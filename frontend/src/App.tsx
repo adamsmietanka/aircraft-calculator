@@ -26,7 +26,7 @@ function App() {
             </a>
           </li>
           <li>
-            <Link to="/powerunit">
+            <Link to="/powerunit/engine">
               <Propeller className="w-6" />
               Power Unit
             </Link>
@@ -59,7 +59,9 @@ function App() {
           </li>
         </ul>
       </div>
-      <Outlet />
+      <div className="m-4 flex flex-col w-full">
+        <Outlet />
+      </div>
     </div>
   );
 }
