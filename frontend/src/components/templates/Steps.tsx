@@ -1,43 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Step } from "../../utils/steps";
 
-interface Step {
-  name: string;
-  path: string;
-  enabledPaths: string[];
-  previous?: string;
-  next?: string;
+interface StepsProps {
+  steps: Step[];
 }
 
-const PowerUnit = () => {
+const Steps = ({ steps }: StepsProps) => {
   const [selectedRoute, setSelectedRoute] = useState<Step>();
-  const routes: Step[] = [
-    {
-      name: "Engine",
-      path: "engine",
-      enabledPaths: ["results", "propeller", "engine"],
-      next: "propeller",
-    },
-    {
-      name: "Propeller",
-      path: "propeller",
-      enabledPaths: ["results", "propeller"],
-      previous: "engine",
-      next: "results",
-    },
-    {
-      name: "Results",
-      path: "results",
-      enabledPaths: ["results"],
-      previous: "propeller",
-    },
-  ];
   let location = useLocation();
   let navigate = useNavigate();
 
   useEffect(() => {
     let pathEnd = location.pathname.split("/")[2];
-    let route = routes.find((el) => el.path === pathEnd);
+    let route = steps.find((el) => el.path === pathEnd);
     setSelectedRoute(() => route);
   }, [location]);
 
@@ -45,7 +21,7 @@ const PowerUnit = () => {
     <>
       <div className="flex flex-col w-full">
         <ul className="steps mb-4">
-          {routes.map((route) => (
+          {steps.map((route) => (
             <li
               key={route.name}
               className={`step cursor-pointer ${
@@ -65,7 +41,7 @@ const PowerUnit = () => {
         {selectedRoute?.previous && (
           <button
             className="btn mr-auto"
-            onClick={() => navigate(selectedRoute?.previous as string)}
+            onClick={() => navigate(selectedRoute.previous as string)}
           >
             Previous
           </button>
@@ -73,7 +49,7 @@ const PowerUnit = () => {
         {selectedRoute?.next && (
           <button
             className="btn ml-auto"
-            onClick={() => navigate(selectedRoute?.next as string)}
+            onClick={() => navigate(selectedRoute.next as string)}
           >
             Next
           </button>
@@ -83,4 +59,4 @@ const PowerUnit = () => {
   );
 };
 
-export default PowerUnit;
+export default Steps;

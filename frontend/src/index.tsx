@@ -5,7 +5,8 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './components/templates/Home';
-import PowerUnit from './components/templates/PowerUnit';
+import Steps from './components/templates/Steps';
+import { powerUnitSteps } from './utils/steps';
 import PowerUnitEngine from './components/organisms/PowerUnitEngine';
 import PowerUnitPropeller from './components/organisms/PowerUnitPropeller';
 import PowerUnitResults from './components/organisms/PowerUnitResults';
@@ -13,13 +14,14 @@ import PowerUnitResults from './components/organisms/PowerUnitResults';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<App />}>
         <Route index element={<Home />} />
-        <Route path="powerunit" element={<PowerUnit />}>
+        <Route path="powerunit" element={<Steps steps={powerUnitSteps} />}>
           <Route path="engine" element={<PowerUnitEngine />} />
           <Route path="propeller" element={<PowerUnitPropeller />} />
           <Route path="results" element={<PowerUnitResults />} />
