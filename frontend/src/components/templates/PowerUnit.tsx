@@ -47,6 +47,7 @@ const PowerUnit = () => {
         <ul className="steps mb-4">
           {routes.map((route) => (
             <li
+              key={route.name}
               className={`step cursor-pointer ${
                 route.enabledPaths.includes(location.pathname.split("/")[2])
                   ? "step-primary"

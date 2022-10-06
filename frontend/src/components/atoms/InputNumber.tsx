@@ -15,7 +15,8 @@ const InputNumber = ({label, unit, value, setter}: Props) => {
       </label>
       <label className="input-group">
         <input
-          type="text"
+          type="number"
+          step={10}
           className="input input-bordered"
           value={value}
           onChange={(e) => setter(parseFloat(e.target.value))}
