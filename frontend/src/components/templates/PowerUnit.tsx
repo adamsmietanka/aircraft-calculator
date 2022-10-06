@@ -44,7 +44,7 @@ const PowerUnit = () => {
   return (
     <>
       <div className="flex flex-col w-full">
-        <ul className="steps">
+        <ul className="steps mb-4">
           {routes.map((route) => (
             <li
               className={`step cursor-pointer ${
