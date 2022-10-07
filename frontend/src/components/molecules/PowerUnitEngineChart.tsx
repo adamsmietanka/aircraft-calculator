@@ -9,25 +9,67 @@ interface powerInput {
   reductionRatio: number;
   maxAltitude: number;
   kCoefficient: number;
-  halfSupercharger?: { endAltitue: number; endPower: number };
-  endSupercharger?: { endAltitue: number; endPower: number };
+  halfSupercharger?: { endAltitude: number; endPower: number };
+  endSupercharger?: { endAltitude: number; endPower: number };
 }
-
-const powerFunction = (props: powerInput) => {
-  let heights = Array.from(
-    { length: Math.floor(props.maxAltitude / 100) },
+const altitudeArrayCreator = (
+  maxAltitude: number,
+  halfSuperchargerendAltitude?: number,
+  endSuperchargerendAltitude?: number
+) => {
+  let altitudes = Array.from(
+    { length: Math.floor(maxAltitude / 100) },
     (_, i) => 100 * i
   );
-  heights = [...heights, props.maxAltitude];
-  console.log(heights);
-  let power = Array.from(
-    heights,
-    (height) =>
-      (props.seaLevelPower *
-        (density(height) / density(0) - props.kCoefficient)) /
-      (1 - props.kCoefficient)
+  altitudes = [...altitudes, maxAltitude];
+
+  if (
+    halfSuperchargerendAltitude &&
+    altitudes.includes(halfSuperchargerendAltitude) === false
+  ) {
+    altitudes = [...altitudes, halfSuperchargerendAltitude];
+    altitudes.sort(function (a, b) {
+      return a - b;
+    });
+  }
+
+  if (
+    endSuperchargerendAltitude &&
+    altitudes.includes(endSuperchargerendAltitude) === false
+  ) {
+    altitudes = [...altitudes, endSuperchargerendAltitude];
+    altitudes.sort(function (a, b) {
+      return a - b;
+    });
+  }
+  return altitudes;
+};
+const superchargerPower = (altitude: number,superchargerStartAltitude:number, superchargerEndAltitude:number,superchargerStartPower:number, superchargerEndPower:number) =>{
+  return (superchargerStartPower +(superchargerEndPower - superchargerStartPower) /(superchargerEndAltitude-superchargerStartAltitude) *altitude);
+}
+const normalPower = (altitude: number,startAltitude:number, startPower:number, kCoefficient:number) =>{
+  return (startPower *(density(altitude) / density(startAltitude) - kCoefficient) / (1 - kCoefficient));
+}
+const powerArrayCreator = (altitude: number, props: powerInput) => {
+  let power = normalPower(altitude,0, props.seaLevelPower ,props.kCoefficient);
+
+  if (props.halfSupercharger && altitude <= props.halfSupercharger.endAltitude) {
+    power = superchargerPower(altitude,0,props.halfSupercharger.endAltitude,props.seaLevelPower ,props.halfSupercharger.endPower)
+  } else if (props.halfSupercharger && altitude > props.halfSupercharger.endAltitude){
+    power = normalPower(altitude,props.halfSupercharger.endAltitude, props.halfSupercharger.endPower ,props.kCoefficient);
+  }
+  return power;
+};
+const powerFunction = (props: powerInput) => {
+  let altitudes = altitudeArrayCreator(
+    props.maxAltitude,
+    props.halfSupercharger?.endAltitude,
+    props.endSupercharger?.endAltitude
   );
-  return { x: heights, y: power };
+
+  console.log(altitudes);
+  let power = Array.from(altitudes, (altitude) => powerArrayCreator(altitude, props));
+  return { x: altitudes, y: power };
 };
 
 let layout = {
@@ -69,6 +111,7 @@ const PowerUnitEngineChart = () => {
       reductionRatio: 0.4,
       maxAltitude: 10010,
       kCoefficient: 0.1,
+      halfSupercharger: { endAltitude: 3010, endPower: 1000 },
     });
     console.log(trace);
     Plotly.newPlot("plot", [trace], layout);
