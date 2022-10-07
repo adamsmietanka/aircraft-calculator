@@ -106,7 +106,7 @@ const powerArrayCreator = (altitude: number, props: powerInput) => {
     altitude <= props.endSupercharger.endAltitude
   ) {
     let startPower = normalPower(
-      altitude,
+      props.endSupercharger.startAltitude,
       props.halfSupercharger.endAltitude,
       props.halfSupercharger.endPower,
       props.kCoefficient
