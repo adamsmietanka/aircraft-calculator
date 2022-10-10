@@ -1,27 +1,28 @@
-import React from "react";
-
 interface Props {
   label: string;
   unit: string;
   value: number;
+  step: number;
   setter: (value: number) => void;
 }
 
-const InputNumber = ({label, unit, value, setter}: Props) => {
+const InputNumber = ({label, unit, value, step, setter}: Props) => {
   return (
     <div className="form-control">
       <label className="label">
         <span className="label-text">{label}</span>
       </label>
-      <label className="input-group">
+      <label className="input-group flex items-center">
         <input
+          className="input input-bordered w-48"
           type="number"
-          step={10}
-          className="input input-bordered"
+          step={step}
           value={value}
           onChange={(e) => setter(parseFloat(e.target.value))}
         />
-        <span>{unit}</span>
+        <span className="flex items-center justify-center bg-gray-200 px-1 w-20 rounded-lg h-12">
+          {unit}
+        </span>
       </label>
     </div>
   );
