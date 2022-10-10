@@ -1,34 +1,46 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Home from './components/templates/Home';
-import Steps from './components/templates/Steps';
-import { powerUnitSteps } from './utils/steps';
-import PowerUnitEngine from './components/organisms/PowerUnitEngine';
-import PowerUnitPropeller from './components/organisms/PowerUnitPropeller';
-import PowerUnitResults from './components/organisms/PowerUnitResults';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./components/templates/Home";
+import Steps from "./components/templates/Steps";
+import { powerUnitSteps } from "./utils/steps";
+import {
+  PowerUnitEngine,
+  PowerUnitPropeller,
+  PowerUnitResults,
+  Aerodynamics,
+  Performance,
+  Settings,
+  Turn,
+  Weight,
+} from "./components/organisms";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 
 root.render(
   <React.StrictMode>
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<App />}>
-        <Route index element={<Home />} />
-        <Route path="powerunit" element={<Steps steps={powerUnitSteps} />}>
-          <Route path="engine" element={<PowerUnitEngine />} />
-          <Route path="propeller" element={<PowerUnitPropeller />} />
-          <Route path="results" element={<PowerUnitResults />} />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<Home />} />
+          <Route path="aerodynamics" element={<Aerodynamics />} />
+          <Route path="powerunit" element={<Steps steps={powerUnitSteps} />}>
+            <Route path="engine" element={<PowerUnitEngine />} />
+            <Route path="propeller" element={<PowerUnitPropeller />} />
+            <Route path="results" element={<PowerUnitResults />} />
+          </Route>
+          <Route path="performance" element={<Performance />} />
+          <Route path="weight" element={<Weight />} />
+          <Route path="turn" element={<Turn />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
-      </Route>
-    </Routes>
-  </BrowserRouter>
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
