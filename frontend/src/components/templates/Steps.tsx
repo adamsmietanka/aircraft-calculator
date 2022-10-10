@@ -15,7 +15,7 @@ const Steps = ({ steps }: StepsProps) => {
     let pathEnd = location.pathname.split("/")[2];
     let route = steps.find((el) => el.path === pathEnd);
     setSelectedRoute(() => route);
-  }, [location]);
+  }, [location, steps]);
 
   return (
     <>
