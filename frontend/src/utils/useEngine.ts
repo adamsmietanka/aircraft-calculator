@@ -15,7 +15,7 @@ export const useEngineStore = create<EngineState>()((set) => ({
   seaLevelPower: 1000,
   engineSpeed: 3000,
   reductionRatio: 0.4,
-  maxAltitude: 5000,
+  maxAltitude: 10,
   setSeaLevelPower: (value) => set((state) => ({ seaLevelPower: value })),
   setEngineSpeed: (value) => set((state) => ({ engineSpeed: value })),
   setReductionRatio: (value) => set((state) => ({ reductionRatio: value })),

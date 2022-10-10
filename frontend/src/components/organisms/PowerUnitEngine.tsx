@@ -1,6 +1,6 @@
 import React from "react";
 import InputNumber from "../atoms/InputNumber";
-import SliderInput from "../atoms/SliderInput";
+import InputSlider from "../atoms/InputSlider";
 import { useEngineStore } from "../../utils/useEngine";
 import PowerUnitEngineChart from "../molecules/PowerUnitEngineChart";
 
@@ -19,26 +19,32 @@ const PowerUnitEngine = () => {
         <InputNumber
           value={seaLevelPower}
           setter={setSeaLevelPower}
+          step={50}
           label="Sea Level Power"
           unit="kW"
         />
         <InputNumber
           value={engineSpeed}
           setter={setEngineSpeed}
+          step={50}
           label="Engine Speed"
           unit="rpm"
         />
         <InputNumber
           value={reductionRatio}
           setter={setReductionRatio}
+          step={0.05}
           label="Reduction Ratio"
           unit=":1"
         />
-        <SliderInput
-          value={maxAltitude}
-          setter={setMaxAltitude}
+        <InputSlider
           label="Maximum altitude"
           unit="km"
+          value={maxAltitude}
+          min={0}
+          max={15}
+          step={1}
+          setter={setMaxAltitude} 
         />
       </div>
       <PowerUnitEngineChart />
