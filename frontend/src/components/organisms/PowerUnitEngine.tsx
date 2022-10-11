@@ -41,9 +41,7 @@ const PowerUnitEngine = () => {
           label="Maximum altitude"
           unit="km"
           value={maxAltitude}
-          min={0}
           max={15}
-          step={1}
           setter={setMaxAltitude} 
         />
       </div>

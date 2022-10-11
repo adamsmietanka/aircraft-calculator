@@ -2,13 +2,13 @@ interface Props {
     label: string;
     unit: string;
     value: number;
-    min: number;
+    step?: number;
+    min?: number;
     max: number;
-    step: number;
     setter: (value: number) => void;  
 }
 
-const InputSlider = ({label, unit, value, min, max, step, setter}: Props) => {
+const InputSlider = ({label, unit, value, step=1, min=0, max, setter}: Props) => {
   return (
     <div className="form-control">
         <label className="label">
