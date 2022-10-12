@@ -12,7 +12,7 @@ let layout = {
   },
   xaxis: {
     title: {
-      text: "Altitude [m]",
+      text: "Altitude [km]",
       font: {
         size: 14,
       },
@@ -29,13 +29,8 @@ let layout = {
 };
 
 const PowerUnitEngineChart = () => {
-  // const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
-  // const engineSpeed = useEngineStore((state) => state.engineSpeed);
-  // const reductionRatio = useEngineStore((state) => state.reductionRatio);
-  // const maxAltitude = useEngineStore((state) => state.maxAltitude);
-  // const kCoefficient = useEngineStore((state) => state.kCoefficient);
   const props = useEngineStore();
-  
+
   useEffect(() => {
     let trace = powerFunction(props);
     console.log(trace);

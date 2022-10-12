@@ -11,7 +11,9 @@ export const powerFunction = (props: powerInput) => {
   let power = Array.from(altitudes, (altitude) =>
     powerArrayCreator(altitude, props)
   );
-  return { x: altitudes, y: power };
+
+  let altitudesKm = altitudes.map((altitude)=>(altitude/1000)); 
+  return { x: altitudesKm, y: power };
 };
 
 interface powerInput {
@@ -39,10 +41,10 @@ const altitudeArrayCreator = (
   turbocharger?: number
 ) => {
   let altitudes = Array.from(
-    { length: Math.floor(maxAltitude / 100) },
-    (_, i) => 100 * i
+    { length: Math.floor(1000*maxAltitude / 100) },
+    (_, i) =>  100*i
   );
-  altitudes = [...altitudes, maxAltitude];
+  altitudes = [...altitudes, 1000*maxAltitude];
 
   if (
     halfSuperchargerendAltitude &&
