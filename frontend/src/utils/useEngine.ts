@@ -7,6 +7,7 @@ interface EngineState {
   maxAltitude: number;
   kCoefficient: number;
   engineType: string;
+  
   setSeaLevelPower: (value: number) => void;
   setEngineSpeed: (value: number) => void;
   setReductionRatio: (value: number) => void;
@@ -19,9 +20,10 @@ export const useEngineStore = create<EngineState>()((set) => ({
   seaLevelPower: 1000,
   engineSpeed: 3000,
   reductionRatio: 0.4,
-  maxAltitude: 5000,
+  maxAltitude: 10,
   kCoefficient: 0.1,
   engineType: "piston",
+
   setSeaLevelPower: (value) => set((state) => ({ seaLevelPower: value })),
   setEngineSpeed: (value) => set((state) => ({ engineSpeed: value })),
   setReductionRatio: (value) => set((state) => ({ reductionRatio: value })),
@@ -29,3 +31,4 @@ export const useEngineStore = create<EngineState>()((set) => ({
   setKCoefficient: (value) => set((state) => ({ maxAltitude: value })),
   setEngineType: (value) => set((state) => ({ maxAltitude: value })),
 }));
+
