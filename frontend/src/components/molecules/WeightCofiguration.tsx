@@ -1,33 +1,49 @@
 import WeightComponet from "../atoms/WeightComponet";
 import { useState } from "react";
+import { useWeightStore } from "../../utils/useWeightConfiguration";
+import AddComponent from "./AddComponent";
+
+interface WegihtComponent {
+  componentName: string;
+  mass: number;
+  cords: { x: number; y: number; z: number };
+}
+
+interface config {
+  name: string;
+  components: Array<WegihtComponent>;
+  enabled: boolean;
+}
 
 function addComponent() {}
-
+function isActive(configuration: config) {
+  if (configuration.enabled) {
+    return configuration;
+  }
+}
 const WeightCofiguration = () => {
-  const weightComponents = [{ name: "Fuselage", mass: 1000, x: 0, y: 0, z: 0 }];
-  const [modalOpened,setModalOpened] = useState(false)
+  const configurations = useWeightStore((state) => state.weightConfigurations);
+  let activeConfiguration = configurations.find(isActive);
   return (
-    <div className="collapse collapse-arrow">
-      <input type="checkbox" />
-      <div className="collapse-title text-xl font-medium">
-        Main Configuration
-      </div>
-      <div className="collapse-content">
-        {weightComponents.length > 0
-          ? weightComponents.map((weightComponent) => (
-              <WeightComponet
-                name={weightComponent.name}
-                mass={weightComponent.mass}
-                x={weightComponent.x}
-                y={weightComponent.y}
-                z={weightComponent.z}
-                // edit = {setModalOpened}
-              />
-            ))
-          : "No components in this configuration"}
-        <label className="btn modal-button" htmlFor="my-modal-5">
-          Add component
-        </label>
+    <div className="flex flex-col">
+      <span className=" m-2 flex justfy-center text-lg">
+        {activeConfiguration?.name}
+      </span>
+
+      <div className="flex flex-col overflow-auto">
+        {activeConfiguration?.components &&
+          activeConfiguration?.components.map((component) => (
+            <WeightComponet
+              key={component?.componentName}
+              name={component?.componentName}
+              mass={component?.mass}
+              cords={component?.cords}
+            />
+          ))}
+
+        {activeConfiguration && (
+          <AddComponent name={activeConfiguration.name}  components={activeConfiguration.components} enabled={activeConfiguration.enabled} />
+        )}
       </div>
     </div>
   );

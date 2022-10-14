@@ -17,6 +17,9 @@ import {
   Turn,
   Weight,
 } from "./components/organisms";
+import { useWeightStore } from "./utils/useWeightConfiguration"
+
+// const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -35,7 +38,7 @@ root.render(
             <Route path="results" element={<PowerUnitResults />} />
           </Route>
           <Route path="performance" element={<Performance />} />
-          <Route path="weight" element={<Weight />} />
+          <Route path="weight" element={<Weight />}/>
           <Route path="turn" element={<Turn />} />
           <Route path="settings" element={<Settings />} />
         </Route>
