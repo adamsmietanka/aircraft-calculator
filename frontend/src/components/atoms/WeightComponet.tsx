@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 interface Component {
   name: string;
   mass: number;
@@ -7,6 +5,7 @@ interface Component {
   //   edit:() => (boolean);
 }
 const WeightComponet = ({ name, mass, cords }: Component) => {
+   
   return (
     <div className="card card-bordered mb-2 card-compact">
       <div className="card-body">

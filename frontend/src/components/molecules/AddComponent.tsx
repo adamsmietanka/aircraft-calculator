@@ -1,43 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputNumber from "../atoms/InputNumber";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 
-interface WegihtComponent {
+interface WeightComponent {
   componentName: string;
   mass: number;
   cords: { x: number; y: number; z: number };
 }
-interface config {
-  name: string;
-  components: Array<WegihtComponent>;
-  enabled: boolean;
-}
+
 interface configuration {
   name: string;
-  components: Array<WegihtComponent>;
-  enabled: boolean;
+  components: Array<WeightComponent>;
 }
-const AddComponent = ({name,components,enabled}:configuration ) => {
-  const setConfigurations = useWeightStore(
+
+const AddComponent = ({ name, components }: configuration) => {
+  const weightConfigurations = useWeightStore(
+    (state) => state.weightConfigurations
+  );
+  const activeWeightConfiguration = useWeightStore(
+    (state) => state.activeWeightConfiguration
+  );
+  const setWeightConfigurations = useWeightStore(
     (state) => state.setWeightConfigurations
   );
+  const setAcitveWeightConfiguration = useWeightStore(
+    (state) => state.setActiveWeightConfiguration
+  );
+
   const [componentName, setName] = useState("Fuselage");
   const [mass, setMass] = useState(900);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [z, setZ] = useState(0);
 
-  function onSubmit(component: WegihtComponent) {
-    // let component: WegihtComponent = {
-    //   componentName: name,
-    //   mass: mass,
-    //   cords: { x: x, y: y, z: z },
-    // };
-    let weightComponents = [...components, component];
-    console.log(weightComponents);
-
-    // setConfigurations((currentConfigurations:Array<configuration>)=>([...currentConfigurations,{name:name,components:components,enabled:enabled}]))
-  }
+  const handleChange = (component: WeightComponent) => {
+    let foundComponent = activeWeightConfiguration.components.find(
+      (comp) => comp.componentName === component.componentName
+    );
+    if (foundComponent === undefined) {
+      console.log("nie ma tego");
+      let components: Array<WeightComponent> =
+        activeWeightConfiguration.components;
+      components.push(component);
+      setAcitveWeightConfiguration({
+        name: activeWeightConfiguration.name,
+        components: components,
+      });
+    }
+  };
   return (
     <div>
       <label className="btn modal-button justify-center" htmlFor="my-modal">
@@ -70,15 +80,21 @@ const AddComponent = ({name,components,enabled}:configuration ) => {
           <InputNumber label="z" unit="m" value={z} setter={setZ} />
 
           <div className="modal-action">
-            <label
-              htmlFor="my-modal"
-              className="btn"
-              onClick={()=> onSubmit({
-                componentName: name,
-                mass: mass,
-                cords: { x: x, y: y, z: z }
-              })}
+            <button
+              className="btn btn-primary"
+              onClick={(e) => {
+                e.preventDefault();
+                handleChange({
+                  componentName: componentName,
+                  mass: mass,
+                  cords: { x: x, y: y, z: z },
+                });
+              }}
             >
+              Save
+            </button>
+
+            <label htmlFor="my-modal" className="btn">
               Submit
             </label>
           </div>

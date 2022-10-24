@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React from "react";
 import WeightCofiguration from "../molecules/WeightCofiguration";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
-import { ReactComponent as Edit } from "../../assets/edit.svg";
-import { Link } from "react-router-dom";
 import WeightDistributionCharts from "../molecules/WeightDistributionCharts";
 
+interface WeightComponent {
+  componentName: string;
+  mass: number;
+  cords: { x: number; y: number; z: number };
+}
 
 const Weight = () => {
-  const configurations = useWeightStore((state) => state.weightConfigurations);
-  const setConfigurations = useWeightStore((state) => state.setWeightConfigurations);
+  const weightConfigurations = useWeightStore((state) => state.weightConfigurations);
+  const setWeightConfigurations = useWeightStore(
+    (state) => state.setWeightConfigurations
+  );
+  const setAcitveWeightConfiguration = useWeightStore(
+    (state) => state.setActiveWeightConfiguration
+  );
   
+  const handleDelete=(name:string)=>{
+    let confugurations = weightConfigurations.filter((weightConfiguration)=>weightConfiguration.name !== name)
+    setWeightConfigurations(confugurations);
+  }
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -24,18 +36,24 @@ const Weight = () => {
             </label>
             <WeightCofiguration />
           </div>
-          <WeightDistributionCharts/>
+          <WeightDistributionCharts />
         </div>
       </div>
 
       <div className="drawer-side">
         <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
         <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
-          {configurations.map((configuration) => (
+          {weightConfigurations.map((configuration: {name: string, components: Array<WeightComponent>}) => (
             <li className="flex flex-row m-2">
-                <span>{configuration.name} </span>
-                <button className="btn  background-color- bg-yellow-50 w-6"> {React.cloneElement(<Edit className="w-6"/>, {className:"w-6"} )},</button>
-                <button className="btn btn-secondary w-6">X</button>
+              <button onClick={() => {setAcitveWeightConfiguration(configuration)}}>
+                {configuration.name}{" "}
+              </button>
+
+              <button
+                className="btn btn-secondary w-6"
+                onClick={() => {handleDelete(configuration.name)}}>
+                X
+              </button>
             </li>
           ))}
           <button className="btn btn-primary">Add new configuration</button>
