@@ -2,6 +2,7 @@ import React from "react";
 import WeightCofiguration from "../molecules/WeightCofiguration";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import WeightDistributionCharts from "../molecules/WeightDistributionCharts";
+import AddConfiguration from "../molecules/AddConfiguration";
 
 interface WeightComponent {
   componentName: string;
@@ -10,18 +11,23 @@ interface WeightComponent {
 }
 
 const Weight = () => {
-  const weightConfigurations = useWeightStore((state) => state.weightConfigurations);
+  const weightConfigurations = useWeightStore(
+    (state) => state.weightConfigurations
+  );
   const setWeightConfigurations = useWeightStore(
     (state) => state.setWeightConfigurations
   );
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration
   );
-  
-  const handleDelete=(name:string)=>{
-    let confugurations = weightConfigurations.filter((weightConfiguration)=>weightConfiguration.name !== name)
+
+  const handleDelete = (name: string) => {
+    let confugurations = weightConfigurations.filter(
+      (weightConfiguration) => weightConfiguration.name !== name
+    );
     setWeightConfigurations(confugurations);
-  }
+  };
+  
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
@@ -43,22 +49,40 @@ const Weight = () => {
       <div className="drawer-side">
         <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
         <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
-          {weightConfigurations.map((configuration: {name: string, components: Array<WeightComponent>}) => (
-            <li className="flex flex-row m-2">
-              <button onClick={() => {setAcitveWeightConfiguration(configuration)}}>
-                {configuration.name}{" "}
-              </button>
+          {weightConfigurations.map(
+            (configuration: {
+              name: string;
+              components: Array<WeightComponent>;
+            }) => (
+              <li className="flex flex-row m-2" key={configuration.name}>
+                <button
+                  onClick={() => {
+                    setAcitveWeightConfiguration(configuration);
+                  }}
+                >
+                  {configuration.name}{" "}
+                </button>
 
-              <button
-                className="btn btn-secondary w-6"
-                onClick={() => {handleDelete(configuration.name)}}>
-                X
-              </button>
-            </li>
-          ))}
-          <button className="btn btn-primary">Add new configuration</button>
+                <button
+                  className="btn btn-secondary w-6"
+                  onClick={() => {
+                    handleDelete(configuration.name);
+                  }}
+                >
+                  X
+                </button>
+              </li>
+            )
+          )}
+          <label
+            className="btn modal-button justify-center"
+            htmlFor="add-config"
+          >
+            Add Configuration
+          </label>
         </ul>
       </div>
+      <AddConfiguration />
     </div>
   );
 };
