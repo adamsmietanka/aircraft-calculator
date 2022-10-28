@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import WeightCofiguration from "../molecules/WeightCofiguration";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import WeightDistributionCharts from "../molecules/WeightDistributionCharts";
@@ -14,6 +14,10 @@ const Weight = () => {
   const weightConfigurations = useWeightStore(
     (state) => state.weightConfigurations
   );
+  const activeWeightConfiguration = useWeightStore(
+    (state) => state.activeWeightConfiguration
+  );
+
   const setWeightConfigurations = useWeightStore(
     (state) => state.setWeightConfigurations
   );
@@ -27,7 +31,11 @@ const Weight = () => {
     );
     setWeightConfigurations(confugurations);
   };
-  
+
+  useEffect(() => {
+    console.log("Rerendering menu");
+  }, [activeWeightConfiguration.name]);
+
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
