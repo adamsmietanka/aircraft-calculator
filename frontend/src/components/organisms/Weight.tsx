@@ -21,6 +21,7 @@ const Weight = () => {
   const setWeightConfigurations = useWeightStore(
     (state) => state.setWeightConfigurations
   );
+
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration
   );

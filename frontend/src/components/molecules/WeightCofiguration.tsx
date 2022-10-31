@@ -1,11 +1,7 @@
 import WeightComponet from "../atoms/WeightComponet";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import AddComponent from "./AddComponent";
-
-interface configuration {
-  name: string;
-  components: Array<WeightComponent>;
-}
+import { useEffect } from "react";
 
 interface WeightComponent {
   componentName: string;
@@ -21,6 +17,14 @@ const WeightCofiguration = () => {
     (state) => state.setActiveWeightConfiguration
   );
 
+  const weightConfigurations = useWeightStore(
+    (state) => state.weightConfigurations
+  );
+
+  const setWeightConfigurations = useWeightStore(
+    (state) => state.setWeightConfigurations
+  );
+
   const handleDelete = (component: WeightComponent) => {
     setAcitveWeightConfiguration({
       ...activeWeightConfiguration,
@@ -29,6 +33,15 @@ const WeightCofiguration = () => {
       ),
     });
   };
+
+  useEffect(() => {
+    let i = weightConfigurations.findIndex(
+      (config) => config.name === activeWeightConfiguration.name
+    );
+    let configs = weightConfigurations;
+    configs[i] = activeWeightConfiguration;
+    setWeightConfigurations(configs);
+  }, [activeWeightConfiguration]);
 
   return (
     <div className="flex flex-col overflow-auto">
