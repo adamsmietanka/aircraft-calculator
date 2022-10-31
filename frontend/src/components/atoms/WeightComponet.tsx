@@ -1,17 +1,23 @@
+interface WeightComponent {
+  componentName: string;
+  mass: number;
+  cords: { x: number; y: number; z: number };
+}
+
+
 interface Component {
   name: string;
   mass: number;
   cords: { x: number; y: number; z: number };
-  //   edit:() => (boolean);
+  handleDelete: (component: WeightComponent) => void;
 }
-const WeightComponet = ({ name, mass, cords }: Component) => {
-   
+const WeightComponet = ({ name, mass, cords, handleDelete }: Component) => {
   return (
     <div className="card card-bordered mb-2 card-compact">
       <div className="card-body">
         <h2 className="card-title">{name}</h2>
         <div className="flex flex-col">
-          <p>Mass: {mass} kg </p>
+          <p> Mass: {mass} kg </p>
           <div className="flex flex-row">
             <p> x = {cords.x} m </p>
             <p> y = {cords.y} m </p>
@@ -21,7 +27,9 @@ const WeightComponet = ({ name, mass, cords }: Component) => {
       </div>
       <div className="card-actions mb-2 justify-center">
         <button className="btn btn-warning">Edit</button>
-        <button className="btn btn-error ">Delete</button>
+        <button className="btn btn-error " onClick={() => handleDelete({ componentName:name, mass:mass, cords:cords})}>
+          Delete
+        </button>
       </div>
     </div>
   );
