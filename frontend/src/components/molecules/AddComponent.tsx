@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputNumber from "../atoms/InputNumber";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 
@@ -8,12 +8,14 @@ interface WeightComponent {
   cords: { x: number; y: number; z: number };
 }
 
-interface configuration {
-  name: string;
-  components: Array<WeightComponent>;
+interface props {
+  useType: string;
+  component?: WeightComponent;
+  isVisible: boolean;
+  onClose: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AddComponent = ({ name, components }: configuration) => {
+const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
   const weightConfigurations = useWeightStore(
     (state) => state.weightConfigurations
   );
@@ -26,39 +28,63 @@ const AddComponent = ({ name, components }: configuration) => {
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration
   );
-
   const [componentName, setName] = useState("Fuselage");
   const [mass, setMass] = useState(900);
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [z, setZ] = useState(0);
 
+  useEffect(() => {
+    if (component && useType === "edit") {
+      setName(component?.componentName);
+      setMass(component.mass)
+      setX(component.cords.x)
+      setY(component.cords.y)
+      setZ(component.cords.z)
+    }
+  },[component]);
+
   const handleChange = (component: WeightComponent) => {
     let foundComponent = activeWeightConfiguration.components.find(
       (comp) => comp.componentName === component.componentName
     );
-    if (foundComponent === undefined) {
-      console.log("nie ma tego");
-      let components: Array<WeightComponent> =
-        activeWeightConfiguration.components;
-      components.push(component);
+    if (useType === "add") {
+      if (foundComponent === undefined) {
+        let components: Array<WeightComponent> =
+          activeWeightConfiguration.components;
+        components.push(component);
+        setAcitveWeightConfiguration({
+          ...activeWeightConfiguration,
+          components: components,
+        });
+      }
+    }
+    if (useType === "edit") {
+      let i = activeWeightConfiguration.components.findIndex(
+        (c) => c.componentName === foundComponent?.componentName
+      );
+      let newComponents = activeWeightConfiguration.components;
+      newComponents[i] = component;
       setAcitveWeightConfiguration({
-        name: activeWeightConfiguration.name,
-        components: components,
+        ...activeWeightConfiguration,
+        components: newComponents,
       });
     }
   };
+
+  if (!isVisible) {
+    return null;
+  }
   return (
     <div>
-      <label className="btn modal-button justify-center" htmlFor="my-modal">
-        Add component
-      </label>
-      <input type="checkbox" id="my-modal" className="modal-toggle" />
-      <div className="modal">
-        <div className="modal-box">
+      <div
+        className="fixed inset-0 bg-black bg-opacity-25
+       backdrop-blur-sm flex justify-center items-center"
+      >
+        <div className="bg-white w-80 rounded-2xl flex  flex-col justify-center items-center">
           <label className="label">
             <span className="label-text">
-              Component of the {name} configuration.
+              Component of the {activeWeightConfiguration.name} configuration.
             </span>
           </label>
           <div className="form-control">
@@ -94,9 +120,14 @@ const AddComponent = ({ name, components }: configuration) => {
               Save
             </button>
 
-            <label htmlFor="my-modal" className="btn">
+            <button
+              className="btn"
+              onClick={() => {
+                onClose(false);
+              }}
+            >
               Submit
-            </label>
+            </button>
           </div>
         </div>
       </div>

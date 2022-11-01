@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import RadioOptions from "../atoms/RadioOptions";
 
@@ -8,6 +8,10 @@ interface WeightComponent {
   mass: number;
   cords: { x: number; y: number; z: number };
 }
+interface Props {
+  isVisible:boolean
+  onClose: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 const radioButtonsText = [
   "Empty Configuration",
@@ -15,7 +19,8 @@ const radioButtonsText = [
   "Load from computer",
 ];
 
-const AddConfiguration = () => {
+const AddConfiguration = ({isVisible , onClose}:Props) => {
+
   const [name, setName] = useState("");
   const [weightComponents, setWeightComponents] = useState<
     WeightComponent[] | never[]
@@ -49,6 +54,7 @@ const AddConfiguration = () => {
     //setting  back default options
     setWeightComponents([]);
     setName("");
+    onClose(false)
   };
 
   const handleSelect = (name: string) => {
@@ -58,17 +64,23 @@ const AddConfiguration = () => {
       setWeightComponents(newComponent)
     }
   };
+  useEffect(()=>{console.log(isVisible)},[isVisible])
+  if (!isVisible){
+    return null;
+  }
+
   return (
     <div className="flex flex-col">
-      <input type="checkbox" id="add-config" className="modal-toggle " />
-      <div className="modal ">
-        <div className="modal-box w-80">
-          <label className="label">
+      <div className="fixed inset-0 bg-black bg-opacity-25
+       backdrop-blur-sm flex justify-center items-center">
+      <div className="form">
+        <div className="bg-white w-80 rounded-2xl flex  flex-col justify-center items-center">
+          <label className="label m-2">
             <span>Crete new configuration:</span>
           </label>
           <input
             type="text"
-            className="input input-bordered w-60 mb-2"
+            className="input input-bordered w-60 m-2"
             placeholder="Input configuration name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -83,7 +95,7 @@ const AddConfiguration = () => {
 
           {checkedButton === "Clone from the configuration" && (
             <select
-              className="select select-bordered w-60 max-w-xs"
+              className="select select-bordered w-60 max-w-xs m-2"
               onChange={(e) => handleSelect(e.target.value)}
             >
               {weightConfigurations &&
@@ -96,17 +108,17 @@ const AddConfiguration = () => {
           {checkedButton === "Load from computer" &&
             "The option is not aviable yet"}
 
-          <div className="modal-action">
-            <label
-              htmlFor="add-config"
+          <div className="modal-action m-2">
+            <button
               className="btn"
               onClick={() => handleSubmit()}
             >
               Submit
-            </label>
+            </button>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

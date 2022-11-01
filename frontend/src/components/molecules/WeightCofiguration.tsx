@@ -1,7 +1,7 @@
 import WeightComponet from "../atoms/WeightComponet";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import AddComponent from "./AddComponent";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface WeightComponent {
   componentName: string;
@@ -10,6 +10,9 @@ interface WeightComponent {
 }
 
 const WeightCofiguration = () => {
+  const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [useType, setUseType] = useState<string>("add");
+  const [editedCompnent,setEditedComponet]=useState<any>({}) 
   const activeWeightConfiguration = useWeightStore(
     (state) => state.activeWeightConfiguration
   );
@@ -25,6 +28,12 @@ const WeightCofiguration = () => {
     (state) => state.setWeightConfigurations
   );
 
+  const handleEdit = (component: WeightComponent) => {
+    setUseType("edit")
+    setEditedComponet(component)
+    setToggleModal(true)
+  };
+
   const handleDelete = (component: WeightComponent) => {
     setAcitveWeightConfiguration({
       ...activeWeightConfiguration,
@@ -33,7 +42,7 @@ const WeightCofiguration = () => {
       ),
     });
   };
-
+  
   useEffect(() => {
     let i = weightConfigurations.findIndex(
       (config) => config.name === activeWeightConfiguration.name
@@ -41,6 +50,7 @@ const WeightCofiguration = () => {
     let configs = weightConfigurations;
     configs[i] = activeWeightConfiguration;
     setWeightConfigurations(configs);
+    setUseType("add")
   }, [activeWeightConfiguration]);
 
   return (
@@ -59,14 +69,27 @@ const WeightCofiguration = () => {
                 mass={component?.mass}
                 cords={component?.cords}
                 handleDelete={handleDelete}
+                handleEdit={handleEdit}
               />
             )
           )}
 
         {activeWeightConfiguration && (
+          <button className="btn  justify-center" onClick={()=>{setToggleModal(true)}}>Add component</button>
+        )}
+        {activeWeightConfiguration && useType==="add" && (
           <AddComponent
-            name={activeWeightConfiguration.name}
-            components={activeWeightConfiguration.components}
+            useType="add"
+            isVisible={toggleModal}
+            onClose={setToggleModal}
+          />
+        )}
+        {activeWeightConfiguration && useType==="edit" && (
+          <AddComponent
+            useType="edit"
+            component={editedCompnent}
+            isVisible={toggleModal}
+            onClose={setToggleModal}
           />
         )}
       </div>

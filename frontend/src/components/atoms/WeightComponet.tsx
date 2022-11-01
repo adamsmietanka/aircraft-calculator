@@ -10,8 +10,10 @@ interface Component {
   mass: number;
   cords: { x: number; y: number; z: number };
   handleDelete: (component: WeightComponent) => void;
+  handleEdit: (component: WeightComponent) => void;
 }
-const WeightComponet = ({ name, mass, cords, handleDelete }: Component) => {
+
+const WeightComponet = ({ name, mass, cords, handleDelete,handleEdit }: Component) => {
   return (
     <div className="card card-bordered mb-2 card-compact">
       <div className="card-body">
@@ -26,7 +28,7 @@ const WeightComponet = ({ name, mass, cords, handleDelete }: Component) => {
         </div>
       </div>
       <div className="card-actions mb-2 justify-center">
-        <button className="btn btn-warning">Edit</button>
+        <label className="btn btn-warning" htmlFor="my-modal" onClick={() => handleEdit({ componentName:name, mass:mass, cords:cords})}>Edit</label>
         <button className="btn btn-error " onClick={() => handleDelete({ componentName:name, mass:mass, cords:cords})}>
           Delete
         </button>

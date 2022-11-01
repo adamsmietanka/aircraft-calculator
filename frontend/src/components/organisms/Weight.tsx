@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import WeightCofiguration from "../molecules/WeightCofiguration";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import WeightDistributionCharts from "../molecules/WeightDistributionCharts";
@@ -11,6 +11,7 @@ interface WeightComponent {
 }
 
 const Weight = () => {
+  const [toggleModal, setToggleModal] = useState<boolean>(false);
   const weightConfigurations = useWeightStore(
     (state) => state.weightConfigurations
   );
@@ -32,6 +33,7 @@ const Weight = () => {
     );
     setWeightConfigurations(confugurations);
   };
+
 
   useEffect(() => {
     console.log("Rerendering menu");
@@ -85,13 +87,15 @@ const Weight = () => {
           )}
           <label
             className="btn modal-button justify-center"
-            htmlFor="add-config"
+            onClick={() => {
+              setToggleModal(true);
+            }}
           >
             Add Configuration
           </label>
         </ul>
       </div>
-      <AddConfiguration />
+      <AddConfiguration isVisible={toggleModal} onClose={setToggleModal} />
     </div>
   );
 };
