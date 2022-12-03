@@ -3,6 +3,7 @@ import WeightCofiguration from "../molecules/WeightCofiguration";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import WeightDistributionCharts from "../molecules/WeightDistributionCharts";
 import AddConfiguration from "../molecules/AddConfiguration";
+import AddComponent from "../molecules/AddComponent";
 
 interface WeightComponent {
   componentName: string;
@@ -12,6 +13,10 @@ interface WeightComponent {
 
 const Weight = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
+  const [toggleModal_2, setToggleModal_2] = useState<boolean>(false);
+  const editedCompnent = useWeightStore((state) => state.editedComponent);
+  const useType = useWeightStore((state) => state.useType);
+  const setUseType = useWeightStore((state) => state.setUseType);
   const weightConfigurations = useWeightStore(
     (state) => state.weightConfigurations
   );
@@ -34,16 +39,25 @@ const Weight = () => {
     setWeightConfigurations(confugurations);
   };
 
-
   useEffect(() => {
     console.log("Rerendering menu");
   }, [activeWeightConfiguration.name]);
+
+  useEffect(() => {
+    let i = weightConfigurations.findIndex(
+      (config) => config.name === activeWeightConfiguration.name
+    );
+    let configs = weightConfigurations;
+    configs[i] = activeWeightConfiguration;
+    setWeightConfigurations(configs);
+    setUseType("add");
+  }, [activeWeightConfiguration, setUseType ,setWeightConfigurations , weightConfigurations]);
 
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
-        <div className="flex ">
+        <div className=" flex flex-row ">
           <div className="flex flex-col w-64 mr-8 space-y-2">
             <label
               htmlFor="my-drawer-4"
@@ -51,9 +65,36 @@ const Weight = () => {
             >
               Choose configuration
             </label>
-            <WeightCofiguration />
+            <WeightCofiguration setToggleModal = {setToggleModal_2}/>
+            {activeWeightConfiguration && (
+              <button
+                className="btn  justify-center"
+                onClick={() => {
+                  setToggleModal_2(true);
+                }}
+              >
+                Add component
+              </button>
+            )}
           </div>
-          <WeightDistributionCharts />
+          <div className="flex flex-col">
+            <WeightDistributionCharts />
+          </div>
+          {activeWeightConfiguration && useType === "add" && (
+            <AddComponent
+              useType="add"
+              isVisible={toggleModal_2}
+              onClose={setToggleModal_2}
+            />
+          )}
+          {activeWeightConfiguration && useType === "edit" && (
+            <AddComponent
+              useType="edit"
+              component={editedCompnent}
+              isVisible={toggleModal_2}
+              onClose={setToggleModal_2}
+            />
+          )}
         </div>
       </div>
 

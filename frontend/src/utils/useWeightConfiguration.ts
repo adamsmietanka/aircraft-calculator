@@ -7,6 +7,8 @@ interface WeightComponent {
 }
 
 interface WeightConfigurationsState {
+  useType: string;
+  editedComponent:WeightComponent
   weightConfigurations: Array<{
     name: string;
     components: Array<WeightComponent>;
@@ -15,6 +17,8 @@ interface WeightConfigurationsState {
     name: string;
     components: Array<WeightComponent>;
   };
+  setUseType: (value: string) => void;
+  setEditedComponent: (value: WeightComponent) => void;
   setWeightConfigurations: (
     value: Array<{
       name: string;
@@ -28,8 +32,8 @@ interface WeightConfigurationsState {
 }
 
 const defaultComponents1 = [
-  { componentName: "Fuselage", mass: 900, cords: { x: 0, y: 0, z: 0 } },
-  { componentName: "Wing", mass: 900, cords: { x: 0, y: 0, z: 0 } },
+  { componentName: "Fuselage", mass: 900, cords: { x: 10, y: 0, z: 2 } },
+  { componentName: "Wing", mass: 900, cords: { x: 10.5, y: -2, z: 1 } },
 ];
 
 const defaultComponents2 = [
@@ -50,8 +54,12 @@ const defaultConfigurations = [
 ];
 
 export const useWeightStore = create<WeightConfigurationsState>()((set) => ({
+  useType: "add",
+  editedComponent:{ componentName: "Fuselage", mass: 900, cords: { x: 0, y: 0, z: 0 } },
   weightConfigurations: defaultConfigurations,
   activeWeightConfiguration: defaultConfigurations[0],
+  setUseType: (value) => set((state) => ({ useType: value })),
+  setEditedComponent: (value) => set((state) => ({ editedComponent: value })),
   setWeightConfigurations: (value) =>
     set((state) => ({ weightConfigurations: value })),
   setActiveWeightConfiguration: (value) =>

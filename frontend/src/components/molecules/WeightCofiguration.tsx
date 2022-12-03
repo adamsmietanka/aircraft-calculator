@@ -1,7 +1,5 @@
 import WeightComponet from "../atoms/WeightComponet";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
-import AddComponent from "./AddComponent";
-import { useEffect, useState } from "react";
 
 interface WeightComponent {
   componentName: string;
@@ -9,23 +7,17 @@ interface WeightComponent {
   cords: { x: number; y: number; z: number };
 }
 
-const WeightCofiguration = () => {
-  const [toggleModal, setToggleModal] = useState<boolean>(false);
-  const [useType, setUseType] = useState<string>("add");
-  const [editedCompnent,setEditedComponet]=useState<any>({}) 
+const WeightCofiguration = ({setToggleModal}:any) => {
+  const setUseType = useWeightStore((state) => state.setUseType);
+  const setEditedComponet = useWeightStore(
+    (state) => state.setEditedComponent
+  );
+
   const activeWeightConfiguration = useWeightStore(
     (state) => state.activeWeightConfiguration
   );
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration
-  );
-
-  const weightConfigurations = useWeightStore(
-    (state) => state.weightConfigurations
-  );
-
-  const setWeightConfigurations = useWeightStore(
-    (state) => state.setWeightConfigurations
   );
 
   const handleEdit = (component: WeightComponent) => {
@@ -43,16 +35,6 @@ const WeightCofiguration = () => {
     });
   };
   
-  useEffect(() => {
-    let i = weightConfigurations.findIndex(
-      (config) => config.name === activeWeightConfiguration.name
-    );
-    let configs = weightConfigurations;
-    configs[i] = activeWeightConfiguration;
-    setWeightConfigurations(configs);
-    setUseType("add")
-  }, [activeWeightConfiguration]);
-
   return (
     <div className="flex flex-col overflow-auto">
       <span className=" m-2 flex justfy-center text-lg">
@@ -73,25 +55,6 @@ const WeightCofiguration = () => {
               />
             )
           )}
-
-        {activeWeightConfiguration && (
-          <button className="btn  justify-center" onClick={()=>{setToggleModal(true)}}>Add component</button>
-        )}
-        {activeWeightConfiguration && useType==="add" && (
-          <AddComponent
-            useType="add"
-            isVisible={toggleModal}
-            onClose={setToggleModal}
-          />
-        )}
-        {activeWeightConfiguration && useType==="edit" && (
-          <AddComponent
-            useType="edit"
-            component={editedCompnent}
-            isVisible={toggleModal}
-            onClose={setToggleModal}
-          />
-        )}
       </div>
     </div>
   );
