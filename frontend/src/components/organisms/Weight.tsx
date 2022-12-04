@@ -4,6 +4,8 @@ import { useWeightStore } from "../../utils/useWeightConfiguration";
 import WeightDistributionCharts from "../molecules/WeightDistributionCharts";
 import AddConfiguration from "../molecules/AddConfiguration";
 import AddComponent from "../molecules/AddComponent";
+import { CoG } from "../../utils/massCalculations";
+
 
 interface WeightComponent {
   componentName: string;
@@ -31,7 +33,9 @@ const Weight = () => {
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration
   );
-
+  const setCog = useWeightStore(
+    (state) => state.setCog
+  );
   const handleDelete = (name: string) => {
     let confugurations = weightConfigurations.filter(
       (weightConfiguration) => weightConfiguration.name !== name
@@ -42,6 +46,10 @@ const Weight = () => {
   useEffect(() => {
     console.log("Rerendering menu");
   }, [activeWeightConfiguration.name]);
+
+  useEffect(() => {
+    setCog(CoG(activeWeightConfiguration.components))
+  }, [activeWeightConfiguration.components]);
 
   useEffect(() => {
     let i = weightConfigurations.findIndex(
@@ -142,3 +150,5 @@ const Weight = () => {
 };
 
 export default Weight;
+
+

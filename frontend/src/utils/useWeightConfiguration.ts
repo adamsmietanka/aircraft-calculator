@@ -1,4 +1,5 @@
 import create from "zustand";
+import { CoG } from "./massCalculations";
 
 interface WeightComponent {
   componentName: string;
@@ -8,7 +9,7 @@ interface WeightComponent {
 
 interface WeightConfigurationsState {
   useType: string;
-  editedComponent:WeightComponent
+  editedComponent: WeightComponent;
   weightConfigurations: Array<{
     name: string;
     components: Array<WeightComponent>;
@@ -17,6 +18,7 @@ interface WeightConfigurationsState {
     name: string;
     components: Array<WeightComponent>;
   };
+  cog: { x: number; y: number; z: number };
   setUseType: (value: string) => void;
   setEditedComponent: (value: WeightComponent) => void;
   setWeightConfigurations: (
@@ -29,6 +31,7 @@ interface WeightConfigurationsState {
     name: string;
     components: Array<WeightComponent>;
   }) => void;
+  setCog: (value: { x: number; y: number; z: number }) => void;
 }
 
 const defaultComponents1 = [
@@ -55,13 +58,19 @@ const defaultConfigurations = [
 
 export const useWeightStore = create<WeightConfigurationsState>()((set) => ({
   useType: "add",
-  editedComponent:{ componentName: "Fuselage", mass: 900, cords: { x: 0, y: 0, z: 0 } },
+  editedComponent: {
+    componentName: "Fuselage",
+    mass: 900,
+    cords: { x: 0, y: 0, z: 0 },
+  },
   weightConfigurations: defaultConfigurations,
   activeWeightConfiguration: defaultConfigurations[0],
+  cog: CoG(defaultComponents1),
   setUseType: (value) => set((state) => ({ useType: value })),
   setEditedComponent: (value) => set((state) => ({ editedComponent: value })),
   setWeightConfigurations: (value) =>
     set((state) => ({ weightConfigurations: value })),
   setActiveWeightConfiguration: (value) =>
     set((state) => ({ activeWeightConfiguration: value })),
+  setCog: (value) => set((state) => ({ cog: value })),
 }));

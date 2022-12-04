@@ -1,7 +1,19 @@
 import Plotly from "plotly.js-dist-min";
 import { useWeightStore } from "../../utils/useWeightConfiguration";
 import { useEffect } from "react";
+import {
+  CoG,
+  getNamesArray,
+  getXarray,
+  getYarray,
+  getZarray,
+} from "../../utils/massCalculations";
 
+interface WeightComponent {
+  componentName: string;
+  mass: number;
+  cords: { x: number; y: number; z: number };
+}
 const layouts = (axis: string) => {
   let layout = {
     plotTittle: "Position on XY",
@@ -57,22 +69,144 @@ const layouts = (axis: string) => {
   };
 };
 
+const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
+  let CoGvalue = CoG(configuration);
+  let trace = {
+    x: getXarray(configuration),
+    y: getYarray(configuration),
+    mode: "markers+text",
+    name: "Components",
+    text: getNamesArray(configuration),
+    textfont: {
+      family: "Times New Roman",
+    },
+    textposition: "bottom center",
+    marker: { size: 12 },
+  };
+  var CoGtrace = {
+    x: [CoGvalue.x],
+    y: [CoGvalue.y],
+    mode: "markers+text",
+    type: "scatter",
+    name: "Center of gravity",
+    text: ["CoG"],
+    textfont: {
+      family: "Times New Roman",
+    },
+    textposition: "bottom center",
+    marker: { size: 12 },
+  };
+ 
+
+  switch (axis) {
+    case "plot_xy":
+      trace = {
+        x: getXarray(configuration),
+        y: getYarray(configuration),
+        mode: "markers+text",
+        name: "Components",
+        text: getNamesArray(configuration),
+        textfont: {
+          family: "Times New Roman",
+        },
+        textposition: "bottom center",
+        marker: { size: 12 },
+      };
+      CoGtrace = {
+        x: [CoGvalue.x],
+        y: [CoGvalue.y],
+        mode: "markers+text",
+        type: "scatter",
+        name: "Center of gravity",
+        text: ["CoG"],
+        textfont: {
+          family: "Times New Roman",
+        },
+        textposition: "bottom center",
+        marker: { size: 12 },
+      };
+      break;
+    case "plot_yz":
+      trace = {
+        x: getYarray(configuration),
+        y: getZarray(configuration),
+        mode: "markers+text",
+        name: "Components",
+        text: getNamesArray(configuration),
+        textfont: {
+          family: "Times New Roman",
+        },
+        textposition: "bottom center",
+        marker: { size: 12 },
+      };
+      CoGtrace = {
+        x: [CoGvalue.y],
+        y: [CoGvalue.z],
+        mode: "markers+text",
+        type: "scatter",
+        name: "Center of gravity",
+        text: ["CoG"],
+        textfont: {
+          family: "Times New Roman",
+        },
+        textposition: "bottom center",
+        marker: { size: 12 },
+      };
+      break;
+    case "plot_xz":
+      trace = {
+        x: getXarray(configuration),
+        y: getZarray(configuration),
+        mode: "markers+text",
+        name: "Components",
+        text: getNamesArray(configuration),
+        textfont: {
+          family: "Times New Roman",
+        },
+        textposition: "bottom center",
+        marker: { size: 12 }
+      };
+      CoGtrace = {
+        x: [CoGvalue.x],
+        y: [CoGvalue.z],
+        mode: "markers+text",
+        type: "scatter",
+        name: "Center of gravity",
+        text: ["CoG"],
+        textfont: {
+          family: "Times New Roman",
+        },
+        textposition: "bottom center",
+        marker: { size: 12 },
+      };
+      break;
+  }
+  return [trace, CoGtrace];
+};
+
 const WeightDistributionCharts = () => {
-  useEffect(() => {
-    let XY =
-      {  
-          x: [0,2,6,5], 
-          y: [0,5,7,8] ,
-          mode:'markers'}
-        ; 
-    // console.log(traces);
-    Plotly.newPlot("plot_xy", [XY], layouts("plot_xy"));
-    Plotly.newPlot("plot_yz", [XY], layouts("plot_yz"));
-    Plotly.newPlot("plot_xz", [XY], layouts("plot_xz"));
-  });
   const activeWeightConfiguration = useWeightStore(
     (state) => state.activeWeightConfiguration
   );
+  const cog = useWeightStore((state) => state.cog);
+  useEffect(() => {
+    Plotly.newPlot(
+      "plot_xy",
+      getTrace(activeWeightConfiguration.components, "plot_xy"),
+      layouts("plot_xy")
+    );
+    Plotly.newPlot(
+      "plot_yz",
+      getTrace(activeWeightConfiguration.components, "plot_yz"),
+      layouts("plot_yz")
+    );
+    Plotly.newPlot(
+      "plot_xz",
+      getTrace(activeWeightConfiguration.components, "plot_xz"),
+      layouts("plot_xz")
+    );
+  });
+
   return (
     <div className=" w-full text-bold text-black text-3xl flex flex-col justify-center items-center">
       <div id="plot_xy"></div>
