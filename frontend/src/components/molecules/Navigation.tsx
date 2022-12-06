@@ -27,7 +27,12 @@ const links = [
   },
   {
     to: "/weight",
-    name: "Weight distribution",
+      name: "Weight distribution",
+    icon: <Scales />,
+  },
+  {
+    to: "/stability/longitudal_moment",
+    name: "Stability",
     icon: <Scales />,
   },
   {

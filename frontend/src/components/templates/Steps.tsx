@@ -35,7 +35,7 @@ const Steps = ({ steps }: StepsProps) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div>  
       <Outlet />
       <div className="flex mt-auto">
         {selectedRoute?.previous && (

@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/templates/Home";
 import Steps from "./components/templates/Steps";
-import { powerUnitSteps } from "./utils/steps";
+import { powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
   PowerUnitEngine,
   PowerUnitPropeller,
@@ -17,6 +17,8 @@ import {
   Turn,
   Weight,
 } from "./components/organisms";
+import Stability from "./components/organisms/StabilityLongitudalMoment";
+import StabilityLongitudalMoment from "./components/organisms/StabilityLongitudalMoment";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -36,6 +38,18 @@ root.render(
           </Route>
           <Route path="performance" element={<Performance />} />
           <Route path="weight" element={<Weight />} />
+          <Route path="stability" element={<Steps steps={stabilitySteps} />}>
+            <Route
+              path="longitudinal-moment"
+              element={<StabilityLongitudalMoment />}
+            />
+            <Route path="steer" element={<Stability />} />
+            <Route path="rod-force" element={<Stability />} />
+            <Route
+              path="stabillty-and-manouverabillty"
+              element={<Stability />}
+            />
+          </Route>
           <Route path="turn" element={<Turn />} />
           <Route path="settings" element={<Settings />} />
         </Route>
