@@ -31,7 +31,7 @@ const links = [
     icon: <Scales />,
   },
   {
-    to: "/stability/longitudal_moment",
+    to: "/stability/longitudal-moment",
     name: "Stability",
     icon: <Scales />,
   },

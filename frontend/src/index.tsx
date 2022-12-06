@@ -17,8 +17,11 @@ import {
   Turn,
   Weight,
 } from "./components/organisms";
-import Stability from "./components/organisms/StabilityLongitudalMoment";
+
 import StabilityLongitudalMoment from "./components/organisms/StabilityLongitudalMoment";
+import StabilityRodForce from "./components/organisms/StabilityRodForce";
+import StabillitySteer from "./components/organisms/StabillitySteer";
+import StabillityCharts from "./components/organisms/StabillityCharts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -40,14 +43,14 @@ root.render(
           <Route path="weight" element={<Weight />} />
           <Route path="stability" element={<Steps steps={stabilitySteps} />}>
             <Route
-              path="longitudinal-moment"
+              path="longitudal-moment"
               element={<StabilityLongitudalMoment />}
             />
-            <Route path="steer" element={<Stability />} />
-            <Route path="rod-force" element={<Stability />} />
+            <Route path="steer" element={<StabillitySteer/>} />
+            <Route path="rod-force" element={<StabilityRodForce />} />
             <Route
               path="stabillty-and-manouverabillty"
-              element={<Stability />}
+              element={<StabillityCharts/>}
             />
           </Route>
           <Route path="turn" element={<Turn />} />
