@@ -1,23 +1,19 @@
-import React from 'react'
-import { useLongitudalMomentStore } from '../../utils/useLongitudalMoment';
+import React from "react";
 
-import InputNumber from "../atoms/InputNumber";
+import { useState } from "react";
+import StabillityLongitutudalMomentFuselageDataCollapse from "../molecules/StabillityLongitutudalMomentFuselageDataCollapse";
+import StabillityLongitutudalMomentWingDataCollapse from "../molecules/StabillityLongitutudalMomentWingDataCollapse";
 
 const StabilityLongitudalMoment = () => {
-const cm0p = useLongitudalMomentStore((state) => state.cm0p)
-const setCm0p = useLongitudalMomentStore((state) => state.setCm0p)
+
   return (
     <div>
-      <div className="flex flex-col w-64 mr-8 space-y-2">
-        <InputNumber
-          value={cm0p}
-          setter={setCm0p}
-          label="Cm0 profile"
-          unit="-"
-        />
+      <div className="flex flex-col w-80 mr-8 space-y-2">
+        <StabillityLongitutudalMomentWingDataCollapse/>
+        <StabillityLongitutudalMomentFuselageDataCollapse/>
       </div>
-      
     </div>
-)}
+  );
+};
 
-export default StabilityLongitudalMoment
+export default StabilityLongitudalMoment;
