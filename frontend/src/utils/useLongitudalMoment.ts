@@ -1,6 +1,19 @@
 import create from 'zustand'
 
 interface LongitudalMomentState {
+  //gondole
+  s_b_g:number
+  s_bf_g:number
+  w_g:number
+  l_b_g:number
+  l_bf_g:number
+  i_w_g:number
+  setS_b_g:(value: number) => void
+  setS_bf_g:(value: number) => void
+  setW_g:(value: number) => void
+  setL_b_g:(value: number) => void
+  setL_bf_g:(value: number) => void
+  setI_w_g:(value: number) => void
   //Fuselage
   s_b:number
   s_bf:number
@@ -42,6 +55,21 @@ interface LongitudalMomentState {
 }
 
 export const useLongitudalMomentStore = create<LongitudalMomentState>()((set) => ({
+  //fuselage
+  s_b_g:2000,
+  s_bf_g:300,
+  w_g:4,
+  l_b_g:20,
+  l_bf_g:7,
+  i_w_g:1,
+  setS_b_g:(value) => set((state) => ({ cm0p: value })),
+  setS_bf_g:(value) =>set((state)=>({s_bf:value})),
+  setW_g:(value) =>set((state)=>({w:value})),
+  setL_b_g:(value) =>set((state)=>({l_b:value})),
+  setL_bf_g:(value) =>set((state)=>({l_bf:value})),
+  setI_w_g:(value) =>set((state)=>({i_w:value})),
+
+  
   //fuselage
   s_b:2000,
   s_bf:300,
