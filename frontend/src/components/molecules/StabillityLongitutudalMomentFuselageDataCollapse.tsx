@@ -2,7 +2,8 @@ import React from 'react'
 import { useLongitudalMomentStore } from "../../utils/useLongitudalMoment";
 
 import InputNumber from "../atoms/InputNumber";
-import OverwriteCheckbox from '../atoms/OvrwriteCheckbox';
+import OverwritableInputNumber from '../atoms/OverwritableInputNumber';
+
 const StabillityLongitutudalMomentFuselageDataCollapse = () => {
   const data = useLongitudalMomentStore() 
   return (
@@ -53,27 +54,28 @@ const StabillityLongitutudalMomentFuselageDataCollapse = () => {
           unit="rad"
         />
 
-    <InputNumber
+    <OverwritableInputNumber
           value={data.c_a}
           setter={data.setC_a}
           label="Wing mean aerodynamic cord"
           unit="m"
+          span={0.5}
         />
-    <OverwriteCheckbox label ="Get wing mean aerodynamic cord value from previous calculation"/>
-    <InputNumber
+    
+    <OverwritableInputNumber
           value={data.S}
           setter={data.setS}
           label="Wing surface"
           unit="m^2"
-        />
-    <OverwriteCheckbox label ="Get wing surface value from previous calculation"/>
-    <InputNumber
+          span = {1}/>
+
+    <OverwritableInputNumber
           value={data.c_0}
           setter={data.setC0}
           label="Wing cord in the fuselage axis"
           unit="m"
+          span= {0.5}
         />
-    <OverwriteCheckbox label ="Get wing surface value from previous calculation"/>
     <InputNumber
           value={data.b_k}
           setter={data.setb_k}

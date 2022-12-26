@@ -52,28 +52,7 @@ const StabillityLongitutudalMomentGondoleDataCollapse = () => {
           label="Wing incilnation"
           unit="rad"
         />
-
-    <InputNumber
-          value={data.c_a}
-          setter={data.setC_a}
-          label="Wing mean aerodynamic cord"
-          unit="m"
-        />
-    <OverwriteCheckbox label ="Get wing mean aerodynamic cord value from previous calculation"/>
-    <InputNumber
-          value={data.S}
-          setter={data.setS}
-          label="Wing surface"
-          unit="m^2"
-        />
-    <OverwriteCheckbox label ="Get wing surface value from previous calculation"/>
-    <InputNumber
-          value={data.c_0}
-          setter={data.setC0}
-          label="Wing cord in the gondole axis"
-          unit="m"
-        />
-    <OverwriteCheckbox label ="Get wing surface value from previous calculation"/>
+        
     <InputNumber
           value={data.b_k}
           setter={data.setb_k}

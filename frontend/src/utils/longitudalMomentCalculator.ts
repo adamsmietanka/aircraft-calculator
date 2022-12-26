@@ -217,4 +217,5 @@ export const longitudalMoment = ({
     for(let i=0; i<cm_f.length;i++){
      cm_bu[i] = cm_p[i]+cm_f[i] + cm_g[i]   
     }
+    return cm_bu
   }; 
