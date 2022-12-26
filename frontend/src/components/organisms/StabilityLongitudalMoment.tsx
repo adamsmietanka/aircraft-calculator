@@ -5,6 +5,7 @@ import { useState, useEffect} from "react";
 import StabillityLongitutudalMomentFuselageDataCollapse from "../molecules/StabillityLongitutudalMomentFuselageDataCollapse";
 import StabillityLongitutudalMomentGondoleDataCollapse from "../molecules/StabillityLongitutudalMomentGondoleDataCollapse";
 import StabillityLongitutudalMomentWingDataCollapse from "../molecules/StabillityLongitutudalMomentWingDataCollapse";
+import StabillityLongitudalMomentChart from "../molecules/StabillityLongitudalMomentChart";
 
 const StabilityLongitudalMoment = () => {
   const [showGondole, setShowGondole] = useState(false);
@@ -16,7 +17,7 @@ const StabilityLongitudalMoment = () => {
     console.log(cmbu)
   },[data])
   return (
-    <div>
+    <div className="flex flex-row">
       <div className="flex flex-col w-80 mr-8 space-y-2">
         <StabillityLongitutudalMomentWingDataCollapse />
         <StabillityLongitutudalMomentFuselageDataCollapse />
@@ -33,6 +34,7 @@ const StabilityLongitudalMoment = () => {
         </label>
         {showGondole && <StabillityLongitutudalMomentGondoleDataCollapse />}
       </div>
+      <StabillityLongitudalMomentChart/>
     </div>
   );
 };
