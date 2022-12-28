@@ -1,9 +1,14 @@
 import React from 'react'
+import StabillitySteerChart from '../molecules/StabillitySteerChart';
+import StabillitySteerKappaDataColapse from '../molecules/StabillitySteerKappaDataColapse';
 
 const StabillitySteer = () => {
   return (
-    <div>
-      Steering chart
+      <div className="flex flex-row">
+      <div className="flex flex-col w-80 mr-8 space-y-2">
+        <StabillitySteerKappaDataColapse />
+      </div>
+      <StabillitySteerChart/>
     </div>
   )
 }
