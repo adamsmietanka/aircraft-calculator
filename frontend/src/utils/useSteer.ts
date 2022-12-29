@@ -6,6 +6,7 @@ interface SteerState {
   sh: number;
 
   steerReynoldsNumber: number;
+  steerMachNumber: number;
   steerProfileThickess: number;
   steerProfileyc90: number;
   steerProfileyc99: number;
@@ -18,6 +19,7 @@ interface SteerState {
   setSh: (value: number) => void;
 
   setSteerReynoldsNumber: (value: number) => void;
+  setSteerMachNumber: (value: number) => void;
   setSteerProfileThickess: (value: number) => void;
   setSteerProfileyc90: (value: number) => void;
   setSteerProfileyc99: (value: number) => void;
@@ -32,6 +34,7 @@ export const useSteerStore = create<SteerState>()((set) => ({
   sh: 3.78,
 
   steerReynoldsNumber: 20000000,
+  steerMachNumber: 0.5,
   steerProfileThickess: 0.2,
   steerProfileyc90: 0.1,
   steerProfileyc99: 0.01,
@@ -45,6 +48,9 @@ export const useSteerStore = create<SteerState>()((set) => ({
 
   setSteerReynoldsNumber: (value) =>
     set((state) => ({ steerReynoldsNumber: value })),
+    
+  setSteerMachNumber: (value) =>
+  set((state) => ({ steerMachNumber: value })),
   setSteerProfileThickess: (value) =>
     set((state) => ({ steerProfileThickess: value })),
   setSteerProfileyc90: (value) => set((state) => ({ steerProfileyc90: value })),

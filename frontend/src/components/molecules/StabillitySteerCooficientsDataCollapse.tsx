@@ -8,6 +8,9 @@ const StabillitySteerCooficientsDataCollapse = () => {
   const steerReynoldsNumber = useSteerStore(
     (state) => state.steerReynoldsNumber
   );
+  const steerMachNumber = useSteerStore(
+    (state) => state.steerMachNumber
+  );
   const o25clineIncilnation = useSteerStore(
     (state) => state.o25clineIncilnation
   );
@@ -17,10 +20,15 @@ const StabillitySteerCooficientsDataCollapse = () => {
   const setSteerReynoldsNumber = useSteerStore(
     (state) => state.setSteerReynoldsNumber
   );
+  const setSteerMachNumber = useSteerStore(
+    (state) => state.setSteerMachNumber
+  );
   const setO25clineIncilnation = useSteerStore(
     (state) => state.setSteero25clineInclination
   );
-  const setSteerAspectRatio = useSteerStore((state) => state.setSteerAspectRatio);
+  const setSteerAspectRatio = useSteerStore(
+    (state) => state.setSteerAspectRatio
+  );
   const setSteerZbieznosc = useSteerStore((state) => state.setsteerzbieznosc);
 
   const a1 = useSteerOutputStore((state) => state.a1);
@@ -55,6 +63,14 @@ const StabillitySteerCooficientsDataCollapse = () => {
           label="Steer reynolds number"
           unit="-"
           span={100000}
+        />
+
+        <OverwritableInputNumber
+          value={steerMachNumber}
+          setter={setSteerMachNumber}
+          label="Steer Mach number"
+          unit="-"
+          span={0.1}
         />
 
         <InputNumber
