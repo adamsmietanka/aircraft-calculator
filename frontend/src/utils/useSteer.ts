@@ -14,6 +14,9 @@ interface SteerState {
   steerAspectRatio: number;
   steerZbieznosc: number;
 
+  wingAspectRatio:number;
+  a:number;
+
   setX_h: (value: number) => void;
   setSpeedDifference: (value: number) => void;
   setSh: (value: number) => void;
@@ -26,6 +29,9 @@ interface SteerState {
   setSteero25clineInclination: (value: number) => void;
   setSteerAspectRatio: (value: number) => void;
   setsteerzbieznosc: (value: number) => void;
+
+  setWingAspectRatio: (value: number) => void;
+  setA: (value: number) => void;
 }
 
 export const useSteerStore = create<SteerState>()((set) => ({
@@ -42,15 +48,17 @@ export const useSteerStore = create<SteerState>()((set) => ({
   steerAspectRatio: 1,
   steerZbieznosc: 0.5,
 
+  wingAspectRatio: 5.96,
+  a: 4.41,
+
   setX_h: (value) => set((state) => ({ x_h: value })),
   setSpeedDifference: (value) => set((state) => ({ speedDifference: value })),
   setSh: (value) => set((state) => ({ sh: value })),
 
   setSteerReynoldsNumber: (value) =>
     set((state) => ({ steerReynoldsNumber: value })),
-    
-  setSteerMachNumber: (value) =>
-  set((state) => ({ steerMachNumber: value })),
+
+  setSteerMachNumber: (value) => set((state) => ({ steerMachNumber: value })),
   setSteerProfileThickess: (value) =>
     set((state) => ({ steerProfileThickess: value })),
   setSteerProfileyc90: (value) => set((state) => ({ steerProfileyc90: value })),
@@ -59,22 +67,29 @@ export const useSteerStore = create<SteerState>()((set) => ({
     set((state) => ({ o25clineIncilnation: value })),
   setSteerAspectRatio: (value) => set((state) => ({ steerAspectRatio: value })),
   setsteerzbieznosc: (value) => set((state) => ({ steerZbieznosc: value })),
+
+  setWingAspectRatio: (value) => set((state) => ({ wingAspectRatio: value })),
+  setA: (value) => set((state) => ({ a: value })),
 }));
 
 interface SteerOutputState {
   kappa: number;
   a1: number;
   a2: number;
+  dEpsTodAlfa:number;
   setKappa: (value: number) => void;
   setA1: (value: number) => void;
   setA2: (value: number) => void;
+  setDEpsTodAlfa: (value: number) => void;
 }
 
 export const useSteerOutputStore = create<SteerOutputState>()((set) => ({
   kappa: 10,
   a1: 2.14,
   a2: 2,
+  dEpsTodAlfa:0.47,
   setKappa: (value) => set((state) => ({ kappa: value })),
   setA1: (value) => set((state) => ({ a1: value })),
   setA2: (value) => set((state) => ({ a2: value })),
+  setDEpsTodAlfa: (value) => set((state) => ({ dEpsTodAlfa: value })),
 }));
