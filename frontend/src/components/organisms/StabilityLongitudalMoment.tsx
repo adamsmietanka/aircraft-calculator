@@ -12,6 +12,7 @@ const StabilityLongitudalMoment = () => {
   const data = useLongitudalMomentStore()
   const setCmbu = useLongitudalMomentOutput((state)=>state.setCmbu)
   const cmbu = useLongitudalMomentOutput((state)=>state.cmbu)
+  
   useEffect (()=>{
     setCmbu(longitudalMoment(data))
     console.log(cmbu)

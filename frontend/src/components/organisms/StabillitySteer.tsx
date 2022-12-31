@@ -1,5 +1,6 @@
 import React from 'react'
 import StabillitySteerAfterWingFlowAngleDataCollapse from '../molecules/StabillitySteerAfterWingFlowAngleDataCollapse';
+import StabillitySteerAngleOfIncilination from '../molecules/StabillitySteerAngleOfIncilination';
 import StabillitySteerChart from '../molecules/StabillitySteerChart';
 import StabillitySteerCooficientsDataCollapse from '../molecules/StabillitySteerCooficientsDataCollapse';
 import StabillitySteerKappaDataColapse from '../molecules/StabillitySteerKappaDataColapse';
@@ -11,6 +12,7 @@ const StabillitySteer = () => {
         <StabillitySteerKappaDataColapse />
         <StabillitySteerCooficientsDataCollapse/>
         <StabillitySteerAfterWingFlowAngleDataCollapse/>
+        <StabillitySteerAngleOfIncilination/>
       </div>
       <StabillitySteerChart/>
     </div>

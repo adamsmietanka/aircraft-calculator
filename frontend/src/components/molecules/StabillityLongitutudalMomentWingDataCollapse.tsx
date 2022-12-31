@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useLongitudalMomentStore } from "../../utils/useLongitudalMoment";
-
-import InputNumber from "../atoms/InputNumber";
 import OverwritableInputNumber from "../atoms/OverwritableInputNumber";
 import OverwriteCheckbox from "../atoms/OvrwriteCheckbox";
 import ReadCSV from "../atoms/ReadCSV";
