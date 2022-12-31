@@ -1,12 +1,15 @@
-import { stat } from "fs/promises";
 import React, { useEffect } from "react";
 import { longitudalMoment } from "../../utils/longitudalMomentCalculator";
-import { getCzFromVelocity } from "../../utils/steerCalculation";
+import {
+  calculateSteerIncilinationAngle,
+  getCzFromVelocity,
+} from "../../utils/steerCalculation";
 import {
   useLongitudalMomentStore,
   useLongitudalMomentOutput,
 } from "../../utils/useLongitudalMoment";
 import { useSteerOutputStore, useSteerStore } from "../../utils/useSteer";
+import OverwritableInputNumber from "../atoms/OverwritableInputNumber";
 
 function closest(value: number, array: number[]) {
   var result: number[] = [];
@@ -26,7 +29,7 @@ const StabillitySteerAngleOfIncilination = () => {
   const mass = useSteerStore((state) => state.mass);
   const wingSurface = useLongitudalMomentStore((state) => state.S);
 
-  const data = useLongitudalMomentStore();
+  // const data = useLongitudalMomentStore();
 
   const a = useSteerStore((state) => state.a);
   const kappa = useSteerOutputStore((state) => state.kappa);
@@ -63,13 +66,48 @@ const StabillitySteerAngleOfIncilination = () => {
     //   (2 * (closestCz[0] + closestCz[1]));
     // console.log(closestCz, Cz);
     // console.log(alfa1, alfa2, alfaNew);
-    
-    let cmbu = cmbuArray[Cz_array.findIndex((val) => val == closestCz[0])];
-    
-    console.log(cmbu)
-    setSteerInclinationAngle(0);
+
+    let Cmbu = cmbuArray[Cz_array.findIndex((val) => val == closestCz[0])];
+
+    console.log(Cmbu);
+    setSteerInclinationAngle(
+      calculateSteerIncilinationAngle({ kappa, a1, a, dEpsTodAlfa, Cmbu, Cz })
+    );
   }, []);
-  return <div></div>;
+  return (
+    <div tabIndex={0} className="collapse border rounded-box">
+      <input type="checkbox" />
+      <button className="collapse-title text-xl font-medium">
+        {" "}
+        Steer inclination angle: alfa_h = {steerInclinationAngle.toPrecision(2)}
+      </button>
+      <div className="collapse-content">
+        <OverwritableInputNumber
+          value={cruiseAlttiude}
+          setter={setCruiseAlttiude}
+          label="Curise alttitude"
+          unit="m"
+          span={100}
+        />
+
+        <OverwritableInputNumber
+          value={cruiseVelocity}
+          setter={setCruiseVelocity}
+          label="Curise velocity"
+          unit="m/s"
+          span={10}
+        />
+
+        <OverwritableInputNumber
+          value={mass}
+          setter={setMass}
+          label="Mass"
+          unit="kg"
+          span={100}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default StabillitySteerAngleOfIncilination;
