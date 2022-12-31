@@ -41,8 +41,8 @@ const StabillitySteerCooficientsDataCollapse = () => {
     { name: "NACA 0007", value: 2 },
   ];
   useEffect(() => {
-    setA1(0);
-    setA2(0);
+    setA1(2);
+    setA2(2.14);
   }, []);
   return (
     <div tabIndex={0} className="collapse border rounded-box">

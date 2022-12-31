@@ -1,4 +1,5 @@
 import { density } from "./atmosphere";
+import { radTodeg } from "./misc";
 
 interface kappaCalculation {
   s: number;
@@ -70,3 +71,36 @@ export const getCzFromVelocity = ({
     (density(cruiseAlttiude) * cruiseVelocity * cruiseVelocity * wingSurface)
   );
 };
+
+interface deltaCalculation {
+  Cmbu: number[];
+  cz: number[];
+  a: number;
+  a1: number;
+  a2: number;
+  kappa: number;
+  dEpsTodAlfa: number;
+  steerIncilinationAngle: number;
+}
+
+export const calculateDelta = ({
+  Cmbu,
+  cz,
+  a,
+  a1,
+  a2,
+  kappa,
+  dEpsTodAlfa,
+  steerIncilinationAngle,
+}: deltaCalculation) => {
+  let delta = cz.map((current) => current);
+  console.log(delta)
+  for (let i = 0; i < delta.length; i++) {
+    delta[i] =
+      Cmbu[i] / (kappa * a2) -
+      (a1 / a2) * ((cz[i] / a) * (1 - dEpsTodAlfa) + steerIncilinationAngle);
+      console.log(delta[i]);
+  }
+  return delta
+};
+  
