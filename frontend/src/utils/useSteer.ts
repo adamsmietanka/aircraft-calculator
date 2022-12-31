@@ -17,6 +17,10 @@ interface SteerState {
   wingAspectRatio:number;
   a:number;
 
+  cruiseVelocity:number;
+  cruiseAlttiude:number;
+  mass:number;
+
   setX_h: (value: number) => void;
   setSpeedDifference: (value: number) => void;
   setSh: (value: number) => void;
@@ -32,6 +36,11 @@ interface SteerState {
 
   setWingAspectRatio: (value: number) => void;
   setA: (value: number) => void;
+
+  
+  setCruiseVelocity:(value: number) => void;
+  setCruiseAlttiude:(value: number) => void;
+  setMass:(value: number) => void;
 }
 
 export const useSteerStore = create<SteerState>()((set) => ({
@@ -50,6 +59,10 @@ export const useSteerStore = create<SteerState>()((set) => ({
 
   wingAspectRatio: 5.96,
   a: 4.41,
+
+  cruiseVelocity:158,
+  cruiseAlttiude:8000,
+  mass:3000,
 
   setX_h: (value) => set((state) => ({ x_h: value })),
   setSpeedDifference: (value) => set((state) => ({ speedDifference: value })),
@@ -70,6 +83,10 @@ export const useSteerStore = create<SteerState>()((set) => ({
 
   setWingAspectRatio: (value) => set((state) => ({ wingAspectRatio: value })),
   setA: (value) => set((state) => ({ a: value })),
+
+  setCruiseVelocity:(value) => set((state) => ({ cruiseVelocity: value })),
+  setCruiseAlttiude:(value) => set((state) => ({ cruiseAlttiude: value })),
+  setMass:(value) => set((state) => ({ mass: value })),
 }));
 
 interface SteerOutputState {
@@ -77,10 +94,12 @@ interface SteerOutputState {
   a1: number;
   a2: number;
   dEpsTodAlfa:number;
+  steerInclinationAngle:number;
   setKappa: (value: number) => void;
   setA1: (value: number) => void;
   setA2: (value: number) => void;
   setDEpsTodAlfa: (value: number) => void;
+  setSteerInclinationAngle: (value: number) => void;
 }
 
 export const useSteerOutputStore = create<SteerOutputState>()((set) => ({
@@ -88,8 +107,10 @@ export const useSteerOutputStore = create<SteerOutputState>()((set) => ({
   a1: 2.14,
   a2: 2,
   dEpsTodAlfa:0.47,
+  steerInclinationAngle:-0.1038,
   setKappa: (value) => set((state) => ({ kappa: value })),
   setA1: (value) => set((state) => ({ a1: value })),
   setA2: (value) => set((state) => ({ a2: value })),
   setDEpsTodAlfa: (value) => set((state) => ({ dEpsTodAlfa: value })),
+  setSteerInclinationAngle: (value) => set((state) => ({ steerInclinationAngle: value })),
 }));

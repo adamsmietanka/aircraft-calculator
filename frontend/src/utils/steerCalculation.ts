@@ -1,19 +1,72 @@
-interface kappaCalculation{
-    s:number
-    sh:number
-    configuration:number
-    mac:number
-    xh:number
-    cog:number
-}
-interface dEpsTodAlfaCalculation{
-    a:number;
-    wingAspectRatio:number;
-}
-export const calculateKappa = ({s,sh,configuration,mac,xh,cog}:kappaCalculation) => {
-    return ((xh/mac-cog))*s/sh*configuration
+import { density } from "./atmosphere";
+
+interface kappaCalculation {
+  s: number;
+  sh: number;
+  configuration: number;
+  mac: number;
+  xh: number;
+  cog: number;
 }
 
-export const calculateDepsToDalfa = ({a,wingAspectRatio}:dEpsTodAlfaCalculation)=>{
-     return (2*a)/(Math.PI*wingAspectRatio)
+interface dEpsTodAlfaCalculation {
+  a: number;
+  wingAspectRatio: number;
 }
+
+interface steerIncilinationAngleCalulation {
+  kappa: number;
+  a1: number;
+  a: number;
+  dEpsTodAlfa: number;
+  Cmbu: number;
+  Cz: number;
+}
+
+interface getCzCalculation {
+  cruiseVelocity: number;
+  cruiseAlttiude: number;
+  mass: number;
+  wingSurface: number;
+}
+
+export const calculateKappa = ({
+  s,
+  sh,
+  configuration,
+  mac,
+  xh,
+  cog,
+}: kappaCalculation) => {
+  return (((xh / mac - cog) * s) / sh) * configuration;
+};
+
+export const calculateDepsToDalfa = ({
+  a,
+  wingAspectRatio,
+}: dEpsTodAlfaCalculation) => {
+  return (2 * a) / (Math.PI * wingAspectRatio);
+};
+
+export const calculateSteerIncilinationAngle = ({
+  kappa,
+  a1,
+  a,
+  dEpsTodAlfa,
+  Cmbu,
+  Cz,
+}: steerIncilinationAngleCalulation) => {
+  return Cmbu / (kappa * a1) - (Cz / a) * dEpsTodAlfa;
+};
+
+export const getCzFromVelocity = ({
+  cruiseVelocity,
+  cruiseAlttiude,
+  mass,
+  wingSurface,
+}: getCzCalculation) => {
+  return (
+    (2 * mass * 9.81) /
+    (density(cruiseAlttiude) * cruiseVelocity * cruiseVelocity * wingSurface)
+  );
+};

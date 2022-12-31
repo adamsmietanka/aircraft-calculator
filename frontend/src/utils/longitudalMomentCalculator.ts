@@ -1,3 +1,5 @@
+import { degTorad } from "./misc";
+
 interface wingDataCalculation {
   cm0p: number;
   alfa: Array<number>;
@@ -62,7 +64,6 @@ interface props {
   z_sc: number;
 }
 
-
 //alfa+-10, len alfa = len cx = len cz
 const wingLongitudonalMoment = ({
   cm0p,
@@ -77,9 +78,9 @@ const wingLongitudonalMoment = ({
   let Cm_p = alfa.map((x) => x);
   for (let i = 0; i < alfa.length; i++) {
     Cm_p[i] =
-      cm0p + cz[i] * (x_sc - x_sa) + (cx[i] - cz[i] * alfa[i]) * (z_sc - z_sa);
+      cm0p + cz[i] * (x_sc - x_sa) + (cx[i] - cz[i] * degTorad(alfa[i])) * (z_sc - z_sa);
   }
-  return Cm_p
+  return Cm_p;
 };
 
 const staticMomentData = ({
@@ -126,22 +127,32 @@ const getDeltaXplotvalue = (x: number, y: number) => {
 };
 
 export const longitudalMoment = ({
-    s_b_g,
-    s_bf_g,
-    w_g,
-    l_b_g,
-    l_bf_g,
-    i_w_g,
-    s_b,
-    s_bf,
-    w,
-    l_b,
-    l_bf,
-    c_a,
-    i_w,
-    S,
-    c_0,
-    b_k,
+  s_b_g,
+  s_bf_g,
+  w_g,
+  l_b_g,
+  l_bf_g,
+  i_w_g,
+  s_b,
+  s_bf,
+  w,
+  l_b,
+  l_bf,
+  c_a,
+  i_w,
+  S,
+  c_0,
+  b_k,
+  cm0p,
+  alfa,
+  cx,
+  cz,
+  x_sa,
+  x_sc,
+  z_sa,
+  z_sc,
+}: props) => {
+  let cm_p = wingLongitudonalMoment({
     cm0p,
     alfa,
     cx,
@@ -150,18 +161,37 @@ export const longitudalMoment = ({
     x_sc,
     z_sa,
     z_sc,
-  }: props) => {
-    let cm_p = wingLongitudonalMoment({
-      cm0p,
-      alfa,
-      cx,
-      cz,
-      x_sa,
-      x_sc,
-      z_sa,
-      z_sc,
-    });
-    const cmf_0 = staticMomentData({
+  });
+  const cmf_0 = staticMomentData({
+    s_b,
+    s_bf,
+    w,
+    l_b,
+    l_bf,
+    c_a,
+    i_w,
+    S,
+  });
+  let cm_f = dynamicMomentData({
+    cz,
+    l_b,
+    l_bf,
+    c_a,
+    S,
+    b_k,
+    c_0,
+  });
+  cm_f = cm_f.map((x) => x + cmf_0);
+
+  let cm_g = cm_f.map((x) => 0);
+  if (s_b_g && s_bf_g && w_g && l_b_g && l_bf_g && i_w_g) {
+    s_b = s_b_g;
+    s_bf = s_bf_g;
+    w = w_g;
+    l_b = l_b_g;
+    l_bf = l_bf_g;
+    i_w = i_w_g;
+    const cm_0_g = staticMomentData({
       s_b,
       s_bf,
       w,
@@ -171,7 +201,7 @@ export const longitudalMoment = ({
       i_w,
       S,
     });
-    let cm_f = dynamicMomentData({
+    cm_g = dynamicMomentData({
       cz,
       l_b,
       l_bf,
@@ -180,42 +210,12 @@ export const longitudalMoment = ({
       b_k,
       c_0,
     });
-    cm_f = cm_f.map((x => x+cmf_0))
+    cm_g.map((x) => x + cm_0_g);
+  }
 
-    let cm_g = cm_f.map(x=>0)
-    if (s_b_g && s_bf_g &&w_g&&l_b_g&&l_bf_g&&i_w_g ) {
-        s_b = s_b_g
-        s_bf = s_bf_g
-        w=w_g
-        l_b=l_b_g
-        l_bf =l_bf_g
-        i_w = i_w_g
-        const cm_0_g = staticMomentData({
-            s_b,
-            s_bf,
-            w,
-            l_b,
-            l_bf,
-            c_a,
-            i_w,
-            S,
-          });
-          cm_g = dynamicMomentData({
-            cz,
-            l_b,
-            l_bf,
-            c_a,
-            S,
-            b_k,
-            c_0,
-          });
-          cm_g.map(x => x+cm_0_g)
-    }
-  
-
-    let cm_bu = alfa.map(aoa => 0)
-    for(let i=0; i<cm_f.length;i++){
-     cm_bu[i] = cm_p[i]+cm_f[i] + cm_g[i]   
-    }
-    return cm_bu
-  }; 
+  let cm_bu = alfa.map((aoa) => 0);
+  for (let i = 0; i < cm_f.length; i++) {
+    cm_bu[i] = cm_p[i] + cm_f[i] + cm_g[i];
+  }
+  return cm_bu;
+};
