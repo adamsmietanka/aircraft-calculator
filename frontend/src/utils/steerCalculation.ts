@@ -1,5 +1,4 @@
 import { density } from "./atmosphere";
-import { radTodeg } from "./misc";
 
 interface kappaCalculation {
   s: number;
@@ -73,8 +72,8 @@ export const getCzFromVelocity = ({
 };
 
 interface deltaCalculation {
-  Cmbu: number[];
-  cz: number[];
+  CmbuArray: number[];
+  CzArray: number[];
   a: number;
   a1: number;
   a2: number;
@@ -84,8 +83,8 @@ interface deltaCalculation {
 }
 
 export const calculateDelta = ({
-  Cmbu,
-  cz,
+  CmbuArray,
+  CzArray,
   a,
   a1,
   a2,
@@ -93,12 +92,12 @@ export const calculateDelta = ({
   dEpsTodAlfa,
   steerIncilinationAngle,
 }: deltaCalculation) => {
-  let delta = cz.map((current) => current);
+  let delta = CzArray.map((current) => current);
   console.log(delta)
   for (let i = 0; i < delta.length; i++) {
     delta[i] =
-      Cmbu[i] / (kappa * a2) -
-      (a1 / a2) * ((cz[i] / a) * (1 - dEpsTodAlfa) + steerIncilinationAngle);
+    CmbuArray[i] / (kappa * a2) -
+      (a1 / a2) * ((CzArray[i] / a) * (1 - dEpsTodAlfa) + steerIncilinationAngle);
       console.log(delta[i]);
   }
   return delta

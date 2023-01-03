@@ -96,12 +96,14 @@ interface SteerOutputState {
   dEpsTodAlfa:number;
   steerInclinationAngle:number;
   delta:number[]
+  alfaH:number[]
   setKappa: (value: number) => void;
   setA1: (value: number) => void;
   setA2: (value: number) => void;
   setDEpsTodAlfa: (value: number) => void;
   setSteerInclinationAngle: (value: number) => void;
   setDelta:(value: number[]) => void;
+  setAlfaH:(value: number[]) => void;
 }
 
 export const useSteerOutputStore = create<SteerOutputState>()((set) => ({
@@ -111,10 +113,12 @@ export const useSteerOutputStore = create<SteerOutputState>()((set) => ({
   dEpsTodAlfa:0.47,
   steerInclinationAngle:-0.1038,
   delta:[1],
+  alfaH:[],
   setKappa: (value) => set((state) => ({ kappa: value })),
   setA1: (value) => set((state) => ({ a1: value })),
   setA2: (value) => set((state) => ({ a2: value })),
   setDEpsTodAlfa: (value) => set((state) => ({ dEpsTodAlfa: value })),
   setSteerInclinationAngle: (value) => set((state) => ({ steerInclinationAngle: value })),
   setDelta: (value) => set((state) => ({ delta: value })),
+  setAlfaH:(value) => set((state) => ({ alfaH: value })),
 }));
