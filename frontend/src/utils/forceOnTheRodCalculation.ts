@@ -1,5 +1,6 @@
 import { density } from "./atmosphere";
-import { powerUnitSteps } from "./steps";
+
+
 
 interface forceOnTheRodCaclculationData {
   height: number;
@@ -104,3 +105,17 @@ const getF = (steerTrailingEdgeAngle: number) => {
   }
   return F
 };
+
+
+
+interface trimAngleCalculationData{
+  b1:number
+  b2:number
+  b3:number
+  alfaH:number
+  deltaH:number
+}
+
+export const trimAngleCalculation = ({ b1 ,b2,b3,alfaH,deltaH }:trimAngleCalculationData) => {
+  return (-b1/b3*alfaH - b2/b3* deltaH)
+}

@@ -113,3 +113,13 @@ export const useTrimStore = create<TrimState>()((set) => ({
   setTrimAftHingeArea: (value) => set((state) => ({ trimAftHingeArea: value })),
   setSteerTrailingEdgeAngle: (value) => set((state) => ({ steerTrailingEdgeAngle: value })),
 }));
+
+interface TrimVelocityState {
+  trimVelocity:number
+  setTrimVelocity: (value: number) => void;
+}
+
+export const useTrimVelocityStore = create<TrimVelocityState>()((set) => ({
+  trimVelocity:1.2,
+  setTrimVelocity: (value) => set((state) => ({ trimVelocity: value })),
+}));

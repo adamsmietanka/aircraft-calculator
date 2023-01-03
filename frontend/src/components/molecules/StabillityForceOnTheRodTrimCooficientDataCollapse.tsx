@@ -1,24 +1,120 @@
 import React, { useEffect } from "react";
-import { getB3 } from "../../utils/forceOnTheRodCalculation";
-import { useForceOnTheRodOutputStore, useTrimStore } from "../../utils/useForceOnTheRod";
+import { getB3, trimAngleCalculation } from "../../utils/forceOnTheRodCalculation";
+import { findClosestValueIndexIntheArray } from "../../utils/misc";
+import {
+  calculateDelta,
+  calculateSteerIncilinationAngle,
+  getCzFromVelocity,
+} from "../../utils/steerCalculation";
+import {
+  useForceOnTheRodOutputStore,
+  useTrimStore,
+  useTrimVelocityStore,
+} from "../../utils/useForceOnTheRod";
+import {
+  useLongitudalMomentOutput,
+  useLongitudalMomentStore,
+} from "../../utils/useLongitudalMoment";
+import { useSteerOutputStore, useSteerStore } from "../../utils/useSteer";
 import InputNumber from "../atoms/InputNumber";
 
 const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
+  const trimVelocity = useTrimVelocityStore((state) => state.trimVelocity);
+  const setTrimVelocity = useTrimVelocityStore(
+    (state) => state.setTrimVelocity
+  );
   const trimData = useTrimStore();
-  const b3 = useForceOnTheRodOutputStore((state) => state.b3)
-  const setB3 = useForceOnTheRodOutputStore((state) => state.setB3)
-  const deltaHK = useForceOnTheRodOutputStore((state) => state.deltaHk)
+  const b1 = useForceOnTheRodOutputStore((state) => state.b1);
+  const b2 = useForceOnTheRodOutputStore((state) => state.b2);
+  const b3 = useForceOnTheRodOutputStore((state) => state.b3);
+  const setB3 = useForceOnTheRodOutputStore((state) => state.setB3);
+  const deltaHK = useForceOnTheRodOutputStore((state) => state.deltaHk);
+  const setDeltaHk = useForceOnTheRodOutputStore((state) => state.setDeltaHk);
 
-  useEffect(()=>{setB3(getB3(trimData))},[setB3,trimData])
+  //delta and alfa calculation data
+  const a = useSteerStore((state) => state.a);
+  const a1 = useSteerOutputStore((state) => state.a1);
+  const a2 = useSteerOutputStore((state) => state.a2);
+  const kappa = useSteerOutputStore((state) => state.kappa);
+  const dEpsTodAlfa = useSteerOutputStore((state) => state.dEpsTodAlfa);
+  const steerIncilinationAngle = useSteerOutputStore(
+    (state) => state.steerInclinationAngle
+  );
+  const longitudanalMomentArray = useLongitudalMomentOutput(
+    (state) => state.cmbu
+  );
+  const CzOriginalaArray = useLongitudalMomentStore((state) => state.cz);
+  //Cz calculation data
+  const cruiseAlttiude = useSteerStore((state) => state.cruiseAlttiude);
+  const mass = useSteerStore((state) => state.mass);
+  const wingSurface = useLongitudalMomentStore((state) => state.S);
+
+  useEffect(() => {
+    setB3(getB3(trimData));
+  }, [setB3, trimData]);
+  useEffect(() => {
+    let cruiseVelocity = trimVelocity;
+    let CzArray = [
+      getCzFromVelocity({
+        cruiseVelocity,
+        cruiseAlttiude,
+        mass,
+        wingSurface,
+      }),
+    ];
+    let Cz = CzArray.reduce((curr) => curr);
+
+    let CmbuArray = [
+      longitudanalMomentArray[
+        findClosestValueIndexIntheArray(CzOriginalaArray, Cz)
+      ],
+    ];
+    let Cmbu = CmbuArray.reduce((curr) => curr);
+
+    let deltaH = calculateDelta({
+      CmbuArray,
+      CzArray,
+      a,
+      a1,
+      a2,
+      kappa,
+      dEpsTodAlfa,
+      steerIncilinationAngle,
+    }).reduce((curr) => curr);
+
+    let alfaH = calculateSteerIncilinationAngle({
+      kappa,
+      a1,
+      a,
+      dEpsTodAlfa,
+      Cmbu,
+      Cz,
+    });
+
+    setDeltaHk(trimAngleCalculation({ b1 ,b2,b3,alfaH,deltaH }));
+  }, [a, a1, a2, kappa, dEpsTodAlfa, steerIncilinationAngle]);
+
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
       <button className="collapse-title text-xl font-medium">
         {" "}
         Trim Hinge Moment Coofiecient and Angle
+        <label className="label">
+          <span className="label-text"> b3 = {b3} </span>
+        </label>
+        <label className="label">
+          <span className="label-text"> deltaHk = {deltaHK} rad </span>
+        </label>
       </button>
       <div className="collapse-content ">
-      <InputNumber
+        <InputNumber
+          value={trimVelocity}
+          setter={setTrimVelocity}
+          label="Trim Velocity"
+          unit="m/s"
+        />
+        <InputNumber
           value={trimData.rudderCord}
           setter={trimData.setRudderCord}
           label="Rudder cord in the center of the trim flap"
