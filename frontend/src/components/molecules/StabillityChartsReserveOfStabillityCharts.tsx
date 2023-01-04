@@ -95,7 +95,7 @@ const StabillityChartsReserveOfStabillityCharts = () => {
   return (
     <div>
       {Plots.map((plot) => (
-        <div id={plot} />
+        <div key = {plot} id={plot} />
       ))}
     </div>
   );
