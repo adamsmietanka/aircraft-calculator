@@ -19,7 +19,10 @@ export const useForceOnTheRodStore = create<ForceOnTheRodState>()((set) => ({
   rodLenght: 1,
   angularRudderToSteeringGearRatio: 1,
   steerCord: 1.115,
-  velocity: [80, 90, 100, 120, 130],
+  velocity: [
+    10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170,
+    180, 190, 200, 210, 220, 230,
+  ],
 
   setHeight: (value) => set((state) => ({ height: value })),
   setRodLenght: (value) => set((state) => ({ rodLenght: value })),
@@ -76,15 +79,15 @@ export const useForceOnTheRodOutputStore = create<ForceOnTheRodOutputState>()(
 );
 
 interface TrimState {
-  rudderCord:number
+  rudderCord: number;
   steerSpan: number;
   steerAftHingeArea: number;
   trimSpan: number;
   trimAftHingeArea: number;
   steerNoseHingeArea: number;
   steerFwdHingeArea: number;
-  steerTrailingEdgeAngle:number;
-  setRudderCord:(value: number) => void;
+  steerTrailingEdgeAngle: number;
+  setRudderCord: (value: number) => void;
   setSteerSpan: (value: number) => void;
   setAftHingeArea: (value: number) => void;
   setTrimSpan: (value: number) => void;
@@ -95,31 +98,33 @@ interface TrimState {
 }
 
 export const useTrimStore = create<TrimState>()((set) => ({
-  rudderCord:1.2,
+  rudderCord: 1.2,
   steerSpan: -0.0861,
   steerAftHingeArea: -0.2252,
   trimSpan: -0.0296,
   trimAftHingeArea: 0.3793,
   steerNoseHingeArea: 0.2,
   steerFwdHingeArea: 20,
-  steerTrailingEdgeAngle:2,
+  steerTrailingEdgeAngle: 2,
   setRudderCord: (value) => set((state) => ({ rudderCord: value })),
   setSteerSpan: (value) => set((state) => ({ steerSpan: value })),
   setAftHingeArea: (value) => set((state) => ({ steerAftHingeArea: value })),
   setTrimSpan: (value) => set((state) => ({ trimSpan: value })),
   setSteerNoseHingeArea: (value) =>
     set((state) => ({ steerNoseHingeArea: value })),
-  setSteerFwdHingeArea: (value) => set((state) => ({ steerFwdHingeArea: value })),
+  setSteerFwdHingeArea: (value) =>
+    set((state) => ({ steerFwdHingeArea: value })),
   setTrimAftHingeArea: (value) => set((state) => ({ trimAftHingeArea: value })),
-  setSteerTrailingEdgeAngle: (value) => set((state) => ({ steerTrailingEdgeAngle: value })),
+  setSteerTrailingEdgeAngle: (value) =>
+    set((state) => ({ steerTrailingEdgeAngle: value })),
 }));
 
 interface TrimVelocityState {
-  trimVelocity:number
+  trimVelocity: number;
   setTrimVelocity: (value: number) => void;
 }
 
 export const useTrimVelocityStore = create<TrimVelocityState>()((set) => ({
-  trimVelocity:1.2,
+  trimVelocity: 1.2,
   setTrimVelocity: (value) => set((state) => ({ trimVelocity: value })),
 }));

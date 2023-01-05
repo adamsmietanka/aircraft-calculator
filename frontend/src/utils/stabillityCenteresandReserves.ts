@@ -4,7 +4,7 @@ export const reserve = (Center: number, CoG: number) => {
   return Center - CoG;
 };
 
-const calculatekappaH0 = (
+export const calculatekappaH0 = (
   rudderArea: number,
   rudderWingdistance: number,
   wingArea: number,
