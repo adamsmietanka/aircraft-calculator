@@ -89,7 +89,7 @@ export const calculatedPdhToMg = (
   return (
     mass *
     9.81 *
-    angularRudderToSteeringGearRatio *
+    (-angularRudderToSteeringGearRatio) *
     ((trimArea * trimCord * MAC * b2) /
       (rudderArea * rudderWingdistance * rodLenght * a2 * velocity)) *
     hMprim
