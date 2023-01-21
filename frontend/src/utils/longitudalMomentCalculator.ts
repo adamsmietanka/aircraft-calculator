@@ -1,4 +1,5 @@
 import { degTorad } from "./misc";
+import { fuselage_report_data } from "./coefA080101";
 
 interface wingDataCalculation {
   cm0p: number;
@@ -64,6 +65,45 @@ interface props {
   z_sc: number;
 }
 
+const fuselageStaticLongitudonalMoment = (
+  fuselageWidth: number,
+  fuselageSurface: number,
+  frontFuselageSurface: number,
+  frontLenghtSurface: number,
+  fuselageLenght: number,
+  MAC: number,
+  wingArea: number,
+  wingInclinationAngle: number
+) => {
+  let z = parseFloat((Math.pow(fuselageWidth, 2) / fuselageSurface).toFixed(2));
+  console.log(z);
+
+  let x =
+    ((frontFuselageSurface / fuselageSurface) * frontLenghtSurface) /
+    fuselageLenght;
+
+  let i = fuselage_report_data.z.findIndex((zValue) => zValue === z);
+  let a1 = fuselage_report_data.a1[i];
+  let b1 = fuselage_report_data.b1[i];
+  let c1 = fuselage_report_data.c1[i];
+  let a2 = fuselage_report_data.a2[i];
+  let b2 = fuselage_report_data.b2[i];
+  let c2 = fuselage_report_data.c2[i];
+
+  let y = Math.exp(x);
+  if (x > 0.2) {
+    y = a1 * Math.exp(-b1 * x) + c1;
+  } else if (x < 0.2) {
+    y = a2 * Math.exp(-b2 * x) + c2;
+  } else {
+    y = (a2 * Math.exp(-b2 * x) + c2 + a1 * Math.exp(-b1 * x) + c1) / 2;
+  }
+  return (
+    ((y * fuselageSurface * fuselageLenght) / (wingArea * MAC)) *
+    wingInclinationAngle
+  );
+};
+
 //alfa+-10, len alfa = len cx = len cz
 const wingLongitudonalMoment = ({
   cm0p,
@@ -78,30 +118,11 @@ const wingLongitudonalMoment = ({
   let Cm_p = alfa.map((x) => x);
   for (let i = 0; i < alfa.length; i++) {
     Cm_p[i] =
-      cm0p + cz[i] * (x_sc - x_sa) + (cx[i] - cz[i] * degTorad(alfa[i])) * (z_sc - z_sa);
+      cm0p +
+      cz[i] * (x_sc - x_sa) +
+      (cx[i] - cz[i] * degTorad(alfa[i])) * (z_sc - z_sa);
   }
   return Cm_p;
-};
-
-const staticMomentData = ({
-  s_b,
-  s_bf,
-  w,
-  l_b,
-  l_bf,
-  c_a,
-  i_w,
-  S,
-}: staticMomentData) => {
-  let x = ((s_bf / s_b) * l_bf) / l_b;
-  let z = (w * w) / s_b;
-  let y = getCm0bPlotValue(x, z);
-  return (y * i_w * s_b * l_b) / (S * c_a);
-};
-
-const getCm0bPlotValue = (x: number, y: number) => {
-  const value = 1;
-  return value;
 };
 
 const dynamicMomentData = ({
@@ -162,16 +183,17 @@ export const longitudalMoment = ({
     z_sa,
     z_sc,
   });
-  const cmf_0 = staticMomentData({
+  const cmf_0 = fuselageStaticLongitudonalMoment(
+    w,
     s_b,
     s_bf,
-    w,
-    l_b,
     l_bf,
+    l_b,
     c_a,
-    i_w,
     S,
-  });
+    i_w
+  );
+  console.log("Cmof = %f", cmf_0);
   let cm_f = dynamicMomentData({
     cz,
     l_b,
@@ -191,16 +213,16 @@ export const longitudalMoment = ({
     l_b = l_b_g;
     l_bf = l_bf_g;
     i_w = i_w_g;
-    const cm_0_g = staticMomentData({
+    const cm_0_g = fuselageStaticLongitudonalMoment(
+      w,
       s_b,
       s_bf,
-      w,
-      l_b,
       l_bf,
+      l_b,
       c_a,
-      i_w,
       S,
-    });
+      i_w
+    );
     cm_g = dynamicMomentData({
       cz,
       l_b,
