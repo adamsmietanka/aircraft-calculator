@@ -4,7 +4,7 @@ interface Props {
   unit: string;
   value: number;
   span?: number;
-  setOverwriteValue?: any;
+  setOverwriteValue?:  (value: number) => void;
   overwittenValue?: any;
   setter: (value: number) => void;
 }
