@@ -14,9 +14,10 @@ const StabilityLongitudalMoment = () => {
   const cmbu = useLongitudalMomentOutput((state)=>state.cmbu)
   
   useEffect (()=>{
-    setCmbu(longitudalMoment(data))
+    setCmbu(longitudalMoment(data,showGondole))
     console.log(cmbu)
-  },[data])
+  },[data,showGondole])
+
   return (
     <div className="flex flex-row">
       <div className="flex flex-col w-80 mr-8 space-y-2">

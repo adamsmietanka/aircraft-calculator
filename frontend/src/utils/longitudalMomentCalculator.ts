@@ -143,36 +143,39 @@ const dynamicMomentData = ({
 };
 
 const getDeltaXplotvalue = (x: number, y: number) => {
-  const value = 1;
+  const value = -0.0534;
   return value;
 };
 
-export const longitudalMoment = ({
-  s_b_g,
-  s_bf_g,
-  w_g,
-  l_b_g,
-  l_bf_g,
-  i_w_g,
-  s_b,
-  s_bf,
-  w,
-  l_b,
-  l_bf,
-  c_a,
-  i_w,
-  S,
-  c_0,
-  b_k,
-  cm0p,
-  alfa,
-  cx,
-  cz,
-  x_sa,
-  x_sc,
-  z_sa,
-  z_sc,
-}: props) => {
+export const longitudalMoment = (
+  {
+    s_b_g,
+    s_bf_g,
+    w_g,
+    l_b_g,
+    l_bf_g,
+    i_w_g,
+    s_b,
+    s_bf,
+    w,
+    l_b,
+    l_bf,
+    c_a,
+    i_w,
+    S,
+    c_0,
+    b_k,
+    cm0p,
+    alfa,
+    cx,
+    cz,
+    x_sa,
+    x_sc,
+    z_sa,
+    z_sc,
+  }: props,
+  gondole: boolean
+) => {
   let cm_p = wingLongitudonalMoment({
     cm0p,
     alfa,
@@ -206,33 +209,35 @@ export const longitudalMoment = ({
   cm_f = cm_f.map((x) => x + cmf_0);
 
   let cm_g = cm_f.map((x) => 0);
-  if (s_b_g && s_bf_g && w_g && l_b_g && l_bf_g && i_w_g) {
-    s_b = s_b_g;
-    s_bf = s_bf_g;
-    w = w_g;
-    l_b = l_b_g;
-    l_bf = l_bf_g;
-    i_w = i_w_g;
-    const cm_0_g = fuselageStaticLongitudonalMoment(
-      w,
-      s_b,
-      s_bf,
-      l_bf,
-      l_b,
-      c_a,
-      S,
-      i_w
-    );
-    cm_g = dynamicMomentData({
-      cz,
-      l_b,
-      l_bf,
-      c_a,
-      S,
-      b_k,
-      c_0,
-    });
-    cm_g.map((x) => x + cm_0_g);
+  if (gondole) {
+    if (s_b_g && s_bf_g && w_g && l_b_g && l_bf_g && i_w_g) {
+      s_b = s_b_g;
+      s_bf = s_bf_g;
+      w = w_g;
+      l_b = l_b_g;
+      l_bf = l_bf_g;
+      i_w = i_w_g;
+      const cm_0_g = fuselageStaticLongitudonalMoment(
+        w,
+        s_b,
+        s_bf,
+        l_bf,
+        l_b,
+        c_a,
+        S,
+        i_w
+      );
+      cm_g = dynamicMomentData({
+        cz,
+        l_b,
+        l_bf,
+        c_a,
+        S,
+        b_k,
+        c_0,
+      });
+      cm_g.map((x) => x + cm_0_g);
+    }
   }
 
   let cm_bu = alfa.map((aoa) => 0);
