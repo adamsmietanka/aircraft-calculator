@@ -17,6 +17,9 @@ import {
   Turn,
   Weight,
 } from "./components/organisms";
+import { useWeightStore } from "./utils/useWeightConfiguration"
+
+// const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
 
 import StabilityLongitudalMoment from "./components/organisms/StabilityLongitudalMoment";
 import StabilityRodForce from "./components/organisms/StabilityRodForce";
@@ -53,6 +56,7 @@ root.render(
               element={<StabillityCharts/>}
             />
           </Route>
+
           <Route path="turn" element={<Turn />} />
           <Route path="settings" element={<Settings />} />
         </Route>

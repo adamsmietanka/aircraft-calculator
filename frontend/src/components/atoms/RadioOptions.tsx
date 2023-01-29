@@ -11,6 +11,7 @@ const RadioOptions = ({ options, checkedButton, setCheckedButton }: Props) => {
     <div>
       {options &&
         options.map((text) => (
+
           <div className="form-control" key={text}>
             <label className="label cursor-pointer">
               <input
@@ -22,6 +23,7 @@ const RadioOptions = ({ options, checkedButton, setCheckedButton }: Props) => {
               />
               <span className="label-text"> {text} </span>
             </label>
+
           </div>
         ))}
     </div>
