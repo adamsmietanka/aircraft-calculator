@@ -11,15 +11,19 @@ const RadioOptions = ({ options, checkedButton, setCheckedButton }: Props) => {
     <div>
       {options &&
         options.map((text) => (
-          <div className="label justify-left w-60" key={text}>
-            <input
-              type="radio"
-              className="radio radio-sm mr-2"
-              value={text}
-              checked={text === checkedButton}
-              onChange={() => setCheckedButton(text)}
-            />
-            <span className="label-text align"> {text} </span>
+
+          <div className="form-control" key={text}>
+            <label className="label cursor-pointer">
+              <input
+                type="radio"
+                className="radio radio-sm mr-2"
+                value={text}
+                checked={text === checkedButton}
+                onChange={() => setCheckedButton(text)}
+              />
+              <span className="label-text"> {text} </span>
+            </label>
+
           </div>
         ))}
     </div>

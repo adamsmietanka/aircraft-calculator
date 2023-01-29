@@ -5,9 +5,10 @@ interface Props {
   unit: string;
   value: number;
   setter: (value: number) => void;
+  step?: number;
 }
 
-const InputNumber = ({label, unit, value, setter}: Props) => {
+const InputNumber = ({label, unit, value, setter, step}: Props) => {
   return (
     <div className="form-control">
       <label className="label">
@@ -16,7 +17,7 @@ const InputNumber = ({label, unit, value, setter}: Props) => {
       <label className="input-group">
         <input
           type="number"
-          step={10}
+          step={step ? step :10}
           className="input input-bordered"
           value={value}
           onChange={(e) => setter(parseFloat(e.target.value))}
