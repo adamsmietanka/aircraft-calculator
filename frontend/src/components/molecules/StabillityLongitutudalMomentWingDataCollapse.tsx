@@ -21,7 +21,7 @@ const StabillityLongitutudalMomentWingDataCollapse = () => {
           span = {0.01}
         />
         
-        <ReadCSV />
+        <ReadCSV label = {"Import Wing Data CSV"}/>
         <OverwriteCheckbox label="Get Cx(alfa) anz Cz_p(alfa) value from previous calculation" />
 
         <OverwritableInputNumber
