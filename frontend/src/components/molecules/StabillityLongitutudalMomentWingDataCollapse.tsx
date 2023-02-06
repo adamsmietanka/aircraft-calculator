@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLongitudalMomentStore } from "../../utils/useLongitudalMoment";
 import OverwritableInputNumber from "../atoms/OverwritableInputNumber";
 import OverwriteCheckbox from "../atoms/OvrwriteCheckbox";
 import ReadCSV from "../atoms/ReadCSV";
 const StabillityLongitutudalMomentWingDataCollapse = () => {
   const data = useLongitudalMomentStore();
+  const [aero,setAreo] = useState({alpha:[],cz:[],cx:[]})
+
+  useEffect(()=>(console.log("aero:",aero)),[aero])
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
@@ -21,7 +24,7 @@ const StabillityLongitutudalMomentWingDataCollapse = () => {
           span = {0.01}
         />
         
-        <ReadCSV label = {"Import Wing Data CSV"}/>
+        <ReadCSV label = "Import Wing Data CSV" setter={setAreo}/>
         <OverwriteCheckbox label="Get Cx(alfa) anz Cz_p(alfa) value from previous calculation" />
 
         <OverwritableInputNumber

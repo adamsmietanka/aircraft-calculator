@@ -142,3 +142,11 @@ export const useLongitudalMomentOutput = create<LongitudalMomentOutput>()(
     setCmbu: (value) => set((state) => ({ cmbu: value })),
   })
 );
+
+// interface Aero{
+
+// }
+
+// const useAero = create<Aero>()(
+
+// );

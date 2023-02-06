@@ -1,13 +1,13 @@
-import { StringifyOptions } from "querystring";
 import React, { useEffect, useState } from "react";
 
 interface props {
   label: string;
+  setter: (value: any) => void;
 }
 
 const reduceSpecialCharacters = (str: string) => {
   if (str.includes("\r")) {
-    str = str.replace(/\r/g, "");
+   str = str.replace(/\r/g, "");
     return str;
   }
   return str;
@@ -16,24 +16,23 @@ const reduceSpecialCharacters = (str: string) => {
 const csvFileToObject = (string: string) => {
   const csvRows = string.split("\n"); //creates an array in each row is a string
   let keys = csvRows[0].split(","); //creates an array in which each object is a
+  keys = keys.map(key => reduceSpecialCharacters(key))
   let data2DArray = csvRows.slice(1).map((row) => row.split(",")); //coneverts each row to an array of strings seperated with ","
   let colArray = data2DArray[0].map((col, i) => {
-    data2DArray = data2DArray.filter((row) => !row);
-    data2DArray.map((row) => {
-      parseFloat(reduceSpecialCharacters(row[i]));
-    });
-    return data2DArray;
+    let finalArray:number[] = data2DArray.map((row) => parseFloat(reduceSpecialCharacters(row[i])));
+    return finalArray
   });
+  console.log("sorted data", colArray);
   let obj = Object.assign(
     {},
     ...keys.map((key, id) => ({ [key]: colArray[id] }))
   );
+  console.log("Object to return", obj);
   return obj;
 };
 
-const ReadCSV = ({ label }: props) => {
+const ReadCSV = ({ label, setter }: props) => {
   const [file, setFile] = useState();
-  const [object, setObject] = useState({});
   const fileReader = new FileReader();
 
   const handleOnChange = (e: any) => {
@@ -44,14 +43,15 @@ const ReadCSV = ({ label }: props) => {
     e.preventDefault();
     if (file) {
       fileReader.onload = function (event: any) {
-        setObject(csvFileToObject(String(event.target.result)));
+        console.log("Import started");
+        let objectRead: object = csvFileToObject(String(event.target.result));
+        console.log("Object read", objectRead);
+        setter(objectRead);
+        console.log("Import finished");
       };
       fileReader.readAsText(file);
     }
   };
-  useEffect(() => {
-    console.log("read object", object);
-  }, [object, setObject]);
 
   return (
     <div className="mt-4">
