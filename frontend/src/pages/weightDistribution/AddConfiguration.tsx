@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import RadioOptions from "../../components/atoms/RadioOptions";
+import WeightComponent from "./interfaces/weightComponent";
 
-interface WeightComponent {
-  componentName: string;
-  mass: number;
-  cords: { x: number; y: number; z: number };
-}
 interface Props {
   isVisible:boolean
   onClose: React.Dispatch<React.SetStateAction<boolean>>

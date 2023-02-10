@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InputNumber from "../../components/atoms/InputNumber";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
-
-interface WeightComponent {
-  componentName: string;
-  mass: number;
-  cords: { x: number; y: number; z: number };
-}
+import WeightComponent from "./interfaces/weightComponent";
 
 interface props {
   useType: string;
@@ -16,14 +11,8 @@ interface props {
 }
 
 const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
-  const weightConfigurations = useWeightStore(
-    (state) => state.weightConfigurations
-  );
   const activeWeightConfiguration = useWeightStore(
     (state) => state.activeWeightConfiguration
-  );
-  const setWeightConfigurations = useWeightStore(
-    (state) => state.setWeightConfigurations
   );
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration

@@ -6,13 +6,8 @@ import AddConfiguration from "./AddConfiguration";
 
 import { CoG } from "../../utils/massCalculations";
 import AddComponent from "./AddComponent";
+import WeightComponent from "./interfaces/weightComponent";
 
-
-interface WeightComponent {
-  componentName: string;
-  mass: number;
-  cords: { x: number; y: number; z: number };
-}
 
 const Weight = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);

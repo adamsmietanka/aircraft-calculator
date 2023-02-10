@@ -1,11 +1,7 @@
 import WeightComponet from "./WeightComponet";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
+import WeightComponent from "./interfaces/weightComponent";
 
-interface WeightComponent {
-  componentName: string;
-  mass: number;
-  cords: { x: number; y: number; z: number };
-}
 
 const WeightCofiguration = ({setToggleModal}:any) => {
   const setUseType = useWeightStore((state) => state.setUseType);

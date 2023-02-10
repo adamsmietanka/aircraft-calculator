@@ -8,12 +8,8 @@ import {
   getYarray,
   getZarray,
 } from "../../utils/massCalculations";
+import WeightComponent from "./interfaces/weightComponent";
 
-interface WeightComponent {
-  componentName: string;
-  mass: number;
-  cords: { x: number; y: number; z: number };
-}
 const layouts = (axis: string) => {
   let layout = {
     plotTittle: "Position on XY",
