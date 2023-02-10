@@ -12,7 +12,7 @@ interface props {
   useType: string;
   component?: WeightComponent;
   isVisible: boolean;
-  onClose: React.Dispatch<React.SetStateAction<boolean>>;
+  onClose: (value:boolean)=>void
 }
 
 const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
