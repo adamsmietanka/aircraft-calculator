@@ -4,8 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/templates/Home";
-import Steps from "./components/templates/Steps";
+import Home from "./pages/home/Home";
+import Steps from "./components/ui/Steps";
 import { powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
   PowerUnitEngine,
@@ -16,15 +16,15 @@ import {
   Settings,
   Turn,
   Weight,
-} from "./components/organisms";
-import { useWeightStore } from "./utils/useWeightConfiguration"
+} from "./pages";
+import { useWeightStore } from "./data/stores/useWeightConfiguration"
 
 // const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
 
-import StabilityLongitudalMoment from "./components/organisms/StabilityLongitudalMoment";
-import StabilityRodForce from "./components/organisms/StabilityRodForce";
-import StabillitySteer from "./components/organisms/StabillitySteer";
-import StabillityCharts from "./components/organisms/StabillityCharts";
+import StabilityLongitudalMoment from "./pages/stabillity/StabilityLongitudalMoment";
+import StabilityRodForce from "./pages/stabillity/StabilityRodForce";
+import StabillitySteer from "./pages/stabillity/StabillitySteer";
+import StabillityCharts from "./pages/stabillity/StabillityCharts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

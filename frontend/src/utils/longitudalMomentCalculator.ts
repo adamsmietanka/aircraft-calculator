@@ -1,5 +1,5 @@
 import { degTorad } from "./misc";
-import { fuselage_report_data } from "./coefA080101";
+import { fuselage_report_data } from "../data/constants/coefA080101";
 
 interface wingDataCalculation {
   cm0p: number;
