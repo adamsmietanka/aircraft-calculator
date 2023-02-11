@@ -7,7 +7,7 @@ import AddConfiguration from "./AddConfiguration";
 import { CoG } from "../../utils/massCalculations";
 import AddComponent from "./AddComponent";
 import WeightComponent from "./interfaces/weightComponent";
-
+import WeightConfiguration from "./interfaces/weightConfiguration";
 
 const Weight = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
@@ -29,9 +29,7 @@ const Weight = () => {
   const setAcitveWeightConfiguration = useWeightStore(
     (state) => state.setActiveWeightConfiguration
   );
-  const setCog = useWeightStore(
-    (state) => state.setCog
-  );
+  const setCog = useWeightStore((state) => state.setCog);
   const handleDelete = (name: string) => {
     let confugurations = weightConfigurations.filter(
       (weightConfiguration) => weightConfiguration.name !== name
@@ -44,7 +42,7 @@ const Weight = () => {
   }, [activeWeightConfiguration.name]);
 
   useEffect(() => {
-    setCog(CoG(activeWeightConfiguration.components))
+    setCog(CoG(activeWeightConfiguration.components));
   }, [activeWeightConfiguration.components]);
 
   useEffect(() => {
@@ -55,7 +53,12 @@ const Weight = () => {
     configs[i] = activeWeightConfiguration;
     setWeightConfigurations(configs);
     setUseType("add");
-  }, [activeWeightConfiguration, setUseType ,setWeightConfigurations , weightConfigurations]);
+  }, [
+    activeWeightConfiguration,
+    setUseType,
+    setWeightConfigurations,
+    weightConfigurations,
+  ]);
 
   return (
     <div className="drawer drawer-end">
@@ -69,7 +72,7 @@ const Weight = () => {
             >
               Choose configuration
             </label>
-            <WeightCofiguration setToggleModal = {setToggleModal_2}/>
+            <WeightCofiguration setToggleModal={setToggleModal_2} />
             {activeWeightConfiguration && (
               <button
                 className="btn  justify-center"
@@ -106,10 +109,7 @@ const Weight = () => {
         <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
         <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
           {weightConfigurations.map(
-            (configuration: {
-              name: string;
-              components: Array<WeightComponent>;
-            }) => (
+            (configuration) => (
               <li className="flex flex-row m-2" key={configuration.name}>
                 <button
                   onClick={() => {
@@ -146,5 +146,3 @@ const Weight = () => {
 };
 
 export default Weight;
-
-

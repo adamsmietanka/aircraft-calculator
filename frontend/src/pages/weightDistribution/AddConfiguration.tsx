@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import RadioOptions from "../../components/atoms/RadioOptions";
 import WeightComponent from "./interfaces/weightComponent";
+import InputNumber from "../../components/atoms/InputNumber";
+import OverwritableInputNumber from "../../components/atoms/OverwritableInputNumber";
 
 interface Props {
   isVisible:boolean
@@ -20,6 +22,9 @@ const AddConfiguration = ({isVisible , onClose}:Props) => {
   const [weightComponents, setWeightComponents] = useState<
     WeightComponent[] | never[]
   >([]);
+  const [MAC, setMAC] = useState<number>(1)
+  const [MACPosition, setMACPosition] = useState<number>(1)
+
   const [checkedButton, setCheckedButton] = useState(radioButtonsText[0]);
 
   const weightConfigurations = useWeightStore(
@@ -38,7 +43,7 @@ const AddConfiguration = ({isVisible , onClose}:Props) => {
   const handleSubmit = () => {
     let configurations = [];
     configurations = weightConfigurations;
-    let newConfuguration = { name: name, components: weightComponents };
+    let newConfuguration = { name: name, components: weightComponents, MAC:MAC, MACPosition:MACPosition };
 
     configurations.push(newConfuguration);
     setWeightConfigurations(configurations);
@@ -86,7 +91,12 @@ const AddConfiguration = ({isVisible , onClose}:Props) => {
             checkedButton={checkedButton}
             setCheckedButton={setCheckedButton}
           />
-          {/* {checkedButton === "Empty Configuration" && (setWeightComponents([]))} */}
+          {checkedButton === "Empty Configuration" && (
+            <>
+              <OverwritableInputNumber label = {"Wing MAC"} unit = {"m"} value={MAC} setter={setMAC}  span = {0.5}/> 
+              <InputNumber label = {"Wing MAC Positon"} unit = {"m"} value={MACPosition} setter={setMACPosition}  step = {0.5}/> 
+            </>
+          )}
 
           {checkedButton === "Clone from the configuration" && (
             <select

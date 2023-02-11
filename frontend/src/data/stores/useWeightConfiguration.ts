@@ -1,36 +1,18 @@
 import create from "zustand";
 import { CoG } from "../../utils/massCalculations";
-
-interface WeightComponent {
-  componentName: string;
-  mass: number;
-  cords: { x: number; y: number; z: number };
-}
+import WeightComponent from "../../pages/weightDistribution/interfaces/weightComponent";
+import WeightConfiguration from "../../pages/weightDistribution/interfaces/weightConfiguration";
 
 interface WeightConfigurationsState {
   useType: string;
   editedComponent: WeightComponent;
-  weightConfigurations: Array<{
-    name: string;
-    components: Array<WeightComponent>;
-  }>;
-  activeWeightConfiguration: {
-    name: string;
-    components: Array<WeightComponent>;
-  };
+  weightConfigurations: Array<WeightConfiguration>;
+  activeWeightConfiguration: WeightConfiguration;
   cog: { x: number; y: number; z: number };
   setUseType: (value: string) => void;
   setEditedComponent: (value: WeightComponent) => void;
-  setWeightConfigurations: (
-    value: Array<{
-      name: string;
-      components: Array<WeightComponent>;
-    }>
-  ) => void;
-  setActiveWeightConfiguration: (value: {
-    name: string;
-    components: Array<WeightComponent>;
-  }) => void;
+  setWeightConfigurations: (value: WeightConfiguration[]) => void;
+  setActiveWeightConfiguration: (value: WeightConfiguration) => void;
   setCog: (value: { x: number; y: number; z: number }) => void;
 }
 
@@ -49,10 +31,14 @@ const defaultConfigurations = [
   {
     name: "Default Configuration 1",
     components: defaultComponents1,
+    MAC: 1.9,
+    MACPosition: 14,
   },
   {
     name: "Default Configuration 2",
     components: defaultComponents2,
+    MAC: 1.9,
+    MACPosition: 14,
   },
 ];
 
