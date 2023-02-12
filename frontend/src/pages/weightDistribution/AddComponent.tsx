@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import CloseButton from "../../components/atoms/CloseButton";
 import InputNumber from "../../components/atoms/InputNumber";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import WeightComponent from "./interfaces/weightComponent";
@@ -7,7 +8,7 @@ interface props {
   useType: string;
   component?: WeightComponent;
   isVisible: boolean;
-  onClose: (value:boolean)=>void
+  onClose: (value: boolean) => void;
 }
 
 const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
@@ -26,12 +27,12 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
   useEffect(() => {
     if (component && useType === "edit") {
       setName(component?.componentName);
-      setMass(component.mass)
-      setX(component.cords.x)
-      setY(component.cords.y)
-      setZ(component.cords.z)
+      setMass(component.mass);
+      setX(component.cords.x);
+      setY(component.cords.y);
+      setZ(component.cords.z);
     }
-  },[component]);
+  }, [component]);
 
   const handleChange = (component: WeightComponent) => {
     let foundComponent = activeWeightConfiguration.components.find(
@@ -65,36 +66,40 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
     return null;
   }
   return (
-    <div>
       <div
         className="fixed inset-0 bg-black bg-opacity-25
-       backdrop-blur-sm flex justify-center items-center"
+       backdrop-blur-sm"
       >
-        <div className="bg-white w-80 rounded-2xl flex  flex-col justify-center items-center">
-          <label className="label">
-            <span className="label-text">
-              Component of the {activeWeightConfiguration.name} configuration.
-            </span>
-          </label>
-          <div className="form-control">
+        <div className="bg-white w-80 rounded-2xl ">
+          <div className="flex flex-row m-2 items-end justify-end">
+            <CloseButton onClose={onClose} />
+          </div>
+          <div className="flex  flex-col justify-center items-center">
             <label className="label">
-              <span className="label-text">Component Name</span>
+              <span className="label-text">
+                Component of the {activeWeightConfiguration.name} configuration.
+              </span>
             </label>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Component Name</span>
+              </label>
 
-            <input
-              type="text"
-              className="input input-bordered"
-              value={componentName}
-              onChange={(e) => setName(e.target.value)}
-            />
+              <input
+                type="text"
+                className="input input-bordered"
+                value={componentName}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+
+            <InputNumber label="mass" unit="kg" value={mass} setter={setMass} />
+            <InputNumber label="x" unit="m" value={x} setter={setX} />
+            <InputNumber label="y" unit="m" value={y} setter={setY} />
+            <InputNumber label="z" unit="m" value={z} setter={setZ} />
           </div>
 
-          <InputNumber label="mass" unit="kg" value={mass} setter={setMass} />
-          <InputNumber label="x" unit="m" value={x} setter={setX} />
-          <InputNumber label="y" unit="m" value={y} setter={setY} />
-          <InputNumber label="z" unit="m" value={z} setter={setZ} />
-
-          <div className="modal-action">
+          <div className="flex flex-row m-2">
             <button
               className="btn btn-primary"
               onClick={(e) => {
@@ -120,7 +125,6 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
