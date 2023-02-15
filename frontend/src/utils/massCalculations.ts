@@ -1,10 +1,6 @@
-interface WeightComponent {
-    componentName: string;
-    mass: number;
-    cords: { x: number; y: number; z: number };
-  }
+import WeightComponent from "../pages/weightDistribution/interfaces/weightComponent"
   
-export const CoG = (configuration:Array<WeightComponent>) => {
+export const CoG = (configuration:WeightComponent[]) => {
  const masses = configuration.map(component =>  component.mass)
  const mx = configuration.map(component => component.mass*component.cords.x)
  const my = configuration.map(component =>  component.mass*component.cords.y)
@@ -16,22 +12,22 @@ export const CoG = (configuration:Array<WeightComponent>) => {
  return {x:mxSum/massSum , y:mySum/massSum, z:mzSum/massSum}
 }
 
-export const getXarray =(configuration:Array<WeightComponent>)=>{
+export const getXarray =(configuration:WeightComponent[])=>{
   const xArray = configuration.map(component => component.cords.x)
   return xArray
 }
 
-export const getYarray =(configuration:Array<WeightComponent>)=>{
+export const getYarray =(configuration:WeightComponent[])=>{
   const yArray = configuration.map(component => component.cords.y)
   return yArray
 }
 
-export const getZarray =(configuration:Array<WeightComponent>)=>{
+export const getZarray =(configuration:WeightComponent[])=>{
   const zArray = configuration.map(component => component.cords.z)
   return zArray
 }
 
-export const getNamesArray =(configuration:Array<WeightComponent>)=>{
+export const getNamesArray =(configuration:WeightComponent[])=>{
   const namesArray = configuration.map(component => component.componentName)
   return namesArray
 }

@@ -66,10 +66,10 @@ const layouts = (axis: string) => {
 };
 
 const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
-  let CoGvalue = CoG(configuration);
+  let emptyNmberArray:number[] = []
   let trace = {
-    x: getXarray(configuration),
-    y: getYarray(configuration),
+    x: emptyNmberArray,
+    y: emptyNmberArray,
     mode: "markers+text",
     name: "Components",
     text: getNamesArray(configuration),
@@ -80,8 +80,8 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
     marker: { size: 12 },
   };
   var CoGtrace = {
-    x: [CoGvalue.x],
-    y: [CoGvalue.y],
+    x: emptyNmberArray,
+    y: emptyNmberArray,
     mode: "markers+text",
     type: "scatter",
     name: "Center of gravity",
@@ -92,8 +92,10 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
     textposition: "bottom center",
     marker: { size: 12 },
   };
- 
-
+  if (configuration.length === 0){
+    return  [trace, CoGtrace]
+  }
+  let CoGvalue = CoG(configuration);
   switch (axis) {
     case "plot_xy":
       trace = {
@@ -160,7 +162,7 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
           family: "Times New Roman",
         },
         textposition: "bottom center",
-        marker: { size: 12 }
+        marker: { size: 12 },
       };
       CoGtrace = {
         x: [CoGvalue.x],
@@ -186,21 +188,14 @@ const WeightDistributionCharts = () => {
   );
   const cog = useWeightStore((state) => state.cog);
   useEffect(() => {
-    Plotly.newPlot(
-      "plot_xy",
-      getTrace(activeWeightConfiguration.components, "plot_xy"),
-      layouts("plot_xy")
-    );
-    Plotly.newPlot(
-      "plot_yz",
-      getTrace(activeWeightConfiguration.components, "plot_yz"),
-      layouts("plot_yz")
-    );
-    Plotly.newPlot(
-      "plot_xz",
-      getTrace(activeWeightConfiguration.components, "plot_xz"),
-      layouts("plot_xz")
-    );
+    let traces = {
+      plot_xy: getTrace(activeWeightConfiguration.components, "plot_xy"),
+      plot_yz: getTrace(activeWeightConfiguration.components, "plot_yz"),
+      plot_xz: getTrace(activeWeightConfiguration.components, "plot_xz"),
+    };
+    Plotly.newPlot("plot_xy", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_xy"));
+    Plotly.newPlot("plot_yz", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_yz"));
+    Plotly.newPlot("plot_xz", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_xz"));
   });
 
   return (
