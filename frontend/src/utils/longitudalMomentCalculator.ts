@@ -143,7 +143,8 @@ const dynamicMomentData = ({
 };
 
 const getDeltaXplotvalue = (x: number, y: number) => {
-  const value = -0.0534;
+  const value = (2.024 * y + 1.301) * Math.exp(-(-3.275 * y + 9.522)* x + (0.925 * y -0.219))
+  console.log("deltaX:",value)
   return value;
 };
 
