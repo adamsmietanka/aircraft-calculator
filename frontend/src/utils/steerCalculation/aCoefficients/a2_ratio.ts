@@ -6,6 +6,9 @@ const a2_ratio = (a1Ratio: number, chordRatio: number) => {
     b1: [2.08816745, -1.15933741],
     c1: [2.29586863, -1.32065881],
   };
+  if (a1Ratio >= 1){
+    return 1
+  }
   return (
     polynomynalFunction(a1Ratio, params["a1"]) *
       chordRatio *
