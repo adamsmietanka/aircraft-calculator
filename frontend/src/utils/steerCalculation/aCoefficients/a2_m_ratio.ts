@@ -1,6 +1,6 @@
 import expotentialFunction from "../../math_estimation/expotentialFunction";
 
-const a2_m = (
+const a2_m_ratio = (
   chordRatio: number,
   steerAspectRatio: number,
   MachNumber: number
@@ -17,4 +17,4 @@ const a2_m = (
   );
 };
 
-export default a2_m;
+export default a2_m_ratio;
