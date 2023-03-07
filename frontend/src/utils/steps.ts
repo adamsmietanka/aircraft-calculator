@@ -30,15 +30,15 @@ export const powerUnitSteps: Step[] = [
 export const stabilitySteps: Step[] = [
   {
     name: "Longitudinal Moment",
-    path: "longitudal-moment",
-    enabledPaths: ["longitudal-moment", "steer", "rod-force","stabillty-and-manouverabillty"],
+    path: "longitudinal-moment",
+    enabledPaths: ["longitudinal-moment", "steer", "rod-force","stabillty-and-manouverabillty"],
     next: "steer",
   },
   {
     name: "Steer",
     path: "steer",
     enabledPaths: [ "steer", "rod-force","stabillty-and-manouverabillty"],
-    previous: "longitudal-moment",
+    previous: "longitudinal-moment",
     next: "rod-force",
   },
   {

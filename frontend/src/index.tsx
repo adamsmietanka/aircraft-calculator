@@ -46,7 +46,7 @@ root.render(
           <Route path="weight" element={<Weight />} />
           <Route path="stability" element={<Steps steps={stabilitySteps} />}>
             <Route
-              path="longitudal-moment"
+              path="longitudinal-moment"
               element={<StabilityLongitudalMoment />}
             />
             <Route path="steer" element={<StabillitySteer/>} />
