@@ -85,9 +85,9 @@ const AddConfiguration = ({ isVisible, onClose }: Props) => {
               <CloseButton onClose={onClose} />
             </div>
             <div className="flex flex-col items-center">
-              <label className="label m-2">
-                <span>Crete new configuration:</span>
-              </label>
+              <h3 className="text-l">
+                Create new configuration:
+              </h3>
               <input
                 type="text"
                 className="input input-bordered w-60 m-2"

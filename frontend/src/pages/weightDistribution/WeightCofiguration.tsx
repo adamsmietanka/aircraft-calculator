@@ -33,10 +33,6 @@ const WeightCofiguration = ({setToggleModal}:any) => {
   
   return (
     <div className="flex flex-col overflow-auto">
-      <span className=" m-2 flex justfy-center text-lg">
-        {activeWeightConfiguration?.name}
-      </span>
-
       <div className="flex flex-col ">
         {activeWeightConfiguration?.components &&
           activeWeightConfiguration?.components.map(

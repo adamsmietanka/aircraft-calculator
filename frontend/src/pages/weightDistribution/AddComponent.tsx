@@ -66,65 +66,73 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
     return null;
   }
   return (
+    <div className="flex flex-col ">
       <div
         className="fixed inset-0 bg-black bg-opacity-25
-       backdrop-blur-sm"
+       backdrop-blur-sm justify-center items-center"
       >
-        <div className="bg-white w-80 rounded-2xl ">
-          <div className="flex flex-row m-2 items-end justify-end">
-            <CloseButton onClose={onClose} />
-          </div>
-          <div className="flex  flex-col justify-center items-center">
-            <label className="label">
-              <span className="label-text">
-                Component of the {activeWeightConfiguration.name} configuration.
-              </span>
-            </label>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text">Component Name</span>
-              </label>
+        <div className="form">
+          <div className="bg-white w-80 rounded-2xl flex flex-col justify-self-center">
+            <div className="flex flex-row m-2 items-end justify-end">
+              <CloseButton onClose={onClose} />
+            </div>
+            <div className="flex flex-col items-center m-2">
+              <h3 className="text-l">
+                  Component of the {activeWeightConfiguration.name}{" "}
+                  configuration.
+              </h3>
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Component Name</span>
+                </label>
 
-              <input
-                type="text"
-                className="input input-bordered"
-                value={componentName}
-                onChange={(e) => setName(e.target.value)}
+                <input
+                  type="text"
+                  className="input input-bordered"
+                  value={componentName}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <InputNumber
+                label="mass"
+                unit="kg"
+                value={mass}
+                setter={setMass}
               />
+              <InputNumber label="x" unit="m" value={x} setter={setX} />
+              <InputNumber label="y" unit="m" value={y} setter={setY} />
+              <InputNumber label="z" unit="m" value={z} setter={setZ} />
             </div>
 
-            <InputNumber label="mass" unit="kg" value={mass} setter={setMass} />
-            <InputNumber label="x" unit="m" value={x} setter={setX} />
-            <InputNumber label="y" unit="m" value={y} setter={setY} />
-            <InputNumber label="z" unit="m" value={z} setter={setZ} />
-          </div>
+            <div className="flex flex-row m-2">
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleChange({
+                    componentName: componentName,
+                    mass: mass,
+                    cords: { x: x, y: y, z: z },
+                  });
+                }}
+              >
+                Save
+              </button>
 
-          <div className="flex flex-row m-2">
-            <button
-              className="btn btn-primary"
-              onClick={(e) => {
-                e.preventDefault();
-                handleChange({
-                  componentName: componentName,
-                  mass: mass,
-                  cords: { x: x, y: y, z: z },
-                });
-              }}
-            >
-              Save
-            </button>
-
-            <button
-              className="btn"
-              onClick={() => {
-                onClose(false);
-              }}
-            >
-              Submit
-            </button>
+              <button
+                className="btn"
+                onClick={() => {
+                  onClose(false);
+                }}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>
+    </div>
   );
 };
 

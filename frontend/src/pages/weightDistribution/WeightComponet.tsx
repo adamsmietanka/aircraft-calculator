@@ -24,8 +24,8 @@ const WeightComponet = ({ name, mass, cords, handleDelete,handleEdit }: Componen
         </div>
       </div>
       <div className="card-actions mb-2 justify-center">
-        <label className="btn btn-warning" htmlFor="my-modal" onClick={() => handleEdit({ componentName:name, mass:mass, cords:cords})}>Edit</label>
-        <button className="btn btn-error " onClick={() => handleDelete({ componentName:name, mass:mass, cords:cords})}>
+        <label className="btn bg-yellow-600" htmlFor="my-modal" onClick={() => handleEdit({ componentName:name, mass:mass, cords:cords})}>Edit</label>
+        <button className="btn bg-red-600 " onClick={() => handleDelete({ componentName:name, mass:mass, cords:cords})}>
           Delete
         </button>
       </div>

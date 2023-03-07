@@ -70,7 +70,7 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
   let trace = {
     x: emptyNmberArray,
     y: emptyNmberArray,
-    mode: "markers+text",
+    mode: "markers",
     name: "Components",
     text: getNamesArray(configuration),
     textfont: {
@@ -101,7 +101,7 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
       trace = {
         x: getXarray(configuration),
         y: getYarray(configuration),
-        mode: "markers+text",
+        mode: "markers",
         name: "Components",
         text: getNamesArray(configuration),
         textfont: {
@@ -128,7 +128,7 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
       trace = {
         x: getYarray(configuration),
         y: getZarray(configuration),
-        mode: "markers+text",
+        mode: "markers",
         name: "Components",
         text: getNamesArray(configuration),
         textfont: {
@@ -155,7 +155,7 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
       trace = {
         x: getXarray(configuration),
         y: getZarray(configuration),
-        mode: "markers+text",
+        mode: "markers",
         name: "Components",
         text: getNamesArray(configuration),
         textfont: {
@@ -194,8 +194,8 @@ const WeightDistributionCharts = () => {
       plot_xz: getTrace(activeWeightConfiguration.components, "plot_xz"),
     };
     Plotly.newPlot("plot_xy", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_xy"));
-    Plotly.newPlot("plot_yz", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_yz"));
-    Plotly.newPlot("plot_xz", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_xz"));
+    Plotly.newPlot("plot_yz", getTrace(activeWeightConfiguration.components,"plot_yz"), layouts("plot_yz"));
+    Plotly.newPlot("plot_xz", getTrace(activeWeightConfiguration.components,"plot_xz"), layouts("plot_xz"));
   });
 
   return (
