@@ -85,14 +85,19 @@ const StabillitySteer = () => {
     steerIncilinationAngle,
   ]);
   return (
-    <div className="flex flex-row">
-      <div className="flex flex-col w-80 mr-8 space-y-2">
-        <StabillitySteerKappaDataColapse />
-        <StabillitySteerCooficientsDataCollapse />
-        <StabillitySteerAfterWingFlowAngleDataCollapse />
-        <StabillitySteerAngleOfIncilination />
+    <div className="flex flex-col">
+      <h1 className="text-4xl m-2">Elevator Angle Calculation</h1>
+      <div className="flex flex-row">
+        <div className="flex flex-col w-80 mr-8 space-y-2">
+          <StabillitySteerKappaDataColapse />
+          <StabillitySteerCooficientsDataCollapse />
+          <StabillitySteerAfterWingFlowAngleDataCollapse />
+          <StabillitySteerAngleOfIncilination />
+        </div>
+        <div className="flex flex-col">
+          <StabillitySteerChart />
+        </div>
       </div>
-      <StabillitySteerChart />
     </div>
   );
 };

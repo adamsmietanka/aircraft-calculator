@@ -16,7 +16,7 @@ import {
 import { degTorad } from "../../../utils/misc";
 const layouts = (type: string) => {
   let layout = {
-    tittle: { text: "Centers of Stabillity and Manouverablillity" },
+    tittle:"Centers of Stabillity and Manouverablillity" ,
     xaxis: { title: { text: "Cz [-]" } },
     yaxis: { title: { text: "x_N, x_N', x_M , x_M' [-]" } },
   };

@@ -20,7 +20,7 @@ const StabillityLongitudalMomentChart = () => {
     };
     switch (type) {
       case "alfa":
-        layout = { ...layout, xaxis:{title:{text:"angle of atack [rad]"}}  };
+        layout = { ...layout, xaxis:{title:{text:"\u03B1 [\u25CB]"}}  };
         break;
       case "cz":
         layout = { ...layout, xaxis:{title:{text:"cz [-]"}}};

@@ -27,7 +27,7 @@ const layouts = (type: string) => {
     case "dDeltaHtodV":
       layout = {
         tittle: { text: "Criteria of steer angle differential to velocity " },
-        yaxis: { title: { text: "ddelta_H / dV [-]" } },
+        yaxis: { title: { text: "d\u03B4_H / dV [-]" } },
         xaxis: { title: { text: "V [m/s]" } },
       };
       break;
@@ -43,7 +43,7 @@ const layouts = (type: string) => {
         tittle: {
           text: "Criteria of steer angle differential to load factor ratio ",
         },
-        yaxis: { title: { text: "ddelta_H / mg - 1 [-]" } },
+        yaxis: { title: { text: "d\u03B4_H / mg - 1 [-]" } },
         xaxis: { title: { text: "V [m/s]" } },
       };
       break;

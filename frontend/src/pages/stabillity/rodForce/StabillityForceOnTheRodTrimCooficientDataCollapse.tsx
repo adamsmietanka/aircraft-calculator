@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { getB3, trimAngleCalculation } from "../../../utils/forceOnTheRodCalculation";
+import {
+  getB3,
+  trimAngleCalculation,
+} from "../../../utils/forceOnTheRodCalculation";
 import { findClosestValueIndexIntheArray } from "../../../utils/misc";
 import {
   calculateDelta,
@@ -15,7 +18,10 @@ import {
   useLongitudalMomentOutput,
   useLongitudalMomentStore,
 } from "../../../data/stores/useLongitudalMoment";
-import { useSteerOutputStore, useSteerStore } from "../../../data/stores/useSteer";
+import {
+  useSteerOutputStore,
+  useSteerStore,
+} from "../../../data/stores/useSteer";
 import InputNumber from "../../../components/atoms/InputNumber";
 
 const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
@@ -91,22 +97,29 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
       Cz,
     });
 
-    setDeltaHk(trimAngleCalculation({ b1 ,b2,b3,alfaH,deltaH }));
+    setDeltaHk(trimAngleCalculation({ b1, b2, b3, alfaH, deltaH }));
   }, [a, a1, a2, kappa, dEpsTodAlfa, steerIncilinationAngle]);
 
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
-      <button className="collapse-title text-xl font-medium">
-        {" "}
-        Trim Hinge Moment Coofiecient and Angle
-        <label className="label">
-          <span className="label-text"> b3 = {b3} </span>
-        </label>
-        <label className="label">
-          <span className="label-text"> deltaHk = {deltaHK} rad </span>
-        </label>
+      <button className="collapse-title ">
+        <h2 className="text-xl font-medium pb-1 justify-center">
+          {" "}
+          Derivative of the hinge moment for trim and trim inclination angle
+        </h2>
+        <div className="flex flex-row justify-center font-normal">
+          <h3 className="text-l pr-1">{"b3 ="}</h3>
+          <h3 className="text-l">{b3.toPrecision(2)}</h3>
+          <h3 className="text-l pl-1">1/rad</h3>
+        </div>
+        <div className="flex flex-row justify-center font-normal">
+          <h3 className="text-l pr-1">{"\u03B4_HK ="}</h3>
+          <h3 className="text-l">{deltaHK.toPrecision(2)}</h3>
+          <h3 className="text-l pl-1">rad</h3>
+        </div>
       </button>
+
       <div className="collapse-content ">
         <InputNumber
           value={trimVelocity}

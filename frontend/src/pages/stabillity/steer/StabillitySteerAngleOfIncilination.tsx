@@ -10,6 +10,7 @@ import {
 } from "../../../data/stores/useLongitudalMoment";
 import { useSteerOutputStore, useSteerStore } from "../../../data/stores/useSteer";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
+import CollapseHeader from "../../../components/atoms/CollapseHeader";
 
 function closest(value: number, array: number[]) {
   var result: number[] = [];
@@ -77,9 +78,14 @@ const StabillitySteerAngleOfIncilination = () => {
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
-      <button className="collapse-title text-xl font-medium">
+      <button className="collapse-title">
         {" "}
-        Steer inclination angle: alfa_h = {steerInclinationAngle.toPrecision(2)}
+        <CollapseHeader
+          collapseTittle={"Steer inclination angle"}
+          outputLabel={"\u03B1_H = "}
+          caluclatedValue={steerInclinationAngle}
+          unit={"rad"}
+        />
       </button>
       <div className="collapse-content">
         <OverwritableInputNumber

@@ -57,11 +57,11 @@ interface LongitudalMomentState {
 export const useLongitudalMomentStore = create<LongitudalMomentState>()(
   (set) => ({
     //fuselage
-    s_b_g: 2000,
-    s_bf_g: 300,
-    w_g: 4,
-    l_b_g: 20,
-    l_bf_g: 7,
+    s_b_g: 2,
+    s_bf_g: 0.3,
+    w_g: 1.2,
+    l_b_g: 5,
+    l_bf_g: 3,
     i_w_g: 1,
     setS_b_g: (value) => set((state) => ({ cm0p: value })),
     setS_bf_g: (value) => set((state) => ({ s_bf: value })),

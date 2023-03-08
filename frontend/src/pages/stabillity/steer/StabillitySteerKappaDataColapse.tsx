@@ -2,9 +2,13 @@ import React, { useEffect } from "react";
 import InputNumber from "../../../components/atoms/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
 import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
-import { useSteerOutputStore, useSteerStore } from "../../../data/stores/useSteer";
+import {
+  useSteerOutputStore,
+  useSteerStore,
+} from "../../../data/stores/useSteer";
 import { calculateKappa } from "../../../utils/steerCalculation/steerCalculation";
 import DropdownSelect from "../../../components/atoms/DropdownSelect";
+import CollapseHeader from "../../../components/atoms/CollapseHeader";
 
 const StabillitySteerKappaDataColapse = () => {
   const xh = useSteerStore((state) => state.x_h);
@@ -31,10 +35,12 @@ const StabillitySteerKappaDataColapse = () => {
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
-      <button className="collapse-title text-xl font-medium">
-        {" "}
-        The volumetric feature of the horizontal stabillizer: Kappa ={" "}
-        {kappa.toPrecision(2)}
+      <button className="collapse-title">
+        <CollapseHeader
+          collapseTittle={"The volumetric feature of the horizontal stabillizer"}
+          outputLabel={"\u03BA = "}
+          caluclatedValue={kappa}
+        />
       </button>
       <div className="collapse-content ">
         <OverwritableInputNumber

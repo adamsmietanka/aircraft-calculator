@@ -98,6 +98,8 @@ const StabilityRodForce = () => {
   ]);
 
   return (
+  <div className="flex flex-col">
+    <h1 className="text-4xl m-2">Force On a Rod</h1>
     <div className="flex flex-row">
       <div className="flex flex-col w-80 mr-8 space-y-2">
         <RadioOptions
@@ -111,6 +113,7 @@ const StabilityRodForce = () => {
         )}
       </div>
       <StabillityForceOnTheRodChart />
+    </div>
     </div>
   );
 };

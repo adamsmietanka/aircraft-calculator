@@ -15,7 +15,7 @@ const StabillityForceOnTheRodChart = () => {
     let layout = {
       tittle: { text: "Force on the Rod" },
       xaxis: { title: { text: "V [m/s]" } },
-      yaxis: { title: { text: "Force on the rod [N]" } },
+      yaxis: { title: { text: "P [N]" } },
     };
     return layout;
   };

@@ -24,18 +24,25 @@ const StabillityForceOnTheRodHingeMoment = () => {
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
-      <div className="collapse-title text-xl font-medium">
-        Coefficient of the derivative of the hinge moment and rod data
-        <label className="label">
-          <span className="label-text"> b1 = {b1} </span>
-        </label>
-        <label className="label">
-          <span className="label-text"> b2 = {b2} </span>
-        </label>
+      <div className="collapse-title">
+        <div className="flex flex-col">
+          <h2 className="text-xl font-medium pb-1 justify-center">
+            {" "}
+            Derivative of the hinge moment and rod force calculation data
+          </h2>
+          <div className="flex flex-row justify-center font-normal">
+            <h3 className="text-l pr-1">{"b1 ="}</h3>
+            <h3 className="text-l">{b1.toPrecision(2)}</h3>
+            <h3 className="text-l pl-1">1/rad</h3>
+          </div>
+          <div className="flex flex-row justify-center font-normal">
+            <h3 className="text-l pr-1">{"b2 ="}</h3>
+            <h3 className="text-l">{b2.toPrecision(2)}</h3>
+            <h3 className="text-l pl-1">1/rad</h3>
+          </div>
+        </div>
       </div>
       <div className="collapse-content ">
-
-
         <InputNumber
           value={height}
           setter={setHeight}

@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
-import { useSteerStore, useSteerOutputStore } from "../../../data/stores/useSteer";
+import {
+  useSteerStore,
+  useSteerOutputStore,
+} from "../../../data/stores/useSteer";
 import DropdownSelect from "../../../components/atoms/DropdownSelect";
 import InputNumber from "../../../components/atoms/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
@@ -8,9 +11,7 @@ const StabillitySteerCooficientsDataCollapse = () => {
   const steerReynoldsNumber = useSteerStore(
     (state) => state.steerReynoldsNumber
   );
-  const steerMachNumber = useSteerStore(
-    (state) => state.steerMachNumber
-  );
+  const steerMachNumber = useSteerStore((state) => state.steerMachNumber);
   const o25clineIncilnation = useSteerStore(
     (state) => state.o25clineIncilnation
   );
@@ -20,9 +21,7 @@ const StabillitySteerCooficientsDataCollapse = () => {
   const setSteerReynoldsNumber = useSteerStore(
     (state) => state.setSteerReynoldsNumber
   );
-  const setSteerMachNumber = useSteerStore(
-    (state) => state.setSteerMachNumber
-  );
+  const setSteerMachNumber = useSteerStore((state) => state.setSteerMachNumber);
   const setO25clineIncilnation = useSteerStore(
     (state) => state.setSteero25clineInclination
   );
@@ -39,6 +38,8 @@ const StabillitySteerCooficientsDataCollapse = () => {
   const profiles = [
     { name: "NACA 0009", value: 1 },
     { name: "NACA 0007", value: 2 },
+    { name: "NACA 0006", value: 1 },
+    { name: "NACA 0012", value: 1 },
   ];
   useEffect(() => {
     setA1(2);
@@ -47,9 +48,23 @@ const StabillitySteerCooficientsDataCollapse = () => {
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
-      <button className="collapse-title text-xl font-medium">
-        {" "}
-        The a cooficients: a1 = {a1.toPrecision(2)}, a2 = {a2.toPrecision(2)}
+      <button className="collapse-title ">
+        <div className="flex flex-col">
+          <h2 className="text-xl font-medium pb-1">
+            {" "}
+            {"Lift force derivates"}
+          </h2>
+          <div className="flex flex-row justify-center font-normal">
+            <h3 className="text-l pr-1">{"a1 ="}</h3>
+            <h3 className="text-l">{a1.toPrecision(2)}</h3>
+            <h3 className="text-l pl-1">1/rad</h3>
+          </div>
+          <div className="flex flex-row justify-center font-normal">
+            <h3 className="text-l pr-1">{"a2 ="}</h3>
+            <h3 className="text-l">{a2.toPrecision(2)}</h3>
+            <h3 className="text-l pl-1">1/rad</h3>
+          </div>
+        </div>
       </button>
       <div className="collapse-content">
         <DropdownSelect //to change

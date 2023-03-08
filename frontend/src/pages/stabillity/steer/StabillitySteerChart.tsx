@@ -14,17 +14,17 @@ const StabillitySteerChart = () => {
     let layout = {
       tittle: { text: "Elevator angle" },
       xaxis: { title: { text: "Cz [-]" } },
-      yaxis: { title: { text: "Delta [-]" } },
+      yaxis: { title: { text: "\u03B4_H [rad]" } },
     };
     switch (type) {
       case "alfa":
         layout = {
           ...layout,
-          xaxis: { title: { text: "angle of atack [deg]" } },
+          xaxis: { title: { text: "\u03B1 [\u25CB]" } },
         };
         break;
       case "cz":
-        layout = { ...layout, xaxis: { title: { text: "cz [-]" } } };
+        layout = { ...layout, xaxis: { title: { text: "Cz [-]" } } };
         break;
     }
     return layout;
