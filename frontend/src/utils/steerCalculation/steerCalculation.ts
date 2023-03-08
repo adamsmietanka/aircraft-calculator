@@ -38,7 +38,7 @@ export const calculateKappa = ({
   xh,
   cog,
 }: kappaCalculation) => {
-  return (((xh / mac - cog) * s) / sh) * configuration;
+  return (((xh / mac - cog) * sh) / s) * configuration;
 };
 
 export const calculateDepsToDalfa = ({

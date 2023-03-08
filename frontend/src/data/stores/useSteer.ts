@@ -108,8 +108,8 @@ interface SteerOutputState {
 
 export const useSteerOutputStore = create<SteerOutputState>()((set) => ({
   kappa: 10,
-  a1: 2.14,
-  a2: 2,
+  a1: 3.2,
+  a2: 1.3,
   dEpsTodAlfa:0.47,
   steerInclinationAngle:-0.1038,
   delta:[1],
