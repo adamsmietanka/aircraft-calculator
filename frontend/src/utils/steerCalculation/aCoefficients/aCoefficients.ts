@@ -1,7 +1,7 @@
 import a1_ratio from "./a10_to_a10T";
 import a10T from "./a10T";
 import { profiles } from "./profileData";
-import { radTodeg } from "../../misc";
+import { degTorad, radTodeg } from "../../misc";
 import tanTauAlfa2 from "./tanTauAlfa2";
 import effectiveWingSweep from "./effectiveWingSweep";
 import a1_0M from "./a1_0M";
@@ -33,7 +33,7 @@ const calculateAcoefs = (
   let a1RatioValue = a1_ratio(tau, reynoldsNumber);
   let a10TValue = a10T(tau, profileData.thickness);
   let a10 = a1RatioValue * a10TValue;
-
+  
   //Poprawka o zbieżność i wydłużenie a1
   //stopnie
   let stabillizerEffectiveWingSweep = effectiveWingSweep(
@@ -43,6 +43,7 @@ const calculateAcoefs = (
     stabillizerConvergence
   );
   let a10M = a1_0M(a10, machNumber, stabillizerEffectiveWingSweep);
+  console.log({a10:a10,a10M:a10M })
   let corectionTau = tauCoefficient(
     a10M,
     stabillizerEffectiveWingSweep,
@@ -54,7 +55,7 @@ const calculateAcoefs = (
   let a1 =
     1 /
     (1 /
-      (a10M * Math.cos(stabillizerEffectiveWingSweep) +
+      (a10M * Math.cos(degTorad(stabillizerEffectiveWingSweep)) +
         (1 + corectionTau) * correctionk));
 
   // Teoretyczna pochodna a2
