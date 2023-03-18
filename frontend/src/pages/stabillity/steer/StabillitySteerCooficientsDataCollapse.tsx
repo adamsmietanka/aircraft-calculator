@@ -3,9 +3,9 @@ import {
   useSteerStore,
   useSteerOutputStore,
 } from "../../../data/stores/useSteer";
-import DropdownSelect from "../../../components/atoms/DropdownSelect";
 import InputNumber from "../../../components/atoms/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
+import calculateAcoefs from "../../../utils/steerCalculation/aCoefficients/aCoefficients";
 
 const StabillitySteerCooficientsDataCollapse = () => {
   const steerReynoldsNumber = useSteerStore(
@@ -17,6 +17,13 @@ const StabillitySteerCooficientsDataCollapse = () => {
   );
   const steerAspectRatio = useSteerStore((state) => state.steerAspectRatio);
   const steerZbieznosc = useSteerStore((state) => state.steerZbieznosc);
+  const profile = useSteerStore((state) => state.profile);
+  const steerOuterSpan = useSteerStore((state) => state.steerOuterSpan);
+  const steerInnerSpan = useSteerStore((state) => state.steerInnerSpan);
+  const stabillzerSpan = useSteerStore((state) => state.stabillzerSpan);
+  const steerToStabillizerCordRatio = useSteerStore(
+    (state) => state.steerToStabillizerCordRatio
+  );
 
   const setSteerReynoldsNumber = useSteerStore(
     (state) => state.setSteerReynoldsNumber
@@ -29,22 +36,44 @@ const StabillitySteerCooficientsDataCollapse = () => {
     (state) => state.setSteerAspectRatio
   );
   const setSteerZbieznosc = useSteerStore((state) => state.setsteerzbieznosc);
+  const setProfile = useSteerStore((state) => state.setProfile);
+  const setSteerOuterSpan = useSteerStore((state) => state.setSteerOuterSpan);
+  const setSteerInnerSpan = useSteerStore((state) => state.setSteerInnerSpan);
+  const setStabillzerSpan = useSteerStore((state) => state.setStabillzerSpan);
 
   const a1 = useSteerOutputStore((state) => state.a1);
   const a2 = useSteerOutputStore((state) => state.a2);
   const setA1 = useSteerOutputStore((state) => state.setA1);
   const setA2 = useSteerOutputStore((state) => state.setA2);
 
-  const profiles = [
-    { name: "NACA 0009", value: 1 },
-    { name: "NACA 0007", value: 2 },
-    { name: "NACA 0006", value: 1 },
-    { name: "NACA 0012", value: 1 },
-  ];
+  const profiles = ["NACA0007", "NACA0009", "NACA0006", "NACA0012"];
   useEffect(() => {
-    setA1(3.2);
-    setA2(1.37);
-  }, []);
+    let aCoef = calculateAcoefs(
+      profile,
+      steerReynoldsNumber,
+      o25clineIncilnation,
+      steerMachNumber,
+      steerZbieznosc,
+      steerAspectRatio,
+      [steerOuterSpan, steerInnerSpan],
+      stabillzerSpan,
+      steerToStabillizerCordRatio
+    );
+    console.log(aCoef);
+    setA1(aCoef.a1);
+    setA2(aCoef.a2);
+  }, [
+    profile,
+    steerReynoldsNumber,
+    o25clineIncilnation,
+    steerMachNumber,
+    steerZbieznosc,
+    steerAspectRatio,
+    steerOuterSpan,
+    steerInnerSpan,
+    stabillzerSpan,
+    steerToStabillizerCordRatio,
+  ]);
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
@@ -67,23 +96,36 @@ const StabillitySteerCooficientsDataCollapse = () => {
         </div>
       </button>
       <div className="collapse-content">
-        <DropdownSelect //to change
-          label="Choose stabilaizer profile"
-          options={profiles}
-          setter={setA1} //to change
-        />
+        <div className="flexbox flex-col mt-2 mb-2">
+          <label className="label">
+            <span className="label-text"> {"Choose stabilizer profile"}</span>
+          </label>
+          <select
+            className="select select-bordered w-60 max-w-xs"
+            onChange={(e) => {
+              setProfile(e.target.value);
+              console.log(profile);
+            }}
+          >
+            {profiles.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
         <OverwritableInputNumber
           value={steerReynoldsNumber}
           setter={setSteerReynoldsNumber}
-          label="Steer reynolds number"
+          label="Stabilizer reynolds number"
           unit="-"
-          span={100000}
+          span={1000000}
         />
 
         <OverwritableInputNumber
           value={steerMachNumber}
           setter={setSteerMachNumber}
-          label="Steer Mach number"
+          label="Stabilizer Mach number"
           unit="-"
           span={0.1}
         />
@@ -99,7 +141,7 @@ const StabillitySteerCooficientsDataCollapse = () => {
         <InputNumber
           value={steerAspectRatio}
           setter={setSteerAspectRatio}
-          label="The aspect reatio of the rudder"
+          label="Stabilizer aspect ratio"
           unit="-"
           step={0.1}
         />
@@ -107,9 +149,31 @@ const StabillitySteerCooficientsDataCollapse = () => {
         <InputNumber
           value={steerZbieznosc}
           setter={setSteerZbieznosc}
-          label="Zbieżność stetcznika, nie pamiętam jak po angielsku kurka wodna"
+          label="Stabilizer covergence"
           unit="-"
-          step={100000}
+          step={0.1}
+        />
+
+        <InputNumber
+          value={stabillzerSpan}
+          setter={setStabillzerSpan}
+          label="Stabilizer span"
+          unit="m"
+          step={1}
+        />
+        <InputNumber
+          value={steerInnerSpan}
+          setter={setSteerInnerSpan}
+          label="Steer inner span"
+          unit="m"
+          step={0.1}
+        />
+        <InputNumber
+          value={steerOuterSpan}
+          setter={setSteerOuterSpan}
+          label="Steer outer span"
+          unit="m"
+          step={0.1}
         />
       </div>
     </div>
