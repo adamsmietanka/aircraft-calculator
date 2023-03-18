@@ -18,7 +18,7 @@ const StabilityLongitudalMoment = () => {
 
   useEffect(() => {
     setCmbu(longitudalMoment(data, showGondole));
-    console.log(cmbu);
+    console.log("cmbu:", cmbu);
   }, [data, showGondole]);
 
   return (

@@ -7,7 +7,7 @@ const StabillityLongitutudalMomentWingDataCollapse = () => {
   const data = useLongitudalMomentStore();
   const [aero,setAreo] = useState({alpha:[],cz:[],cx:[]})
 
-  useEffect(()=>(console.log("aero:",aero)),[aero])
+  useEffect(()=>(console.log("loaded wing data:",aero)),[aero])
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />

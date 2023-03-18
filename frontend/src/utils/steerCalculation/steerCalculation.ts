@@ -93,13 +93,13 @@ export const calculateDelta = ({
   steerIncilinationAngle,
 }: deltaCalculation) => {
   let delta = CzArray.map((current) => current);
-  console.log(delta)
+  
   for (let i = 0; i < delta.length; i++) {
     delta[i] =
     CmbuArray[i] / (kappa * a2) -
       (a1 / a2) * ((CzArray[i] / a) * (1 - dEpsTodAlfa) + steerIncilinationAngle);
-      console.log(delta[i]);
   }
+  console.log("Calculated value of the elevator angle:",delta)
   return delta
 };
   
