@@ -63,6 +63,8 @@ const StabillitySteerCooficientsDataCollapse = () => {
     setA1(aCoef.a1);
     setA2(aCoef.a2);
   }, [
+    setA1,
+    setA2,
     profile,
     steerReynoldsNumber,
     o25clineIncilnation,

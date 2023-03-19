@@ -24,7 +24,7 @@ const calculateAcoefs = (
   steerToStabillizerCordRatio:number
 ) => {
   //Teoretyczna pochodna a1
-  let i = profiles.findIndex((prop) => prop.name == profileName);
+  let i = profiles.findIndex((prop) => prop.name === profileName);
   let profileData = profiles[i];
   //stopnie
   let tau = radTodeg(
