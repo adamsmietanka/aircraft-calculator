@@ -105,10 +105,10 @@ export const longitudalMoment = (
   }
 
   console.log("Values of the longitudinal moment:", {
-    FuselageNeutralpoint:fuselageDeltaX,
+    FuselageNeutralpoint:-fuselageDeltaX,
     cmf0: cm_0_f,
-    GondoleNeutralpoint:gondoleDeltaX,
+    GondoleNeutralpoint:-gondoleDeltaX,
     cm_0_g: cm_0_g,
   });
-  return cm_bu;
+  return {cmbu:cm_bu,deltaXFuselage:-fuselageDeltaX};
 };

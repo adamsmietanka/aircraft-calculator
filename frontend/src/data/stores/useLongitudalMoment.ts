@@ -37,17 +37,17 @@ interface LongitudalMomentState {
   setb_k: (value: number) => void;
   //Wing
   cm0p: number;
-  alfa: Array<number>;
-  cx: Array<number>;
-  cz: Array<number>;
+  alfa: number[];
+  cx: number[];
+  cz: number[];
   x_sa: number;
   x_sc: number;
   z_sa: number;
   z_sc: number;
   setCm0p: (value: number) => void;
-  setAlfa: (value: Array<number>) => void;
-  setCx: (value: Array<number>) => void;
-  setCz: (value: Array<number>) => void;
+  setAlfa: (value: number[]) => void;
+  setCx: (value: number[]) => void;
+  setCz: (value: number[]) => void;
   setX_sc: (value: number) => void;
   setX_sa: (value: number) => void;
   setZ_sc: (value: number) => void;
@@ -123,12 +123,15 @@ export const useLongitudalMomentStore = create<LongitudalMomentState>()(
 );
 
 interface LongitudalMomentOutput {
-  cmbu: Array<number>;
-  setCmbu: (value: Array<number>) => void;
+  fuselageNeutralPoint:number
+  cmbu: number[];
+  setCmbu: (value: number[]) => void;
+  setFuselageNeutralPoint:(value: number) => void;
 }
 
 export const useLongitudalMomentOutput = create<LongitudalMomentOutput>()(
   (set) => ({
+    fuselageNeutralPoint:-0.1,
     cmbu: [
       -0.0807532857461385, -0.0945345227121025, -0.102714258593874,
       -0.110127943101989, -0.112569243098197, -0.115132605657143,
@@ -140,6 +143,7 @@ export const useLongitudalMomentOutput = create<LongitudalMomentOutput>()(
       0.0537179847324651, 0.0865250921182821,
     ],
     setCmbu: (value) => set((state) => ({ cmbu: value })),
+    setFuselageNeutralPoint:(value) => set((state) => ({ fuselageNeutralPoint: value }))
   })
 );
 

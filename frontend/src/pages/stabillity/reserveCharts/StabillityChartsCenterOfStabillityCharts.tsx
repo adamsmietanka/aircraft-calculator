@@ -4,7 +4,7 @@ import {
   useForceOnTheRodOutputStore,
   useForceOnTheRodStore,
 } from "../../../data/stores/useForceOnTheRod";
-import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
+import { useLongitudalMomentOutput, useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
 import { useCenterOfStabillityStore } from "../../../data/stores/useCenterOfStabillity";
 import { useSteerOutputStore, useSteerStore } from "../../../data/stores/useSteer";
 import {
@@ -41,7 +41,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
   const dEpsTodAlfa = useSteerOutputStore((state) => state.dEpsTodAlfa);
   const a = useSteerStore((state) => state.a);
   const a1 = useSteerOutputStore((state) => state.a1);
-  const rudderWingdistance = useSteerStore((state) => state.x_h);
+  const elevatorWingdistance = useSteerStore((state) => state.x_h);
   const MAC = useLongitudalMomentStore((state) => state.c_a);
   const xSA = useLongitudalMomentStore((state) => state.x_sa);
   const zSc = useLongitudalMomentStore((state) => state.z_sc);
@@ -53,10 +53,10 @@ const StabillityChartsCenterOfStabillityCharts = () => {
   const mass = useSteerStore((state) => state.mass);
 
   const height = useForceOnTheRodStore((state) => state.height);
-  //brak wcześniejszych wywołań pierwsze możnaby wyprowdzic z obliczeń
-  const DeltaXSAj = -0.0534;
+  const DeltaXSAj =  useLongitudalMomentOutput((state) => state.fuselageNeutralPoint);
+  //brak wcześniejszych wywołań pierwsze możnaby wyprowdzic z obliczeń -alfa0 do przemyślenia
   const LambdaE = 4.94;
-  const alfa0 = degTorad(-3.75)
+  const alfa0 = useLongitudalMomentStore((state)=>state.i_w)
   const Plots = ["CentersOfStabillityToCz", "CentersOfStabillityToV"];
 
   const traces = (type: string) => {
@@ -91,7 +91,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
           dEpsTodAlfa,
           a,
           a1,
-          rudderWingdistance,
+          elevatorWingdistance,
           MAC,
           xSA,
           DeltaXSAj,
@@ -112,7 +112,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
     dEpsTodAlfa,
     a,
     a1,
-    rudderWingdistance,
+    elevatorWingdistance,
     MAC,
     xSA,
     DeltaXSAj,
@@ -132,7 +132,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
           dEpsTodAlfa,
           a,
           a1,
-          rudderWingdistance,
+          elevatorWingdistance,
           MAC,
           xSA,
           DeltaXSAj,
@@ -155,7 +155,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
     dEpsTodAlfa,
     a,
     a1,
-    rudderWingdistance,
+    elevatorWingdistance,
     MAC,
     xSA,
     DeltaXSAj,
@@ -177,7 +177,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
           dEpsTodAlfa,
           a,
           a1,
-          rudderWingdistance,
+          elevatorWingdistance,
           MAC,
           xSA,
           DeltaXSAj,
@@ -201,7 +201,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
     dEpsTodAlfa,
     a,
     a1,
-    rudderWingdistance,
+    elevatorWingdistance,
     MAC,
     xSA,
     DeltaXSAj,
@@ -224,7 +224,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
           dEpsTodAlfa,
           a,
           a1,
-          rudderWingdistance,
+          elevatorWingdistance,
           MAC,
           xSA,
           DeltaXSAj,
@@ -250,7 +250,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
     dEpsTodAlfa,
     a,
     a1,
-    rudderWingdistance,
+    elevatorWingdistance,
     MAC,
     xSA,
     DeltaXSAj,

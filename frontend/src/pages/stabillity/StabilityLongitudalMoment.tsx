@@ -14,9 +14,12 @@ const StabilityLongitudalMoment = () => {
   const [showGondole, setShowGondole] = useState(false);
   const data = useLongitudalMomentStore();
   const setCmbu = useLongitudalMomentOutput((state) => state.setCmbu);
+  const setFuselageNeutralPoint = useLongitudalMomentOutput((state) => state.setFuselageNeutralPoint);
 
   useEffect(() => {
-    setCmbu(longitudalMoment(data, showGondole));
+    let longitudalMomentParams =  longitudalMoment(data, showGondole)
+    setCmbu(longitudalMomentParams.cmbu);
+    setFuselageNeutralPoint(longitudalMomentParams.deltaXFuselage)
   }, [data, showGondole,setCmbu]);
 
   return (
