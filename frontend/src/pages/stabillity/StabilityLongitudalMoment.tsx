@@ -19,7 +19,7 @@ const StabilityLongitudalMoment = () => {
   useEffect(() => {
     setCmbu(longitudalMoment(data, showGondole));
     console.log("cmbu:", cmbu);
-  }, [data, showGondole,cmbu,setCmbu]);
+  }, [data, showGondole,setCmbu]);
 
   return (
     <div className="flex flex-col">
