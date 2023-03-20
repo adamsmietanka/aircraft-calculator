@@ -13,7 +13,7 @@ const F3correction = (chordRatio: number,balance:number) => {
   let a  = polynomynalFunction(z, coefs["a1"]);
   let b = expotentialFunction(z, coefs["b1"][0],-coefs["b1"][1],coefs["b1"][2]);
   let c = polynomynalFunction(z, coefs["c1"]);
-  let d = polynomynalFunction(z, coefs["c1"])
+  let d = polynomynalFunction(z, coefs["d1"])
   return a*Math.tanh(b*x)+c*Math.sinh(x)+d
 };
 

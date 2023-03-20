@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   useForceOnTheRodOutputStore,
   useForceOnTheRodStore,
 } from "../../../data/stores/useForceOnTheRod";
 import InputNumber from "../../../components/atoms/InputNumber";
+import { useSteerStore } from "../../../data/stores/useSteer";
+import bCoefficients from "../../../utils/steerCalculation/bCoefficients/bCoefficients"
 
 const StabillityForceOnTheRodHingeMoment = () => {
   const b1 = useForceOnTheRodOutputStore((state) => state.b1);
+  const setB1 = useForceOnTheRodOutputStore((state) => state.setB1);
   const b2 = useForceOnTheRodOutputStore((state) => state.b2);
+  const setB2 = useForceOnTheRodOutputStore((state) => state.setB2);
   const height = useForceOnTheRodStore((state) => state.height);
   const setHeight = useForceOnTheRodStore((state) => state.setHeight);
   const steerCord = useForceOnTheRodStore((state) => state.steerCord);
@@ -21,6 +25,19 @@ const StabillityForceOnTheRodHingeMoment = () => {
     (state) => state.setAngularRudderToSteeringGearRatio
   );
 
+  const profileName = useSteerStore((state)=>state.profile)
+  const reynoldsNumber = useSteerStore((state)=>state.steerReynoldsNumber)
+  const steerToStabillizerChordRatio = useSteerStore((state)=>state.steerToStabillizerCordRatio)
+  const stabillizerAspectRatio = useSteerStore((state)=>state.steerAspectRatio)
+  useEffect(()=>{
+   let bCoef =  bCoefficients(
+      profileName,
+      reynoldsNumber,
+      steerToStabillizerChordRatio,
+      stabillizerAspectRatio,
+    );
+    setB1(bCoef.b1);
+    setB2(bCoef.b2)},[setB1,setB2,profileName,reynoldsNumber,steerToStabillizerChordRatio,stabillizerAspectRatio])
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />

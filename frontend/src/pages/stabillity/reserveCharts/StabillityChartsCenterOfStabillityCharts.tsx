@@ -146,7 +146,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
         )
       )
     );
-    console.log("x_m:" + centers.xM);
+    console.log("x_m:" , centers.xM);
   }, [
     centers.setXn,
     velocityRatio,
@@ -192,7 +192,7 @@ const StabillityChartsCenterOfStabillityCharts = () => {
         )
       )
     );
-    console.log("x_N':" + centers.xNprim);
+    console.log("x_N':" , centers.xNprim);
   }, [
     centers.setXnPrim,
     velocityRatio,

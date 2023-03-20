@@ -48,7 +48,7 @@ const bCoefficients = (
   let F1 = F1correction(stabillizerAspectRatio,a10,steerToStabillizerChordRatio)
   let F2 = F2correction(stabillizerAspectRatio,a10,steerToStabillizerChordRatio)
   let F3 = F3correction(steerToStabillizerChordRatio,0)
-
+  console.log("F corrections",{F1:F1,F2:F2,F3:F3})
   // b1 i b2 final
   let b1 = b10*(1-F1)+F2*F3*a10;
   let b2 = b20 - F2 *a20/a10*b10+F2*F3*a20;
@@ -57,3 +57,5 @@ const bCoefficients = (
   console.log("b2 deveriviatives", {b20T:b20TValue,b20:b20,b2:b2})
   return { b1, b2 };
 };
+
+export default bCoefficients

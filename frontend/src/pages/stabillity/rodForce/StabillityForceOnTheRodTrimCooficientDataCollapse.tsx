@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import {
-  getB3,
   trimAngleCalculation,
 } from "../../../utils/forceOnTheRodCalculation";
+
 import { findClosestValueIndexIntheArray } from "../../../utils/misc";
 import {
   calculateDelta,
@@ -23,6 +23,7 @@ import {
   useSteerStore,
 } from "../../../data/stores/useSteer";
 import InputNumber from "../../../components/atoms/InputNumber";
+import { getB3 } from "../../../utils/forceOnTheRodCalculation/b3";
 
 const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
   const trimVelocity = useTrimVelocityStore((state) => state.trimVelocity);

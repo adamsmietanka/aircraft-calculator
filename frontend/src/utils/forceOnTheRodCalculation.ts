@@ -27,7 +27,7 @@ export const forceOnTheRodCaclculation = ({
   for (let i = 0; i < forceOnTheRod.length; i++) {
     forceOnTheRod[i] =
       ((density(height) * steerCord * steerArea * rodLenght) /
-        angularRudderToSteeringGearRatio) *
+        -angularRudderToSteeringGearRatio) *
       velocity[i] *
       velocityRatio *
       heightSteerHingeMoment[i];
@@ -63,49 +63,6 @@ export const heightSteerHingeMomentCalculation = ({
   }
   return heightSteerHingeMoment;
 };
-
-interface getB3Data {
-  rudderCord:number
-  steerSpan: number;
-  steerAftHingeArea: number;
-  trimSpan: number;
-  trimAftHingeArea: number;
-  steerNoseHingeArea: number;
-  steerFwdHingeArea: number;
-  steerTrailingEdgeAngle: number;
-}
-export const getB3 = ({
-  rudderCord,
-  steerSpan,
-  steerAftHingeArea,
-  trimSpan,
-  trimAftHingeArea,
-  steerNoseHingeArea,
-  steerFwdHingeArea,
-  steerTrailingEdgeAngle,
-}: getB3Data) => {
-  const f = getF(steerTrailingEdgeAngle)
-  const cT = (trimAftHingeArea/trimSpan)
-  const cF = steerAftHingeArea/ steerSpan
-  const Cfprim = steerNoseHingeArea/trimSpan
-  const cTtoC = cT/rudderCord
-  const lambda = steerFwdHingeArea/steerNoseHingeArea
-  return (-f*getY(cTtoC,lambda)/((steerSpan/trimSpan)*Math.pow((cF/Cfprim),2)))
-};
-const getY =(cTtoC: number ,lambda:number ) => {
-  //under construction
-  return lambda
-}
-//works ok when steerTrailingEdgeAngle>5
-const getF = (steerTrailingEdgeAngle: number) => {
-  const coef = [1.21072, 0.014884, -0.00142543];
-  let F = 0;
-  for (let i=0; i<coef.length; i++){
-    F = F+coef[i]*Math.pow(steerTrailingEdgeAngle,i)
-  }
-  return F
-};
-
 
 
 interface trimAngleCalculationData{

@@ -14,7 +14,7 @@ const F2correction = (aspectRatio: number, a10: number, chordRatio: number) => {
     polynomynalFunction(z, coefs["a1"]),
     -polynomynalFunction(z, coefs["b1"]),
     polynomynalFunction(z, coefs["c1"])
-  );
+  )/10;
 };
 
 export default F2correction;
