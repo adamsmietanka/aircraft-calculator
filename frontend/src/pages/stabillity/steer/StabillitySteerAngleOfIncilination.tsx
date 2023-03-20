@@ -8,7 +8,10 @@ import {
   useLongitudalMomentStore,
   useLongitudalMomentOutput,
 } from "../../../data/stores/useLongitudalMoment";
-import { useSteerOutputStore, useSteerStore } from "../../../data/stores/useSteer";
+import {
+  useSteerOutputStore,
+  useSteerStore,
+} from "../../../data/stores/useSteer";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
 import CollapseHeader from "../../../components/atoms/CollapseHeader";
 
@@ -59,22 +62,21 @@ const StabillitySteerAngleOfIncilination = () => {
 
     var closestCz = closest(Cz, Cz_array);
 
-    // var alfa1 = data.alfa[Cz_array.findIndex((val) => val == closestCz[0])];
-    // var alfa2 = data.alfa[Cz_array.findIndex((val) => val == closestCz[1])];
-
-    // var alfaNew =
-    //   (alfa1 * closestCz[0] + alfa2 * closestCz[1]) /
-    //   (2 * (closestCz[0] + closestCz[1]));
-    // console.log(closestCz, Cz);
-    // console.log(alfa1, alfa2, alfaNew);
-
     let Cmbu = cmbuArray[Cz_array.findIndex((val) => val == closestCz[0])];
-
-    console.log(Cmbu);
     setSteerInclinationAngle(
       calculateSteerIncilinationAngle({ kappa, a1, a, dEpsTodAlfa, Cmbu, Cz })
     );
-  }, []);
+  }, [
+    kappa,
+    a1,
+    a,
+    dEpsTodAlfa,
+    Cz_array,
+    cruiseVelocity,
+    cruiseAlttiude,
+    mass,
+    wingSurface,
+  ]);
   return (
     <div tabIndex={0} className="collapse border rounded-box">
       <input type="checkbox" />
