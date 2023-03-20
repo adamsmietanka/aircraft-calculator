@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { longitudalMoment } from "../../../utils/longitudalMomentCalculator";
+import { longitudalMoment } from "../../../utils/longitudinalMomentCalculation/longitudalMomentCalculator";
 import {
   calculateSteerIncilinationAngle,
   getCzFromVelocity,

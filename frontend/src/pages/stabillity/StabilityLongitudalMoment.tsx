@@ -3,7 +3,7 @@ import {
   useLongitudalMomentOutput,
   useLongitudalMomentStore,
 } from "../../data/stores/useLongitudalMoment";
-import { longitudalMoment } from "../../utils/longitudalMomentCalculator";
+import { longitudalMoment } from "../../utils/longitudinalMomentCalculation/longitudalMomentCalculator";
 import { useState, useEffect } from "react";
 import StabillityLongitutudalMomentFuselageDataCollapse from "./longitudonalMoment/StabillityLongitutudalMomentFuselageDataCollapse";
 import StabillityLongitutudalMomentGondoleDataCollapse from "./longitudonalMoment/StabillityLongitutudalMomentGondoleDataCollapse";
@@ -14,11 +14,9 @@ const StabilityLongitudalMoment = () => {
   const [showGondole, setShowGondole] = useState(false);
   const data = useLongitudalMomentStore();
   const setCmbu = useLongitudalMomentOutput((state) => state.setCmbu);
-  const cmbu = useLongitudalMomentOutput((state) => state.cmbu);
 
   useEffect(() => {
     setCmbu(longitudalMoment(data, showGondole));
-    console.log("cmbu:", cmbu);
   }, [data, showGondole,setCmbu]);
 
   return (
