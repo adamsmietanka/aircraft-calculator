@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Plotly from "plotly.js-dist-min";
 import { useCenterOfStabillityStore } from "../../../data/stores/useCenterOfStabillity";
-import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
+import { useLongitudalMomentStore, usePositiveOutput } from "../../../data/stores/useLongitudalMoment";
 import { useForceOnTheRodStore } from "../../../data/stores/useForceOnTheRod";
 import { useReservesOfStabillityStore } from "../../../data/stores/useReservesOfstability";
 import { reserve } from "../../../utils/stabillityCenteresandReserves";
@@ -38,7 +38,7 @@ const StabillityChartsReserveOfStabillityCharts = () => {
   const centers = useCenterOfStabillityStore();
   const CoG = useLongitudalMomentStore((state) => state.x_sc);
   const reserves = useReservesOfStabillityStore();
-  const czArray = useLongitudalMomentStore((state) => state.cz);
+  const czArray = usePositiveOutput((state) => state.cz);
   const velocityArray = useForceOnTheRodStore((state) => state.velocity);
   const Plots = ["ReservesOfStabillityToCz", "ReservessOfStabillityToV"];
 

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { longitudalMoment } from "../../../utils/longitudinalMomentCalculation/longitudalMomentCalculator";
 import {
   calculateSteerIncilinationAngle,
   getCzFromVelocity,
@@ -39,6 +38,7 @@ const StabillitySteerAngleOfIncilination = () => {
   const kappa = useSteerOutputStore((state) => state.kappa);
   const a1 = useSteerOutputStore((state) => state.a1);
   const dEpsTodAlfa = useSteerOutputStore((state) => state.dEpsTodAlfa);
+  //tutaj poprawne wszystkie
   const cmbuArray = useLongitudalMomentOutput((state) => state.cmbu);
   const Cz_array = useLongitudalMomentStore((state) => state.cz);
 
@@ -58,11 +58,12 @@ const StabillitySteerAngleOfIncilination = () => {
       mass,
       wingSurface,
     });
-    console.log(Cz);
+    console.log("Claculeted Cz:",Cz);
 
-    var closestCz = closest(Cz, Cz_array);
-
-    let Cmbu = cmbuArray[Cz_array.findIndex((val) => val == closestCz[0])];
+    let closestCz = closest(Cz, Cz_array);
+    console.log("Closest Cz in the array:",closestCz);
+    let Cmbu = cmbuArray[Cz_array.findIndex((val) => val === closestCz[0])];
+    console.log("Cmbu for the closest Cz:",Cmbu);
     setSteerInclinationAngle(
       calculateSteerIncilinationAngle({ kappa, a1, a, dEpsTodAlfa, Cmbu, Cz })
     );
@@ -76,6 +77,8 @@ const StabillitySteerAngleOfIncilination = () => {
     cruiseAlttiude,
     mass,
     wingSurface,
+    cmbuArray,
+    setSteerInclinationAngle
   ]);
   return (
     <div tabIndex={0} className="collapse border rounded-box">

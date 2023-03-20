@@ -17,6 +17,7 @@ import {
 import {
   useLongitudalMomentOutput,
   useLongitudalMomentStore,
+  usePositiveOutput,
 } from "../../../data/stores/useLongitudalMoment";
 import {
   useSteerOutputStore,
@@ -47,18 +48,19 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
   const steerIncilinationAngle = useSteerOutputStore(
     (state) => state.steerInclinationAngle
   );
-  const longitudanalMomentArray = useLongitudalMomentOutput(
+  const longitudanalMomentArray = usePositiveOutput(
     (state) => state.cmbu
   );
-  const CzOriginalaArray = useLongitudalMomentStore((state) => state.cz);
+  const CzOriginalaArray = usePositiveOutput((state) => state.cz);
   //Cz calculation data
   const cruiseAlttiude = useSteerStore((state) => state.cruiseAlttiude);
   const mass = useSteerStore((state) => state.mass);
   const wingSurface = useLongitudalMomentStore((state) => state.S);
+  const profile = useSteerStore((state) => state.profile);
 
   useEffect(() => {
-    setB3(getB3(trimData));
-  }, [setB3, trimData]);
+    setB3(getB3(trimData,profile));
+  }, [setB3, trimData,profile]);
   useEffect(() => {
     let cruiseVelocity = trimVelocity;
     let CzArray = [
@@ -99,7 +101,7 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
     });
 
     setDeltaHk(trimAngleCalculation({ b1, b2, b3, alfaH, deltaH }));
-  }, [a, a1, a2, kappa, dEpsTodAlfa, steerIncilinationAngle]);
+  }, [a, a1, a2, kappa, dEpsTodAlfa, steerIncilinationAngle,b1,b2,b3,]);
 
   return (
     <div tabIndex={0} className="collapse border rounded-box">
@@ -131,7 +133,7 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
         <InputNumber
           value={trimData.rudderCord}
           setter={trimData.setRudderCord}
-          label="Rudder cord in the center of the trim flap"
+          label="Elevator cord in the center of the trim flap"
           unit="m"
           step={0.5}
         />
@@ -183,13 +185,6 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
           step={0.5}
         />
 
-        <InputNumber
-          value={trimData.steerTrailingEdgeAngle}
-          setter={trimData.setSteerTrailingEdgeAngle}
-          label="Steer trailing edge angle"
-          unit="deg"
-          step={0.5}
-        />
       </div>
     </div>
   );

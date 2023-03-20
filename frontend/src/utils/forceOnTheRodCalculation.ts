@@ -27,7 +27,7 @@ export const forceOnTheRodCaclculation = ({
   for (let i = 0; i < forceOnTheRod.length; i++) {
     forceOnTheRod[i] =
       ((density(height) * steerCord * steerArea * rodLenght) /
-        -angularRudderToSteeringGearRatio) *
+        angularRudderToSteeringGearRatio) *
       velocity[i] *
       velocityRatio *
       heightSteerHingeMoment[i];

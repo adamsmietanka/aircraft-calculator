@@ -4,7 +4,7 @@ import {
   useForceOnTheRodOutputStore,
   useForceOnTheRodStore,
 } from "../../../data/stores/useForceOnTheRod";
-import { useLongitudalMomentOutput, useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
+import { useLongitudalMomentOutput, useLongitudalMomentStore, usePositiveOutput } from "../../../data/stores/useLongitudalMoment";
 import { useCenterOfStabillityStore } from "../../../data/stores/useCenterOfStabillity";
 import { useSteerOutputStore, useSteerStore } from "../../../data/stores/useSteer";
 import {
@@ -32,7 +32,7 @@ const layouts = (type: string) => {
 
 const StabillityChartsCenterOfStabillityCharts = () => {
   const centers = useCenterOfStabillityStore();
-  const czArray = useLongitudalMomentStore((state) => state.cz);
+  const czArray = usePositiveOutput((state) => state.cz);
   const velocityArray = useForceOnTheRodStore((state) => state.velocity);
 
   const velocityRatio = useSteerStore((state) => state.speedDifference);

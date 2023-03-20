@@ -46,7 +46,7 @@ const StabilityRodForce = () => {
 
   useEffect(() => {
     switch (optionChosen) {
-      case "trim":
+      case "Trim":
         setHeightSteerHingeMoment(
           heightSteerHingeMomentCalculation({
             b1,
@@ -69,7 +69,6 @@ const StabilityRodForce = () => {
           );
           break;
     }
-    console.log("Height steer hinge moment: "+ heightSteerHingeMoment)
   }, [b1, alfaH, b2, deltaH, b3, deltaHk,optionChosen]);
 
   useEffect(() => {

@@ -26,8 +26,8 @@ const StabillitySteerKappaDataColapse = () => {
   const setKappa = useSteerOutputStore((state) => state.setKappa);
   const rudderConfiguration = [
     { name: "T-tail", value: 0.98 },
-    { name: "Rudder in fuselage axis", value: 0.9 },
-    { name: "Rudder below fuselage axis", value: 0.85 },
+    { name: "Elevator in fuselage axis", value: 0.9 },
+    { name: "Elevator below fuselage axis", value: 0.85 },
   ];
   useEffect(() => {
     setKappa(calculateKappa({ s, sh, configuration, mac, xh, cog }));
@@ -51,7 +51,7 @@ const StabillitySteerKappaDataColapse = () => {
         />
 
         <DropdownSelect
-          label="Choose rudder cofiguration"
+          label="Choose elevator cofiguration"
           options={rudderConfiguration}
           setter={setVelocityDifferenece}
         />
@@ -59,7 +59,7 @@ const StabillitySteerKappaDataColapse = () => {
         <InputNumber
           value={sh}
           setter={setSh}
-          label="Rudder area"
+          label="Elevator area"
           unit="m^2"
           step={0.5}
         />

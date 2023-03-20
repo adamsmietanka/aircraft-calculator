@@ -123,15 +123,15 @@ export const useLongitudalMomentStore = create<LongitudalMomentState>()(
 );
 
 interface LongitudalMomentOutput {
-  fuselageNeutralPoint:number
+  fuselageNeutralPoint: number;
   cmbu: number[];
   setCmbu: (value: number[]) => void;
-  setFuselageNeutralPoint:(value: number) => void;
+  setFuselageNeutralPoint: (value: number) => void;
 }
 
 export const useLongitudalMomentOutput = create<LongitudalMomentOutput>()(
   (set) => ({
-    fuselageNeutralPoint:-0.1,
+    fuselageNeutralPoint: -0.1,
     cmbu: [
       -0.0807532857461385, -0.0945345227121025, -0.102714258593874,
       -0.110127943101989, -0.112569243098197, -0.115132605657143,
@@ -143,14 +143,49 @@ export const useLongitudalMomentOutput = create<LongitudalMomentOutput>()(
       0.0537179847324651, 0.0865250921182821,
     ],
     setCmbu: (value) => set((state) => ({ cmbu: value })),
-    setFuselageNeutralPoint:(value) => set((state) => ({ fuselageNeutralPoint: value }))
+    setFuselageNeutralPoint: (value) =>
+      set((state) => ({ fuselageNeutralPoint: value })),
   })
 );
 
-// interface Aero{
+interface PositiveOutput {
+  cmbu: number[];
+  setCmbu: (value: number[]) => void;
+  cz: number[];
+  setCz: (value: number[]) => void;
+  alfa: number[];
+  setAlfa: (value: number[]) => void;
+  cx: number[];
+  setCx: (value: number[]) => void;
+}
 
-// }
-
-// const useAero = create<Aero>()(
-
-// );
+export const usePositiveOutput = create<PositiveOutput>()((set) => ({
+  cmbu: [
+    -0.114335332495531, -0.113278573347122, -0.107322692745697,
+    -0.0993260381430485, -0.0965167049212053, -0.0850503426553338,
+    -0.0759065579031023, -0.0658892407401278, -0.0490582838887245,
+    -0.0348659126336388, -0.021345456526302, -0.00800730551424755,
+    0.0085219917637668, 0.027565202416483, 0.0383667575672632,
+    0.0537179847324651, 0.0865250921182821,
+  ],
+  setCmbu: (value) => set((state) => ({ cmbu: value })),
+  cz: [
+    0.03, 0.07, 0.2, 0.31, 0.35, 0.46, 0.52, 0.58, 0.68, 0.75, 0.82, 0.88, 0.94,
+    1.01, 1.05, 1.1, 1.2,
+  ],
+  setCz: (value) => set((state) => ({ cz: value })),
+  alfa: [
+    -0.114335332495531, -0.113278573347122, -0.107322692745697,
+    -0.0993260381430485, -0.0965167049212053, -0.0850503426553338,
+    -0.0759065579031023, -0.0658892407401278, -0.0490582838887245,
+    -0.0348659126336388, -0.021345456526302, -0.00800730551424755,
+    0.0085219917637668, 0.027565202416483, 0.0383667575672632,
+    0.0537179847324651, 0.0865250921182821,
+  ],
+  setAlfa: (value) => set((state) => ({ alfa: value })),
+  cx: [
+    0.03, 0.07, 0.2, 0.31, 0.35, 0.46, 0.52, 0.58, 0.68, 0.75, 0.82, 0.88, 0.94,
+    1.01, 1.05, 1.1, 1.2,
+  ],
+  setCx: (value) => set((state) => ({ cx: value })),
+}));

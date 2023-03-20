@@ -1,5 +1,7 @@
 import polynomynalFunction from "../math_estimation/polynomynalFunction";
-
+import { radTodeg } from "../misc";
+import { profiles } from "../steerCalculation/aCoefficients/profileData"
+import tanTauAlfa2 from "../steerCalculation/aCoefficients/tanTauAlfa2";
 interface getB3Data {
   rudderCord: number;
   steerSpan: number;
@@ -8,7 +10,6 @@ interface getB3Data {
   trimAftHingeArea: number;
   steerNoseHingeArea: number;
   steerFwdHingeArea: number;
-  steerTrailingEdgeAngle: number;
 }
 export const getB3 = ({
   rudderCord,
@@ -18,9 +19,15 @@ export const getB3 = ({
   trimAftHingeArea,
   steerNoseHingeArea,
   steerFwdHingeArea,
-  steerTrailingEdgeAngle,
-}: getB3Data) => {
-  const f = getF(steerTrailingEdgeAngle);
+}: getB3Data,profileName:string) => {
+  let i = profiles.findIndex((prop) => prop.name === profileName);
+  let profileData = profiles[i];
+  //stopnie
+  let tau = radTodeg(
+    2 * Math.atan(tanTauAlfa2(profileData.y90, profileData.y99))
+  );
+  console.log("trailing edge angle",tau)
+  const f = getF(tau);
   const cT = trimAftHingeArea / trimSpan;
   const cF = steerAftHingeArea / steerSpan;
   const Cfprim = steerNoseHingeArea / trimSpan;
