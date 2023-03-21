@@ -97,12 +97,12 @@ interface TrimState {
 
 export const useTrimStore = create<TrimState>()((set) => ({
   rudderCord: 1.2,
-  steerSpan: 0.0861,
-  steerAftHingeArea: 0.2252,
-  trimSpan: 0.0296,
-  trimAftHingeArea: 0.3793,
-  steerNoseHingeArea: 0.2,
-  steerFwdHingeArea: 20,
+  steerSpan: 3,
+  steerAftHingeArea: 3.5, //S_F
+  trimSpan: 0.496,
+  trimAftHingeArea: 0.42, //S_T
+  steerNoseHingeArea: 0.2, //S_F
+  steerFwdHingeArea: 0.27, //S_1
   setRudderCord: (value) => set((state) => ({ rudderCord: value })),
   setSteerSpan: (value) => set((state) => ({ steerSpan: value })),
   setAftHingeArea: (value) => set((state) => ({ steerAftHingeArea: value })),

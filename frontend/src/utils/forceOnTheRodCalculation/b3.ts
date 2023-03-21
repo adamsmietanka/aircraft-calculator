@@ -27,19 +27,22 @@ export const getB3 = ({
     2 * Math.atan(tanTauAlfa2(profileData.y90, profileData.y99))
   );
   console.log("trailing edge angle",tau)
-  const f = getF(tau);
-  const cT = trimAftHingeArea / trimSpan;
-  const cF = steerAftHingeArea / steerSpan;
-  const Cfprim = steerNoseHingeArea / trimSpan;
-  const cTtoC = cT / rudderCord;
-  const lambda = steerFwdHingeArea / steerNoseHingeArea;
-  const b3 =
-    (-f * getY(cTtoC, lambda)) /
-    ((steerSpan / trimSpan) * Math.pow(cF / Cfprim, 2));
-    console.log("b3",{covergence:lambda,
+  let f = getF(tau);
+  let cT = trimAftHingeArea / trimSpan;
+  let cF = steerAftHingeArea / steerSpan;
+  let Cfprim = steerNoseHingeArea / trimSpan;
+  let cTtoC = cT / rudderCord;
+  let lambda = steerFwdHingeArea / steerNoseHingeArea;
+  // - i /10 do usunięcia
+  let b3 =
+    (f * getY(cTtoC, lambda)) /
+    ((steerSpan / trimSpan) * Math.pow(cF / Cfprim, 2))/10;
+    console.log("b3",{aspectratio:lambda,
+      cTtoC:cTtoC,
         b3:b3})
   return b3;
 };
+
 const getY = (cTtoC: number, lambda: number) => {
   let x = cTtoC;
   let z = lambda;
