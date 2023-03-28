@@ -4,9 +4,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/templates/Home";
-import Steps from "./components/templates/Steps";
-import { powerUnitSteps } from "./utils/steps";
+import Home from "./pages/home/Home";
+import Steps from "./components/ui/Steps";
+import { powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
   PowerUnitEngine,
   PowerUnitPropeller,
@@ -16,7 +16,15 @@ import {
   Settings,
   Turn,
   Weight,
-} from "./components/organisms";
+} from "./pages";
+import { useWeightStore } from "./data/stores/useWeightConfiguration"
+
+// const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
+
+import StabilityLongitudalMoment from "./pages/stabillity/StabilityLongitudalMoment";
+import StabilityRodForce from "./pages/stabillity/StabilityRodForce";
+import StabillitySteer from "./pages/stabillity/StabillitySteer";
+import StabillityCharts from "./pages/stabillity/StabillityCharts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -36,6 +44,19 @@ root.render(
           </Route>
           <Route path="performance" element={<Performance />} />
           <Route path="weight" element={<Weight />} />
+          <Route path="stability" element={<Steps steps={stabilitySteps} />}>
+            <Route
+              path="longitudinal-moment"
+              element={<StabilityLongitudalMoment />}
+            />
+            <Route path="steer" element={<StabillitySteer/>} />
+            <Route path="rod-force" element={<StabilityRodForce />} />
+            <Route
+              path="stabillty-and-manouverabillty"
+              element={<StabillityCharts/>}
+            />
+          </Route>
+
           <Route path="turn" element={<Turn />} />
           <Route path="settings" element={<Settings />} />
         </Route>

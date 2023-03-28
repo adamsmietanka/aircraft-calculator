@@ -2,12 +2,13 @@ interface Props {
   label: string;
   unit: string;
   value: number;
-  step?: number;
-  min?: number;
   setter: (value: number) => void;
+  step?: number;
 }
 
-const InputNumber = ({label, unit, value, step=1, min=0, setter}: Props) => {
+
+const InputNumber = ({label, unit, value, setter, step}: Props) => {
+
   return (
     <div className="form-control">
       <label className="label">
@@ -17,9 +18,8 @@ const InputNumber = ({label, unit, value, step=1, min=0, setter}: Props) => {
         <input
           className="input input-bordered w-48"
           type="number"
-          step={step}
+          step={step ? step :10}
           value={value}
-          min={min}
           onChange={(e) => setter(parseFloat(e.target.value))}
         />
         <span className="flex items-center justify-center bg-gray-200 px-1 w-20 rounded-lg h-12">
