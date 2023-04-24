@@ -6,7 +6,7 @@ export const generate_verts = (mesh: number[][]) => {
 
   values.forEach((heights, i) => {
     heights.forEach((height, j) => {
-      const angle = 10 + j * 0.5;
+      const angle = 10 + j;
       results.push(angle, height, advanceRatios[i]);
     });
   });
@@ -22,10 +22,11 @@ export const generate_verts_rev = (mesh: number[][]) => {
 
   values.forEach((heights, i) => {
     heights.forEach((height, j) => {
-      const angle = 10 + j * 0.5;
+      const angle = 10 + j;
       results.push(angle, height, advanceRatios[i]);
     });
   });
+  console.log(results)
   return new Float32Array(results);
 };
 
