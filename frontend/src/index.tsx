@@ -8,15 +8,13 @@ import Home from "./components/templates/Home";
 import Steps from "./components/templates/Steps";
 import { powerUnitSteps } from "./utils/steps";
 import {
-  PowerUnitEngine,
-  PowerUnitPropeller,
-  PowerUnitResults,
   Aerodynamics,
   Performance,
   Settings,
   Turn,
   Weight,
 } from "./components/organisms";
+import { PowerUnitEngine, PowerUnitPropeller, PowerUnitResults } from "./features/power_unit";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
