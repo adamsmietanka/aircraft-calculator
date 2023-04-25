@@ -18,7 +18,6 @@ const PowerUnitEngineChart = () => {
       <div>Chart goes here</div>
       <div>SL Power: {seaLevelPower}</div>
       <div>Engine speed: {engineSpeed}</div>
-      <div>Reduction ratio: {heights}</div>
       <button onClick={() => setNumber((i) => i + 1)}>{number}</button>
     </div>
   );
