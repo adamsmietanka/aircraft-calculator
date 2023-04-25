@@ -43,6 +43,7 @@ const PowerUnitEngine = () => {
           label="Maximum altitude"
           unit="km"
           value={maxAltitude}
+          min={5}
           max={15}
           setter={setMaxAltitude} 
         />
