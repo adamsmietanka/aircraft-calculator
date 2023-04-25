@@ -42,6 +42,7 @@ const PowerUnitEngineChart = () => {
         font: { size: 16 },
       },
     },
+    // dragmode: false,
   }), [powers])
 
   return (
@@ -56,6 +57,15 @@ const PowerUnitEngineChart = () => {
           },
         ]}
         layout={layout}
+        config={{
+          scrollZoom: false,
+          responsive: true,
+          modeBarButtons: [['toImage']],
+          toImageButtonOptions: {
+            format: 'png',
+            filename: 'engine_power',
+          },
+        }}
       />
   );
 };
