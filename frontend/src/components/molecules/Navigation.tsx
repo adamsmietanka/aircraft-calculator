@@ -21,7 +21,7 @@ const links = [
     icon: <Propeller />,
   },
   {
-    to: "/performance",
+    to: "/performance/initial_data",
     name: "Performance",
     icon: <Engine />,
   },

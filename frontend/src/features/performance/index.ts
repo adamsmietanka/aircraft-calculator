@@ -1,5 +1,5 @@
 import PerformanceInitial from "./PerformanceInitial";
-import PerfromanceInitialChart from "./PerformanceInitialChart"
+import PerfromanceInitialChart from "./PerformanceInitiaEndurancelChart"
 import PerformanceBreguet from "./PerformanceBreguet";
 import PerformanceExtendedAlg from "./PerformanceExtendedAlg"
 
