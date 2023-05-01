@@ -27,3 +27,24 @@ export const powerUnitSteps: Step[] = [
   },
 ];
 
+export const performanceUnitSteps: Step[] = [
+  {
+    name: "Initial Data",
+    path: "initial_data",
+    enabledPaths: ["perf_extended", "breguet", "initial_data"],
+    next: "breguet",
+  },
+  {
+    name: "Breguet Formulas",
+    path: "breguet",
+    enabledPaths: ["perf_extended", "breguet"],
+    previous: "initial_data",
+    next: "perf_extended",
+  },
+  {
+    name: "Extended Algorithm",
+    path: "perf_extended",
+    enabledPaths: ["perf_extended"],
+    previous: "breguet",
+  },
+];

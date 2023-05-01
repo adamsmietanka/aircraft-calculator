@@ -6,15 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/templates/Home";
 import Steps from "./components/templates/Steps";
-import { powerUnitSteps } from "./utils/steps";
+import { powerUnitSteps , performanceUnitSteps} from "./utils/steps";
 import {
   Aerodynamics,
-  Performance,
   Settings,
   Turn,
   Weight,
 } from "./components/organisms";
 import { PowerUnitEngine, PowerUnitPropeller, PowerUnitResults } from "./features/power_unit";
+import { PerformanceBreguet, PerformanceExtendedAlg, PerformanceInitial} from "./features/performance";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -32,7 +33,11 @@ root.render(
             <Route path="propeller" element={<PowerUnitPropeller />} />
             <Route path="results" element={<PowerUnitResults />} />
           </Route>
-          <Route path="performance" element={<Performance />} />
+          <Route path="performance" element={<Steps steps={performanceUnitSteps} />}>
+            <Route path="initial_data" element={<PerformanceInitial />} />
+            <Route path="breguet" element={<PerformanceBreguet />} />
+            <Route path="perf_extended" element={<PerformanceExtendedAlg />} />
+          </Route>
           <Route path="weight" element={<Weight />} />
           <Route path="turn" element={<Turn />} />
           <Route path="settings" element={<Settings />} />
