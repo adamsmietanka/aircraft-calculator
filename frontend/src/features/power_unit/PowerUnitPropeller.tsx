@@ -1,6 +1,6 @@
 import React from "react";
 import InputNumber from "../../components/atoms/InputNumber";
-import { useEngineStore } from "./useEngine";
+import { useEngineStore } from "./hooks/useEngine";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed)

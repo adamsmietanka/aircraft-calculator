@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.bg-base {
+  background-color: hsla(var(--b1) / var(--tw-bg-opacity, 1));
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

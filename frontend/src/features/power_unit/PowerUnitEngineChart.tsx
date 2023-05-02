@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useEngineStore } from "./useEngine";
-import { usePower } from "./usePower";
+import { useEngineStore } from "./hooks/useEngine";
+import { usePower } from "./hooks/usePower";
 import Plot from 'react-plotly.js';
 
 const PowerUnitEngineChart = () => {

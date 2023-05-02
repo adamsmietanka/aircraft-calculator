@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="flex">
       <Navigation />
-      <div className="m-4 flex flex-col w-full">
+      <div className="pl-4 flex flex-col w-full ml-80">
         <Outlet />
       </div>
     </div>

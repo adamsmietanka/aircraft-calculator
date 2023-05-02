@@ -19,7 +19,7 @@ const Steps = ({ steps }: StepsProps) => {
 
   return (
     <>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full sticky top-0 z-50 py-2 bg-base">
         <ul className="steps mb-4">
           {steps.map((route) => (
             <li
@@ -37,24 +37,24 @@ const Steps = ({ steps }: StepsProps) => {
         </ul>
       </div>
       <Outlet />
-      <div className="flex mt-auto">
+      {selectedRoute?.next && (
+        <button
+          className="btn fixed right-4 bottom-4"
+          onClick={() => navigate(selectedRoute.next as string)}
+        >
+          Next
+        </button>
+      )}
+      {/* <div className="fixed bottom-0 bg-base w-full">
         {selectedRoute?.previous && (
           <button
-            className="btn mr-auto"
+            className="btn"
             onClick={() => navigate(selectedRoute.previous as string)}
           >
             Previous
           </button>
         )}
-        {selectedRoute?.next && (
-          <button
-            className="btn ml-auto"
-            onClick={() => navigate(selectedRoute.next as string)}
-          >
-            Next
-          </button>
-        )}
-      </div>
+      </div> */}
     </>
   );
 };

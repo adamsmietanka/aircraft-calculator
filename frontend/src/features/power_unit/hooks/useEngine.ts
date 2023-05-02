@@ -10,11 +10,13 @@ interface EngineState {
   maxAltitude: number;
   kCoefficient: number;
   heights: number[];
+  superchargerEnabled: boolean;
   setSeaLevelPower: (value: number) => void;
   setEngineSpeed: (value: number) => void;
   setReductionRatio: (value: number) => void;
   setMaxAltitude: (value: number) => void;
   setKCoefficient: (value: number) => void;
+  setSuperchargerEnabled: (value: boolean) => void;
 }
 
 export const useEngineStore = create<EngineState>()((set) => ({
@@ -24,6 +26,7 @@ export const useEngineStore = create<EngineState>()((set) => ({
   maxAltitude: 10,
   kCoefficient: 0.1,
   heights: createHeightsArray(10),
+  superchargerEnabled: false,
   setSeaLevelPower: (value) => set((state) => ({ seaLevelPower: value })),
   setEngineSpeed: (value) => set((state) => ({ engineSpeed: value })),
   setReductionRatio: (value) => set((state) => ({ reductionRatio: value })),
@@ -33,4 +36,5 @@ export const useEngineStore = create<EngineState>()((set) => ({
       heights: createHeightsArray(value),
     })),
   setKCoefficient: (value) => set((state) => ({ kCoefficient: value })),
+  setSuperchargerEnabled: (value) => set((state) => ({ superchargerEnabled: value })),
 }));
