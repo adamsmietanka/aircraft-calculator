@@ -1,4 +1,4 @@
-import InfoTooltip from "../../features/common/InfoTooltip";
+import InfoTooltip from "./InfoTooltip";
 
 interface Props {
   label: string;
@@ -29,9 +29,9 @@ const InputNumber = ({
           {tooltip && <InfoTooltip text={tooltip} />}
         </span>
       </label>
-      <label className="input-group">
+      <label className="input-group input-group-2sm">
         <input
-          className="input input-bordered w-full"
+          className="input input-bordered input-2sm input-md w-full"
           type="number"
           step={step}
           value={value}
@@ -39,7 +39,7 @@ const InputNumber = ({
           disabled={disabled}
           onChange={(e) => setter(parseFloat(e.target.value))}
         />
-        <span className="flex items-center justify-center w-20 rounded-lg h-12">
+        <span className="flex items-center justify-center w-20 rounded-lg">
           {unit}
         </span>
       </label>

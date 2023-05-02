@@ -1,5 +1,5 @@
 import React from "react";
-import InputNumber from "../../components/atoms/InputNumber";
+import InputNumber from "../common/InputNumber";
 import { useEngineStore } from "./hooks/useEngine";
 
 const PowerUnitPropeller = () => {

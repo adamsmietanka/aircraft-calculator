@@ -8,7 +8,7 @@ interface Props {
 const InfoTooltip = ({ text }: Props) => {
   return (
     <div className="tooltip" data-tip={text}>
-      <Info className="w-4 ml-1 opacity-50 relative bottom-0.5" />
+      <Info className="w-4 ml-1.5 relative bottom-0.5 text-color" />
     </div>
   );
 };

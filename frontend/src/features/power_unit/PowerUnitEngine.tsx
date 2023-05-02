@@ -1,5 +1,5 @@
 import React from "react";
-import InputNumber from "../../components/atoms/InputNumber";
+import InputNumber from "../common/InputNumber";
 import InputSlider from "../../components/atoms/InputSlider";
 import { useEngineStore } from "./hooks/useEngine";
 import PowerUnitEngineChart from "./PowerUnitEngineChart";
@@ -14,7 +14,7 @@ const PowerUnitEngine = () => {
   const setMaxAltitude = useEngineStore((state) => state.setMaxAltitude);
   const setKCoefficient = useEngineStore((state) => state.setKCoefficient);
   return (
-    <div className="flex w-full">
+    <div className="flex w-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputNumber
           value={seaLevelPower}

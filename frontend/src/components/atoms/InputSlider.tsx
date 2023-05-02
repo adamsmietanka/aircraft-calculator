@@ -35,7 +35,7 @@ const InputSlider = ({
           />
         </div>
         <span
-          className="flex items-center justify-center w-24 rounded-lg h-12 [background-color: hsl(var(--b3, var(--b2)) / var(--tw-bg-opacity));]"
+          className="flex items-center justify-center w-24 rounded-lg h-12 bg-base-span"
         >
           {value} {unit}
         </span>

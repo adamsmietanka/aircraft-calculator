@@ -6,16 +6,37 @@
   background-color: hsla(var(--b1) / var(--tw-bg-opacity, 1));
 }
 
+.bg-base-span {
+  background-color: hsl(var(--b3, var(--b2)));
+}
+
+.text-color {
+  fill: hsl(var(--bc, var(--b2)));
+}
+
+.input-group-2sm {
+  font-size: 0.875rem /* 14px */;
+  line-height: 2.5rem /* 40px */;
+}
+
+.input-2sm {
+  height: 2.5rem/* 40px */;
+  padding-left: 1rem/* 16px */;
+  padding-right: 1rem/* 16px */;
+  font-size: 0.875rem/* 14px */;
+  line-height: 2.5rem/* 40px */;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }

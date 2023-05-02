@@ -1,5 +1,5 @@
 import React from "react";
-import InputNumber from "../../components/atoms/InputNumber";
+import InputNumberSmall from "../common/InputNumberSmall";
 import InputToggle from "../common/InputToggle";
 import { useSuperchargerStore } from "./hooks/useSupercharger";
 
@@ -14,7 +14,7 @@ const PowerUnitEngineSupercharger = () => {
         setter={supercharger.setEnabled}
       />
       <div className="rounded-2xl shadow p-4">
-        <InputNumber
+        <InputNumberSmall
           value={supercharger.LGendAltitude}
           setter={supercharger.setLGendAltitude}
           step={0.1}
@@ -22,7 +22,7 @@ const PowerUnitEngineSupercharger = () => {
           unit="km"
           disabled={!supercharger.enabled}
         />
-        <InputNumber
+        <InputNumberSmall
           value={supercharger.LGendPower}
           setter={supercharger.setLGendPower}
           step={50}
@@ -38,7 +38,7 @@ const PowerUnitEngineSupercharger = () => {
           disabled={!supercharger.enabled}
           setter={supercharger.setHGEnabled}
         />
-        <InputNumber
+        <InputNumberSmall
           value={supercharger.HGstartAltitude}
           setter={supercharger.setHGstartAltitude}
           step={50}
@@ -46,7 +46,7 @@ const PowerUnitEngineSupercharger = () => {
           unit="km"
           disabled={!supercharger.enabled || !supercharger.HGenabled}
         />
-        <InputNumber
+        <InputNumberSmall
           value={supercharger.HGendAltitude}
           setter={supercharger.setHGendAltitude}
           step={50}
@@ -54,7 +54,7 @@ const PowerUnitEngineSupercharger = () => {
           unit="km"
           disabled={!supercharger.enabled || !supercharger.HGenabled}
         />
-        <InputNumber
+        <InputNumberSmall
           value={supercharger.HGendPower}
           setter={supercharger.setHGendPower}
           step={50}
