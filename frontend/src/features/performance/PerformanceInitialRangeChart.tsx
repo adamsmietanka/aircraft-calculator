@@ -1,14 +1,22 @@
 import { useEffect, useMemo, useState } from "react";
 import { useInitialStore } from "./useInitial";
-import Plot from 'react-plotly.js';
+import Plot, { PlotParams } from 'react-plotly.js';
+import { Datum, TypedArray } from "plotly.js";
 
-const PerformanceInitialRangeChart = () => {
-    const heights = [0, 100]
-    const powers = [0, 100]
-  
+interface ChartProps {
+  trace: {
+    xes: number[];
+    yes: number[];
+  };
+}
+
+const PerformanceInitialRangeChart = ({trace}: ChartProps) => {
+
+  const xes = trace.xes;
+  const yes = trace.yes;
     useEffect(() => {
       console.log("log")
-    });
+    }, []);
   
     let layout = {
       title: 'Range vs Velocity',
@@ -24,14 +32,14 @@ const PerformanceInitialRangeChart = () => {
         pad: 4,
       },
       yaxis: {
-        range: [0, 100],
+        range: [0, 700],
         title: {
           text: 'Range [km]',
           font: { size: 16 },
         },
       },
       xaxis: {
-        range: [0, 100],
+        range: [0, 200],
         title: {
           text: 'Velocity [km/h]',
           font: { size: 16 },
@@ -42,8 +50,8 @@ const PerformanceInitialRangeChart = () => {
       <Plot
           data={[
             {
-              x: heights,
-              y: powers,
+              x: xes,
+              y: yes,
               type: 'scatter',
               mode: 'lines',
               marker: {color: 'red'},

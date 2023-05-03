@@ -1,9 +1,10 @@
 import InputNumber from "../../components/atoms/InputNumber";
 import InputSlider from "../../components/atoms/InputSlider";
-import InputSwitch from "../../utils/performance/InputSwitch"
 import { useInitialStore } from "./useInitial";
+import { useState, useEffect } from "react";
 import PerformanceInitialRangeChart from "./PerformanceInitialRangeChart";
 import PerformanceInitialEnduranceChart from "./PerformanceInitiaEndurancelChart";
+import axios from "axios";
 
 const PerformanceInitial = () => {
   const proptype = useInitialStore((state) => state.proptype)
@@ -33,9 +34,16 @@ const PerformanceInitial = () => {
   const setCx0 = useInitialStore((state) => state.setCx0)
   const setCzmax = useInitialStore((state) => state.setCzmax)
 
+  const [trace, setTrace] = useState(
+    {
+      xes: [],
+      yes: [],
+    }
+  );
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(
+    console.log({
       proptype,
       propnumber,
       nominalPower,
@@ -49,8 +57,29 @@ const PerformanceInitial = () => {
       aspectRatio,
       cx0,
       czmax
-      );
-  };
+    });
+    let response = await axios.post("http://127.0.0.1:8000", {
+    proptype,
+    propnumber,
+    nominalPower,
+    flightAltitude,
+    startMass,
+    fuelMass,
+    fuelcons,
+    vmax,
+    wmax,
+    area,
+    aspectRatio,
+    cx0,
+    czmax
+    })
+    console.log(response.data)
+    setTrace((prevState) => ({
+      ...prevState,
+      xes: response.data.xes,
+      yes: response.data.yes,
+    }))};
+
 
   return (
     <div className="flex">
@@ -160,7 +189,9 @@ const PerformanceInitial = () => {
         </form>
       </div> 
       <div className="flex flex-col w-64 mr-8 space-y-2">
-        <PerformanceInitialRangeChart/>
+        <PerformanceInitialRangeChart
+          trace={trace}
+        />
         <PerformanceInitialEnduranceChart/>
       </div>
     </div>
