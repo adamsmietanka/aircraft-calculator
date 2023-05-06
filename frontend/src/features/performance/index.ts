@@ -1,6 +1,6 @@
 import PerformanceInitial from "./PerformanceInitial";
 import PerfromanceInitialChart from "./PerformanceInitiaEndurancelChart"
-import PerformanceBreguet from "./PerformanceBreguet";
+import PerformanceBreguet from "./PerformanceSensitivity";
 import PerformanceExtendedAlg from "./PerformanceExtendedAlg"
 
 export {

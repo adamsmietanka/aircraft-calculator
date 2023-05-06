@@ -14,7 +14,8 @@ import {
   Weight,
 } from "./components/organisms";
 import { PowerUnitEngine, PowerUnitPropeller, PowerUnitResults } from "./features/power_unit";
-import { PerformanceBreguet, PerformanceExtendedAlg, PerformanceInitial} from "./features/performance";
+import { PerformanceExtendedAlg, PerformanceInitial} from "./features/performance";
+import PerformanceSensitivity from "./features/performance/PerformanceSensitivity";
 
 
 const root = ReactDOM.createRoot(
@@ -35,8 +36,8 @@ root.render(
           </Route>
           <Route path="performance" element={<Steps steps={performanceUnitSteps} />}>
             <Route path="initial_data" element={<PerformanceInitial />} />
-            <Route path="breguet" element={<PerformanceBreguet />} />
             <Route path="perf_extended" element={<PerformanceExtendedAlg />} />
+            <Route path="sensitivity" element={<PerformanceSensitivity />} />
           </Route>
           <Route path="weight" element={<Weight />} />
           <Route path="turn" element={<Turn />} />
