@@ -37,7 +37,14 @@ const PerformanceInitial = () => {
   const [trace, setTrace] = useState(
     {
       xes: [],
+      xes2: [],
+      xes3: [],
       yes: [],
+      yes2: [],
+      yes3: [],
+      zes: [],
+      zes2: [],
+      zes3: [],
     }
   );
 
@@ -77,7 +84,14 @@ const PerformanceInitial = () => {
     setTrace((prevState) => ({
       ...prevState,
       xes: response.data.xes,
+      xes2: response.data.xes2,
+      xes3: response.data.xes3,
       yes: response.data.yes,
+      yes2: response.data.yes2,
+      yes3: response.data.yes3,
+      zes: response.data.zes,
+      zes2: response.data.zes2,
+      zes3: response.data.zes3,
     }))};
 
 
@@ -180,8 +194,9 @@ const PerformanceInitial = () => {
             label="Flight altitude"
             unit="km"
             value={flightAltitude}
+            step={0.1}
             min={0}
-            max={15}
+            max={10}
             setter={setFlightAltitude} 
           />
           <div className="break"></div>
@@ -192,7 +207,9 @@ const PerformanceInitial = () => {
         <PerformanceInitialRangeChart
           trace={trace}
         />
-        <PerformanceInitialEnduranceChart/>
+        <PerformanceInitialEnduranceChart
+          trace={trace}
+        />
       </div>
     </div>
   );

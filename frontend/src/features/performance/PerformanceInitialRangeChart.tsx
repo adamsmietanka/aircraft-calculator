@@ -1,19 +1,33 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect} from "react";
 import { useInitialStore } from "./useInitial";
-import Plot, { PlotParams } from 'react-plotly.js';
-import { Datum, TypedArray } from "plotly.js";
+import Plot from 'react-plotly.js';
 
-interface ChartProps {
+interface PerformanceChartProps {
   trace: {
     xes: number[];
+    xes2: number[];
+    xes3: number[];
     yes: number[];
+    yes2: number[];
+    yes3: number[];
+    zes: number[];
+    zes2: number[];
+    zes3: number[];
   };
 }
 
-const PerformanceInitialRangeChart = ({trace}: ChartProps) => {
+const PerformanceInitialRangeChart = ({trace}: PerformanceChartProps) => {
 
   const xes = trace.xes;
+  const xes2 = trace.xes2;
+  const xes3 = trace.xes3;
   const yes = trace.yes;
+  const yes2 = trace.yes2;
+  const yes3 = trace.yes3;
+  const zes = trace.zes;
+  const zes2 = trace.zes2;
+  const zes3 = trace.zes3;
+
     useEffect(() => {
       console.log("log")
     }, []);
@@ -22,8 +36,7 @@ const PerformanceInitialRangeChart = ({trace}: ChartProps) => {
       title: 'Range vs Velocity',
       font: { size: 18 },
       height: window.innerWidth > 960 ? 600 : window.innerHeight * 0.5,
-      width: window.innerWidth > 960 ? 600 : window.innerWidth * 0.9,
-  
+      width: window.innerWidth > 1800 ? 600 : window.innerWidth * 0.5,
       margin: {
         l: 65,
         r: 10,
@@ -32,14 +45,14 @@ const PerformanceInitialRangeChart = ({trace}: ChartProps) => {
         pad: 4,
       },
       yaxis: {
-        range: [0, 700],
+        range: [Math.min(...zes)*0.9, Math.max(...zes) * 1.1],
         title: {
           text: 'Range [km]',
           font: { size: 16 },
         },
       },
       xaxis: {
-        range: [0, 200],
+        range: [Math.min(...xes)*0.9, Math.max(...xes)*1.1],
         title: {
           text: 'Velocity [km/h]',
           font: { size: 16 },
@@ -51,12 +64,30 @@ const PerformanceInitialRangeChart = ({trace}: ChartProps) => {
           data={[
             {
               x: xes,
-              y: yes,
+              y: zes,
               type: 'scatter',
               mode: 'lines',
+              line: {dash: 'dash'},
               marker: {color: 'red'},
-              name: 'Trace',
+              name: 'Breguet - 1st set',
             },
+            {
+              x: xes2,
+              y: zes2,
+              type: 'scatter',
+              mode: 'lines',
+              marker: {color: 'blue'},
+              name: 'Breguet - 2nd set',
+            },
+            {
+              x: xes3,
+              y: zes3,
+              type: 'scatter',
+              mode: 'lines',
+              line: {dash: 'dashdot'},
+              marker: {color: 'green'},
+              name: 'Breguet - 3rd set',
+            }
           ]}
           layout={layout}
           config={{

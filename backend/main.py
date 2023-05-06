@@ -36,11 +36,21 @@ app.add_middleware(
 
 @app.post("/")
 def home(object: MyForm):
-    returned_dictProp1 = bsp.breguetPropeller(object.startMass, object.nominalPower, object.fuelcons, object.propnumber, object.flightAltitude, object.aspectRatio, object.cx0, object.area, object.vmax, object.fuelMass, aero_cessna)
+    returned_dictProp1 = bsp.breguetPropeller(object.startMass, object.nominalPower, object.fuelcons, object.propnumber, 1000*object.flightAltitude, object.aspectRatio, object.cx0, object.area, object.vmax, object.fuelMass, aero_cessna)
+    returned_dictProp2 = bsp.breguetPropeller_2set(object.startMass, object.nominalPower, object.fuelcons, object.propnumber, 1000*object.flightAltitude, object.aspectRatio, object.cx0, object.area, object.vmax, object.fuelMass, aero_cessna)
+    returned_dictProp3 = bsp.breguetPropeller_3set(object.startMass, object.nominalPower, object.fuelcons, object.propnumber, 1000*object.flightAltitude, object.aspectRatio, object.cx0, object.area, object.vmax, object.fuelMass, aero_cessna)
+    
     if object.proptype == 'propeller':
         return {
             'xes': returned_dictProp1['x_list'],
-            'yes' : returned_dictProp1['times_list']
+            'xes2': returned_dictProp2['x_list'],
+            'xes3': returned_dictProp3['x_list'],
+            'yes' : returned_dictProp1['times_list'],
+            'yes2': returned_dictProp2['times_list'],
+            'yes3': returned_dictProp3['times_list'],
+            'zes': returned_dictProp1['ranges_list'],
+            'zes2': returned_dictProp2['ranges_list'],
+            'zes3': returned_dictProp3['ranges_list']
         }
 
     
