@@ -109,8 +109,8 @@ const PerformanceInitial = () => {
               id="propselect"
               onChange={(e) => setProptype(e.target.value)}
             >
-              <option value="propeller">Propeller</option>
-              <option value="jet">Jet</option>
+              <option value="propeller-breguet">Propeller</option>
+              <option value="jet-breguet">Jet</option>
             </select>
 
           <InputNumber

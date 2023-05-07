@@ -61,7 +61,7 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
     fuelmass_prop=fuelmass-diffmass_prop                 
     endmass_prop=startmass-fuelmass_prop 
     calc_mass = (startmass + endmass_prop)/2 
-    print('Calc mass:',calc_mass)
+
     #implementation of cz and cx arrays
     double_arr = basf.aero_prep(aero_input)
     alpha_arr = double_arr[0]

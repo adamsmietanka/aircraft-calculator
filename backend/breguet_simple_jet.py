@@ -2,16 +2,22 @@ import numpy as np
 import math
 import basic_funcs as basf
 
-def breguetJet(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area,vmin,vmax):
+
+
+def breguetJet(startmass,nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input):
     
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
     #masses needed in calculations
-    difmass_jet=propnumber*nompow_jet*fuelcons_jet*1.25    
-    fuelmass_jet=0.35*startmass-difmass_jet                 
-    endmass_jet=startmass-fuelmass_jet                             
+    diffmass_jet=propnumber*nompow_jet*fuelcons_jet*1.25    
+    fuelmass_jet=fuelmass-diffmass_jet                 
+    endmass_jet=startmass-fuelmass_jet 
+    calc_mass = (startmass + endmass_jet)/2   
 
+    double_arr = basf.aero_prep(aero_input)
+    cz_arr = double_arr[1]
+    vmin = basf.velocity(calc_mass, air_density, area, max(cz_arr))                         
     #array of velocities, counting step - 100
     x=np.linspace(vmin,vmax,100)
     
@@ -46,19 +52,19 @@ def breguetJet(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectrati
 
     return return_dict
 
-def breguetJet_2set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area, vmin, vmax):
+def breguetJet_2set(startmass,nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input):
     
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
     #masses needed in calculations
-    difmass_jet=propnumber*nompow_jet*fuelcons_jet*1.25    
-    fuelmass_jet=0.35*startmass-difmass_jet                 
-    endmass_jet=startmass-fuelmass_jet
-    calc_mass = (startmass + endmass_jet)/2                             
+    diffmass_jet=propnumber*nompow_jet*fuelcons_jet*1.25    
+    fuelmass_jet=fuelmass-diffmass_jet                 
+    endmass_jet=startmass-fuelmass_jet 
+    calc_mass = (startmass + endmass_jet)/2                            
 
     #implementation of cz and cx arrays
-    double_arr = basf.aero_prep()
+    double_arr = basf.aero_prep(aero_input)
     alpha_arr = double_arr[0]
     cz_arr = double_arr[1]
     alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(calc_mass, air_density, area, vmax))
@@ -74,12 +80,12 @@ def breguetJet_2set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
 
     #loop calculations of Breguet formulas
     for i in lift_drag:
-        time = i/9.81/fuelcons_jet*np.log(startmass/endmass_jet)
+        time = 10*i/9.81/fuelcons_jet*np.log(startmass/endmass_jet)
         times.append(time)
  
     for i in new_cz_arr:
-        pom = 3.6*2*math.sqrt(2/9.81/air_density/area)/fuelcons_jet
-        range = pom*math.sqrt(i)*basf.cx(i, cx0 ,aspectratio)*(math.sqrt(startmass) - math.sqrt(endmass_jet))
+        pom = 10*3.6*2*math.sqrt(2/9.81/air_density/area)/fuelcons_jet
+        range = pom*math.sqrt(i)/basf.cx(i, cx0 ,aspectratio)*(math.sqrt(startmass) - math.sqrt(endmass_jet))
         ranges.append(range)
 
     times_arr=100*np.array(times)     
@@ -102,19 +108,19 @@ def breguetJet_2set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
 
     return return_dict
 
-def breguetJet_3set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area, vmin, vmax):
+def breguetJet_3set(startmass,nompow_jet,fuelcons_jet,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input):
     
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
     #masses needed in calculations
-    difmass_jet=propnumber*nompow_jet*fuelcons_jet*1.25    
-    fuelmass_jet=0.35*startmass-difmass_jet                 
-    endmass_jet=startmass-fuelmass_jet
-    calc_mass = (startmass + endmass_jet)/2                             
+    diffmass_jet=propnumber*nompow_jet*fuelcons_jet*1.25    
+    fuelmass_jet=fuelmass-diffmass_jet                 
+    endmass_jet=startmass-fuelmass_jet 
+    calc_mass = (startmass + endmass_jet)/2                           
 
     #implementation of cz and cx arrays
-    double_arr = basf.aero_prep()
+    double_arr = basf.aero_prep(aero_input)
     alpha_arr = double_arr[0]
     cz_arr = double_arr[1]
     alpha_root = basf.poly_root(alpha_arr, cz_arr, 5, basf.cz(calc_mass, air_density, area, vmax))
@@ -134,11 +140,11 @@ def breguetJet_3set(startmass, nompow_jet,fuelcons_jet,propnumber,altitude,aspec
 
     #loop calculations of Breguet formulas
     for i in lift_drag:
-        time = i/9.81/fuelcons_jet*np.log(startmass/endmass_jet)
+        time = 10*i/9.81/fuelcons_jet*np.log(startmass/endmass_jet)
         times.append(time)
  
     for i in velocity_L_D:
-        range = 3.6*i/9.81/fuelcons_jet*np.log(startmass/endmass_jet)
+        range = 10*3.6*i/9.81/fuelcons_jet*np.log(startmass/endmass_jet)
         ranges.append(range)
 
     times_arr=100*np.array(times)     

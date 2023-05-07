@@ -30,7 +30,7 @@ interface InitialState {
 }
 
 export const useInitialStore = create<InitialState>()((set) => ({
-  proptype: 'propeller',
+  proptype: 'propeller-breguet',
   propnumber: 1,
   flightAltitude: 0,
   nominalPower: 74.6,
