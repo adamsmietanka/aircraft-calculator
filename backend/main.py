@@ -10,8 +10,12 @@ app = FastAPI()
 #origins = ["http://localhost:3000/performance/initial_data", "http://127.0.0.1:3000/performance/initial_data"]
 origins = ["http://localhost:3000", "http://127.0.0.1:3000/"]
 aero_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-cz-data.xlsx"
+rpm_input_cessna = 'C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-rpm-load-data.xlsx'
+eta_input_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/eta-velo.xlsx"
+fuelcons_input_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-fuelcons-load-data.xlsx"
 
 class MyForm(BaseModel):
+    method_type: str
     proptype:str
     propnumber:float
     nominalPower:float
@@ -25,6 +29,7 @@ class MyForm(BaseModel):
     aspectRatio:float
     cx0:float
     czmax:float
+    maxPower:float
 
 
 app.add_middleware(
@@ -44,7 +49,7 @@ def home(object: MyForm):
     returned_dictJet2 = bsj.breguetJet_2set(object.startMass, object.nominalPower, object.fuelcons, object.propnumber, 1000*object.flightAltitude, object.aspectRatio, object.cx0, object.area, object.vmax, object.fuelMass, aero_cessna)
     returned_dictJet3 = bsj.breguetJet_3set(object.startMass, object.nominalPower, object.fuelcons, object.propnumber, 1000*object.flightAltitude, object.aspectRatio, object.cx0, object.area, object.vmax, object.fuelMass, aero_cessna)
 
-    if object.proptype == 'propeller-breguet':
+    if object.proptype == 'propeller-breguet' and object.method_type == 'breguet':
         return {
             'xes': returned_dictProp1['x_list'],
             'xes2': returned_dictProp2['x_list'],
@@ -56,7 +61,7 @@ def home(object: MyForm):
             'zes2': returned_dictProp2['ranges_list'],
             'zes3': returned_dictProp3['ranges_list']
         }
-    elif object.proptype == 'jet-breguet':
+    elif object.proptype == 'jet-breguet' and object.method_type == 'breguet':
         return{
             'xes': returned_dictJet1['x_list'],
             'xes2': returned_dictJet2['x_list'],
@@ -67,6 +72,13 @@ def home(object: MyForm):
             'zes': returned_dictJet1['ranges_list'],
             'zes2': returned_dictJet2['ranges_list'],
             'zes3': returned_dictJet3['ranges_list']    
+        }
+    elif object.proptype == 'propeller-breguet' and object.method_type == 'raymer' or object.proptype == 'propeller-breguet' and object.method_type == 'authors' or object.proptype == 'propeller-breguet' and object.method_type == 'paturski':
+        returned_dictExt = ext.extended_alg(rpm_input_cessna, fuelcons_input_cessna, eta_input_cessna, object, 30)
+        return{
+            'xes': returned_dictExt['x_list'],
+            'yes' : returned_dictExt['times_list'],
+            'zes': returned_dictExt['ranges_list'],  
         }
 
     

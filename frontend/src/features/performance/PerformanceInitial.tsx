@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import PerformanceInitialRangeChart from "./PerformanceInitialRangeChart";
 import PerformanceInitialEnduranceChart from "./PerformanceInitiaEndurancelChart";
 import axios from "axios";
+import { usePower } from "../power_unit/usePower";
 
 const PerformanceInitial = () => {
+  const method_type = useInitialStore((state) => state.method_type)
   const proptype = useInitialStore((state) => state.proptype)
   const propnumber = useInitialStore((state) => state.propnumber)
   const nominalPower = useInitialStore((state) => state.nominalPower)
@@ -34,6 +36,13 @@ const PerformanceInitial = () => {
   const setCx0 = useInitialStore((state) => state.setCx0)
   const setCzmax = useInitialStore((state) => state.setCzmax)
 
+  const [calculatePower] = usePower();
+  const [maxPower, setMaxPower] = useState(calculatePower(0))
+
+  useEffect(() => {
+    setMaxPower(() => calculatePower(flightAltitude))
+  }, [flightAltitude, calculatePower])
+
   const [trace, setTrace] = useState(
     {
       xes: [],
@@ -51,6 +60,7 @@ const PerformanceInitial = () => {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log({
+      method_type,
       proptype,
       propnumber,
       nominalPower,
@@ -63,9 +73,11 @@ const PerformanceInitial = () => {
       area,
       aspectRatio,
       cx0,
-      czmax
+      czmax,
+      maxPower
     });
     let response = await axios.post("http://127.0.0.1:8000", {
+    method_type,
     proptype,
     propnumber,
     nominalPower,
@@ -78,7 +90,8 @@ const PerformanceInitial = () => {
     area,
     aspectRatio,
     cx0,
-    czmax
+    czmax,
+    maxPower
     })
     console.log(response.data)
     setTrace((prevState) => ({
@@ -117,6 +130,8 @@ const PerformanceInitial = () => {
             value={propnumber}
             setter={setPropnumber}
             step={1}
+            min={1}
+            max={2}
             label="Number of Engines"
             unit="-"
           />

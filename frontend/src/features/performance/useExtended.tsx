@@ -1,7 +1,7 @@
 import create from "zustand";
 
-interface InitialState {
-  method_type: 'breguet'
+interface ExtendedState {
+    method_type: string;  
   proptype: string;
   propnumber: number;
   flightAltitude: number;
@@ -15,6 +15,7 @@ interface InitialState {
   aspectRatio: number;
   cx0: number;
   czmax: number;
+  setMethodType: (value: string) => void;
   setProptype: (value: string) => void;
   setPropnumber: (value: number) => void;
   setFlightAltitude: (value: number) => void;
@@ -30,8 +31,8 @@ interface InitialState {
   setCzmax: (value: number) => void;
 }
 
-export const useInitialStore = create<InitialState>()((set) => ({
-  method_type: 'breguet',
+export const useExtendedStore = create<ExtendedState>()((set) => ({
+    method_type: 'raymer',
   proptype: 'propeller-breguet',
   propnumber: 1,
   flightAltitude: 0,
@@ -45,6 +46,7 @@ export const useInitialStore = create<InitialState>()((set) => ({
   aspectRatio: 2.855,
   cx0: 0.0269,
   czmax: 1.156,
+  setMethodType: (value) => set((state) => ({ method_type: value })),
   setProptype: (value) => set((state) => ({ proptype: value })),
   setPropnumber: (value) => set((state) => ({ propnumber: value })),
   setFlightAltitude: (value) => set((state) => ({ flightAltitude: value })),

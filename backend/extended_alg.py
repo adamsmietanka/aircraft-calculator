@@ -1,20 +1,29 @@
 import math
 import numpy as np
 import basic_funcs as basf
-import time
 
 cz_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-cz-data.xlsx"
 fuelcons_input_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-fuelcons-load-data.xlsx"
 rpm_input_cessna = 'C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-rpm-load-data.xlsx'
 eta_input = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/eta-velo.xlsx"
 
-def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitude, time_step):
-    cpu_start_time = time.process_time()
+def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, time_step):
     
-    print('Please type fuelmass calculating method\nAvailable methods are:\nRaymer\nPaturski\nAuthors')
-    type_calc = basf.mass_calc_type(airplane, altitude)
+    #assignment of objects values to new arguments
+    altitude = 1000*airplane.flightAltitude
+    print(altitude)
+    air_density = 1.2255 * (1-(altitude/44300))**4.256
+    
+    vmax = airplane.vmax
+    area = airplane.area
+    aspectratio = airplane.aspectRatio
+    cx0 = airplane.cx0
+    czmax = airplane.czmax
+    maxPower = airplane.maxPower
 
-    start_time = time.time()
+    print(maxPower)
+
+    type_calc = basf.mass_calc_type(airplane, altitude)
 
     rpm_prep = basf.rpm_prep(rpm_input)
     rpm = rpm_prep[0]
@@ -31,16 +40,6 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     
     fuelcons_arr = basf.new_values_array(fuel_rpm, fuelcons, 6, new_rpm_range)
     
-    #assignment of objects values to new arguments
-    vmin = airplane.vmin
-    vmax = airplane.vmax
-    area = airplane.area
-    aspectratio = airplane.aspectratio
-    cx0 = airplane.cx0
-    czmax = airplane.czmax
-
-    air_density = 1.2255 * (1-(altitude/44300))**4.256
-    
     m_i = type_calc[0]
     end_mass = type_calc[1]
     ranges_final_list = []
@@ -49,6 +48,7 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
     effective_pow_list = []
 
     vmin = basf.velocity(m_i, air_density, area, czmax)
+
     new_velo_range = np.linspace(vmin, vmax, 50)
     fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
     velocity_range = np.linspace(vmin, vmax, 50)
@@ -68,17 +68,17 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
             effective_pow = essential_pow/eta_of_chosen_velocity
             effective_pow_list.append(effective_pow)
 
-            if effective_pow <= max(rpm_power) and effective_pow >= min(rpm_power):
+            if effective_pow <= maxPower and effective_pow >= min(rpm_power):
                 fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
                 burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
                 m_ii = current_mass - burnt_mass
             else:
-                effective_pow = airplane.nompow
+                effective_pow = maxPower
                 fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
                 burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
                 m_ii = current_mass - burnt_mass
-                print('Power Values Exceeded, Max Available Value Taken.')
-                break
+                #print('Power Values Exceeded, Max Available Value Taken.')
+                
 
             A_factor=air_density*area*velocity*velocity*math.sqrt(cx0*3.14*aspectratio)
             endurance=1000*(efficiency/9.81/velocity/fuelcons_of_velo)*math.sqrt(3.14*aspectratio/cx0)*(math.atan(2*9.81*current_mass/A_factor)-math.atan(2*9.81*m_ii/A_factor))
@@ -96,10 +96,19 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, altitud
         endurances_final_list.append(endurance_result)
 
     ranges_final_array = np.array(ranges_final_list)
-    endurances_final_array = np.array(endurances_final_list)
+    endurances_final_array = np.multiply(100,np.array(endurances_final_list))
     velocity_range = np.multiply(velocity_range, 3.6)
 
     triple_array = [ranges_final_array, endurances_final_array, velocity_range]
-    end_time = (time.time() - start_time)
-    cpu_end_time = (time.process_time() - cpu_start_time)
-    return triple_array, end_time, cpu_end_time
+    
+    velocities_list = list(velocity_range)
+    times_list = list(endurances_final_array)
+    ranges_list = list(ranges_final_array)
+
+    return_dict={
+        'times_list':times_list,
+        'ranges_list':ranges_list,
+        'x_list':velocities_list
+    }
+    
+    return return_dict

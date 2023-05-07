@@ -4,10 +4,11 @@ interface Props {
   value: number;
   step?: number;
   min?: number;
+  max?: number;
   setter: (value: number) => void;
 }
 
-const InputNumber = ({label, unit, value, step=1, min=0, setter}: Props) => {
+const InputNumber = ({label, unit, value, step=1, min, max, setter}: Props) => {
   return (
     <div className="form-control">
       <label className="label">
@@ -20,6 +21,7 @@ const InputNumber = ({label, unit, value, step=1, min=0, setter}: Props) => {
           step={step}
           value={value}
           min={min}
+          max={max}
           onChange={(e) => setter(parseFloat(e.target.value))}
         />
         <span className="flex items-center justify-center bg-gray-200 px-1 w-20 rounded-lg h-12">
