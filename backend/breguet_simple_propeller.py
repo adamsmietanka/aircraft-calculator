@@ -4,8 +4,8 @@ import basic_funcs as basf
 
 #zmieniac 1.25 na 0.75 w przypadku kiedy zapas nie jest brany pod uwagę w źródłach do wyznaczania zasięgu
 
-def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input):
-    efficiency = 0.8
+def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input, avg_efficiency):
+    efficiency = avg_efficiency
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
@@ -51,8 +51,8 @@ def breguetPropeller(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,asp
     triple_arr = [velocities, times_arr, ranges_arr]
     return return_dict
 
-def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input):
-    efficiency = 0.8
+def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input, avg_efficiency):
+    efficiency = avg_efficiency
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
@@ -109,8 +109,8 @@ def breguetPropeller_2set(startmass,nompow_prop,fuelcons_prop,propnumber,altitud
 
     return return_dict
 
-def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input):
-    efficiency = 0.8
+def breguetPropeller_3set(startmass,nompow_prop,fuelcons_prop,propnumber,altitude,aspectratio,cx0,area,vmax,fuelmass, aero_input, avg_efficiency):
+    efficiency = avg_efficiency
     #Air density from SI
     air_density=1.2255*(1-(altitude/44300))**4.256
 
