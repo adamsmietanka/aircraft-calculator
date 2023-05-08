@@ -69,7 +69,7 @@ const PerformanceInitialRangeChart = ({trace}: PerformanceChartProps) => {
               mode: 'lines',
               line: {dash: 'dash'},
               marker: {color: 'red'},
-              name: 'Breguet - 1st set',
+              name: 'Const. H-V',
             },
             {
               x: xes2,
@@ -77,7 +77,7 @@ const PerformanceInitialRangeChart = ({trace}: PerformanceChartProps) => {
               type: 'scatter',
               mode: 'lines',
               marker: {color: 'blue'},
-              name: 'Breguet - 2nd set',
+              name: 'Const AoA-H',
             },
             {
               x: xes3,
@@ -86,7 +86,7 @@ const PerformanceInitialRangeChart = ({trace}: PerformanceChartProps) => {
               mode: 'lines',
               line: {dash: 'dashdot'},
               marker: {color: 'green'},
-              name: 'Breguet - 3rd set',
+              name: 'Const. AoA-V',
             }
           ]}
           layout={layout}
@@ -96,7 +96,7 @@ const PerformanceInitialRangeChart = ({trace}: PerformanceChartProps) => {
             modeBarButtons: [['toImage']],
             toImageButtonOptions: {
               format: 'png',
-              filename: 'engine_power',
+              filename: 'initial_range',
             },
           }}
         />

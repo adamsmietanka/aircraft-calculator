@@ -79,7 +79,7 @@ const PerformanceExtendedChart = ({trace}: PerformanceExtendedChartProps) => {
             modeBarButtons: [['toImage']],
             toImageButtonOptions: {
               format: 'png',
-              filename: 'engine_power',
+              filename: 'extended_alg_chart',
             },
           }}
         />
