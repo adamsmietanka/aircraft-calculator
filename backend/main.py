@@ -7,13 +7,12 @@ import extended_alg as ext
 
 app = FastAPI()
 
-
 origins = ["http://localhost:3000", "http://127.0.0.1:3000/"]
 
-aero_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-cz-data.xlsx"
-rpm_input_cessna = 'C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-rpm-load-data.xlsx'
-eta_input_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/eta-velo.xlsx"
-fuelcons_input_cessna = "C:/Users/barto/Desktop/inżynierka/test-data/cessna-data/cessna-fuelcons-load-data.xlsx"
+aero_cessna = "C:/Users/barto/Desktop/bachelor-thesis/test-data/cessna-data/cessna-cz-data.xlsx"
+rpm_input_cessna = 'C:/Users/barto/Desktop/bachelor-thesis/test-data/cessna-data/cessna-rpm-load-data.xlsx'
+eta_input_cessna = "C:/Users/barto/Desktop/bachelor-thesis/test-data/cessna-data/eta-velo.xlsx"
+fuelcons_input_cessna = "C:/Users/barto/Desktop/bachelor-thesis/test-data/cessna-data/cessna-fuelcons-load-data.xlsx"
 
 avg_efficiency = 0.8
 
