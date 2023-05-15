@@ -1,35 +1,86 @@
 import create from "zustand";
+import produce from "immer";
+import { useHighGearStartPower } from "./useHighGearStartPower";
+
+export interface GearState {
+  enabled: boolean;
+  startAltitude: number;
+  endAltitude: number;
+  startPower: number;
+  endPower: number;
+}
 
 interface SuperchargerState {
   enabled: boolean;
-  LGendAltitude: number;
-  LGendPower: number;
-  HGenabled: boolean;
-  HGstartAltitude: number;
-  HGendAltitude: number;
-  HGendPower: number;
+  lowGear: GearState;
+  highGear: GearState;
   setEnabled: (value: boolean) => void;
   setLGendAltitude: (value: number) => void;
   setLGendPower: (value: number) => void;
   setHGEnabled: (value: boolean) => void;
   setHGstartAltitude: (value: number) => void;
+  setHGstartPower: (value: number) => void;
   setHGendAltitude: (value: number) => void;
   setHGendPower: (value: number) => void;
 }
 
 export const useSuperchargerStore = create<SuperchargerState>()((set) => ({
   enabled: false,
-  LGendAltitude: 3,
-  LGendPower: 1000,
-  HGenabled: false,
-  HGstartAltitude: 5,
-  HGendAltitude: 8,
-  HGendPower: 960,
+  lowGear: {
+    enabled: true,
+    startAltitude: 0,
+    endAltitude: 3,
+    startPower: 800,
+    endPower: 1000,
+  },
+  highGear: {
+    enabled: false,
+    startAltitude: 5,
+    endAltitude: 8,
+    startPower: 960,
+    endPower: 1000,
+  },
   setEnabled: (value) => set((state) => ({ enabled: value })),
-  setLGendAltitude: (value) => set((state) => ({ LGendAltitude: value })),
-  setLGendPower: (value) => set((state) => ({ LGendPower: value })),
-  setHGEnabled: (value) => set((state) => ({ HGenabled: value })),
-  setHGstartAltitude: (value) => set((state) => ({ HGstartAltitude: value })),
-  setHGendAltitude: (value) => set((state) => ({ HGendAltitude: value })),
-  setHGendPower: (value) => set((state) => ({ HGendPower: value })),
+  setLGendAltitude: (value) =>
+    set(
+      produce((state) => {
+        state.lowGear.endAltitude = value;
+      })
+    ),
+  setLGendPower: (value) =>
+    set(
+      produce((state) => {
+        state.lowGear.endPower = value;
+      })
+    ),
+  setHGEnabled: (value) =>
+    set(
+      produce((state) => {
+        state.highGear.enabled = value;
+      })
+    ),
+  setHGstartAltitude: (value) =>
+    set(
+      produce((state) => {
+        state.highGear.startAltitude = value;
+      })
+    ),
+  setHGstartPower: (value) =>
+    set(
+      produce((state) => {
+        state.highGear.startPower = value;
+      })
+    ),
+  setHGendAltitude: (value) =>
+    set(
+      produce((state) => {
+        state.highGear.endAltitude = value;
+      })
+    ),
+  setHGendPower: (value) =>
+    set(
+      produce((state) => {
+        state.highGear.endPower = value;
+      })
+    ),
 }));
