@@ -1,6 +1,8 @@
 import React from "react";
 import InputNumber from "../common/InputNumber";
 import { useEngineStore } from "./hooks/useEngine";
+import InputDisabled from "../common/InputDisabled";
+import Decimal from "decimal.js";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed)
@@ -23,6 +25,11 @@ const PowerUnitPropeller = () => {
           step={0.05}
           label="Reduction Ratio"
           unit=":1"
+        />
+        <InputDisabled
+          value={(new Decimal(engineSpeed).mul(new Decimal(reductionRatio))).toString()}
+          label="Propeller speed"
+          unit="rpm"
         />
       </div>
       <div />

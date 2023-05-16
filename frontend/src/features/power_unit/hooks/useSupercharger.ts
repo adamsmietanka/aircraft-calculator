@@ -1,6 +1,5 @@
 import create from "zustand";
 import produce from "immer";
-import { useHighGearStartPower } from "./useHighGearStartPower";
 
 export interface GearState {
   enabled: boolean;
