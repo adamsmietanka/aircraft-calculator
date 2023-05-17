@@ -2,17 +2,12 @@ import InfoTooltip from "./InfoTooltip";
 
 interface Props {
   label: string;
-  unit: string;
+  unit?: string;
   value: number | string;
   tooltip?: string;
 }
 
-const InputNumber = ({
-  label,
-  unit,
-  value,
-  tooltip,
-}: Props) => {
+const InputNumber = ({ label, unit, value, tooltip }: Props) => {
   return (
     <div className="form-control">
       <label className="label">
@@ -21,16 +16,18 @@ const InputNumber = ({
           {tooltip && <InfoTooltip text={tooltip} />}
         </span>
       </label>
-      <label className="input-group">
+      <label className={`${!!unit && "input-group"}`}>
         <input
           className="input input-bordered w-full"
           type="number"
           value={value}
           disabled={true}
         />
-        <span className="flex items-center justify-center w-20 rounded-lg h-12">
-          {unit}
-        </span>
+        {unit && (
+          <span className="flex items-center justify-center w-20 rounded-lg h-12">
+            {unit}
+          </span>
+        )}
       </label>
     </div>
   );
