@@ -51,12 +51,10 @@ const PowerUnitPropeller = () => {
           unit="m/s"
           tooltip="The speed of most economical flight"
         />
-        <InputNumber
+        <InputAltitude
           label="Cruise altitude"
           value={cruiseAltitude}
           setter={setAltitude}
-          unit="km"
-          step={0.1}
         />
         <InputDisabled
           value={Math.round(power * 100) / 100}
