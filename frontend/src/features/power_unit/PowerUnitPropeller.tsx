@@ -4,6 +4,7 @@ import InputDisabled from "../common/InputDisabled";
 import { usePropellerStore } from "./stores/usePropeller";
 import { usePower } from "./hooks/usePower";
 import InputAltitude from "../common/InputAltitude";
+import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
@@ -23,8 +24,8 @@ const PowerUnitPropeller = () => {
     cruiseSpeed *
     (density / (power * 1000 * (propellerSpeed / 60) ** 2)) ** 0.2;
   return (
-    <div className="flex">
-      <div className="flex flex-col w-64 mr-8 space-y-2">
+    <div className="flexw-full p-4">
+      <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputNumber
           value={engineSpeed}
           setter={setEngineSpeed}
@@ -68,6 +69,7 @@ const PowerUnitPropeller = () => {
           unit=""
           tooltip="Engine max power at cruise altitude"
         />
+        <PowerUnitPropellerBlades />
       </div>
       <div />
     </div>
