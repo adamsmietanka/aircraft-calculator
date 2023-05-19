@@ -5,6 +5,9 @@ import { usePropellerStore } from "./stores/usePropeller";
 import { usePower } from "./hooks/usePower";
 import InputAltitude from "../common/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
+import { usePropellerInterpolation } from "./hooks/usePropelerInterpolation";
+import InputPadlock from "../common/InputPadlock";
+import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
@@ -16,13 +19,24 @@ const PowerUnitPropeller = () => {
   const setSpeed = usePropellerStore((state) => state.setSpeed);
   const setAltitude = usePropellerStore((state) => state.setAltitude);
 
+  const [interpolateJ] = usePropellerInterpolation();
+
   const [calculatePower] = usePower();
   const power = calculatePower(cruiseAltitude);
   const density = 1.2255 * (1 - cruiseAltitude / 44.3) ** 4.256;
-  const propellerSpeed = engineSpeed * reductionRatio;
+  const propellerSpeed = (engineSpeed * reductionRatio) / 60;
   const Cn =
-    cruiseSpeed *
-    (density / (power * 1000 * (propellerSpeed / 60) ** 2)) ** 0.2;
+    cruiseSpeed * (density / (power * 1000 * propellerSpeed ** 2)) ** 0.2;
+  const J = interpolateJ(Cn);
+  const diameter = cruiseSpeed / (J * propellerSpeed);
+  const soundSpeed = 340.3 * ((288.15 - 6.5 * cruiseAltitude) / 288) ** 0.5;
+  const machTip = () => {
+    const rotationSpeed = Math.PI * propellerSpeed * diameter;
+    const forwardSpeed = 1.2 * cruiseSpeed;
+    const a = Math.hypot(forwardSpeed, rotationSpeed) / soundSpeed;
+    return parseFloat(a.toFixed(3));
+  };
+
   return (
     <div className="flexw-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-1">
@@ -41,7 +55,7 @@ const PowerUnitPropeller = () => {
           unit=":1"
         />
         <InputDisabled
-          value={Math.round(propellerSpeed * 100) / 100}
+          value={Math.round(propellerSpeed * 60 * 100) / 100}
           label="Propeller speed"
           unit="rpm"
         />
@@ -61,15 +75,29 @@ const PowerUnitPropeller = () => {
           value={Math.round(power * 100) / 100}
           label="Power"
           unit="kW"
-          tooltip="Engine max power at cruise altitude"
+          tooltip="Engine max power at cruise altitude read from the previous tab"
         />
         <InputDisabled
           value={Cn.toPrecision(5)}
           label="Cn"
-          unit=""
           tooltip="Engine max power at cruise altitude"
         />
         <PowerUnitPropellerBlades />
+        <InputDisabled
+          value={J.toPrecision(5)}
+          label="J"
+          tooltip="Advance ratio"
+        />
+        <InputPadlock
+          value={diameter.toPrecision(4)}
+          label="Propeller diameter"
+          unit="m"
+          // tooltip="Advance ratio"
+        />
+        <InputDisabled
+          value={machTip()}
+          label="Blade Tip Mach number"
+        />
       </div>
       <div />
     </div>
