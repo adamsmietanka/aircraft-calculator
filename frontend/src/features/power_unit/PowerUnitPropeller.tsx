@@ -83,6 +83,7 @@ const PowerUnitPropeller = () => {
           tooltip="Engine max power at cruise altitude"
         />
         <PowerUnitPropellerBlades />
+        <PowerUnitPropellerPitch />
         <InputDisabled
           value={J.toPrecision(5)}
           label="J"

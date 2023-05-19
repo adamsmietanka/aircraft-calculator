@@ -7,7 +7,7 @@ interface Props {
   tooltip?: string;
 }
 
-const InputNumber = ({ label, unit, value, tooltip }: Props) => {
+const InputDisabled = ({ label, unit, value, tooltip }: Props) => {
   return (
     <div className="form-control">
       <label className="label">
@@ -33,4 +33,4 @@ const InputNumber = ({ label, unit, value, tooltip }: Props) => {
   );
 };
 
-export default InputNumber;
+export default InputDisabled;
