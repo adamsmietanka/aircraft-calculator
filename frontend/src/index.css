@@ -14,6 +14,10 @@
   fill: hsl(var(--bc, var(--b2)));
 }
 
+.svg-color {
+  stroke: hsl(var(--bc, var(--b2)));
+}
+
 .input-group-2sm {
   font-size: 0.875rem /* 14px */;
   line-height: 2.5rem /* 40px */;
