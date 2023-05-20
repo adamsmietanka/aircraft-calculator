@@ -7,6 +7,7 @@ import InputAltitude from "../common/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import { usePropellerInterpolation } from "./hooks/usePropelerInterpolation";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
+import PowerUnitPropellerChart from "./PowerUnitPropellerChart";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
 
 const PowerUnitPropeller = () => {
@@ -94,6 +95,7 @@ const PowerUnitPropeller = () => {
         />
         <InputDisabled value={machTip()} label="Blade Tip Mach number" />
       </div>
+      <PowerUnitPropellerChart Cn={Cn} J={J} />
       <div />
     </div>
   );
