@@ -1,4 +1,4 @@
-import { ReactComponent as Padlock } from "../../assets/padlock.svg";
+import { ReactComponent as Profile } from "../../assets/clarkY.svg";
 import { useRef } from "react";
 import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
@@ -18,10 +18,9 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
   const toggleClass = () => {
     const element = lockRef.current;
     if (element) {
-      variable
-        ? element.classList.add("locked")
-        : element.classList.remove("locked");
       setVariable(!variable);
+      variable
+        ? element.classList.remove("variable") : element.classList.add("variable");
     }
   };
   return (
@@ -29,16 +28,16 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
       <label className="label">
         <span className="label-text flex ">
           {"Propeller pitch"}
-          <InfoTooltip text="A propeller can have a blade with a fixed pitch or a variable one which changes with speed of the aircraft" />
+          <InfoTooltip text="A propeller can have a blade with a fixed pitch or a variable one which changes with the speed of the aircraft" />
         </span>
       </label>
       <label className="input-group">
         <span
-          className="px-4"
+          className="px-3 cursor-pointer"
           onClick={toggleClass}
         >
-          <div className="cursor-pointer w-6 svg-color text-color z-50" data-tip="">
-            <Padlock ref={lockRef} />
+          <div className=" w-9 svg-color text-color z-50" data-tip="">
+            <Profile ref={lockRef} />
           </div>
         </span>
         <input

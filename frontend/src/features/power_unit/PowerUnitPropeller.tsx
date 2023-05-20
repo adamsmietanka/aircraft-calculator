@@ -38,7 +38,7 @@ const PowerUnitPropeller = () => {
   };
 
   return (
-    <div className="flexw-full p-4">
+    <div className="flex w-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputNumber
           value={engineSpeed}
@@ -95,10 +95,7 @@ const PowerUnitPropeller = () => {
           unit="m"
           // tooltip="Advance ratio"
         />
-        <InputDisabled
-          value={machTip()}
-          label="Blade Tip Mach number"
-        />
+        <InputDisabled value={machTip()} label="Blade Tip Mach number" />
       </div>
       <div />
     </div>
