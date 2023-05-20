@@ -1,28 +1,16 @@
-import { ReactComponent as Profile } from "../../assets/clarkY.svg";
-import { useRef } from "react";
 import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
+import BladePitch from "../common/BladePitch";
 
 interface Props {
   tooltip?: string;
 }
 
 const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
-  const lockRef = useRef<SVGSVGElement>(null);
-
   const variable = usePropellerStore((state) => state.variable);
   const angle = usePropellerStore((state) => state.angle);
   const setVariable = usePropellerStore((state) => state.setVariable);
   const setAngle = usePropellerStore((state) => state.setAngle);
-
-  const toggleClass = () => {
-    const element = lockRef.current;
-    if (element) {
-      setVariable(!variable);
-      variable
-        ? element.classList.remove("variable") : element.classList.add("variable");
-    }
-  };
   return (
     <div className="form-control">
       <label className="label">
@@ -32,14 +20,7 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
         </span>
       </label>
       <label className="input-group">
-        <span
-          className="px-3 cursor-pointer"
-          onClick={toggleClass}
-        >
-          <div className=" w-9 svg-color text-color z-50" data-tip="">
-            <Profile ref={lockRef} />
-          </div>
-        </span>
+        <BladePitch variable={variable} setVariable={setVariable} />
         <input
           className="input input-bordered w-full"
           type={variable ? "text" : "number"}

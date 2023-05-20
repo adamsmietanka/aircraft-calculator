@@ -6,8 +6,8 @@ import { usePower } from "./hooks/usePower";
 import InputAltitude from "../common/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import { usePropellerInterpolation } from "./hooks/usePropelerInterpolation";
-import InputPadlock from "../common/InputPadlock";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
+import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
@@ -87,13 +87,10 @@ const PowerUnitPropeller = () => {
         <InputDisabled
           value={J.toPrecision(5)}
           label="J"
-          tooltip="Advance ratio"
+          tooltip="Advance ratio is the ratio of the freestream fluid speed to the propeller tip speed"
         />
-        <InputPadlock
-          value={diameter.toPrecision(4)}
-          label="Propeller diameter"
-          unit="m"
-          // tooltip="Advance ratio"
+        <PowerUnitPropellerDiameter
+          value={diameter}
         />
         <InputDisabled value={machTip()} label="Blade Tip Mach number" />
       </div>

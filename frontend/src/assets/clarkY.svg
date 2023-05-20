@@ -1,6 +1,6 @@
 <svg
-  viewBox="-200 -40 262 110"
-  class="profile variable"
+  viewBox="-200 -40 262 140"
+  class="profile"
   fill="currentColor"
   stroke="currentColor"
   xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@
       transition: all 1000ms ease-out;
     }
     .profile .outline {
-      transform: rotate(-10deg);
+      transform: rotate(-15deg);
     }
     .profile.variable .outline {
       animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -21,10 +21,10 @@
       0%,
       80%,
       100% {
-        transform: rotate(-10deg);
+        transform: rotate(-15deg);
       }
       40% {
-        transform: rotate(-20deg);
+        transform: rotate(-30deg);
       }
     }
   </style>
