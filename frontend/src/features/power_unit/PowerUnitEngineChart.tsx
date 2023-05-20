@@ -44,27 +44,29 @@ const PowerUnitEngineChart = () => {
   );
 
   return (
-    <Plot
-      data={[
-        {
-          x: heights,
-          y: powers,
-          type: "scatter",
-          mode: "lines",
-          marker: { color: "red" },
-        },
-      ]}
-      layout={layout}
-      config={{
-        scrollZoom: false,
-        responsive: true,
-        modeBarButtons: [["toImage"]],
-        toImageButtonOptions: {
-          format: "png",
-          filename: "engine_power",
-        },
-      }}
-    />
+    <div className="sticky top-28">
+      <Plot
+        data={[
+          {
+            x: heights,
+            y: powers,
+            type: "scatter",
+            mode: "lines",
+            marker: { color: "red" },
+          },
+        ]}
+        layout={layout}
+        config={{
+          scrollZoom: false,
+          responsive: true,
+          modeBarButtons: [["toImage"]],
+          toImageButtonOptions: {
+            format: "png",
+            filename: "engine_power",
+          },
+        }}
+      />
+    </div>
   );
 };
 

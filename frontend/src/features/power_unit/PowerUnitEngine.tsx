@@ -43,7 +43,9 @@ const PowerUnitEngine = () => {
         <PowerUnitEngineSupercharger />
         <PowerUnitEngineTurbocharger />
       </div>
-      <PowerUnitEngineChart />
+      <div>
+        <PowerUnitEngineChart />
+      </div>
     </div>
   );
 };

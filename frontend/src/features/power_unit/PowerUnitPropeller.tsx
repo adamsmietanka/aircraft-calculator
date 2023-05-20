@@ -90,12 +90,12 @@ const PowerUnitPropeller = () => {
           label="J"
           tooltip="Advance ratio is the ratio of the freestream fluid speed to the propeller tip speed"
         />
-        <PowerUnitPropellerDiameter
-          value={diameter}
-        />
+        <PowerUnitPropellerDiameter value={diameter} />
         <InputDisabled value={machTip()} label="Blade Tip Mach number" />
       </div>
-      <PowerUnitPropellerChart Cn={Cn} J={J} />
+      <div>
+        <PowerUnitPropellerChart Cn={Cn} J={J} />
+      </div>
       <div />
     </div>
   );

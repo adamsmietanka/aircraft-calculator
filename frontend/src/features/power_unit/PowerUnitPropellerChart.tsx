@@ -1,4 +1,3 @@
-import React, { useMemo } from "react";
 import { usePropellerStore } from "./stores/usePropeller";
 import Plot from "react-plotly.js";
 import { data } from "./data/prop";
@@ -38,69 +37,71 @@ const PowerUnitPropellerChart = ({ Cn, J }: Props) => {
   };
 
   return (
-    <Plot
-      data={[
-        {
-          name: "2 blades",
-          x: data.cn,
-          y: data[2],
-          type: "scatter",
-          mode: "lines",
-        },
-        {
-          name: "3 blades",
-          x: data.cn,
-          y: data[3],
-          type: "scatter",
-          mode: "lines",
-        },
-        {
-          name: "4 blades",
-          x: data.cn,
-          y: data[4],
-          type: "scatter",
-          mode: "lines",
-        },
-        {
-          name: "vertical",
-          x: [Cn, Cn],
-          y: [data[2][0], J],
-          type: "scatter",
-          mode: "lines",
-          line: {
-            color: "gray",
-            dash: "dot",
-            width: 2,
+    <div className="sticky top-28">
+      <Plot
+        data={[
+          {
+            name: "2 blades",
+            x: data.cn,
+            y: data[2],
+            type: "scatter",
+            mode: "lines",
           },
-          showlegend: false,
-        },
-        optimized
-          ? {
-              name: "horizontal",
-              x: [data.cn[0], Cn],
-              y: [J, J],
-              type: "scatter",
-              mode: "lines",
-              line: {
-                color: "gray",
-                dash: "dot",
-                width: 2,
-              },
-              showlegend: false,
-            }
-          : {},
-      ]}
-      layout={layout}
-      config={{
-        scrollZoom: false,
-        responsive: true,
-        modeBarButtons: [["toImage"]],
-        toImageButtonOptions: {
-          format: "png",
-          filename: "engine_power",
-        },
-      }}
-    />
+          {
+            name: "3 blades",
+            x: data.cn,
+            y: data[3],
+            type: "scatter",
+            mode: "lines",
+          },
+          {
+            name: "4 blades",
+            x: data.cn,
+            y: data[4],
+            type: "scatter",
+            mode: "lines",
+          },
+          {
+            name: "vertical",
+            x: [Cn, Cn],
+            y: [data[2][0], J],
+            type: "scatter",
+            mode: "lines",
+            line: {
+              color: "gray",
+              dash: "dot",
+              width: 2,
+            },
+            showlegend: false,
+          },
+          optimized
+            ? {
+                name: "horizontal",
+                x: [data.cn[0], Cn],
+                y: [J, J],
+                type: "scatter",
+                mode: "lines",
+                line: {
+                  color: "gray",
+                  dash: "dot",
+                  width: 2,
+                },
+                showlegend: false,
+              }
+            : {},
+        ]}
+        layout={layout}
+        config={{
+          scrollZoom: false,
+          responsive: true,
+          modeBarButtons: [["toImage"]],
+          toImageButtonOptions: {
+            format: "png",
+            filename: "engine_power",
+          },
+        }}
+      />
+    </div>
   );
 };
 
