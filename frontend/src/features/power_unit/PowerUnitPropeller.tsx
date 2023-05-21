@@ -15,6 +15,7 @@ const PowerUnitPropeller = () => {
   const reductionRatio = useEngineStore((state) => state.reductionRatio);
   const cruiseSpeed = usePropellerStore((state) => state.cruiseSpeed);
   const cruiseAltitude = usePropellerStore((state) => state.cruiseAltitude);
+  const diameter = usePropellerStore((state) => state.diameter);
   const setEngineSpeed = useEngineStore((state) => state.setEngineSpeed);
   const setReductionRatio = useEngineStore((state) => state.setReductionRatio);
   const setSpeed = usePropellerStore((state) => state.setSpeed);
@@ -29,8 +30,9 @@ const PowerUnitPropeller = () => {
   const Cn =
     cruiseSpeed * (density / (power * 1000 * propellerSpeed ** 2)) ** 0.2;
   const J = interpolateJ(Cn);
-  const diameter = cruiseSpeed / (J * propellerSpeed);
+  const computedDiameter = cruiseSpeed / (J * propellerSpeed);
   const soundSpeed = 340.3 * ((288.15 - 6.5 * cruiseAltitude) / 288) ** 0.5;
+
   const machTip = () => {
     const rotationSpeed = Math.PI * propellerSpeed * diameter;
     const forwardSpeed = 1.2 * cruiseSpeed;
@@ -81,16 +83,16 @@ const PowerUnitPropeller = () => {
         <InputDisabled
           value={Cn.toPrecision(5)}
           label="Cn"
-          tooltip="Engine max power at cruise altitude"
+          tooltip="Diameterless Power Coefficient"
         />
         <PowerUnitPropellerBlades />
-        <PowerUnitPropellerPitch />
         <InputDisabled
           value={J.toPrecision(5)}
           label="J"
           tooltip="Advance ratio is the ratio of the freestream fluid speed to the propeller tip speed"
         />
-        <PowerUnitPropellerDiameter value={diameter} />
+        <PowerUnitPropellerPitch />
+        <PowerUnitPropellerDiameter value={computedDiameter} />
         <InputDisabled value={machTip()} label="Blade Tip Mach number" />
       </div>
       <div>
