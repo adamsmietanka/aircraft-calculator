@@ -7,8 +7,12 @@ import {
   generate_verts_rev,
   rotate_mesh,
 } from "../../utils/three/meshGeneration";
+import { useResultsStore } from "./stores/useResults";
+import InputAltitude from "../common/InputAltitude";
+import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
+import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 
-function Box(props: ThreeElements["mesh"]) {
+const Surface = (props: ThreeElements["mesh"]) => {
   const mesh = useRef<THREE.Mesh>(null!);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
@@ -76,7 +80,7 @@ function Box(props: ThreeElements["mesh"]) {
       />
     </mesh>
   );
-}
+};
 
 const Lights = () => {
   const pointLightRef = useRef(null!);
@@ -89,16 +93,31 @@ const Lights = () => {
 };
 
 const PowerUnitResults = () => {
-
+  const altitude = useResultsStore((state) => state.altitude);
+  const setAltitude = useResultsStore((state) => state.setAltitude);
+  
   return (
-    <Canvas>
-      <axesHelper />
-      <ambientLight intensity={0.4} />
-      <Lights />
-      <Box position={[0, 0, 0]} />
-      <OrbitControls />
-      {/* <Stats /> */}
-    </Canvas>
+    <div className="flex w-full p-4">
+      <div className="flex flex-col w-80 mr-8 space-y-2">
+        <InputAltitude value={altitude} setter={setAltitude} label="Altitude" />
+        <div className="card card-compact w-80 shadow-xl">
+          <div className="card-body">
+            <PowerUnitPropellerBlades />
+            <PowerUnitPropellerPitch />
+          </div>
+        </div>
+      </div>
+      <div className="h-96 w-96">
+        <Canvas>
+          <axesHelper />
+          <ambientLight intensity={0.4} />
+          <Lights />
+          <Surface position={[0, 0, 0]} />
+          <OrbitControls />
+          {/* <Stats /> */}
+        </Canvas>
+      </div>
+    </div>
   );
 };
 
