@@ -9,6 +9,7 @@ import { usePropellerInterpolation } from "./hooks/usePropelerInterpolation";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import PowerUnitPropellerChart from "./PowerUnitPropellerChart";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
+import InputSpeed from "../common/InputSpeed";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
@@ -62,11 +63,10 @@ const PowerUnitPropeller = () => {
           label="Propeller speed"
           unit="rpm"
         />
-        <InputNumber
+        <InputSpeed
           value={cruiseSpeed}
           setter={setSpeed}
           label="Cruise speed"
-          unit="m/s"
           tooltip="The speed of most economical flight"
         />
         <InputAltitude
