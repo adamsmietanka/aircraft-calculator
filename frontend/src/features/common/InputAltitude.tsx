@@ -37,13 +37,12 @@ const InputAltitude = ({
   disabled = false,
   setter,
 }: Props) => {
-
   const [unit, setUnit] = useState("km");
-  
+
   const { multiplier, step, round } = data[unit];
   const displayValue = round
     ? Math.round(value / multiplier)
-    : value / multiplier;
+    : Math.round((value / multiplier) * 1000) / 1000;
 
   return (
     <div className="form-control">
