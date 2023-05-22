@@ -19,9 +19,9 @@ const BladePitch = ({ variable, setVariable }: Props) => {
   }, [variable]);
 
   return (
-    <span className="cursor-pointer" onClick={() => setVariable(!variable)}>
+    <span className="cursor-pointer flex justify-center" onClick={() => setVariable(!variable)}>
       <div
-        className="tooltip  w-7 svg-color text-color z-50"
+        className="tooltip w-9 svg-color text-color z-50"
         data-tip={`Click to change to ${variable ? "fixed" : "variable"}`}
       >
         <ProfileIcon ref={iconRef} />

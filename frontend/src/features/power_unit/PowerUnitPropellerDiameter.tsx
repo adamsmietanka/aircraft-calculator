@@ -1,6 +1,6 @@
 import InfoTooltip from "../common/InfoTooltip";
 import { useEffect } from "react";
-import Padlock from "../common/Padlock";
+import Calculator from "../common/Calculator";
 import { usePropellerStore } from "./stores/usePropeller";
 
 interface Props {
@@ -27,7 +27,7 @@ const PowerUnitPropellerDiameter = ({ value, tooltip }: Props) => {
         </span>
       </label>
       <label className="input-group">
-        <Padlock locked={optimized} setLocked={setOptimized} />
+        <Calculator calculated={optimized} setCalculated={setOptimized} />
         <input
           className="input input-bordered w-full"
           type="number"
