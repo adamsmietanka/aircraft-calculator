@@ -11,7 +11,6 @@ import {
   PowerUnitEngine,
   PowerUnitPropeller,
   PowerUnitResults,
-  Aerodynamics,
   Performance,
   Settings,
   Turn,
@@ -25,6 +24,8 @@ import StabilityLongitudalMoment from "./pages/stabillity/StabilityLongitudalMom
 import StabilityRodForce from "./pages/stabillity/StabilityRodForce";
 import StabillitySteer from "./pages/stabillity/StabillitySteer";
 import StabillityCharts from "./pages/stabillity/StabillityCharts";
+import { aerodynamicsSteps } from "./utils/steps/aerodynamicsSteps";
+import { WingAerodynamics, WingGeometry,Fuselage } from "./pages/areodynamics";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -36,7 +37,11 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="aerodynamics" element={<Aerodynamics />} />
+          <Route path="aerodynamics" element={<Steps steps={aerodynamicsSteps} />}>
+            <Route path="wing-geometry" element ={<WingGeometry/>} />
+            <Route path="wing-aerodynamics" element ={<WingAerodynamics/>} />
+            <Route path="fuselage" element ={<Fuselage/>} />
+          </Route>
           <Route path="powerunit" element={<Steps steps={powerUnitSteps} />}>
             <Route path="engine" element={<PowerUnitEngine />} />
             <Route path="propeller" element={<PowerUnitPropeller />} />

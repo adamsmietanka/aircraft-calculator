@@ -11,7 +11,7 @@ import Link from "../atoms/Link";
 const links = [
   { to: "/", name: "Home", icon: <Home /> },
   {
-    to: "/aerodynamics",
+    to: "/aerodynamics/wing-geometry",
     name: "Aerodynamics",
     icon: <Airplane />,
   },
