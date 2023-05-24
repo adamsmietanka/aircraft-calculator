@@ -15,7 +15,7 @@ const PowerUnitPropellerDiameter = ({ value, tooltip }: Props) => {
   const setOptimized = usePropellerStore((state) => state.setOptimized);
 
   useEffect(() => {
-    optimized && setDiameter(parseFloat(value.toPrecision(3)));
+    optimized && setDiameter(parseFloat(value.toPrecision(4)));
   }, [value, optimized, setDiameter, setOptimized]);
 
   return (
