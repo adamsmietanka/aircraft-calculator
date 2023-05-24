@@ -1,5 +1,5 @@
 import {
-  findLowerBound,
+  findUpperBound,
   linearInterpolation,
 } from "../../../utils/interpolation/binarySearch";
 import { data } from "../data/prop";
@@ -10,7 +10,7 @@ export const usePropellerInterpolation = () => {
   const x = data.cn;
   const y = data[blades];
   const interpolateJ = (cn: number) => {
-    const index = findLowerBound(x, cn);
+    const index = findUpperBound(x, cn);
     return linearInterpolation(
       x[index],
       y[index],

@@ -1,20 +1,40 @@
-export const findLowerBound = (arr: number[], target: number): number => {
+export const findUpperBound = (arr: number[], target: number): number => {
   let low = 0;
   let high = arr.length - 1;
-  let lowerBound = -1;
+  let upperBound = -1;
 
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
 
     if (arr[mid] >= target) {
       high = mid - 1; // Target is in the left half of the array
-      lowerBound = mid; // Update the lower bound
+      upperBound = mid; // Update the lower bound
     } else {
       low = mid + 1;
     }
   }
 
-  return lowerBound;
+  return upperBound;
+};
+
+const findAngleUpperBound = (
+  i: number,
+  normalizedX: number,
+  Z: number[][],
+  z: number
+) => {
+  let j = 0;
+  let k = 51;
+  while (j < k) {
+    const h = Math.floor((j + k) / 2);
+    const zBound = (1 - normalizedX) * Z[h][i - 1] + normalizedX * Z[h][i];
+    if (zBound < z) {
+      j = h + 1;
+    } else {
+      k = h;
+    }
+  }
+  return j;
 };
 
 export const linearInterpolation = (
@@ -30,4 +50,45 @@ export const linearInterpolation = (
 
   const y = y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
   return y;
+};
+
+export const barycentricAngle = (
+  X: number[],
+  Y: number[],
+  Z: number[][],
+  x: number,
+  z: number
+): number => {
+  // binary search for x upper bound
+  let i = findUpperBound(X, x);
+  if (x < 0 || i === X.length) {
+    return 0;
+  }
+  if (x === 0) {
+    i += 1;
+  }
+  // binary search for y upper bound
+  const normalizedX = (x - X[i - 1]) / (X[i] - X[i - 1]);
+  const j = findAngleUpperBound(i, normalizedX, Z, z);
+  if (j === 0 || j === Z.length) {
+    return 0;
+  }
+  const triangleBound =
+    (1 - normalizedX) * Z[j - 1][i - 1] + normalizedX * Z[j][i];
+  if (z < triangleBound) {
+    // lower triangle /_|
+    const A = (X[i] - X[i - 1]) * (Z[j][i] - Z[j - 1][i]);
+    const w1 =
+      ((Z[j - 1][i - 1] - Z[j - 1][i]) * (x - X[i]) +
+        (X[i] - X[i - 1]) * (z - Z[j - 1][i])) /
+      A;
+    return Y[j - 1] + w1 * (Y[j] - Y[j - 1]);
+  }
+  // upper triangle |/
+  const A = (Z[j - 1][i - 1] - Z[j][i - 1]) * (X[i] - X[i - 1]);
+  const w2 =
+    ((Z[j][i - 1] - Z[j][i]) * (x - X[i - 1]) +
+      (X[i] - X[i - 1]) * (z - Z[j][i - 1])) /
+    A;
+  return Y[j] - w2 * (Y[j] - Y[j - 1]);
 };

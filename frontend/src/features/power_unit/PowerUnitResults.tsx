@@ -1,7 +1,7 @@
 import * as THREE from "three";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
-import { Stats, OrbitControls, useHelper } from "@react-three/drei";
+import { Stats, OrbitControls, useHelper, Html } from "@react-three/drei";
 import { clark_2 } from "../../data/cp";
 import {
   generate_verts_rev,
@@ -11,34 +11,52 @@ import { useResultsStore } from "./stores/useResults";
 import InputAltitude from "../common/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
+import InputDisabled from "../common/InputDisabled";
+import { usePower } from "./hooks/usePower";
+import { usePropellerStore } from "./stores/usePropeller";
+import { useEngineStore } from "./hooks/useEngine";
+import { barycentricAngle } from "../../utils/interpolation/binarySearch";
 
-const Surface = (props: ThreeElements["mesh"]) => {
+interface SurfaceProps {
+  cpMarkers: Float32Array;
+}
+
+const Surface = ({ cpMarkers }: SurfaceProps) => {
   const mesh = useRef<THREE.Mesh>(null!);
+  const points = useRef<THREE.Points>(null!);
+  const positionsRef = useRef<THREE.BufferAttribute>(null);
   const [hovered, setHover] = useState(false);
   const [active, setActive] = useState(false);
-  // useFrame((state, delta) => (mesh.current.rotation.y += 0.5*delta));
 
-  // const positions = new Float32Array([-10, 0, 0, 10, 0, 0]);
+  const altitude = useResultsStore((state) => state.altitude);
 
-  const positions = new Float32Array([
-    19.67, 0.0642, 0, 19.81, 0.0642, 0.1197, 20.04, 0.0642, 0.2394, 20.43,
-    0.0642, 0.3591, 21, 0.0642, 0.4788, 21.79, 0.0642, 0.5985, 22.89, 0.0642,
-    0.7182, 24.23, 0.0642, 0.8379, 25.73, 0.0642, 0.9576, 27.15, 0.0642, 1.077,
-    28.93, 0.0642, 1.197, 30.89, 0.0642, 1.317, 32.85, 0.0642, 1.436, 34.55,
-    0.0642, 1.556, 36.1, 0.0642, 1.676, 37.51, 0.0642, 1.796, 38.83, 0.0642,
-    1.915, 40.03, 0.0642, 2.035,
-  ]);
+  const center = useMemo(() => {
+    if (mesh.current) {
+      mesh.current.geometry.computeBoundingBox();
+      const center = new THREE.Vector3();
+      mesh.current.geometry.boundingBox?.getCenter(center);
+      return center;
+    }
+  }, []);
+
+  useFrame((state, dt) => {
+    if (positionsRef.current) {
+      positionsRef.current.set(useResultsStore.getState().cpMarkers);
+      positionsRef.current.needsUpdate = true;
+    }
+  });
   return (
     <mesh
-      {...props}
       ref={mesh}
       scale={[0.1, 10, 1]}
       onClick={(event) => {
         console.log(mesh);
-        console.log(generate_verts_rev(rotate_mesh(clark_2.mesh)));
+        // console.log(generate_verts_rev(rotate_mesh(clark_2.mesh)));
         // mesh.current.geometry.computeVertexNormals();
       }}
-      onPointerOver={(event) => setHover(true)}
+      onPointerOver={(event) => {
+        setHover(true);
+      }}
       onPointerOut={(event) => setHover(false)}
     >
       <planeGeometry
@@ -55,12 +73,13 @@ const Surface = (props: ThreeElements["mesh"]) => {
           itemSize={3}
         />
       </planeGeometry>
-      <points>
-        <bufferGeometry attach="geometry">
+      <points ref={points}>
+        <bufferGeometry>
           <bufferAttribute
+            ref={positionsRef}
             attach="attributes-position"
-            count={positions.length / 3}
-            array={positions}
+            count={cpMarkers.length / 3}
+            array={cpMarkers}
             itemSize={3}
             // usage={THREE.DynamicDrawUsage}
           />
@@ -72,12 +91,42 @@ const Surface = (props: ThreeElements["mesh"]) => {
           sizeAttenuation={false}
         />
       </points>
+
       <meshStandardMaterial
         color={hovered ? "hotpink" : "orange"}
         side={THREE.DoubleSide}
         opacity={0.6}
         transparent
+        wireframe
       />
+      <Html
+        className="select-none"
+        color="black"
+        scale={[10, 0.1, 1]}
+        up={[0,-10,0]}
+        position={[35, 0, 0]}
+        center
+      >
+        Angle
+      </Html>
+      <Html
+        className="select-none"
+        color="black"
+        scale={[10, 0.1, 1]}
+        position={[60, 0.2, 0]}
+        center
+      >
+        Cp
+      </Html>
+      <Html
+        className="select-none"
+        color="black"
+        scale={[10, 0.1, 1]}
+        position={[8, 0, 2.5]}
+        center
+      >
+        J
+      </Html>
     </mesh>
   );
 };
@@ -92,14 +141,61 @@ const Lights = () => {
   );
 };
 
+interface Point {
+  v: number;
+  j: number;
+  angle: number;
+}
+
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);
+  const engineSpeed = useEngineStore((state) => state.engineSpeed);
+  const reductionRatio = useEngineStore((state) => state.reductionRatio);
+  const diameter = usePropellerStore((state) => state.diameter);
+  const speed = usePropellerStore((state) => state.cruiseSpeed);
   const setAltitude = useResultsStore((state) => state.setAltitude);
-  
+  const cpMarkers = useResultsStore((state) => state.cpMarkers);
+  const setCpMarkers = useResultsStore((state) => state.setCpMarkers);
+
+  const [table, setTable] = useState<Point[]>();
+
+  const [calculatePower] = usePower();
+  const power = calculatePower(altitude);
+  const density = 1.2255 * (1 - altitude / 44.3) ** 4.256;
+  const propellerSpeed = (engineSpeed * reductionRatio) / 60;
+  const Cp = (power * 1000) / (density * propellerSpeed ** 3 * diameter ** 5);
+  const { J, angles, cp } = clark_2.mesh;
+
+  useEffect(() => {
+    const table = [];
+    const markers = [];
+    for (let v = 0; v <= 1.2 * speed; v += 10) {
+      const j = v / (propellerSpeed * diameter);
+      // const rpm = propellerSpeed * 60 / Ratio
+      const angle = barycentricAngle(J, angles, cp, j, Cp);
+      table.push({ v, j, angle });
+      markers.push(angle, Cp, j);
+    }
+    setTable(table);
+    setCpMarkers(new Float32Array(markers));
+  }, [altitude]);
+
   return (
     <div className="flex w-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-2">
         <InputAltitude value={altitude} setter={setAltitude} label="Altitude" />
+        <InputDisabled
+          value={Math.round(power * 100) / 100}
+          label="Power"
+          unit="kW"
+          tooltip="Engine max power read from the Engine tab"
+        />
+        <InputDisabled
+          value={Math.round(Cp * 10000) / 10000}
+          label="Cp"
+          unit="kW"
+          tooltip="Coefficient of Power - this is usually stated as the amount of power the propeller absorbs"
+        />
         <div className="card card-compact w-80 shadow-xl">
           <div className="card-body">
             <PowerUnitPropellerBlades />
@@ -112,8 +208,12 @@ const PowerUnitResults = () => {
           <axesHelper />
           <ambientLight intensity={0.4} />
           <Lights />
-          <Surface position={[0, 0, 0]} />
-          <OrbitControls />
+          <Surface cpMarkers={cpMarkers} />
+          <OrbitControls
+            autoRotate
+            autoRotateSpeed={1}
+            target={[3.5, 1, 2.5]}
+          />
           {/* <Stats /> */}
         </Canvas>
       </div>

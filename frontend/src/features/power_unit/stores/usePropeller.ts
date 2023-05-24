@@ -24,7 +24,7 @@ export const usePropellerStore = create<PropellerState>()((set) => ({
   variable: true,
   optimized: true,
   angle: 30,
-  diameter: 3,
+  diameter: 3.45,
   setSpeed: (value) => set((state) => ({ cruiseSpeed: value })),
   setAltitude: (value) => set((state) => ({ cruiseAltitude: value })),
   setBlades: (value) => set((state) => ({ blades: value })),
