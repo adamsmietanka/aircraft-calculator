@@ -73,22 +73,27 @@ export const barycentricAngle = (
   if (j === 0 || j === Z.length) {
     return 0;
   }
-  const triangleBound =
-    (1 - normalizedX) * Z[j - 1][i - 1] + normalizedX * Z[j][i];
-  if (z < triangleBound) {
+
+  // d---c
+  // |  /|
+  // | / |
+  // |/  |
+  // a---b
+  const a = Z[j - 1][i - 1];
+  const b = Z[j - 1][i];
+  const c = Z[j][i];
+  const d = Z[j][i - 1];
+
+  // interpolate the z coord of the triangle boundary from the normalizedX
+  const triangleBoundary = (1 - normalizedX) * a + normalizedX * c;
+  if (z < triangleBoundary) {
     // lower triangle /_|
-    const A = (X[i] - X[i - 1]) * (Z[j][i] - Z[j - 1][i]);
-    const w1 =
-      ((Z[j - 1][i - 1] - Z[j - 1][i]) * (x - X[i]) +
-        (X[i] - X[i - 1]) * (z - Z[j - 1][i])) /
-      A;
+    const A = (X[i] - X[i - 1]) * (c - b);
+    const w1 = ((a - b) * (x - X[i]) + (X[i] - X[i - 1]) * (z - b)) / A;
     return Y[j - 1] + w1 * (Y[j] - Y[j - 1]);
   }
   // upper triangle |/
-  const A = (Z[j - 1][i - 1] - Z[j][i - 1]) * (X[i] - X[i - 1]);
-  const w2 =
-    ((Z[j][i - 1] - Z[j][i]) * (x - X[i - 1]) +
-      (X[i] - X[i - 1]) * (z - Z[j][i - 1])) /
-    A;
+  const A = (X[i] - X[i - 1]) * (a - d);
+  const w2 = ((d - c) * (x - X[i - 1]) + (X[i] - X[i - 1]) * (z - d)) / A;
   return Y[j] - w2 * (Y[j] - Y[j - 1]);
 };
