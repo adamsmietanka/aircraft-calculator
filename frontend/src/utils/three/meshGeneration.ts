@@ -1,3 +1,5 @@
+import { Mesh } from "../../data/cp";
+
 export const generate_verts = (mesh: number[][]) => {
   const results: number[] = [];
 
@@ -13,12 +15,12 @@ export const generate_verts = (mesh: number[][]) => {
   return new Float32Array(results);
 };
 
-export const generate_verts_rev = (mesh: number[][]) => {
+export const generate_verts_rev = (mesh: Mesh) => {
   const results: number[] = [];
 
   // Reversing the order of the advance ratios to make the mesh triangles face the other way
-  const advanceRatios = mesh.slice()[0].reverse();
-  const values = mesh.slice(1).reverse();
+  const advanceRatios = [...mesh.J].reverse();
+  const values = [...mesh.cp].reverse();
 
   values.forEach((heights, i) => {
     heights.forEach((height, j) => {
@@ -26,16 +28,18 @@ export const generate_verts_rev = (mesh: number[][]) => {
       results.push(angle, height, advanceRatios[i]);
     });
   });
-  console.log(results)
+  console.log(results);
   return new Float32Array(results);
 };
 
-export const rotate_mesh = (mesh: number[][]) => {
+export const rotate_mesh = (mesh: Mesh) => {
   /**
    * The meshes created by Python are first looped through angles and then by advance ratios
    * For Three.js we must reverse this loop order
-   * @param {number[][]} mesh - first row is an array of advance ratios and the rest are values
+   * @param {Mesh} mesh - first row is an array of advance ratios and the rest are values
    */
-  const values = mesh.slice(1);
-  return [mesh[0], ...values[0].map((_, i) => values.map((row) => row[i]))];
+  return {
+    ...mesh,
+    cp: [...mesh.cp[0].map((_, i) => mesh.cp.map((row) => row[i]))],
+  };
 };

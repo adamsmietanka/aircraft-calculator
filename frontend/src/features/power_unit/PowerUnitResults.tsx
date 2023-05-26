@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
 import { Stats, OrbitControls, useHelper, Html } from "@react-three/drei";
-import { clark_2 } from "../../data/cp";
+import { clark } from "../../data/cp";
 import {
   generate_verts_rev,
   rotate_mesh,
@@ -25,10 +25,9 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
   const mesh = useRef<THREE.Mesh>(null!);
   const points = useRef<THREE.Points>(null!);
   const positionsRef = useRef<THREE.BufferAttribute>(null);
-  const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
+  const surfacePositionsRef = useRef<THREE.BufferAttribute>(null);
 
-  const altitude = useResultsStore((state) => state.altitude);
+  const blades = usePropellerStore((state) => state.blades);
 
   const center = useMemo(() => {
     if (mesh.current) {
@@ -41,23 +40,18 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
 
   useFrame((state, dt) => {
     if (positionsRef.current) {
-      positionsRef.current.set(useResultsStore.getState().cpMarkers);
+      positionsRef.current.set(cpMarkers);
       positionsRef.current.needsUpdate = true;
+    }
+    if (surfacePositionsRef.current) {
+      surfacePositionsRef.current.set(clark[blades].verts);
+      surfacePositionsRef.current.needsUpdate = true;
     }
   });
   return (
     <mesh
       ref={mesh}
-      scale={[0.1, 10, 1]}
-      onClick={(event) => {
-        console.log(mesh);
-        // console.log(generate_verts_rev(rotate_mesh(clark_2.mesh)));
-        // mesh.current.geometry.computeVertexNormals();
-      }}
-      onPointerOver={(event) => {
-        setHover(true);
-      }}
-      onPointerOut={(event) => setHover(false)}
+      scale={[0.1, 6, 1]}
     >
       <planeGeometry
         args={[5, 5, 50, 60]}
@@ -67,9 +61,10 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
         }}
       >
         <bufferAttribute
+          ref={surfacePositionsRef}
           attach="attributes-position"
-          count={clark_2.verts.length / 3}
-          array={clark_2.verts}
+          count={clark[blades].verts.length / 3}
+          array={clark[blades].verts}
           itemSize={3}
         />
       </planeGeometry>
@@ -93,7 +88,7 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
       </points>
 
       <meshStandardMaterial
-        color={hovered ? "hotpink" : "orange"}
+        color="lightgreen"
         side={THREE.DoubleSide}
         opacity={0.6}
         transparent
@@ -103,7 +98,7 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
         className="select-none"
         color="black"
         scale={[10, 0.1, 1]}
-        up={[0,-10,0]}
+        up={[0, -10, 0]}
         position={[35, 0, 0]}
         center
       >
@@ -153,6 +148,7 @@ const PowerUnitResults = () => {
   const reductionRatio = useEngineStore((state) => state.reductionRatio);
   const diameter = usePropellerStore((state) => state.diameter);
   const speed = usePropellerStore((state) => state.cruiseSpeed);
+  const blades = usePropellerStore((state) => state.blades);
   const setAltitude = useResultsStore((state) => state.setAltitude);
   const cpMarkers = useResultsStore((state) => state.cpMarkers);
   const setCpMarkers = useResultsStore((state) => state.setCpMarkers);
@@ -164,7 +160,7 @@ const PowerUnitResults = () => {
   const density = 1.2255 * (1 - altitude / 44.3) ** 4.256;
   const propellerSpeed = (engineSpeed * reductionRatio) / 60;
   const Cp = (power * 1000) / (density * propellerSpeed ** 3 * diameter ** 5);
-  const { J, angles, cp } = clark_2.mesh;
+  const meshData = useMemo(() => clark[blades].mesh, [blades]);
 
   useEffect(() => {
     const table = [];
@@ -172,13 +168,20 @@ const PowerUnitResults = () => {
     for (let v = 0; v <= 1.2 * speed; v += 10) {
       const j = v / (propellerSpeed * diameter);
       // const rpm = propellerSpeed * 60 / Ratio
-      const angle = barycentricAngle(J, angles, cp, j, Cp);
+      const angle = barycentricAngle(
+        meshData.J,
+        meshData.angles,
+        meshData.cp,
+        j,
+        Cp
+      );
       table.push({ v, j, angle });
       markers.push(angle, Cp, j);
     }
     setTable(table);
     setCpMarkers(new Float32Array(markers));
-  }, [altitude]);
+    // console.log(generate_verts_rev(rotate_mesh(clark[4].mesh)));
+  }, [altitude, meshData, Cp, diameter, propellerSpeed, speed, setCpMarkers]);
 
   return (
     <div className="flex w-full p-4">
