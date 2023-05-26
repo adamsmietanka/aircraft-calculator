@@ -16,6 +16,8 @@ import { usePower } from "./hooks/usePower";
 import { usePropellerStore } from "./stores/usePropeller";
 import { useEngineStore } from "./hooks/useEngine";
 import { barycentricAngle } from "../../utils/interpolation/binarySearch";
+import { verts } from "../../data/verts";
+import { eff } from "../../data/eff";
 
 interface SurfaceProps {
   cpMarkers: Float32Array;
@@ -28,6 +30,8 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
   const surfacePositionsRef = useRef<THREE.BufferAttribute>(null);
 
   const blades = usePropellerStore((state) => state.blades);
+
+  const chartType = "cp"
 
   const center = useMemo(() => {
     if (mesh.current) {
@@ -44,7 +48,7 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
       positionsRef.current.needsUpdate = true;
     }
     if (surfacePositionsRef.current) {
-      surfacePositionsRef.current.set(clark[blades].verts);
+      surfacePositionsRef.current.set(verts[chartType][blades]);
       surfacePositionsRef.current.needsUpdate = true;
     }
   });
@@ -63,8 +67,8 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
         <bufferAttribute
           ref={surfacePositionsRef}
           attach="attributes-position"
-          count={clark[blades].verts.length / 3}
-          array={clark[blades].verts}
+          count={verts[chartType][blades].length / 3}
+          array={verts[chartType][blades]}
           itemSize={3}
         />
       </planeGeometry>
@@ -160,18 +164,19 @@ const PowerUnitResults = () => {
   const density = 1.2255 * (1 - altitude / 44.3) ** 4.256;
   const propellerSpeed = (engineSpeed * reductionRatio) / 60;
   const Cp = (power * 1000) / (density * propellerSpeed ** 3 * diameter ** 5);
-  const meshData = useMemo(() => clark[blades].mesh, [blades]);
+  const cpMesh = useMemo(() => clark.cp[blades], [blades]);
 
   useEffect(() => {
+    console.log(eff)
     const table = [];
     const markers = [];
     for (let v = 0; v <= 1.2 * speed; v += 10) {
       const j = v / (propellerSpeed * diameter);
       // const rpm = propellerSpeed * 60 / Ratio
       const angle = barycentricAngle(
-        meshData.J,
-        meshData.angles,
-        meshData.cp,
+        cpMesh.J,
+        cpMesh.angles,
+        cpMesh.Z,
         j,
         Cp
       );
@@ -180,8 +185,8 @@ const PowerUnitResults = () => {
     }
     setTable(table);
     setCpMarkers(new Float32Array(markers));
-    // console.log(generate_verts_rev(rotate_mesh(clark[4].mesh)));
-  }, [altitude, meshData, Cp, diameter, propellerSpeed, speed, setCpMarkers]);
+    // console.log(generate_verts_rev(rotate_mesh(eff[4])));
+  }, [altitude, cpMesh, Cp, diameter, propellerSpeed, speed, setCpMarkers]);
 
   return (
     <div className="flex w-full p-4">
@@ -214,7 +219,7 @@ const PowerUnitResults = () => {
           <Surface cpMarkers={cpMarkers} />
           <OrbitControls
             autoRotate
-            autoRotateSpeed={1}
+            autoRotateSpeed={0.25}
             target={[3.5, 1, 2.5]}
           />
           {/* <Stats /> */}

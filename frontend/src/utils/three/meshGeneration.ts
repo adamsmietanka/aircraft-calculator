@@ -1,14 +1,14 @@
 import { Mesh } from "../../data/cp";
 
-export const generate_verts = (mesh: number[][]) => {
+export const generate_verts = (mesh: Mesh) => {
   const results: number[] = [];
 
-  const advanceRatios = mesh[0];
-  const values = mesh.slice(1);
+  const advanceRatios = mesh.J;
+  const values = mesh.Z;
 
   values.forEach((heights, i) => {
     heights.forEach((height, j) => {
-      const angle = 10 + j;
+      const angle = mesh.angles[j];
       results.push(angle, height, advanceRatios[i]);
     });
   });
@@ -20,11 +20,11 @@ export const generate_verts_rev = (mesh: Mesh) => {
 
   // Reversing the order of the advance ratios to make the mesh triangles face the other way
   const advanceRatios = [...mesh.J].reverse();
-  const values = [...mesh.cp].reverse();
+  const values = [...mesh.Z].reverse();
 
   values.forEach((heights, i) => {
     heights.forEach((height, j) => {
-      const angle = 10 + j;
+      const angle = mesh.angles[j];
       results.push(angle, height, advanceRatios[i]);
     });
   });
@@ -40,6 +40,6 @@ export const rotate_mesh = (mesh: Mesh) => {
    */
   return {
     ...mesh,
-    cp: [...mesh.cp[0].map((_, i) => mesh.cp.map((row) => row[i]))],
+    Z: [...mesh.Z[0].map((_, i) => mesh.Z.map((row) => row[i]))],
   };
 };
