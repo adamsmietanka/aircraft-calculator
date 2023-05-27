@@ -12,6 +12,7 @@ export const generate_verts = (mesh: Mesh) => {
       results.push(angle, height, advanceRatios[i]);
     });
   });
+  console.log(results);
   return new Float32Array(results);
 };
 

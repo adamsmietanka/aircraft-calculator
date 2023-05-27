@@ -2,8 +2,9 @@ import * as THREE from "three";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
 import { Stats, OrbitControls, useHelper, Html } from "@react-three/drei";
-import { clark } from "../../data/cp";
+import { cp } from "../../data/cp";
 import {
+  generate_verts,
   generate_verts_rev,
   rotate_mesh,
 } from "../../utils/three/meshGeneration";
@@ -31,7 +32,7 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
 
   const blades = usePropellerStore((state) => state.blades);
 
-  const chartType = "cp"
+  const chartType = "cp";
 
   const center = useMemo(() => {
     if (mesh.current) {
@@ -53,10 +54,7 @@ const Surface = ({ cpMarkers }: SurfaceProps) => {
     }
   });
   return (
-    <mesh
-      ref={mesh}
-      scale={[0.1, 6, 1]}
-    >
+    <mesh ref={mesh} scale={[0.1, 6, 1]}>
       <planeGeometry
         args={[5, 5, 50, 60]}
         onUpdate={(self) => {
@@ -164,28 +162,22 @@ const PowerUnitResults = () => {
   const density = 1.2255 * (1 - altitude / 44.3) ** 4.256;
   const propellerSpeed = (engineSpeed * reductionRatio) / 60;
   const Cp = (power * 1000) / (density * propellerSpeed ** 3 * diameter ** 5);
-  const cpMesh = useMemo(() => clark.cp[blades], [blades]);
+  const cpMesh = useMemo(() => cp[blades], [blades]);
 
   useEffect(() => {
-    console.log(eff)
+    console.log(eff);
     const table = [];
     const markers = [];
     for (let v = 0; v <= 1.2 * speed; v += 10) {
       const j = v / (propellerSpeed * diameter);
       // const rpm = propellerSpeed * 60 / Ratio
-      const angle = barycentricAngle(
-        cpMesh.J,
-        cpMesh.angles,
-        cpMesh.Z,
-        j,
-        Cp
-      );
+      const angle = barycentricAngle(cpMesh.J, cpMesh.angles, cpMesh.Z, j, Cp);
       table.push({ v, j, angle });
       markers.push(angle, Cp, j);
     }
     setTable(table);
     setCpMarkers(new Float32Array(markers));
-    // console.log(generate_verts_rev(rotate_mesh(eff[4])));
+    console.log(generate_verts(rotate_mesh(cp[2])));
   }, [altitude, cpMesh, Cp, diameter, propellerSpeed, speed, setCpMarkers]);
 
   return (
