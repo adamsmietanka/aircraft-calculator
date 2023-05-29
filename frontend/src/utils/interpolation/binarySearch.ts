@@ -61,12 +61,14 @@ export const barycentricAngle = (
 ): number => {
   // binary search for x upper bound
   let i = findUpperBound(X, x);
+
   if (x < 0 || i === X.length) {
     return 0;
   }
   if (x === 0) {
     i += 1;
   }
+
   // binary search for y upper bound
   const normalizedX = (x - X[i - 1]) / (X[i] - X[i - 1]);
   const j = findAngleUpperBound(i, normalizedX, Z, z);
@@ -96,4 +98,47 @@ export const barycentricAngle = (
   const A = (X[i] - X[i - 1]) * (a - d);
   const w2 = ((d - c) * (x - X[i - 1]) + (X[i] - X[i - 1]) * (z - d)) / A;
   return Y[j] - w2 * (Y[j] - Y[j - 1]);
+};
+
+export const barycentricZ = (
+  X: number[],
+  Y: number[],
+  Z: number[][],
+  x: number,
+  y: number
+) => {
+  // binary search for x upper bound
+  let i = findUpperBound(X, x);
+
+  if (x < 0 || i === X.length) {
+    return 0;
+  }
+  if (x === 0) {
+    i += 1;
+  }
+
+  // binary search for y upper bound
+  let j = findUpperBound(Y, y);
+
+  if (y < 10 || j === Y.length) {
+    return 0;
+  }
+  if (y === 10) {
+    j += 1;
+  }
+  const normalizedX = (x - X[i - 1]) / (X[i] - X[i - 1]);
+  const triangleBound = (1 - normalizedX) * Y[j - 1] + normalizedX * Y[j];
+
+  if (y < triangleBound) {
+    // lower triangle /_|
+    const w1 = (y - Y[j - 1]) / (Y[j] - Y[j - 1]);
+    const w2 = (X[i] - x) / (X[i] - X[i - 1]);
+    const w3 = 1 - w1 - w2;
+    return Z[j][i] * w1 + Z[j - 1][i - 1] * w2 + Z[j - 1][i] * w3;
+  }
+  // upper triangle |/
+  const w1 = (x - X[i - 1]) / (X[i] - X[i - 1]);
+  const w2 = (y - Y[j]) / (Y[j - 1] - Y[j]);
+  const w3 = 1 - w1 - w2;
+  return Z[j][i] * w1 + Z[j - 1][i - 1] * w2 + Z[j][i - 1] * w3;
 };

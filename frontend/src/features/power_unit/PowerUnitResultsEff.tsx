@@ -1,5 +1,5 @@
-import React, { useMemo, useRef } from "react";
-import { Canvas, useFrame, ThreeElements } from "@react-three/fiber";
+import React, { useEffect, useMemo, useRef } from "react";
+import { Canvas, useFrame, ThreeElements, useThree } from "@react-three/fiber";
 import { Stats, OrbitControls, useHelper, Html } from "@react-three/drei";
 import { usePropellerStore } from "./stores/usePropeller";
 import * as THREE from "three";
@@ -18,7 +18,7 @@ const Surface = ({ markers }: SurfaceProps) => {
 
   const blades = usePropellerStore((state) => state.blades);
 
-  const chartType = "cp";
+  const chartType = "eff";
 
   const center = useMemo(() => {
     if (mesh.current) {
@@ -28,8 +28,13 @@ const Surface = ({ markers }: SurfaceProps) => {
       return center;
     }
   }, []);
+  
+  const { camera } = useThree();
+  const prevCameraPosition = useRef(camera.position.clone());
+
 
   useFrame((state, dt) => {
+    // console.log(state)
     if (positionsRef.current) {
       positionsRef.current.set(markers);
       positionsRef.current.needsUpdate = true;
@@ -39,10 +44,17 @@ const Surface = ({ markers }: SurfaceProps) => {
       surfacePositionsRef.current.needsUpdate = true;
     }
   });
+
+  useEffect(() => {
+    if (mesh.current) {
+      mesh.current.geometry.computeVertexNormals();
+    }
+  }, [blades])
+
   return (
     <mesh ref={mesh} scale={[0.1, 6, 1]}>
       <planeGeometry
-        args={[5, 5, 50, 60]}
+        args={[5, 5, 100, 110]}
         onUpdate={(self) => {
           self.computeVertexNormals();
           console.log(self);
@@ -80,7 +92,6 @@ const Surface = ({ markers }: SurfaceProps) => {
         side={THREE.DoubleSide}
         opacity={0.6}
         transparent
-        wireframe
       />
       <Html
         className="select-none"
@@ -96,10 +107,10 @@ const Surface = ({ markers }: SurfaceProps) => {
         className="select-none"
         color="black"
         scale={[10, 0.1, 1]}
-        position={[60, 0.2, 0]}
+        position={[60, 0.4, 0]}
         center
       >
-        Cp
+        Eff
       </Html>
       <Html
         className="select-none"
@@ -124,8 +135,8 @@ const Lights = () => {
   );
 };
 
-const PowerUnitResultsCp = () => {
-  const markers = useResultsStore.getState().cpMarkers;
+const PowerUnitResultsEff = () => {
+  const markers = useResultsStore.getState().effMarkers;
   return (
     <div className="h-96 w-96">
       <Canvas orthographic camera={{ zoom: 50, position: [-10, 1, 10] }} >
@@ -144,4 +155,4 @@ const PowerUnitResultsCp = () => {
   );
 };
 
-export default PowerUnitResultsCp;
+export default PowerUnitResultsEff;
