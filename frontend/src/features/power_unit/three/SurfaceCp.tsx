@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useRef } from "react";
-import { Canvas, useFrame, ThreeElements, useThree } from "@react-three/fiber";
-import { Stats, OrbitControls, useHelper, Html } from "@react-three/drei";
-import { usePropellerStore } from "./stores/usePropeller";
+import { ThreeElements, useFrame } from "@react-three/fiber";
+import { verts } from "../../../data/verts";
+import { usePropellerStore } from "../stores/usePropeller";
+import { useResultsStore } from "../stores/useResults";
+
 import * as THREE from "three";
-import { verts } from "../../data/verts";
-import { useResultsStore } from "./stores/useResults";
+import { useRef } from "react";
+import { Html } from "@react-three/drei";
 
-
-const Surface = () => {
+const SurfaceCp = (props: ThreeElements["mesh"]) => {
   const mesh = useRef<THREE.Mesh>(null!);
   const points = useRef<THREE.Points>(null!);
   const positionsRef = useRef<THREE.BufferAttribute>(null);
@@ -15,13 +15,11 @@ const Surface = () => {
 
   const blades = usePropellerStore((state) => state.blades);
 
-  const chartType = "eff";
-  
-  const markers = useResultsStore.getState().effMarkers;
+  const chartType = "cp";
 
+  const markers = useResultsStore.getState().cpMarkers;
 
   useFrame((state, dt) => {
-    // console.log(state)
     if (positionsRef.current) {
       positionsRef.current.set(markers);
       positionsRef.current.needsUpdate = true;
@@ -31,17 +29,10 @@ const Surface = () => {
       surfacePositionsRef.current.needsUpdate = true;
     }
   });
-
-  useEffect(() => {
-    if (mesh.current) {
-      mesh.current.geometry.computeVertexNormals();
-    }
-  }, [blades])
-
   return (
-    <mesh ref={mesh} scale={[0.1, 6, 1]}>
+    <mesh {...props} ref={mesh} scale={[0.1, 6, 1]}>
       <planeGeometry
-        args={[5, 5, 100, 110]}
+        args={[5, 5, 50, 60]}
         onUpdate={(self) => {
           self.computeVertexNormals();
           console.log(self);
@@ -79,6 +70,7 @@ const Surface = () => {
         side={THREE.DoubleSide}
         opacity={0.6}
         transparent
+        wireframe
       />
       <Html
         className="select-none"
@@ -94,10 +86,10 @@ const Surface = () => {
         className="select-none"
         color="black"
         scale={[10, 0.1, 1]}
-        position={[60, 0.4, 0]}
+        position={[60, 0.2, 0]}
         center
       >
-        Eff
+        Cp
       </Html>
       <Html
         className="select-none"
@@ -112,33 +104,4 @@ const Surface = () => {
   );
 };
 
-const Lights = () => {
-  const pointLightRef = useRef(null!);
-  useHelper(pointLightRef, THREE.PointLightHelper, 100);
-  return (
-    <>
-      <pointLight ref={pointLightRef} position={[10, 10, 10]} />
-    </>
-  );
-};
-
-const PowerUnitResultsEff = () => {
-  return (
-    <div className="h-96 w-96">
-      <Canvas orthographic camera={{ zoom: 50, position: [-10, 10, 10] }} >
-        <axesHelper />
-        <ambientLight intensity={0.4} />
-        <Lights />
-        <Surface />
-        <OrbitControls
-          autoRotate
-          autoRotateSpeed={0.25}
-          target={[3.5, 1, 2.5]}
-        />
-        {/* <Stats /> */}
-      </Canvas>
-    </div>
-  );
-};
-
-export default PowerUnitResultsEff;
+export default SurfaceCp;

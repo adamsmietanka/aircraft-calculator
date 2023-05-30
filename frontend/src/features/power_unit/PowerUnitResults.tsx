@@ -3,16 +3,14 @@ import InputAltitude from "../common/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import InputDisabled from "../common/InputDisabled";
-import PowerUnitResultsCp from "./PowerUnitResultsCp";
-import PowerUnitResultsEff from "./PowerUnitResultsEff";
+import PowerUnitResults3D from "./three/PowerUnitResults3D";
 import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
 import { usePowerUnitResults } from "./hooks/usePowerUnitResults";
-
 
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);
   const setAltitude = useResultsStore((state) => state.setAltitude);
-  const [power, Cp] = usePowerUnitResults()
+  const [power, Cp] = usePowerUnitResults();
 
   return (
     <div className="flex w-full p-4">
@@ -34,10 +32,7 @@ const PowerUnitResults = () => {
         <PowerUnitPropellerPitch />
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="flex space-x-4">
-          <PowerUnitResultsCp />
-          <PowerUnitResultsEff />
-        </div>
+        <PowerUnitResults3D />
         <PowerUnitResultsPowerChart />
       </div>
     </div>
