@@ -125,7 +125,7 @@ const Lights = () => {
 const PowerUnitResultsEff = () => {
   return (
     <div className="h-96 w-96">
-      <Canvas orthographic camera={{ zoom: 50, position: [-10, 1, 10] }} >
+      <Canvas orthographic camera={{ zoom: 50, position: [-10, 10, 10] }} >
         <axesHelper />
         <ambientLight intensity={0.4} />
         <Lights />

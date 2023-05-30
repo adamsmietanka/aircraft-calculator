@@ -24,7 +24,7 @@ interface SuperchargerState {
 }
 
 export const useSuperchargerStore = create<SuperchargerState>()((set) => ({
-  enabled: false,
+  enabled: true,
   lowGear: {
     enabled: true,
     startAltitude: 0,
