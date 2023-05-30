@@ -5,7 +5,7 @@ import { usePropellerStore } from "./stores/usePropeller";
 import { usePower } from "./hooks/usePower";
 import InputAltitude from "../common/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
-import { usePropellerInterpolation } from "./hooks/usePropelerInterpolation";
+import { usePropellerInterpolation } from "./hooks/usePropellerInterpolation";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import PowerUnitPropellerChart from "./PowerUnitPropellerChart";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
