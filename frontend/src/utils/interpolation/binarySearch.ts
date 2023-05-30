@@ -142,3 +142,70 @@ export const barycentricZ = (
   const w3 = 1 - w1 - w2;
   return Z[j][i] * w1 + Z[j - 1][i - 1] * w2 + Z[j][i - 1] * w3;
 };
+
+export const barycentricX = (
+  X: number[],
+  Y: number[],
+  Z: number[][],
+  y: number,
+  z: number
+) => {
+  // binary search for y upper bound
+  let j = findUpperBound(Y, y);
+
+  if (y < 10 || j === Y.length) {
+    return 0;
+  }
+  if (y === 10) {
+    j += 1;
+  }
+
+  // linear search for x upper bound
+  // mesh slices for angle=const are non-monotonic
+  // so we cannot use binary search
+  let i = 0;
+  let normalizedY = (y - Y[j - 1]) / (Y[j] - Y[j - 1]);
+  let zOld = (1 - normalizedY) * Z[j - 1][0] + normalizedY * Z[j][0];
+  let lowerTriangle = true;
+  for (let k = 1; k < X.length; k++) {
+    normalizedY = (y - Y[j - 1]) / (Y[j] - Y[j - 1]);
+    const zBound = (1 - normalizedY) * Z[j - 1][k] + normalizedY * Z[j][k];
+    const triangleBound =
+      (1 - normalizedY) * Z[j - 1][k - 1] + normalizedY * Z[j][k];
+    if ((zOld <= z && z <= zBound) || (zBound <= z && z <= zOld)) {
+      i = k;
+    }
+    if (zOld <= z && z <= zBound && z <= triangleBound) {
+      lowerTriangle = false;
+      if (z === 0) {
+        break;
+      }
+    }
+    if (zBound <= z && z <= zOld && triangleBound <= z) {
+      lowerTriangle = false;
+      if (z === 0) {
+        break;
+      }
+    }
+    zOld = zBound;
+  }
+  if (i === 0 || i === X.length) {
+    return 0;
+  }
+  if (lowerTriangle) {
+    // lower triangle /_|
+    const A = (Z[j - 1][i - 1] - Z[j - 1][i]) * (Y[j] - Y[j - 1]);
+    const w2 =
+      ((Z[j - 1][i] - Z[j][i]) * (y - Y[j - 1]) +
+        (Y[j] - Y[j - 1]) * (z - Z[j - 1][i])) /
+      A;
+    return X[i] - w2 * (X[i] - X[i - 1]);
+  }
+  // upper triangle |/
+  const A = (Z[j][i] - Z[j][i - 1]) * (Y[j] - Y[j - 1]);
+  const w1 =
+    ((Z[j - 1][i - 1] - Z[j][i - 1]) * (y - Y[j]) +
+      (Y[j] - Y[j - 1]) * (z - Z[j][i - 1])) /
+    A;
+  return X[i - 1] + w1 * (X[i] - X[i - 1]);
+};

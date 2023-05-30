@@ -6,7 +6,7 @@ import InputDisabled from "../common/InputDisabled";
 import PowerUnitResultsCp from "./PowerUnitResultsCp";
 import PowerUnitResultsEff from "./PowerUnitResultsEff";
 import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
-import { usePowerUnitResults } from "./hooks/useResultsTable";
+import { usePowerUnitResults } from "./hooks/usePowerUnitResults";
 
 
 const PowerUnitResults = () => {
