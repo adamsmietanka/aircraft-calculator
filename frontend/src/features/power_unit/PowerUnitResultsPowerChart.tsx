@@ -1,9 +1,11 @@
 import { useMemo } from "react";
 import Plot from "react-plotly.js";
 import { useResultsStore } from "./stores/useResults";
+import { usePropellerStore } from "./stores/usePropeller";
 
 const PowerUnitResultsPowerChart = () => {
   const table = useResultsStore((state) => state.table);
+  const speed = usePropellerStore((state) => state.cruiseSpeed);
 
   const layout = useMemo(
     () => ({
@@ -26,6 +28,7 @@ const PowerUnitResultsPowerChart = () => {
         },
       },
       xaxis: {
+        range: [0, speed * 1.2],
         title: {
           text: "Velocity [m/s]",
           font: { size: 16 },
@@ -33,7 +36,7 @@ const PowerUnitResultsPowerChart = () => {
       },
       // dragmode: false,
     }),
-    [table]
+    [speed]
   );
 
   return (
