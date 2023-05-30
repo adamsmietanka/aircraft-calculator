@@ -24,6 +24,8 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
         <input
           className="input input-bordered w-full"
           type={variable ? "text" : "number"}
+          min={10}
+          max={60}
           value={variable ? "Variable" : angle}
           onChange={(e) => setAngle(parseFloat(e.target.value))}
           disabled={variable}
