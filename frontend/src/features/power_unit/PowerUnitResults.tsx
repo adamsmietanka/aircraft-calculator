@@ -52,13 +52,14 @@ const PowerUnitResults = () => {
     const table: TableRow[] = [];
     const cpMarkers = [];
     const effMarkers = [];
-    for (let v = 0; v <= 1.2 * speed; v += 10) {
+    for (let v = 0; v <= 1.2 * speed; v += 1) {
       const j = v / (propellerSpeed * diameter);
+      const cp = Cp;
       // const rpm = propellerSpeed * 60 / Ratio
       const angle = barycentricAngle(cpMesh.J, cpMesh.angles, cpMesh.Z, j, Cp);
       const eff = barycentricZ(effMesh.J, effMesh.angles, effMesh.Z, j, angle);
       const prop_power = power * eff;
-      table.push({ v, j, angle, eff, prop_power });
+      table.push({ v, j, cp, angle, eff, prop_power });
       cpMarkers.push(angle, Cp, j);
       effMarkers.push(angle, eff, j);
     }
@@ -101,7 +102,7 @@ const PowerUnitResults = () => {
         <PowerUnitPropellerPitch />
       </div>
       <div className="flex flex-col space-y-4">
-        <div className="flex">
+        <div className="flex space-x-4">
           <PowerUnitResultsCp />
           <PowerUnitResultsEff />
         </div>

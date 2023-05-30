@@ -19,14 +19,13 @@ const PowerUnitResultsPowerChart = () => {
         pad: 4,
       },
       yaxis: {
-        // range: [0, Math.max(...powers) * 1.1],
+        range: [0, 1000],
         title: {
           text: "Propeller Power [kW]",
           font: { size: 16 },
         },
       },
       xaxis: {
-        // range: [0, this.engine.maxAltitude],
         title: {
           text: "Velocity [m/s]",
           font: { size: 16 },

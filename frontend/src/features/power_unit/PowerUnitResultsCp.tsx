@@ -6,11 +6,8 @@ import * as THREE from "three";
 import { verts } from "../../data/verts";
 import { useResultsStore } from "./stores/useResults";
 
-interface SurfaceProps {
-  markers: Float32Array;
-}
 
-const Surface = ({ markers }: SurfaceProps) => {
+const Surface = () => {
   const mesh = useRef<THREE.Mesh>(null!);
   const points = useRef<THREE.Points>(null!);
   const positionsRef = useRef<THREE.BufferAttribute>(null);
@@ -20,14 +17,7 @@ const Surface = ({ markers }: SurfaceProps) => {
 
   const chartType = "cp";
 
-  const center = useMemo(() => {
-    if (mesh.current) {
-      mesh.current.geometry.computeBoundingBox();
-      const center = new THREE.Vector3();
-      mesh.current.geometry.boundingBox?.getCenter(center);
-      return center;
-    }
-  }, []);
+  const markers = useResultsStore.getState().cpMarkers
 
   useFrame((state, dt) => {
     if (positionsRef.current) {
@@ -125,14 +115,13 @@ const Lights = () => {
 };
 
 const PowerUnitResultsCp = () => {
-  const markers = useResultsStore.getState().cpMarkers;
   return (
     <div className="h-96 w-96">
-      <Canvas orthographic camera={{ zoom: 50, position: [-10, 1, 10] }} >
+      <Canvas orthographic camera={{ zoom: 50, position: [-10, 1, 10] }}>
         <axesHelper />
         <ambientLight intensity={0.4} />
         <Lights />
-        <Surface markers={markers} />
+        <Surface />
         <OrbitControls
           autoRotate
           autoRotateSpeed={0.25}

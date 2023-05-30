@@ -3,6 +3,7 @@ import create from "zustand";
 export interface TableRow {
   v: number;
   j: number;
+  cp: number;
   angle: number;
   eff: number;
   prop_power: number;
