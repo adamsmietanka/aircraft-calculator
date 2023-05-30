@@ -9,16 +9,15 @@ const PowerUnitResultsPowerChart = () => {
 
   const layout = useMemo(
     () => ({
-      title: "Propeller performance",
       font: { size: 18 },
-      height: 500,
+      height: 360,
       width: window.innerWidth > 960 ? 600 : window.innerWidth * 0.9,
       margin: {
         l: 65,
         r: 10,
-        b: 100,
-        t: 100,
-        pad: 4,
+        b: 70,
+        t: 20,
+        pad: 5,
       },
       yaxis: {
         range: [0, 1000],
