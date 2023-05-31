@@ -4,6 +4,7 @@ import { OrbitControls, useHelper } from "@react-three/drei";
 import * as THREE from "three";
 import SurfaceCp from "./SurfaceCp";
 import SurfaceEff from "./SurfaceEff";
+import GridLines from "./GridLines";
 
 const Lights = () => {
   const pointLightRef = useRef(null!);
@@ -16,19 +17,22 @@ const Lights = () => {
 };
 
 const PowerUnitResults3D = () => {
+  const style = getComputedStyle(document.body);
+  const b1 = style.getPropertyValue("--b1").replaceAll(" ", ",")
+  console.log(b1);
+  const bgColor = new THREE.Color(`hsl(${b1})`);
   return (
     <div className="h-96 w-full">
       <Canvas orthographic camera={{ zoom: 40, position: [-10, 10, 15] }}>
+        <fog attach="fog" args={[bgColor, 20, 25]} />
+
         <axesHelper />
         <ambientLight intensity={0.4} />
         <Lights />
         <SurfaceCp />
-        <SurfaceEff position={[0, 0, 6.5]} />
-        <OrbitControls
-          autoRotate
-          autoRotateSpeed={0.25}
-          target={[3.5, 1, 5.5]}
-        />
+        <SurfaceEff position={[0, 0, 7]} />
+        <GridLines />
+        <OrbitControls autoRotate autoRotateSpeed={0.25} target={[3.5, 1, 6]} />
         {/* <Stats /> */}
       </Canvas>
     </div>
