@@ -83,8 +83,7 @@ const SurfaceEff = (props: ThreeElements["mesh"]) => {
         <Html
           className="select-none"
           color="black"
-          scale={[10, 0.1, 1]}
-          position={[60, 0.4, 0]}
+          position={[70, 0.5, 5.5]}
           center
         >
           Eff

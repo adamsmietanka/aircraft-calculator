@@ -6,6 +6,7 @@ import { useResultsStore } from "../stores/useResults";
 import * as THREE from "three";
 import { useRef } from "react";
 import { Html } from "@react-three/drei";
+import VerticalAxis from "./VerticalAxis";
 
 const SurfaceCp = (props: ThreeElements["mesh"]) => {
   const mesh = useRef<THREE.Mesh>(null!);
@@ -72,32 +73,11 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
         transparent
         wireframe
       />
-      <Html
-        className="select-none"
-        color="black"
-        scale={[10, 0.1, 1]}
-        up={[0, -10, 0]}
-        position={[35, 0, 0]}
-        center
-      >
+      <VerticalAxis name="Cp"/>
+      <Html className="select-none" color="black" position={[35, 0, 0]} center>
         Angle
       </Html>
-      <Html
-        className="select-none"
-        color="black"
-        scale={[10, 0.1, 1]}
-        position={[60, 0.2, 0]}
-        center
-      >
-        Cp
-      </Html>
-      <Html
-        className="select-none"
-        color="black"
-        scale={[10, 0.1, 1]}
-        position={[8, 0, 2.5]}
-        center
-      >
+      <Html className="select-none" color="black" position={[8, 0, 2.5]} center>
         J
       </Html>
     </mesh>
