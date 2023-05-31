@@ -7,10 +7,10 @@ import SurfaceEff from "./SurfaceEff";
 
 const Lights = () => {
   const pointLightRef = useRef(null!);
-  useHelper(pointLightRef, THREE.PointLightHelper, 100);
+  useHelper(pointLightRef, THREE.PointLightHelper, 1);
   return (
     <>
-      <pointLight ref={pointLightRef} position={[10, 10, 10]} />
+      <pointLight ref={pointLightRef} position={[-10, 10, 10]} />
     </>
   );
 };
@@ -23,7 +23,7 @@ const PowerUnitResults3D = () => {
         <ambientLight intensity={0.4} />
         <Lights />
         <SurfaceCp />
-        <SurfaceEff position={[0, 0, 6]} />
+        <SurfaceEff position={[0, 0, 6.5]} />
         <OrbitControls
           autoRotate
           autoRotateSpeed={0.25}
