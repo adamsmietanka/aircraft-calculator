@@ -1,8 +1,8 @@
 import { useResultsStore } from "./stores/useResults";
-import InputAltitude from "../common/InputAltitude";
+import InputAltitude from "../common/inputs/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
-import InputDisabled from "../common/InputDisabled";
+import InputDisabled from "../common/inputs/InputDisabled";
 import PowerUnitResults3D from "./three/PowerUnitResults3D";
 import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
 import { usePowerUnitResults } from "./hooks/usePowerUnitResults";

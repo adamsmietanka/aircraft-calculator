@@ -1,4 +1,4 @@
-import InfoTooltip from "./InfoTooltip";
+import InfoTooltip from "../InfoTooltip";
 
 interface Props {
   label: string;
@@ -8,7 +8,13 @@ interface Props {
   setter: (value: boolean) => void;
 }
 
-const InputToggle = ({ label, value, tooltip, disabled = false, setter }: Props) => {
+const InputToggle = ({
+  label,
+  value,
+  tooltip,
+  disabled = false,
+  setter,
+}: Props) => {
   return (
     <div className="form-control">
       <label className="label cursor-pointer">

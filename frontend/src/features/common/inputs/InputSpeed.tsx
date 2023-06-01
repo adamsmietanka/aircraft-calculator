@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InfoTooltip from "./InfoTooltip";
+import InfoTooltip from "../InfoTooltip";
 
 interface Props {
   label: string;
@@ -14,35 +14,40 @@ interface UnitData {
   round?: boolean;
 }
 const data: Record<string, UnitData> = {
-  km: {
-    step: 0.1,
+  "m/s": {
+    step: 1,
     multiplier: 1,
   },
-  m: {
-    step: 100,
-    multiplier: 0.001,
+  "km/h": {
+    step: 1,
+    multiplier: 0.277778,
     round: true,
   },
-  ft: {
-    step: 1000,
-    multiplier: 0.0003048,
+  mph: {
+    step: 1,
+    multiplier: 0.44704,
+    round: true,
+  },
+  kn: {
+    step: 1,
+    multiplier: 0.514444,
     round: true,
   },
 };
 
-const InputAltitude = ({
+const InputSpeed = ({
   label,
   value,
   tooltip,
   disabled = false,
   setter,
 }: Props) => {
-  const [unit, setUnit] = useState("km");
+  const [unit, setUnit] = useState("m/s");
 
   const { multiplier, step, round } = data[unit];
   const displayValue = round
     ? Math.round(value / multiplier)
-    : Math.round((value / multiplier) * 1000) / 1000;
+    : Math.round(value / multiplier);
 
   return (
     <div className="form-control">
@@ -69,14 +74,17 @@ const InputAltitude = ({
               tabIndex={0}
               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li onClick={() => setUnit("km")}>
-                <a>km</a>
+              <li onClick={() => setUnit("m/s")}>
+                <a>m/s</a>
               </li>
-              <li onClick={() => setUnit("m")}>
-                <a>m</a>
+              <li onClick={() => setUnit("km/h")}>
+                <a>km/h</a>
               </li>
-              <li onClick={() => setUnit("ft")}>
-                <a>ft</a>
+              <li onClick={() => setUnit("mph")}>
+                <a>mph</a>
+              </li>
+              <li onClick={() => setUnit("kn")}>
+                <a>kn</a>
               </li>
             </ul>
           </div>
@@ -86,4 +94,4 @@ const InputAltitude = ({
   );
 };
 
-export default InputAltitude;
+export default InputSpeed;

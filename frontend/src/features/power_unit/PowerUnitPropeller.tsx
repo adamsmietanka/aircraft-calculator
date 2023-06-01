@@ -1,15 +1,15 @@
-import InputNumber from "../common/InputNumber";
+import InputNumber from "../common/inputs/InputNumber";
 import { useEngineStore } from "./stores/useEngine";
-import InputDisabled from "../common/InputDisabled";
+import InputDisabled from "../common/inputs/InputDisabled";
 import { usePropellerStore } from "./stores/usePropeller";
 import { usePower } from "./hooks/usePower";
-import InputAltitude from "../common/InputAltitude";
+import InputAltitude from "../common/inputs/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import { usePropellerInterpolation } from "./hooks/usePropellerInterpolation";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import PowerUnitPropellerChart from "./PowerUnitPropellerChart";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
-import InputSpeed from "../common/InputSpeed";
+import InputSpeed from "../common/inputs/InputSpeed";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);

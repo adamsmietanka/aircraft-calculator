@@ -1,4 +1,4 @@
-import InfoTooltip from "./InfoTooltip";
+import InfoTooltip from "../InfoTooltip";
 
 interface Props {
   label: string;

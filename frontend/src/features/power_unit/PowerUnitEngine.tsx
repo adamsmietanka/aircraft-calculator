@@ -1,6 +1,6 @@
 import React from "react";
-import InputNumber from "../common/InputNumber";
-import InputSlider from "../../components/atoms/InputSlider";
+import InputNumber from "../common/inputs/InputNumber";
+import InputSlider from "../common/inputs/InputSlider";
 import { useEngineStore } from "./stores/useEngine";
 import PowerUnitEngineChart from "./PowerUnitEngineChart";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";

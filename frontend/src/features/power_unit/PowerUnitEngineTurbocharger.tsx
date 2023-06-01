@@ -1,6 +1,6 @@
 import React from "react";
-import InputToggle from "../common/InputToggle";
-import InputNumber from "../common/InputNumber";
+import InputToggle from "../common/inputs/InputToggle";
+import InputNumber from "../common/inputs/InputNumber";
 import { useTurbochargerStore } from "./stores/useTurbocharger";
 
 const PowerUnitEngineTurbocharger = () => {
