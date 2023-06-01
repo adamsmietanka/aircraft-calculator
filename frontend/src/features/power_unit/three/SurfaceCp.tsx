@@ -30,8 +30,13 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
       surfacePositionsRef.current.needsUpdate = true;
     }
   });
+  const style = getComputedStyle(document.body);
+  const p = style.getPropertyValue("--p").replaceAll(" ", ",")
+  console.log(p);
+  const traceColor = new THREE.Color(`hsl(${p})`);
+
   return (
-    <mesh {...props} ref={mesh} scale={[0.1, 6, 1]}>
+    <mesh {...props} ref={mesh} scale={[0.1, 5, 1]}>
       <planeGeometry
         args={[5, 5, 50, 60]}
         onUpdate={(self) => {
@@ -60,7 +65,7 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
         </bufferGeometry>
         <pointsMaterial
           attach="material"
-          color={"blue"}
+          color={traceColor}
           size={5}
           sizeAttenuation={false}
         />

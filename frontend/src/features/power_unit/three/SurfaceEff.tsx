@@ -39,7 +39,7 @@ const SurfaceEff = (props: ThreeElements["mesh"]) => {
     }, [blades])
   
     return (
-      <mesh {...props} ref={mesh} scale={[0.1, 6, 1]}>
+      <mesh {...props} ref={mesh} scale={[0.1, 5, 1]}>
         <planeGeometry
           args={[5, 5, 100, 110]}
           onUpdate={(self) => {

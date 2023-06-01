@@ -12,8 +12,10 @@ const VerticalAxis = ({ name }: Props) => {
     if (groupRef.current) {
       groupRef.current.position.x = state.camera.position.x > 3.5 ? -50 : 0;
     }
-    console.log();
   });
+
+  const width = 0.5;
+
   return (
     <group ref={groupRef}>
       <Line
@@ -22,11 +24,12 @@ const VerticalAxis = ({ name }: Props) => {
           [60, 1, 0],
         ]}
         color="inherit"
-        lineWidth={1.25}
+        lineWidth={width}
       />
       <Html className="select-none" position={[70, 0.5, -1]} center>
         {name}
       </Html>
+      {/* horizontal lines */}
       {[0, 0.2, 0.4, 0.6, 0.8, 1].map((i) => (
         <>
           <Html className="select-none text-xs" position={[65, i, -0.5]} center>
@@ -35,13 +38,34 @@ const VerticalAxis = ({ name }: Props) => {
           <Line
             points={[
               [60, i, 0],
-              [60, i, 11],
+              [60, i, 15],
             ]}
             color="inherit"
-            lineWidth={1.25}
+            lineWidth={width}
           />
         </>
       ))}
+      {/* vertical lines */}
+      {Array.from(Array(15).keys()).map((i) => (
+        <>
+          <Line
+            points={[
+              [60, 0, i],
+              [60, 1, i],
+            ]}
+            color="inherit"
+            lineWidth={width}
+          />
+        </>
+      ))}
+      <Line
+        points={[
+          [60, 0, 15],
+          [60, 1, 15],
+        ]}
+        color="inherit"
+        lineWidth={width}
+      />
     </group>
   );
 };

@@ -23,16 +23,16 @@ const PowerUnitResults3D = () => {
   const bgColor = new THREE.Color(`hsl(${b1})`);
   return (
     <div className="h-96 w-full">
-      <Canvas orthographic camera={{ zoom: 40, position: [-10, 10, 15] }}>
-        <fog attach="fog" args={[bgColor, 20, 25]} />
+      <Canvas orthographic camera={{ zoom: 30, position: [-10, 10, 15] }}>
+        {/* <fog attach="fog" args={[bgColor, 20, 25]} /> */}
 
         <axesHelper />
         <ambientLight intensity={0.4} />
         <Lights />
         <SurfaceCp />
-        <SurfaceEff position={[0, 0, 7]} />
+        <SurfaceEff position={[0, 0, 10]} />
         <GridLines />
-        <OrbitControls autoRotate autoRotateSpeed={0.25} target={[3.5, 1, 6]} />
+        <OrbitControls autoRotate autoRotateSpeed={0.25} target={[3.5, 1, 7.5]} />
         {/* <Stats /> */}
       </Canvas>
     </div>
