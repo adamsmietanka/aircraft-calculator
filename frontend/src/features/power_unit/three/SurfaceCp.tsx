@@ -78,13 +78,7 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
         transparent
         wireframe
       />
-      <VerticalAxis name="Cp"/>
-      <Html className="select-none" color="black" position={[35, 0, 0]} center>
-        Angle
-      </Html>
-      <Html className="select-none" color="black" position={[8, 0, 2.5]} center>
-        J
-      </Html>
+      <VerticalAxis/>
     </mesh>
   );
 };
