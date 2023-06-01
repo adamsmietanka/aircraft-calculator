@@ -27,12 +27,17 @@ const links = [
   },
   {
     to: "/weight",
-    name: "Weight distribution",
+    name: "Mass Distribution",
+    icon: <img src="https://img.icons8.com/ios/100/null/weight-kg.png" />,
+  },
+  {
+    to: "/stability/longitudinal-moment",
+    name: "Longitudinal Stability",
     icon: <Scales />,
   },
   {
     to: "/turn",
-    name: "Turn analysis",
+    name: "Turn Analysis",
     icon: <Curve />,
   },
 ];
