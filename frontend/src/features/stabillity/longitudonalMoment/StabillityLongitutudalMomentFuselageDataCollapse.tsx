@@ -1,8 +1,8 @@
 import React from "react";
 import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
 
-import InputNumber from "../../common/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
+import InputNumber from "../../common/inputs/InputNumber";
 
 const StabillityLongitutudalMomentFuselageDataCollapse = () => {
   const data = useLongitudalMomentStore();

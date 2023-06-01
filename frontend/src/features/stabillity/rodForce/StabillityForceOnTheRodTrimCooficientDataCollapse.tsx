@@ -21,8 +21,8 @@ import {
   useSteerOutputStore,
   useSteerStore,
 } from "../../../data/stores/useSteer";
-import InputNumber from "../../common/InputNumber";
 import { getB3 } from "../../../utils/forceOnTheRodCalculation/b3";
+import InputNumber from "../../common/inputs/InputNumber";
 
 const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
   const trimVelocity = useTrimVelocityStore((state) => state.trimVelocity);

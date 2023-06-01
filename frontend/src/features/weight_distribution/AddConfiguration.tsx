@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import RadioOptions from "../../components/atoms/RadioOptions";
 import WeightComponent from "./interfaces/weightComponent";
-import InputNumber from "../common/InputNumber";
 import OverwritableInputNumber from "../../components/atoms/OverwritableInputNumber";
 import CloseButton from "../../components/atoms/CloseButton";
+import InputNumber from "../common/inputs/InputNumber";
 
 interface Props {
   isVisible: boolean;

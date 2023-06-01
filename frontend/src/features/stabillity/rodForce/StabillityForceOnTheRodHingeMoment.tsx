@@ -3,9 +3,9 @@ import {
   useForceOnTheRodOutputStore,
   useForceOnTheRodStore,
 } from "../../../data/stores/useForceOnTheRod";
-import InputNumber from "../../common/InputNumber";
 import { useSteerStore } from "../../../data/stores/useSteer";
 import bCoefficients from "../../../utils/steerCalculation/bCoefficients/bCoefficients";
+import InputNumber from "../../common/inputs/InputNumber";
 
 const StabillityForceOnTheRodHingeMoment = () => {
   const b1 = useForceOnTheRodOutputStore((state) => state.b1);

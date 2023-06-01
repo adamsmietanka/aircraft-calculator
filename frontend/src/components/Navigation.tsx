@@ -43,7 +43,7 @@ const links = [
 ];
 const Navigation = () => {
   return (
-    <div className="flex flex-col justify-between h-screen w-80 p-2">
+    <div className="flex flex-col justify-between h-screen w-80 p-2 fixed">
       <div>
         {links.map((l) => (
           <Link to={l.to}>

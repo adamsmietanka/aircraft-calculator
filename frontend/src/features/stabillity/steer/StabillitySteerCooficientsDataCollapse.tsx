@@ -3,9 +3,9 @@ import {
   useSteerStore,
   useSteerOutputStore,
 } from "../../../data/stores/useSteer";
-import InputNumber from "../../common/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
 import calculateAcoefs from "../../../utils/steerCalculation/aCoefficients/aCoefficients";
+import InputNumber from "../../common/inputs/InputNumber";
 
 const StabillitySteerCooficientsDataCollapse = () => {
   const steerReynoldsNumber = useSteerStore(

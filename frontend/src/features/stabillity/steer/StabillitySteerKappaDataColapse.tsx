@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import InputNumber from "../../common/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
 import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
 import {
@@ -9,6 +8,7 @@ import {
 import { calculateKappa } from "../../../utils/steerCalculation/steerCalculation";
 import DropdownSelect from "../../../components/atoms/DropdownSelect";
 import CollapseHeader from "../../../components/atoms/CollapseHeader";
+import InputNumber from "../../common/inputs/InputNumber";
 
 const StabillitySteerKappaDataColapse = () => {
   const xh = useSteerStore((state) => state.x_h);
