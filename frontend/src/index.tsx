@@ -4,17 +4,19 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/templates/Home";
-import Steps from "./components/templates/Steps";
+import Home from "./features/Home";
+import Steps from "./components/Steps";
 import { powerUnitSteps } from "./utils/steps";
 import {
-  Aerodynamics,
-  Performance,
-  Settings,
-  Turn,
-  Weight,
-} from "./components/organisms";
-import { PowerUnitEngine, PowerUnitPropeller, PowerUnitResults } from "./features/power_unit";
+  PowerUnitEngine,
+  PowerUnitPropeller,
+  PowerUnitResults,
+} from "./features/power_unit";
+import Aerodynamics from "./features/aerodynamics/Aerodynamics";
+import Weight from "./features/weight_distribution/Weight";
+import Turn from "./features/turn/Turn";
+import Settings from "./features/settings/Settings";
+import Performance from "./features/performance/Performance";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
