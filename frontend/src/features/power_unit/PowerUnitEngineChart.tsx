@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useEngineStore } from "./hooks/useEngine";
+import { useEngineStore } from "./stores/useEngine";
 import { usePower } from "./hooks/usePower";
 import Plot from "react-plotly.js";
 

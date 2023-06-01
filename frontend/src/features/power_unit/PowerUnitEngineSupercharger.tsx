@@ -1,6 +1,6 @@
 import InputNumberSmall from "../common/InputNumberSmall";
 import InputToggle from "../common/InputToggle";
-import { useSuperchargerStore } from "./hooks/useSupercharger";
+import { useSuperchargerStore } from "./stores/useSupercharger";
 import { useHighGearStartPower } from "./hooks/useHighGearStartPower";
 import { useAdditionalHeightPoints } from "./hooks/useAdditionalHeightPoints";
 

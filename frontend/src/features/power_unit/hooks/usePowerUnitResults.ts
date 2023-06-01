@@ -9,7 +9,7 @@ import { usePower } from "./usePower";
 import { TableRow, useResultsStore } from "../stores/useResults";
 import { useEffect, useMemo } from "react";
 import { usePropellerStore } from "../stores/usePropeller";
-import { useEngineStore } from "./useEngine";
+import { useEngineStore } from "../stores/useEngine";
 
 export const usePowerUnitResults = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);

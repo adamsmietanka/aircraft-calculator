@@ -1,7 +1,7 @@
 import React from "react";
 import InputNumber from "../common/InputNumber";
 import InputSlider from "../../components/atoms/InputSlider";
-import { useEngineStore } from "./hooks/useEngine";
+import { useEngineStore } from "./stores/useEngine";
 import PowerUnitEngineChart from "./PowerUnitEngineChart";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";

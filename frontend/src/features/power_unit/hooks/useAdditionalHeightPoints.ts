@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { createHeightsArray, useEngineStore } from "./useEngine";
-import { useSuperchargerStore } from "./useSupercharger";
+import { createHeightsArray, useEngineStore } from "../stores/useEngine";
+import { useSuperchargerStore } from "../stores/useSupercharger";
 
 export const useAdditionalHeightPoints = () => {
   const heights = useEngineStore((state) => state.heights);

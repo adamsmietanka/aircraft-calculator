@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
-import { useEngineStore } from "./useEngine";
-import { useSuperchargerStore } from "./useSupercharger";
+import { useEngineStore } from "../stores/useEngine";
+import { useSuperchargerStore } from "../stores/useSupercharger";
 
 export const useHighGearStartPower = () => {
   const kCoefficient = useEngineStore((state) => state.kCoefficient);

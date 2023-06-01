@@ -1,7 +1,7 @@
-import { useTurbochargerStore } from "./useTurbocharger";
+import { useTurbochargerStore } from "../stores/useTurbocharger";
 import { useCallback } from "react";
-import { useEngineStore } from "./useEngine";
-import { GearState, useSuperchargerStore } from "./useSupercharger";
+import { useEngineStore } from "../stores/useEngine";
+import { GearState, useSuperchargerStore } from "../stores/useSupercharger";
 
 const linePower = (gear: GearState, height: number) => {
   const { startPower, endPower, startAltitude, endAltitude } = gear;

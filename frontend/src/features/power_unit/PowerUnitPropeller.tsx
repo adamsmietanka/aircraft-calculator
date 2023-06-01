@@ -1,5 +1,5 @@
 import InputNumber from "../common/InputNumber";
-import { useEngineStore } from "./hooks/useEngine";
+import { useEngineStore } from "./stores/useEngine";
 import InputDisabled from "../common/InputDisabled";
 import { usePropellerStore } from "./stores/usePropeller";
 import { usePower } from "./hooks/usePower";
