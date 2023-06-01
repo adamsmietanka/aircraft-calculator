@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  trimAngleCalculation,
-} from "../../../utils/forceOnTheRodCalculation";
+import { trimAngleCalculation } from "../../../utils/forceOnTheRodCalculation";
 
 import { findClosestValueIndexIntheArray } from "../../../utils/misc";
 import {
@@ -23,7 +21,7 @@ import {
   useSteerOutputStore,
   useSteerStore,
 } from "../../../data/stores/useSteer";
-import InputNumber from "../../../components/atoms/InputNumber";
+import InputNumber from "../../common/InputNumber";
 import { getB3 } from "../../../utils/forceOnTheRodCalculation/b3";
 
 const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
@@ -48,9 +46,7 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
   const steerIncilinationAngle = useSteerOutputStore(
     (state) => state.steerInclinationAngle
   );
-  const longitudanalMomentArray = usePositiveOutput(
-    (state) => state.cmbu
-  );
+  const longitudanalMomentArray = usePositiveOutput((state) => state.cmbu);
   const CzOriginalaArray = usePositiveOutput((state) => state.cz);
   //Cz calculation data
   const cruiseAlttiude = useSteerStore((state) => state.cruiseAlttiude);
@@ -59,8 +55,8 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
   const profile = useSteerStore((state) => state.profile);
 
   useEffect(() => {
-    setB3(getB3(trimData,profile));
-  }, [setB3, trimData,profile]);
+    setB3(getB3(trimData, profile));
+  }, [setB3, trimData, profile]);
   useEffect(() => {
     let cruiseVelocity = trimVelocity;
     let CzArray = [
@@ -101,7 +97,7 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
     });
 
     setDeltaHk(trimAngleCalculation({ b1, b2, b3, alfaH, deltaH }));
-  }, [a, a1, a2, kappa, dEpsTodAlfa, steerIncilinationAngle,b1,b2,b3,]);
+  }, [a, a1, a2, kappa, dEpsTodAlfa, steerIncilinationAngle, b1, b2, b3]);
 
   return (
     <div tabIndex={0} className="collapse border rounded-box">
@@ -184,7 +180,6 @@ const StabillityForceOnTheRodTrimCooficientDataCollapse = () => {
           unit="m^2"
           step={0.5}
         />
-
       </div>
     </div>
   );

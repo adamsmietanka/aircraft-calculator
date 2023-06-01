@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Step } from "../../utils/steps";
+import { Step } from "../utils/steps";
 
 interface StepsProps {
   steps: Step[];
@@ -35,7 +35,7 @@ const Steps = ({ steps }: StepsProps) => {
             </li>
           ))}
         </ul>
-      </div>  
+      </div>
       <Outlet />
       <div className="flex mt-auto">
         {selectedRoute?.previous && (

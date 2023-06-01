@@ -1,12 +1,12 @@
-import { ReactComponent as Home } from "../../assets/home.svg";
-import { ReactComponent as Airplane } from "../../assets/airplane.svg";
-import { ReactComponent as Propeller } from "../../assets/propeller.svg";
-import { ReactComponent as Engine } from "../../assets/engine.svg";
-import { ReactComponent as Scales } from "../../assets/scales.svg";
-import { ReactComponent as Curve } from "../../assets/curve.svg";
-import { ReactComponent as Cog } from "../../assets/cog.svg";
+import { ReactComponent as Home } from "../assets/home.svg";
+import { ReactComponent as Airplane } from "../assets/airplane.svg";
+import { ReactComponent as Propeller } from "../assets/propeller.svg";
+import { ReactComponent as Engine } from "../assets/engine.svg";
+import { ReactComponent as Scales } from "../assets/scales.svg";
+import { ReactComponent as Curve } from "../assets/curve.svg";
+import { ReactComponent as Cog } from "../assets/cog.svg";
 import React from "react";
-import Link from "../atoms/Link";
+import Link from "./Link";
 
 const links = [
   { to: "/", name: "Home", icon: <Home /> },

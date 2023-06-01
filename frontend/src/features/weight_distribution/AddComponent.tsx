@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CloseButton from "../../components/atoms/CloseButton";
-import InputNumber from "../../components/atoms/InputNumber";
+import InputNumber from "../common/InputNumber";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import WeightComponent from "./interfaces/weightComponent";
 
@@ -78,8 +78,7 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
             </div>
             <div className="flex flex-col items-center m-2">
               <h3 className="text-l">
-                  Component of the {activeWeightConfiguration.name}{" "}
-                  configuration.
+                Component of the {activeWeightConfiguration.name} configuration.
               </h3>
               <div className="form-control">
                 <label className="label">

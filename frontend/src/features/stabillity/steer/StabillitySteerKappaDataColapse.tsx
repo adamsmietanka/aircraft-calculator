@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import InputNumber from "../../../components/atoms/InputNumber";
+import InputNumber from "../../common/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
 import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
 import {
@@ -37,7 +37,9 @@ const StabillitySteerKappaDataColapse = () => {
       <input type="checkbox" />
       <button className="collapse-title">
         <CollapseHeader
-          collapseTittle={"The volumetric feature of the horizontal stabillizer"}
+          collapseTittle={
+            "The volumetric feature of the horizontal stabillizer"
+          }
           outputLabel={"\u03BA = "}
           caluclatedValue={kappa}
         />

@@ -1,20 +1,19 @@
 import React from "react";
 
-import InputNumber from "../../components/atoms/InputNumber";
-import InputSlider from "../../components/atoms/InputSlider";
+import InputNumber from "../common/InputNumber";
+import InputSlider from "../common/InputSlider";
 import { useEngineStore } from "../../data/stores/useEngine";
 import PowerUnitEngineChart from "./PowerUnitEngineChart";
 
-
 const PowerUnitEngine = () => {
-    const seaLevelPower = useEngineStore((state) => state.seaLevelPower)
-    const engineSpeed = useEngineStore((state) => state.engineSpeed)
-    const reductionRatio = useEngineStore((state) => state.reductionRatio)
-    const maxAltitude = useEngineStore((state) => state.maxAltitude)
-    const setSeaLevelPower = useEngineStore((state) => state.setSeaLevelPower)
-    const setEngineSpeed = useEngineStore((state) => state.setEngineSpeed)
-    const setReductionRatio = useEngineStore((state) => state.setReductionRatio)
-    const setMaxAltitude = useEngineStore((state) => state.setMaxAltitude)
+  const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
+  const engineSpeed = useEngineStore((state) => state.engineSpeed);
+  const reductionRatio = useEngineStore((state) => state.reductionRatio);
+  const maxAltitude = useEngineStore((state) => state.maxAltitude);
+  const setSeaLevelPower = useEngineStore((state) => state.setSeaLevelPower);
+  const setEngineSpeed = useEngineStore((state) => state.setEngineSpeed);
+  const setReductionRatio = useEngineStore((state) => state.setReductionRatio);
+  const setMaxAltitude = useEngineStore((state) => state.setMaxAltitude);
   return (
     <div className="flex">
       <div className="flex flex-col w-64 mr-8 space-y-2">
@@ -44,7 +43,7 @@ const PowerUnitEngine = () => {
           unit="km"
           value={maxAltitude}
           max={15}
-          setter={setMaxAltitude} 
+          setter={setMaxAltitude}
         />
       </div>
       <PowerUnitEngineChart />

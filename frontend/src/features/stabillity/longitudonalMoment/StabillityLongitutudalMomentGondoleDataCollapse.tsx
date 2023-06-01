@@ -1,6 +1,6 @@
 import React from "react";
 import { useLongitudalMomentStore } from "../../../data/stores/useLongitudalMoment";
-import InputNumber from "../../../components/atoms/InputNumber";
+import InputNumber from "../../common/InputNumber";
 
 const StabillityLongitutudalMomentGondoleDataCollapse = () => {
   const data = useLongitudalMomentStore();

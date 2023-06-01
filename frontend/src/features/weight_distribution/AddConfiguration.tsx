@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import RadioOptions from "../../components/atoms/RadioOptions";
 import WeightComponent from "./interfaces/weightComponent";
-import InputNumber from "../../components/atoms/InputNumber";
+import InputNumber from "../common/InputNumber";
 import OverwritableInputNumber from "../../components/atoms/OverwritableInputNumber";
 import CloseButton from "../../components/atoms/CloseButton";
 
@@ -85,9 +85,7 @@ const AddConfiguration = ({ isVisible, onClose }: Props) => {
               <CloseButton onClose={onClose} />
             </div>
             <div className="flex flex-col items-center">
-              <h3 className="text-l">
-                Create new configuration:
-              </h3>
+              <h3 className="text-l">Create new configuration:</h3>
               <input
                 type="text"
                 className="input input-bordered w-60 m-2"

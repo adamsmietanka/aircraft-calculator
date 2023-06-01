@@ -1,6 +1,6 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
-import Navigation from "./components/ui/Navigation";
+import Navigation from "./components/Navigation";
 
 function App() {
   return (

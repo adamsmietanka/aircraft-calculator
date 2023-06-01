@@ -4,8 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./pages/home/Home";
-import Steps from "./components/ui/Steps";
+import Home from "./features/home/Home";
+import Steps from "./components/Steps";
 import { powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
   PowerUnitEngine,
@@ -16,15 +16,15 @@ import {
   Settings,
   Turn,
   Weight,
-} from "./pages";
-import { useWeightStore } from "./data/stores/useWeightConfiguration"
+} from "./features";
+import { useWeightStore } from "./data/stores/useWeightConfiguration";
 
 // const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
 
-import StabilityLongitudalMoment from "./pages/stabillity/StabilityLongitudalMoment";
-import StabilityRodForce from "./pages/stabillity/StabilityRodForce";
-import StabillitySteer from "./pages/stabillity/StabillitySteer";
-import StabillityCharts from "./pages/stabillity/StabillityCharts";
+import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
+import StabilityRodForce from "./features/stabillity/StabilityRodForce";
+import StabillitySteer from "./features/stabillity/StabillitySteer";
+import StabillityCharts from "./features/stabillity/StabillityCharts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -49,11 +49,11 @@ root.render(
               path="longitudinal-moment"
               element={<StabilityLongitudalMoment />}
             />
-            <Route path="steer" element={<StabillitySteer/>} />
+            <Route path="steer" element={<StabillitySteer />} />
             <Route path="rod-force" element={<StabilityRodForce />} />
             <Route
               path="stabillty-and-manouverabillty"
-              element={<StabillityCharts/>}
+              element={<StabillityCharts />}
             />
           </Route>
 

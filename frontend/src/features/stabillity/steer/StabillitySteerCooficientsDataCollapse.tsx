@@ -3,7 +3,7 @@ import {
   useSteerStore,
   useSteerOutputStore,
 } from "../../../data/stores/useSteer";
-import InputNumber from "../../../components/atoms/InputNumber";
+import InputNumber from "../../common/InputNumber";
 import OverwritableInputNumber from "../../../components/atoms/OverwritableInputNumber";
 import calculateAcoefs from "../../../utils/steerCalculation/aCoefficients/aCoefficients";
 
