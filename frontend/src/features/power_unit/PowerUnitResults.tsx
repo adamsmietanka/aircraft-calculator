@@ -1,11 +1,13 @@
-import { useResultsStore } from "./stores/useResults";
+import React from "react";
 import InputAltitude from "../common/inputs/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import InputDisabled from "../common/inputs/InputDisabled";
 import PowerUnitResults3D from "./three/PowerUnitResults3D";
 import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
-import { usePowerUnitResults } from "./hooks/usePowerUnitResults";
+
+import { usePowerUnitResults } from "./stores/usePowerUnitResults";
+import { useResultsStore } from "./stores/useResults";
 
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);

@@ -5,11 +5,11 @@ import {
 } from "../../../utils/interpolation/binarySearch";
 import { cp } from "../../../data/cp";
 import { eff } from "../../../data/eff";
-import { usePower } from "./usePower";
-import { TableRow, useResultsStore } from "../stores/useResults";
+import { usePower } from "../hooks/usePower";
+import { TableRow, useResultsStore } from "./useResults";
 import { useEffect, useMemo } from "react";
-import { usePropellerStore } from "../stores/usePropeller";
-import { useEngineStore } from "../stores/useEngine";
+import { usePropellerStore } from "./usePropeller";
+import { useEngineStore } from "./useEngine";
 
 export const usePowerUnitResults = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
