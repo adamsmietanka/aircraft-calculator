@@ -52,13 +52,14 @@ export const linearInterpolation = (
   return y;
 };
 
-export const barycentricAngle = (
-  X: number[],
-  Y: number[],
-  Z: number[][],
-  x: number,
-  z: number
-): number => {
+interface Mesh {
+  J: number[];
+  angles: number[];
+  Z: number[][];
+}
+
+export const barycentricAngle = (mesh: Mesh, x: number, z: number): number => {
+  const { J: X, angles: Y, Z } = mesh;
   // binary search for x upper bound
   let i = findUpperBound(X, x);
 
@@ -100,13 +101,9 @@ export const barycentricAngle = (
   return Y[j] - w2 * (Y[j] - Y[j - 1]);
 };
 
-export const barycentricZ = (
-  X: number[],
-  Y: number[],
-  Z: number[][],
-  x: number,
-  y: number
-) => {
+export const barycentricZ = (mesh: Mesh, x: number, y: number) => {
+  const { J: X, angles: Y, Z } = mesh;
+
   // binary search for x upper bound
   let i = findUpperBound(X, x);
 
@@ -143,13 +140,9 @@ export const barycentricZ = (
   return Z[j][i] * w1 + Z[j - 1][i - 1] * w2 + Z[j][i - 1] * w3;
 };
 
-export const barycentricX = (
-  X: number[],
-  Y: number[],
-  Z: number[][],
-  y: number,
-  z: number
-) => {
+export const barycentricJ = (mesh: Mesh, y: number, z: number) => {
+  const { J: X, angles: Y, Z } = mesh;
+
   // binary search for y upper bound
   let j = findUpperBound(Y, y);
 
