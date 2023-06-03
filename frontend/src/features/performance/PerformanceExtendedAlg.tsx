@@ -5,6 +5,7 @@ import axios from "axios";
 import PerformanceExtendedChart from "./PerformanceExtendedChart";
 import { usePower } from "../power_unit/hooks/usePower";
 import InputNumber from "../common/inputs/InputNumber";
+import InputDisabled from "../common/inputs/InputDisabled";
 
 const PerformanceExtendedAlg = () => {
     const flightAltitude = useInitialStore((state) => state.flightAltitude)
@@ -114,10 +115,8 @@ const PerformanceExtendedAlg = () => {
               label="Height"
               unit="km"
             />
-            <InputNumber
+            <InputDisabled
               value={maxPower}
-              setter={() => {}}
-              step={50}
               label="Max Power (IAW Performance Engine)"
               unit="kW"
             />
