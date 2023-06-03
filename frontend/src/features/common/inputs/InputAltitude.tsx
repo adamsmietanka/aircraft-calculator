@@ -52,9 +52,9 @@ const InputAltitude = ({
           {tooltip && <InfoTooltip text={tooltip} />}
         </span>
       </label>
-      <label className="input-group">
+      <div className="join w-full items-stretch">
         <input
-          className="input input-bordered w-full"
+          className="join-item input input-bordered w-full"
           type="number"
           step={step}
           value={displayValue}
@@ -62,26 +62,25 @@ const InputAltitude = ({
           disabled={disabled}
           onChange={(e) => setter(parseFloat(e.target.value) * multiplier)}
         />
-        <span className="dropdown dropdown-hover flex items-center justify-center w-20 rounded-lg h-12">
-          <div>
-            <label tabIndex={0}>{unit}</label>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-            >
-              <li onClick={() => setUnit("km")}>
-                <a>km</a>
+        <div className="dropdown dropdown-hover join-item ">
+          <label
+            tabIndex={0}
+            className="flex items-center justify-center cursor-pointer w-16 h-12 bg-base-span"
+          >
+            {unit}
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content menu p-2 shadow bg-base-200 rounded-box w-16 z-50"
+          >
+            {Object.keys(data).map((u) => (
+              u !== unit && <li key={u} onClick={() => setUnit(u)}>
+                <button className="flex justify-center">{u}</button>
               </li>
-              <li onClick={() => setUnit("m")}>
-                <a>m</a>
-              </li>
-              <li onClick={() => setUnit("ft")}>
-                <a>ft</a>
-              </li>
-            </ul>
-          </div>
-        </span>
-      </label>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
