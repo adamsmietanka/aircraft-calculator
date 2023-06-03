@@ -1,12 +1,12 @@
 import "./App.css";
 import { Outlet } from "react-router-dom";
-import Navigation from "./components/molecules/Navigation";
+import Navigation from "./components/Navigation";
 
 function App() {
   return (
     <div className="flex">
       <Navigation />
-      <div className="m-4 flex flex-col w-full">
+      <div className="flex flex-col w-full ml-80">
         <Outlet />
       </div>
     </div>

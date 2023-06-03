@@ -1,11 +1,12 @@
-import InputNumber from "../../components/atoms/InputNumber";
-import InputSlider from "../../components/atoms/InputSlider";
+
 import { useInitialStore } from "./useInitial";
 import { useState, useEffect } from "react";
 import PerformanceInitialRangeChart from "./PerformanceInitialRangeChart";
 import PerformanceInitialEnduranceChart from "./PerformanceInitiaEndurancelChart";
 import axios from "axios";
-import { usePower } from "../power_unit/usePower";
+import { usePower } from "../power_unit/hooks/usePower";
+import InputNumber from "../common/inputs/InputNumber";
+import InputSlider from "../common/inputs/InputSlider";
 
 const PerformanceInitial = () => {
   const method_type = useInitialStore((state) => state.method_type)
@@ -131,7 +132,6 @@ const PerformanceInitial = () => {
             setter={setPropnumber}
             step={1}
             min={1}
-            max={2}
             label="Number of Engines"
             unit="-"
           />

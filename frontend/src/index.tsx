@@ -4,19 +4,29 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./components/templates/Home";
-import Steps from "./components/templates/Steps";
-import { powerUnitSteps , performanceUnitSteps} from "./utils/steps";
+import Home from "./features/home/Home";
+import Steps from "./components/Steps";
+import { performanceUnitSteps, powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
+  PowerUnitEngine,
+  PowerUnitPropeller,
+  PowerUnitResults,
   Aerodynamics,
   Settings,
   Turn,
   Weight,
-} from "./components/organisms";
-import { PowerUnitEngine, PowerUnitPropeller, PowerUnitResults } from "./features/power_unit";
+
+} from "./features";
 import { PerformanceExtendedAlg, PerformanceInitial} from "./features/performance";
 import PerformanceSensitivity from "./features/performance/PerformanceSensitivity";
+import { useWeightStore } from "./data/stores/useWeightConfiguration";
 
+// const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
+
+import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
+import StabilityRodForce from "./features/stabillity/StabilityRodForce";
+import StabillitySteer from "./features/stabillity/StabillitySteer";
+import StabillityCharts from "./features/stabillity/StabillityCharts";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -40,6 +50,19 @@ root.render(
             <Route path="sensitivity" element={<PerformanceSensitivity />} />
           </Route>
           <Route path="weight" element={<Weight />} />
+          <Route path="stability" element={<Steps steps={stabilitySteps} />}>
+            <Route
+              path="longitudinal-moment"
+              element={<StabilityLongitudalMoment />}
+            />
+            <Route path="steer" element={<StabillitySteer />} />
+            <Route path="rod-force" element={<StabilityRodForce />} />
+            <Route
+              path="stabillty-and-manouverabillty"
+              element={<StabillityCharts />}
+            />
+          </Route>
+
           <Route path="turn" element={<Turn />} />
           <Route path="settings" element={<Settings />} />
         </Route>
