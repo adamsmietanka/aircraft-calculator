@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import PerformanceSensitivityRangeChart from "./PerformanceSensitivityRangeChart";
 import PerformanceSensitivityEnduranceChart from "./PerformanceSensitivityEnduranceChart";
 import axios from "axios";
-import { usePower } from "../power_unit/usePower";
 import { useSensitivityStore } from "./useSensitivity";
+import { usePower } from "../power_unit/hooks/usePower";
 
 
 

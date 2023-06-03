@@ -48,3 +48,36 @@ export const performanceUnitSteps: Step[] = [
     previous: "perf_extended",
   },
 ];
+export const stabilitySteps: Step[] = [
+  {
+    name: "Longitudinal Moment",
+    path: "longitudinal-moment",
+    enabledPaths: [
+      "longitudinal-moment",
+      "steer",
+      "rod-force",
+      "stabillty-and-manouverabillty",
+    ],
+    next: "steer",
+  },
+  {
+    name: "Steer",
+    path: "steer",
+    enabledPaths: ["steer", "rod-force", "stabillty-and-manouverabillty"],
+    previous: "longitudinal-moment",
+    next: "rod-force",
+  },
+  {
+    name: "Force on a rod",
+    path: "rod-force",
+    enabledPaths: ["rod-force", "stabillty-and-manouverabillty"],
+    previous: "steer",
+    next: "stabillty-and-manouverabillty",
+  },
+  {
+    name: "Stabillty and manouverabillty",
+    path: "stabillty-and-manouverabillty",
+    enabledPaths: ["stabillty-and-manouverabillty"],
+    previous: "rod-force",
+  },
+];

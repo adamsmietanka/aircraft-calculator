@@ -1,0 +1,37 @@
+<svg
+  viewBox="-200 -40 280 140"
+  class="profile"
+  fill="currentColor"
+  stroke="currentColor"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <style type="text/css" id="style2">
+    .profile {
+      stroke-width: 6;
+      opacity: 1;
+      transition: all 1000ms ease-out;
+    }
+    .profile .outline {
+      transform: rotate(-15deg);
+    }
+    .profile.variable .outline {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes pulse {
+      0%,
+      80%,
+      100% {
+        transform: rotate(-15deg);
+      }
+      40% {
+        transform: rotate(-30deg);
+      }
+    }
+  </style>
+  <path
+    class="outline"
+    d="M 62.777 -0.4228 C 37.527 -44.0109 -138.1658 -18.4082 -195.4372 -0.9164 C -107.6964 -0.4228 69.901 16.2931 62.777 -0.4228 Z"
+    stroke="black"
+    stroke-width="4"
+  />
+</svg>

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
-import { usePower } from "../power_unit/usePower";
-import InputNumber from "../../components/atoms/InputNumber";
 import { useExtendedStore } from "./useExtended";
 import { useInitialStore } from "./useInitial";
 import axios from "axios";
 import PerformanceExtendedChart from "./PerformanceExtendedChart";
+import { usePower } from "../power_unit/hooks/usePower";
+import InputNumber from "../common/inputs/InputNumber";
 
 const PerformanceExtendedAlg = () => {
     const flightAltitude = useInitialStore((state) => state.flightAltitude)
