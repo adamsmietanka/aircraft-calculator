@@ -12,7 +12,7 @@ const BackMesh = () => {
   const backMeshRef = useRef<THREE.Group>(null);
   useFrame((state, dt) => {
     if (backMeshRef.current) {
-      backMeshRef.current.position.x = state.camera.position.x > 3.5 ? -50 : 0;
+      backMeshRef.current.position.x = state.camera.position.x > 2.5 ? -50 : 0;
     }
   });
   return (
@@ -54,7 +54,7 @@ const SideMesh = () => {
       verticalNumbersRef.current.position.z =
         state.camera.position.z > 7.5 ? -numbersPadding : numbersPadding;
       verticalNumbersRef.current.position.x =
-        state.camera.position.x > 3.5 ? 0 : -60;
+        state.camera.position.x > 2.5 ? 0 : -60;
     }
   });
   return (
@@ -133,13 +133,13 @@ const J = () => {
 
   useFrame((state, dt) => {
     if (axisRef.current && numbersRef.current && titleRef.current) {
-      axisRef.current.position.x = state.camera.position.x > 3.5 ? 60 : 10;
+      axisRef.current.position.x = state.camera.position.x > 2.5 ? 60 : 10;
       numbersRef.current.position.x =
-        state.camera.position.x > 3.5
+        state.camera.position.x > 2.5
           ? 10 * numbersPadding
           : -10 * numbersPadding;
       titleRef.current.position.x =
-        state.camera.position.x > 3.5 ? 10 * titlePadding : -10 * titlePadding;
+        state.camera.position.x > 2.5 ? 10 * titlePadding : -10 * titlePadding;
     }
   });
   return (
