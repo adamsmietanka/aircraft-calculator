@@ -16,7 +16,7 @@ const links = [
     icon: <Airplane />,
   },
   {
-    to: "/powerunit/engine",
+    to: "/powerunit",
     name: "Power Unit",
     icon: <Propeller />,
   },
@@ -31,7 +31,7 @@ const links = [
     icon: <img src="https://img.icons8.com/ios/100/null/weight-kg.png" />,
   },
   {
-    to: "/stability/longitudinal-moment",
+    to: "/stability",
     name: "Longitudinal Stability",
     icon: <Scales />,
   },
@@ -43,8 +43,8 @@ const links = [
 ];
 const Navigation = () => {
   return (
-    <div className="flex flex-col justify-between h-screen w-80 p-2 fixed">
-      <div>
+    <div className="sticky flex flex-col justify-between h-screen top-0 w-96 p-2 bg-base">
+      <div className="w-full">
         {links.map((l) => (
           <Link to={l.to}>
             {React.cloneElement(l.icon, { className: "w-6 mr-2" })}

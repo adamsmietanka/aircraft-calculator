@@ -7,7 +7,7 @@ interface LinkProps {
 }
 
 const Link = ({ to, children }: LinkProps) => (
-  <NavLink to={to} end>
+  <NavLink to={to}>
     {({ isActive }) => (
       <button
         className={`btn btn-block btn-ghost justify-start ${
