@@ -11,7 +11,7 @@ const Link = ({ to, children }: LinkProps) => (
     {({ isActive }) => (
       <button
         className={`btn btn-block btn-ghost justify-start ${
-          isActive && "bg-base-span"
+          isActive && "bg-base-300"
         }`}
       >
         {children}
