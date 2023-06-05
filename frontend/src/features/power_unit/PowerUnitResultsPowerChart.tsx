@@ -11,7 +11,7 @@ const PowerUnitResultsPowerChart = () => {
     () => ({
       font: { size: 18 },
       height: 360,
-      width: window.innerWidth > 960 ? 600 : window.innerWidth * 0.9,
+      width: window.innerWidth * 0.5,
       margin: {
         l: 65,
         r: 10,

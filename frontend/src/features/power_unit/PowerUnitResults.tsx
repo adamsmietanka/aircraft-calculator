@@ -15,7 +15,7 @@ const PowerUnitResults = () => {
   const [power, Cp] = usePowerUnitResults();
 
   return (
-    <div className="flex w-full p-4">
+    <div className="flex w-full h-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-2">
         <InputAltitude value={altitude} setter={setAltitude} label="Altitude" />
         <InputDisabled
