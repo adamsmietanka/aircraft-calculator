@@ -3,13 +3,12 @@ import { useEngineStore } from "./stores/useEngine";
 import InputDisabled from "../common/inputs/InputDisabled";
 import { usePropellerStore } from "./stores/usePropeller";
 import { usePower } from "./hooks/usePower";
-import InputAltitude from "../common/inputs/InputAltitude";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import { usePropellerInterpolation } from "./hooks/usePropellerInterpolation";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import PowerUnitPropellerChart from "./PowerUnitPropellerChart";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
-import InputSpeed from "../common/inputs/InputSpeed";
+import InputUnits from "../common/inputs/InputUnits";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
@@ -63,13 +62,15 @@ const PowerUnitPropeller = () => {
           label="Propeller speed"
           unit="rpm"
         />
-        <InputSpeed
+        <InputUnits
+          type="speed"
           value={cruiseSpeed}
           setter={setSpeed}
           label="Cruise speed"
           tooltip="The speed of most economical flight"
         />
-        <InputAltitude
+        <InputUnits
+          type="altitude"
           label="Cruise altitude"
           value={cruiseAltitude}
           setter={setAltitude}

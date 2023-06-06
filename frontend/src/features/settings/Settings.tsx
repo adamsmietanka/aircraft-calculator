@@ -6,8 +6,8 @@ import { useThemeStore } from "./stores/useTheme";
 
 const Settings = () => {
   const units = useGlobalUnitsStore();
-  const theme = useThemeStore((state) => state.theme)
-  const setTheme = useThemeStore((state) => state.setTheme)
+  const theme = useThemeStore((state) => state.theme);
+  const setTheme = useThemeStore((state) => state.setTheme);
 
   React.useEffect(() => {
     document.querySelector("html")?.setAttribute("data-theme", theme);
@@ -22,21 +22,21 @@ const Settings = () => {
         <Cog className="w-6 mr-2" />
         Settings
       </button>
-      <dialog id="settings_modal" className="modal overscroll-none bg-transparent">
+      <dialog id="settings_modal" className="modal">
         <form method="dialog" className="modal-box">
           <h3>Settings</h3>
 
           <InputRadio
             label="Units"
-            value={units.type}
+            value={units.system}
             values={["metric", "imperial"]}
-            setter={units.setType}
+            setter={units.setSystem}
           />
           <InputRadio
             label="Speed"
-            value={units.speed}
+            value={units.types.speed}
             values={
-              units.type === "metric" ? ["m/s", "km/h", "kn"] : ["mph", "kn"]
+              units.system === "metric" ? ["m/s", "km/h", "kn"] : ["mph", "kn"]
             }
             setter={units.setSpeed}
           />

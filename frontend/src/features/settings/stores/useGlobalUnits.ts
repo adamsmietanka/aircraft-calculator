@@ -1,15 +1,31 @@
-import {create} from "zustand";
+import { produce } from "immer";
+import { create } from "zustand";
 
 interface GlobalUnitsState {
-  type: string;
-  speed: string;
-  setType: (value: string) => void;
+  system: string;
+  types: Record<string, string>;
+  setSystem: (value: string) => void;
   setSpeed: (value: string) => void;
+  setAltitude: (value: string) => void;
 }
 
 export const useGlobalUnitsStore = create<GlobalUnitsState>()((set) => ({
-  type: "metric",
-  speed: "m/s",
-  setType: (value) => set((state) => ({ type: value })),
-  setSpeed: (value) => set((state) => ({ speed: value })),
+  system: "metric",
+  types: {
+    speed: "m/s",
+    altitude: "km",
+  },
+  setSystem: (value) => set((state) => ({ system: value })),
+  setSpeed: (value) =>
+    set(
+      produce((state) => {
+        state.types.speed = value;
+      })
+    ),
+  setAltitude: (value) =>
+    set(
+      produce((state) => {
+        state.types.altitude = value;
+      })
+    ),
 }));
