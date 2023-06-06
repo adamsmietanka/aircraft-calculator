@@ -10,10 +10,11 @@ export const useUnits = (value: number, type: string) => {
 
   const [unit, setUnit] = useState(types[type]);
 
-  const { multiplier, step, round } = unitData[type][unit];
-  const displayValue = round
-    ? Math.round(value / multiplier)
-    : Math.round(value / multiplier);
+  const { multiplier, step } = unitData[type][unit];
+  const displayValue =
+    step < 1
+      ? Math.round((value * 100) / multiplier) / 100
+      : Math.round(value / multiplier);
 
   useEffect(() => {
     setUnit(() => types[type]);

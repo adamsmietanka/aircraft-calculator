@@ -3,6 +3,7 @@ import { useUnits } from "../../settings/hooks/useUnits";
 
 interface Props {
   type: string;
+  small?: boolean;
   label: string;
   value: number;
   tooltip?: string;
@@ -12,6 +13,7 @@ interface Props {
 
 const InputUnits = ({
   type,
+  small = false,
   label,
   value,
   tooltip,
@@ -33,7 +35,9 @@ const InputUnits = ({
       </label>
       <div className="join w-full">
         <input
-          className="join-item input input-bordered w-full"
+          className={`join-item input input-bordered w-full ${
+            small && "input-2sm"
+          }`}
           type="number"
           step={step}
           value={displayValue}
@@ -44,7 +48,7 @@ const InputUnits = ({
         <div className="dropdown dropdown-hover dropdown-right join-item z-50">
           <label
             tabIndex={0}
-            className="flex items-center justify-center cursor-pointer w-16 h-12 bg-base-span z-10"
+            className="flex items-center justify-center cursor-pointer bg-base-span z-10 w-16 h-full"
           >
             {unit}
           </label>

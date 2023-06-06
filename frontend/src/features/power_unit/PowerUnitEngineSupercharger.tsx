@@ -1,8 +1,8 @@
-import InputNumberSmall from "../common/inputs/InputNumberSmall";
 import InputToggle from "../common/inputs/InputToggle";
 import { useSuperchargerStore } from "./stores/useSupercharger";
 import { useHighGearStartPower } from "./hooks/useHighGearStartPower";
 import { useAdditionalHeightPoints } from "./hooks/useAdditionalHeightPoints";
+import InputUnits from "../common/inputs/InputUnits";
 
 const PowerUnitEngineSupercharger = () => {
   const supercharger = useSuperchargerStore();
@@ -17,20 +17,20 @@ const PowerUnitEngineSupercharger = () => {
         setter={supercharger.setEnabled}
       />
       <div className="rounded-2xl shadow p-4">
-        <InputNumberSmall
+        <InputUnits
+          small
+          type="altitude"
           value={supercharger.lowGear.endAltitude}
           setter={supercharger.setLGendAltitude}
-          step={0.1}
           label="Critical altitude"
-          unit="km"
           disabled={!supercharger.enabled}
         />
-        <InputNumberSmall
+        <InputUnits
+          small
+          type="power"
           value={supercharger.lowGear.endPower}
           setter={supercharger.setLGendPower}
-          step={50}
           label="Max power"
-          unit="kW"
           disabled={!supercharger.enabled}
         />
         <div className="divider"></div>
@@ -41,28 +41,28 @@ const PowerUnitEngineSupercharger = () => {
           disabled={!supercharger.enabled}
           setter={supercharger.setHGEnabled}
         />
-        <InputNumberSmall
+        <InputUnits
+          small
+          type="altitude"
           value={supercharger.highGear.startAltitude}
           setter={supercharger.setHGstartAltitude}
-          step={0.1}
           label="Gear change altitude"
-          unit="km"
           disabled={!supercharger.enabled || !supercharger.highGear.enabled}
         />
-        <InputNumberSmall
+        <InputUnits
+          small
+          type="altitude"
           value={supercharger.highGear.endAltitude}
           setter={supercharger.setHGendAltitude}
-          step={0.1}
           label="Critical altitude"
-          unit="km"
           disabled={!supercharger.enabled || !supercharger.highGear.enabled}
         />
-        <InputNumberSmall
+        <InputUnits
+          small
+          type="power"
           value={supercharger.highGear.endPower}
           setter={supercharger.setHGendPower}
-          step={50}
           label="Max power"
-          unit="kW"
           disabled={!supercharger.enabled || !supercharger.highGear.enabled}
         />
       </div>

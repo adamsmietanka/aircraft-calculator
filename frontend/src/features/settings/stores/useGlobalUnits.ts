@@ -14,6 +14,7 @@ export const useGlobalUnitsStore = create<GlobalUnitsState>()((set) => ({
   types: {
     speed: "m/s",
     altitude: "km",
+    power: "kW",
   },
   setSystem: (value) => set((state) => ({ system: value })),
   setSpeed: (value) =>
