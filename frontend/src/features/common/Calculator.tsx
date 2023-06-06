@@ -19,14 +19,17 @@ const Calculator = ({ calculated, setCalculated }: Props) => {
   }, [calculated]);
 
   return (
-    <span className="cursor-pointer px-6" onClick={() => setCalculated(!calculated)}>
+    <div
+      className="btn w-16 normal-case bg-base-300 join-item"
+      onClick={() => setCalculated(!calculated)}
+    >
       <div
         className="tooltip w-5 svg-color text-color z-50"
         data-tip={`Click to change to ${calculated ? "manual" : "optimized"}`}
       >
         <CalculatorIcon ref={lockRef} />
       </div>
-    </span>
+    </div>
   );
 };
 

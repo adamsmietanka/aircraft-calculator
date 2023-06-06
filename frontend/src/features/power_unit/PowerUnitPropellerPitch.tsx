@@ -19,10 +19,10 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
           <InfoTooltip text="A propeller can have a blade with a fixed pitch or a variable one which changes with the speed of the aircraft" />
         </span>
       </label>
-      <label className="input-group">
+      <div className="join">
         <BladePitch variable={variable} setVariable={setVariable} />
         <input
-          className="input input-bordered w-full"
+          className="input input-bordered w-full join-item"
           type={variable ? "text" : "number"}
           min={10}
           max={60}
@@ -31,11 +31,11 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
           disabled={variable}
         />
         {!variable && (
-          <span className="flex items-center justify-center w-20 rounded-lg h-12">
-            {"°"}
-          </span>
+          <div className="flex items-center justify-center w-16 h-full join-item bg-base-300">
+            °
+          </div>
         )}
-      </label>
+      </div>
     </div>
   );
 };

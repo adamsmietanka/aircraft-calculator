@@ -1,4 +1,3 @@
-import React from "react";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import InputDisabled from "../common/inputs/InputDisabled";
@@ -8,6 +7,7 @@ import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
 import { usePowerUnitResults } from "./stores/usePowerUnitResults";
 import { useResultsStore } from "./stores/useResults";
 import InputUnits from "../common/inputs/InputUnits";
+import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
 
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);
@@ -37,6 +37,7 @@ const PowerUnitResults = () => {
         />
         <PowerUnitPropellerBlades />
         <PowerUnitPropellerPitch />
+        <PowerUnitPropellerDiameter />
       </div>
       <div className="flex flex-col space-y-4">
         <PowerUnitResults3D />
