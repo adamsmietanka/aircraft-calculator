@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
 import InfoTooltip from "../InfoTooltip";
-import { unitData } from "../../settings/data/units";
-import { useGlobalUnitsStore } from "../../settings/stores/useGlobalUnits";
 import { useUnits } from "../../settings/hooks/useUnits";
 
 interface Props {
@@ -21,12 +18,10 @@ const InputUnits = ({
   disabled = false,
   setter,
 }: Props) => {
-  const { unit, setUnit, units } = useUnits(type);
-
-  const { multiplier, step, round } = units[unit];
-  const displayValue = round
-    ? Math.round(value / multiplier)
-    : Math.round(value / multiplier);
+  const { unit, setUnit, units, multiplier, step, displayValue } = useUnits(
+    value,
+    type
+  );
 
   return (
     <div className="form-control">
