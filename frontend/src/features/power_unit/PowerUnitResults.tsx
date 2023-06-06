@@ -1,6 +1,5 @@
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
-import InputDisabled from "../common/inputs/InputDisabled";
 import PowerUnitResults3D from "./three/PowerUnitResults3D";
 import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
 
@@ -8,6 +7,7 @@ import { usePowerUnitResults } from "./stores/usePowerUnitResults";
 import { useResultsStore } from "./stores/useResults";
 import InputUnits from "../common/inputs/InputUnits";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
+import InputNumber from "../common/inputs/InputNumber";
 
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);
@@ -23,16 +23,17 @@ const PowerUnitResults = () => {
           setter={setAltitude}
           label="Altitude"
         />
-        <InputDisabled
+        <InputUnits
+          disabled
+          type="power"
           value={Math.round(power * 100) / 100}
           label="Power"
-          unit="kW"
           tooltip="Engine max power read from the Engine tab"
         />
-        <InputDisabled
+        <InputNumber
+          disabled
           value={Math.round(Cp * 10000) / 10000}
           label="Cp"
-          unit="kW"
           tooltip="Coefficient of Power - this is usually stated as the amount of power the propeller absorbs"
         />
         <PowerUnitPropellerBlades />

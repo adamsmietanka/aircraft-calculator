@@ -8,7 +8,7 @@ interface Props {
   value: number;
   tooltip?: string;
   disabled?: boolean;
-  setter: (value: number) => void;
+  setter?: (value: number) => void;
 }
 
 const InputUnits = ({
@@ -43,7 +43,9 @@ const InputUnits = ({
           value={displayValue}
           min={0}
           disabled={disabled}
-          onChange={(e) => setter(parseFloat(e.target.value) * multiplier)}
+          onChange={(e) =>
+            setter && setter(parseFloat(e.target.value) * multiplier)
+          }
         />
         <div className="dropdown dropdown-hover dropdown-right join-item z-50">
           <label
@@ -60,7 +62,11 @@ const InputUnits = ({
               (u) =>
                 u !== unit && (
                   <li key={u} onClick={() => setUnit(u)}>
-                    <button className="flex justify-center">{u}</button>
+                    <button
+                      className={`flex justify-center ${!small && "h-12"}`}
+                    >
+                      {u}
+                    </button>
                   </li>
                 )
             )}

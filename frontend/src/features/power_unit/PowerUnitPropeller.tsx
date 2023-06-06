@@ -1,6 +1,5 @@
 import InputNumber from "../common/inputs/InputNumber";
 import { useEngineStore } from "./stores/useEngine";
-import InputDisabled from "../common/inputs/InputDisabled";
 import { usePropellerStore } from "./stores/usePropeller";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
@@ -19,8 +18,7 @@ const PowerUnitPropeller = () => {
   const setSpeed = usePropellerStore((state) => state.setSpeed);
   const setAltitude = usePropellerStore((state) => state.setAltitude);
 
-  const { power, propellerSpeed, Cn, J, machTip } =
-    usePropeller();
+  const { power, propellerSpeed, Cn, J, machTip } = usePropeller();
 
   return (
     <div className="flex w-full p-4">
@@ -39,7 +37,8 @@ const PowerUnitPropeller = () => {
           label="Reduction Ratio"
           unit=":1"
         />
-        <InputDisabled
+        <InputNumber
+          disabled
           value={propellerSpeed}
           label="Propeller speed"
           unit="rpm"
@@ -57,26 +56,28 @@ const PowerUnitPropeller = () => {
           value={cruiseAltitude}
           setter={setAltitude}
         />
-        <InputDisabled
+        <InputUnits
+          type="power"
           value={Math.round(power * 100) / 100}
           label="Power"
-          unit="kW"
           tooltip="Engine max power at cruise altitude read from the previous tab"
         />
-        <InputDisabled
+        <InputNumber
+          disabled
           value={Cn}
           label="Cn"
           tooltip="Diameterless Power Coefficient"
         />
         <PowerUnitPropellerBlades />
-        <InputDisabled
+        <InputNumber
+          disabled
           value={J}
           label="J"
           tooltip="Advance ratio is the ratio of the freestream fluid speed to the propeller tip speed"
         />
         <PowerUnitPropellerPitch />
         <PowerUnitPropellerDiameter />
-        <InputDisabled value={machTip} label="Blade Tip Mach number" />
+        <InputNumber disabled value={machTip} label="Blade Tip Mach number" />
       </div>
       <div>
         <PowerUnitPropellerChart Cn={Cn} J={J} />
