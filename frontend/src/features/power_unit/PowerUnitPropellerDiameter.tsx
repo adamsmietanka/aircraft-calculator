@@ -13,7 +13,7 @@ const PowerUnitPropellerDiameter = () => {
   );
   const setOptimized = usePropellerStore((state) => state.setOptimized);
 
-  const { computedDiameter } = usePropeller();
+  const { computedDiameter, machTip } = usePropeller();
 
   useEffect(() => {
     optimized && setDiameter(computedDiameter);
@@ -38,6 +38,11 @@ const PowerUnitPropellerDiameter = () => {
           m
         </div>
       </div>
+      {machTip > 0.9 && (
+        <p className="label text-xs text-error">
+          The propeller tip Mach number is too high! ({machTip})
+        </p>
+      )}
     </div>
   );
 };
