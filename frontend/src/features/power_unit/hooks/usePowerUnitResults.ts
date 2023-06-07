@@ -5,14 +5,13 @@ import {
 } from "../../../utils/interpolation/binarySearch";
 import { cp } from "../../../data/cp";
 import { eff } from "../../../data/eff";
-import { usePower } from "../hooks/usePower";
-import { TableRow, useResultsStore } from "./useResults";
+import { TableRow, useResultsStore } from "../stores/useResults";
 import { useEffect, useMemo } from "react";
-import { usePropellerStore } from "./usePropeller";
-import { useEngineStore } from "./useEngine";
+import { usePropellerStore } from "../stores/usePropeller";
+import { useEngineStore } from "../stores/useEngine";
+import { useCp } from "./useCp";
 
 export const usePowerUnitResults = () => {
-  const engineSpeed = useEngineStore((state) => state.engineSpeed);
   const reductionRatio = useEngineStore((state) => state.reductionRatio);
 
   const diameter = usePropellerStore((state) => state.diameter);
@@ -29,17 +28,14 @@ export const usePowerUnitResults = () => {
   const cpMesh = useMemo(() => cp[blades], [blades]);
   const effMesh = useMemo(() => eff[blades], [blades]);
 
-  const [calculatePower] = usePower();
-  const power = calculatePower(altitude);
-  const density = 1.2255 * (1 - altitude / 44.3) ** 4.256;
-  const propellerSpeed = (engineSpeed * reductionRatio) / 60;
-  const Cp = (power * 1000) / (density * propellerSpeed ** 3 * diameter ** 5);
+  const { power, propellerSpeed, Cp } = useCp()
 
   const POINTS_BEFORE_MAX_RPM = 50;
 
   const points_fixed = useMemo(() => {
     let points: number[] = [];
     const j_lim = barycentricJ(cpMesh, angle, Cp);
+    console.log(j_lim)
     const j_end = barycentricJ(cpMesh, angle, 0);
     for (let i = 0; i < POINTS_BEFORE_MAX_RPM; i++) {
       points.push((i * j_lim) / POINTS_BEFORE_MAX_RPM);
@@ -62,7 +58,7 @@ export const usePowerUnitResults = () => {
         const angle = barycentricAngle(cpMesh, j, Cp);
         const eff = barycentricZ(effMesh, j, angle);
         const prop_power = power * eff;
-        
+
         table.push({ v, j, cp, angle, eff, prop_power });
         cpMarkers.push(angle, Cp, j);
         effMarkers.push(angle, eff, j);

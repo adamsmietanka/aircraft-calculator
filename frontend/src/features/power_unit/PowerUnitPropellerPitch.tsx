@@ -1,6 +1,7 @@
 import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
 import BladePitch from "../common/BladePitch";
+import { useOptimalFixedAngle } from "./hooks/useOptimalFixedAngle";
 
 interface Props {
   tooltip?: string;
@@ -11,6 +12,8 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
   const angle = usePropellerStore((state) => state.angle);
   const setVariable = usePropellerStore((state) => state.setVariable);
   const setAngle = usePropellerStore((state) => state.setAngle);
+
+  const { j_lim } = useOptimalFixedAngle();
   return (
     <div className="form-control">
       <label className="label">
@@ -36,6 +39,11 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
           </div>
         )}
       </div>
+      {j_lim === 0 && (
+        <p className="label text-xs text-error">
+          The blade angle is too shallow for this much power!
+        </p>
+      )}
     </div>
   );
 };

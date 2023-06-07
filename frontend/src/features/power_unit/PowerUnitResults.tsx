@@ -3,7 +3,7 @@ import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import PowerUnitResults3D from "./three/PowerUnitResults3D";
 import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
 
-import { usePowerUnitResults } from "./stores/usePowerUnitResults";
+import { usePowerUnitResults } from "./hooks/usePowerUnitResults";
 import { useResultsStore } from "./stores/useResults";
 import InputUnits from "../common/inputs/InputUnits";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
