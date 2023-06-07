@@ -22,7 +22,7 @@ const Settings = () => {
         <Cog className="w-6 mr-2" />
         Settings
       </button>
-      <dialog id="settings_modal" className="modal">
+      <dialog id="settings_modal" className="modal transition-none">
         <form method="dialog" className="modal-box">
           <h3>Settings</h3>
 
