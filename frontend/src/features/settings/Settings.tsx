@@ -19,7 +19,7 @@ const Settings = () => {
         className="btn btn-block btn-ghost justify-start"
         onClick={() => (window as any).settings_modal.showModal()}
       >
-        <Cog className="w-6 mr-2" />
+        <Cog className="mr-2" />
         Settings
       </button>
       <dialog id="settings_modal" className="modal transition-none">

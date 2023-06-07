@@ -2,12 +2,10 @@ import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
 import BladePitch from "../common/BladePitch";
 import { useOptimalFixedAngle } from "./hooks/useOptimalFixedAngle";
+import { ReactComponent as ProfileIcon } from "../../assets/clarkY.svg";
 
-interface Props {
-  tooltip?: string;
-}
 
-const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
+const PowerUnitPropellerPitch = () => {
   const variable = usePropellerStore((state) => state.variable);
   const angle = usePropellerStore((state) => state.angle);
   const setVariable = usePropellerStore((state) => state.setVariable);
@@ -23,7 +21,17 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
         </span>
       </label>
       <div className="join">
-        <BladePitch variable={variable} setVariable={setVariable} />
+        <div
+          className="btn w-16 normal-case bg-base-300 join-item"
+          onClick={() => setVariable(!variable)}
+        >
+          <div
+            className="tooltip w-9 svg-color text-color z-50"
+            data-tip={`Click to change to ${variable ? "fixed" : "variable"}`}
+          >
+            <ProfileIcon className={`profile w-8 ${variable && "variable"}`} />
+          </div>
+        </div>
         <input
           className="input input-bordered w-full join-item"
           type={variable ? "text" : "number"}
