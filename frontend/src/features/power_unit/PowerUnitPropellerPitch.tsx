@@ -1,6 +1,5 @@
 import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
-import BladePitch from "../common/BladePitch";
 import { useOptimalFixedAngle } from "./hooks/useOptimalFixedAngle";
 import { ReactComponent as ProfileIcon } from "../../assets/clarkY.svg";
 
@@ -12,6 +11,7 @@ const PowerUnitPropellerPitch = () => {
   const setAngle = usePropellerStore((state) => state.setAngle);
 
   const { j_lim } = useOptimalFixedAngle();
+  
   return (
     <div className="form-control">
       <label className="label">

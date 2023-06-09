@@ -1,5 +1,5 @@
 import { ThreeElements, useFrame } from "@react-three/fiber";
-import { verts } from "../../../data/verts";
+import { verts } from "../data/verts";
 import { usePropellerStore } from "../stores/usePropeller";
 import { useResultsStore } from "../stores/useResults";
 

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { barycentricJ } from "../../../utils/interpolation/binarySearch";
 import { usePropellerStore } from "../stores/usePropeller";
-import { cp } from "../../../data/cp";
+import { cp } from "../data/cp";
 import { useCp } from "./useCp";
 
 export const useOptimalFixedAngle = () => {

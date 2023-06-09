@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { ThreeElements, useFrame } from '@react-three/fiber';
 import { usePropellerStore } from '../stores/usePropeller';
 import { useResultsStore } from '../stores/useResults';
-import { verts } from '../../../data/verts';
+import { verts } from '../data/verts';
 
 import * as THREE from "three";
 import { Html } from '@react-three/drei';

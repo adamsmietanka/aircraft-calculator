@@ -3,8 +3,8 @@ import {
   barycentricJ,
   barycentricZ,
 } from "../../../utils/interpolation/binarySearch";
-import { cp } from "../../../data/cp";
-import { eff } from "../../../data/eff";
+import { cp } from "../data/cp";
+import { eff } from "../data/eff";
 import { TableRow, useResultsStore } from "../stores/useResults";
 import { useEffect, useMemo } from "react";
 import { usePropellerStore } from "../stores/usePropeller";
@@ -28,7 +28,7 @@ export const usePowerUnitResults = () => {
   const cpMesh = useMemo(() => cp[blades], [blades]);
   const effMesh = useMemo(() => eff[blades], [blades]);
 
-  const { power, propellerSpeed, Cp } = useCp()
+  const { power, propellerSpeed, Cp } = useCp();
 
   const POINTS_BEFORE_MAX_RPM = 50;
 
