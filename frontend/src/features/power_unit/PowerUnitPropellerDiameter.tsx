@@ -29,7 +29,7 @@ const PowerUnitPropellerDiameter = () => {
           className="input input-bordered w-full join-item"
           type="number"
           min={0}
-          step={0.1}
+          step={0.01}
           value={Math.round(diameter * 1000) / 1000}
           onChange={(e) => setManualDiameter(parseFloat(e.target.value))}
           disabled={optimized}
