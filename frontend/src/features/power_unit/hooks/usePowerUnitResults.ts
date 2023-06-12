@@ -10,6 +10,7 @@ import { useEffect, useMemo } from "react";
 import { usePropellerStore } from "../stores/usePropeller";
 import { useEngineStore } from "../stores/useEngine";
 import { useCp } from "./useCp";
+import { POINTS_BEFORE_MAX_RPM } from "../three/config";
 
 export const usePowerUnitResults = () => {
   const reductionRatio = useEngineStore((state) => state.reductionRatio);
@@ -30,26 +31,23 @@ export const usePowerUnitResults = () => {
 
   const { power, propellerSpeed, Cp } = useCp();
 
-  const POINTS_BEFORE_MAX_RPM = 50;
-
   const points_fixed = useMemo(() => {
     let points: number[] = [];
     const j_lim = barycentricJ(cpMesh, angle, Cp);
-    console.log(j_lim)
     const j_end = barycentricJ(cpMesh, angle, 0);
     for (let i = 0; i < POINTS_BEFORE_MAX_RPM; i++) {
       points.push((i * j_lim) / POINTS_BEFORE_MAX_RPM);
     }
-    for (let i = 0; i < 6; i++) {
-      points.push(j_lim + (i * (j_end - j_lim)) / 5);
+    for (let i = 0; i < 11; i++) {
+      points.push(j_lim + (i * (j_end - j_lim)) / 10);
     }
     return points;
   }, [cpMesh, angle, Cp]);
 
   useEffect(() => {
     const table: TableRow[] = [];
-    const cpMarkers: number[] = [];
-    const effMarkers: number[] = [];
+    const cpMarkers: number[][] = [];
+    const effMarkers: number[][] = [];
     if (variable) {
       for (let v = 0; v <= 1.2 * speed; v += 1) {
         const j = v / (propellerSpeed * diameter);
@@ -60,8 +58,8 @@ export const usePowerUnitResults = () => {
         const prop_power = power * eff;
 
         table.push({ v, j, cp, angle, eff, prop_power });
-        cpMarkers.push(angle, Cp, j);
-        effMarkers.push(angle, eff, j);
+        cpMarkers.push([angle, Cp, j]);
+        effMarkers.push([angle, eff, j]);
       }
     } else {
       points_fixed.forEach((j, index) => {
@@ -80,13 +78,13 @@ export const usePowerUnitResults = () => {
         const rpm = (n * 60) / reductionRatio;
 
         table.push({ v, j, cp: Cp_fixed, angle, eff, prop_power });
-        cpMarkers.push(angle, Cp_fixed, j);
-        effMarkers.push(angle, eff, j);
+        cpMarkers.push([angle, Cp_fixed, j]);
+        effMarkers.push([angle, eff, j]);
       });
     }
     setTable(table);
-    setCpMarkers(new Float32Array(cpMarkers));
-    setEffMarkers(new Float32Array(effMarkers));
+    setCpMarkers(cpMarkers);
+    setEffMarkers(effMarkers);
   }, [
     power,
     altitude,
