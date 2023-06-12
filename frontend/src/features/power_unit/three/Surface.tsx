@@ -30,7 +30,6 @@ const Surface = ({ type }: Props) => {
         args={type === "eff" ? [5, 5, 100, 110] : [5, 5, 50, 60]}
         onUpdate={(self) => {
           self.computeVertexNormals();
-          console.log(self);
         }}
       >
         <bufferAttribute

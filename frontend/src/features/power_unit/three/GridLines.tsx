@@ -1,5 +1,5 @@
 import { Line } from "@react-three/drei";
-import React from "react";
+import { GRID_WIDTH, useCSSColors } from "./config";
 
 const vertexShader = `
   varying vec3 vColor;
@@ -19,33 +19,33 @@ const fragmentShader = `
 `;
 
 const GridLines = () => {
-  const width = 0.3;
+  const { gridColor } = useCSSColors();
   return (
     <mesh>
       {Array.from(Array(16).keys()).map((i) => (
         <Line
-          fog
+          key={i}
           points={[
             [i - 5, 0, -5],
             [i - 5, 0, 20],
           ]}
           //   vertexShader={vertexShader}
           //   fragmentShader={fragmentShader}
-          color="inherit"
-          lineWidth={i % 5 === 0 ? width * 2 : width}
+          color={gridColor}
+          lineWidth={i % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
       ))}
       {Array.from(Array(26).keys()).map((j) => (
         <Line
-          fog
+          key={j}
           points={[
             [-5, 0, j - 5],
             [10, 0, j - 5],
           ]}
           //   vertexShader={vertexShader}
           //   fragmentShader={fragmentShader}
-          color="inherit"
-          lineWidth={j % 5 === 0 ? width * 2 : width}
+          color={gridColor}
+          lineWidth={j % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
       ))}
     </mesh>
