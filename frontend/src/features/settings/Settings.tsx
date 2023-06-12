@@ -43,7 +43,7 @@ const Settings = () => {
           <InputRadio
             label="Theme"
             value={theme}
-            values={["light", "dark", "dracula"]}
+            values={["light", "dark", "dracula", "business"]}
             setter={setTheme}
           />
         </form>
