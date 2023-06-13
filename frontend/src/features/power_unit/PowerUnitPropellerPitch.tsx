@@ -47,7 +47,7 @@ const PowerUnitPropellerPitch = () => {
           </div>
         )}
       </div>
-      {j_lim === 0 && (
+      {j_lim === 0 && !variable && (
         <p className="label text-xs text-error">
           The blade angle is too shallow for this much power!
         </p>
