@@ -11,8 +11,8 @@ export const POINT_SIZE = 0.5;
 export const useCSSColors = () => {
   const theme = useThemeStore((state) => state.theme);
 
-  const traceColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
-  const surfaceColor = useMemo(() => getHSLColorFromCSS("p"), [theme]);
+  const traceColor = useMemo(() => getHSLColorFromCSS("p"), [theme]);
+  const surfaceColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const gridColor = useMemo(() => getHSLColorFromCSS("bc"), [theme]);
   const infoColor = useMemo(() => getHSLColorFromCSS("in"), [theme]);
   const errorColor = useMemo(() => getHSLColorFromCSS("er"), [theme]);
