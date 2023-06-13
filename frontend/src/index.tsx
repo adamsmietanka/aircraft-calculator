@@ -5,8 +5,6 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./features/home/Home";
-import Steps from "./components/Steps";
-import { powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
   PowerUnitEngine,
   PowerUnitPropeller,
@@ -17,9 +15,6 @@ import {
   Turn,
   Weight,
 } from "./features";
-import { useWeightStore } from "./data/stores/useWeightConfiguration";
-
-// const weightConfigsRoutes = useWeightStore((state) => state.weightConfigurations);
 
 import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
 import StabilityRodForce from "./features/stabillity/StabilityRodForce";
@@ -37,14 +32,14 @@ root.render(
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="aerodynamics" element={<Aerodynamics />} />
-          <Route path="powerunit" element={<Steps steps={powerUnitSteps} />}>
+          <Route path="powerunit">
             <Route path="engine" element={<PowerUnitEngine />} />
             <Route path="propeller" element={<PowerUnitPropeller />} />
             <Route path="results" element={<PowerUnitResults />} />
           </Route>
           <Route path="performance" element={<Performance />} />
           <Route path="weight" element={<Weight />} />
-          <Route path="stability" element={<Steps steps={stabilitySteps} />}>
+          <Route path="stability">
             <Route
               path="longitudinal-moment"
               element={<StabilityLongitudalMoment />}
