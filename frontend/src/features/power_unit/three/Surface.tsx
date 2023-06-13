@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { verts } from "../data/verts";
 import { usePropellerStore } from "../stores/usePropeller";
 import { useCSSColors } from "./config";
+import { useSettingsStore } from "../../settings/stores/useSettings";
 
 interface Props {
   type: "cp" | "eff";
@@ -14,6 +15,7 @@ const Surface = ({ type }: Props) => {
   const surfacePositionsRef = useRef<THREE.BufferAttribute>(null);
 
   const blades = usePropellerStore((state) => state.blades);
+  const settings = useSettingsStore();
 
   const { surfaceColor } = useCSSColors();
 
@@ -44,9 +46,9 @@ const Surface = ({ type }: Props) => {
       <meshStandardMaterial
         color={surfaceColor}
         side={THREE.DoubleSide}
-        opacity={0.2}
+        opacity={0.5}
         transparent
-        wireframe
+        wireframe={settings.wireframe}
       />
     </>
   );

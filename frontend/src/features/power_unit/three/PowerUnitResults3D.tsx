@@ -4,6 +4,7 @@ import * as THREE from "three";
 import SurfaceCp from "./SurfaceCp";
 import SurfaceEff from "./SurfaceEff";
 import GridLines from "./GridLines";
+import { useSettingsStore } from "../../settings/stores/useSettings";
 
 const Lights = () => {
   return (
@@ -15,6 +16,7 @@ const Lights = () => {
 };
 
 const PowerUnitResults3D = () => {
+  const settings = useSettingsStore();
   return (
     <div className="h-1/2 w-full">
       <Canvas orthographic camera={{ zoom: 30, position: [-10, 10, 15] }}>
@@ -23,7 +25,7 @@ const PowerUnitResults3D = () => {
         <SurfaceEff position={[-1, 0, 10]} />
         <GridLines />
         <OrbitControls
-          autoRotate
+          autoRotate={settings.autoRotate}
           autoRotateSpeed={0.25}
           target={[2.5, 1, 7.5]}
         />

@@ -3,11 +3,14 @@ import { ReactComponent as Cog } from "../../assets/cog.svg";
 import { useGlobalUnitsStore } from "./stores/useGlobalUnits";
 import InputRadio from "../common/inputs/InputRadio";
 import { useThemeStore } from "./stores/useTheme";
+import InputToggle from "../common/inputs/InputToggle";
+import { useSettingsStore } from "./stores/useSettings";
 
 const Settings = () => {
   const units = useGlobalUnitsStore();
   const theme = useThemeStore((state) => state.theme);
   const setTheme = useThemeStore((state) => state.setTheme);
+  const settings = useSettingsStore();
 
   React.useEffect(() => {
     document.querySelector("html")?.setAttribute("data-theme", theme);
@@ -46,6 +49,20 @@ const Settings = () => {
             values={["light", "dark", "dracula", "business"]}
             setter={setTheme}
           />
+
+          <h3 className="pt-2">Models</h3>
+          <div className="w-40">
+            <InputToggle
+              label="Wireframe"
+              value={settings.wireframe}
+              setter={settings.setWireframe}
+            />
+            <InputToggle
+              label="Auto Rotate"
+              value={settings.autoRotate}
+              setter={settings.setAutoRotate}
+            />
+          </div>
         </form>
         <form method="dialog" className="modal-backdrop">
           <button>close</button>
