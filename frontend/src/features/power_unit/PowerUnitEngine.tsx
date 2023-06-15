@@ -4,6 +4,7 @@ import PowerUnitEngineChart from "./PowerUnitEngineChart";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
 import InputUnits from "../common/inputs/InputUnits";
+import Chart2D from "./three/Chart2D";
 
 const PowerUnitEngine = () => {
   const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
@@ -43,6 +44,7 @@ const PowerUnitEngine = () => {
       </div>
       <div>
         <PowerUnitEngineChart />
+        <Chart2D />
       </div>
     </div>
   );
