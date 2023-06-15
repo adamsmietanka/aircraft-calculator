@@ -9,20 +9,34 @@ const vertexShader = `
     attribute vec3 positionFrom;
     attribute vec3 positionTarget;
 
-    float linear_easing() {
-        float time = u_time - u_time_start;
-        if (time < 0.0) {
+    float linear() {
+        float x = (u_time - u_time_start) / u_duration;
+        if (x < 0.0) {
             return 0.0;
         }
-        if (0.0 < time && time < u_duration) {
-            return time / u_duration;
+        else if (x < 1.0) {
+            return x;
+        }
+        return 1.0;
+    }
+
+    float cubic_in_out() {
+        float x = (u_time - u_time_start) / u_duration;
+        if (x < 0.0) {
+            return 0.0;
+        }
+        else if (x < 0.5) {
+            return 4.0 * pow(x, 3.0) ;
+        }
+        else if (x < 1.0) {
+            return 1.0 - pow(-2.0 * x + 2.0, 3.0) / 2.0;
         }
         return 1.0;
     }
   
   void main() {
-    float inter = linear_easing();
-    vec3 new_position = mix(position, positionTarget, inter);
+    float inter = cubic_in_out();
+    vec3 new_position = mix(positionFrom, position, inter);
     vec4 modelPosition = modelMatrix * vec4(new_position, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
@@ -46,9 +60,8 @@ void main() {
 const Trace = () => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
 
-  const verts = new Float32Array([0, 0, 0, 2, 0, 5]);
-  const vertsFrom = new Float32Array([0, 0, 0, 2, 0, -2]);
-  const vertsTarget = new Float32Array([0, 0, 0, 2, 0, 2]);
+  const verts = new Float32Array([0, 0, 0, 2, 0, -2]);
+  const vertsFrom = new Float32Array([0, 0, 0, 2, 0, 2]);
 
   const uniforms = useMemo(
     () => ({
@@ -56,7 +69,7 @@ const Trace = () => {
         value: 0.0,
       },
       u_time_start: {
-        value: 0.0,
+        value: 1.0,
       },
       u_duration: {
         value: 2.0,
@@ -81,12 +94,6 @@ const Trace = () => {
           attach="attributes-position"
           count={verts.length / 3}
           array={verts}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-positionTarget"
-          count={vertsTarget.length / 3}
-          array={vertsTarget}
           itemSize={3}
         />
         <bufferAttribute
