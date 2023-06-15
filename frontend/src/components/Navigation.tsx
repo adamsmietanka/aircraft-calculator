@@ -46,7 +46,7 @@ const Navigation = () => {
     <div className="sticky flex flex-col justify-between h-screen top-0 w-96 p-2 bg-base">
       <div className="w-full">
         {links.map((l) => (
-          <Link to={l.to}>
+          <Link key={l.to} to={l.to}>
             {React.cloneElement(l.icon, { className: "w-6 mr-2" })}
             {l.name}
           </Link>
