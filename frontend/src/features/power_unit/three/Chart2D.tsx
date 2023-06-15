@@ -7,8 +7,9 @@ const Chart2D = () => {
 
   return (
     <div className="h-2/5 w-full">
-      <Canvas orthographic camera={{ zoom: 30, position: [0, 10, 0] }}>
-        <gridHelper />
+      <Canvas orthographic camera={{ zoom: 30, position: [0, 0, 10] }}>
+        <gridHelper rotation-x={Math.PI /2}/>
+        <axesHelper />
         <Trace />
       </Canvas>
     </div>
