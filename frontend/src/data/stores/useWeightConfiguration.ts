@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { CoG } from "../../utils/massCalculations";
 import WeightComponent from "../../features/weight_distribution/interfaces/weightComponent";
 import WeightConfiguration from "../../features/weight_distribution/interfaces/weightConfiguration";
