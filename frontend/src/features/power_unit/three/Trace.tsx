@@ -60,8 +60,8 @@ void main() {
 const Trace = () => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
 
-  const verts = new Float32Array([0, 0, 0, 2, 0, -2]);
-  const vertsFrom = new Float32Array([0, 0, 0, 2, 0, 2]);
+  const vertsFrom = new Float32Array([0, 0, 0, 2, -2, 0]);
+  const verts = new Float32Array([0, 1, 0, 2, 2, 0]);
 
   const uniforms = useMemo(
     () => ({
