@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 
 export const createHeightsArray = (maxHeight: number, step = 0.2) =>
   Array.from(Array(maxHeight / step + 1).keys()).map((h) => h * step);
@@ -36,8 +36,9 @@ export const useEngineStore = create<EngineState>()((set) => ({
       maxAltitude: value,
       heights: createHeightsArray(value),
     })),
-  
+
   setKCoefficient: (value) => set((state) => ({ kCoefficient: value })),
   setHeights: (value) => set((state) => ({ heights: value })),
-  setSuperchargerEnabled: (value) => set((state) => ({ superchargerEnabled: value })),
+  setSuperchargerEnabled: (value) =>
+    set((state) => ({ superchargerEnabled: value })),
 }));
