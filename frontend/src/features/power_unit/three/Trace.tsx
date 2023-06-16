@@ -7,7 +7,7 @@ const vertexShader = `
     uniform float u_time_start;
     uniform float u_duration;
     attribute vec3 positionFrom;
-    attribute vec3 positionTarget;
+    attribute float index;
 
     float linear() {
         float x = (u_time - u_time_start) / u_duration;
@@ -21,7 +21,8 @@ const vertexShader = `
     }
 
     float cubic_in_out() {
-        float x = (u_time - u_time_start) / u_duration;
+        float start = u_time_start + index * 0.2;
+        float x = (u_time - start) / u_duration;
         if (x < 0.0) {
             return 0.0;
         }
@@ -60,8 +61,12 @@ void main() {
 const Trace = () => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
 
-  const vertsFrom = new Float32Array([0, 0, 0, 2, -2, 0]);
-  const verts = new Float32Array([0, 1, 0, 2, 2, 0]);
+  const index = useMemo(() => {
+    return new Float32Array(Array.from(Array(4).keys()));
+  }, []);
+
+  const vertsFrom = new Float32Array([-1, 0, 0, 0, 0, 0, 2, -2, 0, 4, 0, 0]);
+  const verts = new Float32Array([-1, 0, 0, 0, 1, 0, 2, 2, 0, 4, -1, 0]);
 
   const uniforms = useMemo(
     () => ({
@@ -72,7 +77,7 @@ const Trace = () => {
         value: 1.0,
       },
       u_duration: {
-        value: 2.0,
+        value: 1.0,
       },
       u_colorA: { value: new THREE.Color("#FFE486") },
       u_colorB: { value: new THREE.Color("#FEB3D9") },
@@ -88,20 +93,21 @@ const Trace = () => {
     }
   });
   return (
-    <lineSegments>
+    <line>
       <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={verts.length / 3}
-          array={verts}
-          itemSize={3}
-        />
         <bufferAttribute
           attach="attributes-positionFrom"
           count={vertsFrom.length / 3}
           array={vertsFrom}
           itemSize={3}
         />
+        <bufferAttribute
+          attach="attributes-position"
+          count={verts.length / 3}
+          array={verts}
+          itemSize={3}
+        />
+        <bufferAttribute attach="attributes-index" array={index} itemSize={1} />
         {/* <bufferAttribute attach="attributes-colors" args={[colors, 3]} /> */}
       </bufferGeometry>
       <shaderMaterial
@@ -111,7 +117,7 @@ const Trace = () => {
         fragmentShader={fragmentShader}
       />
       {/* <lineBasicMaterial color="red" linewidth={40} /> */}
-    </lineSegments>
+    </line>
   );
 };
 
