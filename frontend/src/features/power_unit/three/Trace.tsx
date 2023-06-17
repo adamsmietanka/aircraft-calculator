@@ -6,41 +6,35 @@ const vertexShader = `
     uniform float u_time;
     uniform float u_time_start;
     uniform float u_duration;
+    uniform float u_stagger_duration;
+    uniform float u_count;
     attribute vec3 positionFrom;
     attribute float index;
 
-    float linear() {
-        float x = (u_time - u_time_start) / u_duration;
-        if (x < 0.0) {
-            return 0.0;
-        }
-        else if (x < 1.0) {
-            return x;
-        }
-        return 1.0;
+    float linear(float x) {
+        return clamp(x, 0.0, 1.0);
     }
 
-    float cubic_in_out() {
-        float start = u_time_start + index * 0.2;
-        float x = (u_time - start) / u_duration;
-        if (x < 0.0) {
-            return 0.0;
+    float cubic_in_out(float x) {
+        float X = clamp(x, 0.0, 1.0);
+        if (X < 0.5) {
+            return 4.0 * pow(X, 3.0) ;
         }
-        else if (x < 0.5) {
-            return 4.0 * pow(x, 3.0) ;
+        else if (X <= 1.0) {
+            return 1.0 - pow(-2.0 * X + 2.0, 3.0) / 2.0;
         }
-        else if (x < 1.0) {
-            return 1.0 - pow(-2.0 * x + 2.0, 3.0) / 2.0;
-        }
-        return 1.0;
     }
   
   void main() {
-    float inter = cubic_in_out();
+    float point_delay = cubic_in_out(index / u_count) * u_stagger_duration;
+    float point_start = u_time_start + point_delay;
+    float x = (u_time - point_start) / u_duration;
+    float inter = cubic_in_out(x);
     vec3 new_position = mix(positionFrom, position, inter);
     vec4 modelPosition = modelMatrix * vec4(new_position, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
+    gl_PointSize = 1.0 * (100.0 / -viewPosition.z);
   
     gl_Position = projectedPosition;
   }
@@ -53,8 +47,12 @@ vec3 colorB = vec3(1.000,0.777,0.052);
 
 void main() {
   vec3 color = mix(colorA, colorB, 1.0);
-
-  gl_FragColor = vec4(color,1.0);
+  gl_FragColor.rgb = color;
+  gl_FragColor.a = 1.0;
+  
+  if (distance(gl_PointCoord, vec2(0.5)) > 0.5) {
+    gl_FragColor.a = 0.0;
+  }
 }
 `;
 
@@ -62,11 +60,15 @@ const Trace = () => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
 
   const index = useMemo(() => {
-    return new Float32Array(Array.from(Array(4).keys()));
+    return new Float32Array(Array.from(Array(5).keys()));
   }, []);
 
-  const vertsFrom = new Float32Array([-1, 0, 0, 0, 0, 0, 2, -2, 0, 4, 0, 0]);
-  const verts = new Float32Array([-1, 0, 0, 0, 1, 0, 2, 2, 0, 4, -1, 0]);
+  const vertsFrom = new Float32Array([
+    -3, -1, 0, -1, 0, 0, 0, 0, 0, 2, -2, 0, 4, 0, 0,
+  ]);
+  const verts = new Float32Array([
+    -3, -1, 0, -1, 1, 0, 0, 1, 0, 2, 2, 0, 4, -1, 0,
+  ]);
 
   const uniforms = useMemo(
     () => ({
@@ -79,6 +81,12 @@ const Trace = () => {
       u_duration: {
         value: 1.0,
       },
+      u_stagger_duration: {
+        value: 0.5,
+      },
+      u_count: {
+        value: 5.0,
+      },
       u_colorA: { value: new THREE.Color("#FFE486") },
       u_colorB: { value: new THREE.Color("#FEB3D9") },
     }),
@@ -87,13 +95,12 @@ const Trace = () => {
 
   useFrame((state) => {
     const { clock } = state;
-    //   console.log(clock.getElapsedTime())
     if (shaderMaterialRef.current) {
       shaderMaterialRef.current.uniforms.u_time.value = clock.getElapsedTime();
     }
   });
   return (
-    <line>
+    <points>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-positionFrom"
@@ -116,8 +123,7 @@ const Trace = () => {
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
       />
-      {/* <lineBasicMaterial color="red" linewidth={40} /> */}
-    </line>
+    </points>
   );
 };
 
