@@ -2,17 +2,10 @@ import { useFrame } from "@react-three/fiber";
 import React, { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const vertexShader = `
-    uniform float u_time;
-    uniform float u_time_start;
-    uniform float u_duration;
-    uniform float u_stagger_duration;
-    uniform float u_count;
-    attribute vec3 positionFrom;
-    attribute float index;
-
+const easingsShader = `
     float linear(float x) {
-        return clamp(x, 0.0, 1.0);
+    float X = clamp(x, 0.0, 1.0);
+    return X;
     }
 
     float cubic_in_out(float x) {
@@ -25,11 +18,37 @@ const vertexShader = `
         }
     }
   
+  // float sine_out(float x) {
+  //   float X = clamp(x, 0.0, 1.0);
+  //   return Math.sin((X * Math.PI) / 2);
+  // }
+
+  float quadratic_out(float x) {
+    float X = clamp(x, 0.0, 1.0);
+    return X * X;
+  }
+`;
+
+const vertexShader = `
+    uniform float u_time;
+    uniform float u_time_start;
+    uniform float u_duration;
+    uniform float u_stagger_duration;
+    uniform float u_count;
+    attribute vec3 positionFrom;
+    attribute float index;
+    varying float v_index;
+  
+  ${easingsShader}
+
   void main() {
+    v_index = index;
+
     float point_delay = cubic_in_out(index / u_count) * u_stagger_duration;
     float point_start = u_time_start + point_delay;
     float x = (u_time - point_start) / u_duration;
     float inter = cubic_in_out(x);
+
     vec3 new_position = mix(positionFrom, position, inter);
     vec4 modelPosition = modelMatrix * vec4(new_position, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
@@ -41,18 +60,29 @@ const vertexShader = `
 `;
 
 const fragmentShader = `
+uniform float u_time;
+uniform float u_stagger_duration;
+uniform float u_count;
+varying float v_index;
 
 vec3 colorA = vec3(0.912,0.191,0.652);
 vec3 colorB = vec3(1.000,0.777,0.052);
 
+float opacity_change_delay = 0.5;
+float opacity_change_duration = 0.2;
+  
+${easingsShader}
+
 void main() {
   vec3 color = mix(colorA, colorB, 1.0);
   gl_FragColor.rgb = color;
-  gl_FragColor.a = 1.0;
   
-  if (distance(gl_PointCoord, vec2(0.5)) > 0.5) {
-    gl_FragColor.a = 0.0;
-  }
+  float point_delay = linear(v_index / u_count) * u_stagger_duration;
+  gl_FragColor.a = clamp((u_time - opacity_change_delay - point_delay) / opacity_change_duration, 0.0, 1.0);
+  
+  // if (distance(gl_PointCoord, vec2(0.5)) > 0.5) {
+  //   gl_FragColor.a = 0.0;
+  // }
 }
 `;
 
@@ -119,6 +149,7 @@ const Trace = () => {
       </bufferGeometry>
       <shaderMaterial
         ref={shaderMaterialRef}
+        blending={THREE.AdditiveBlending}
         uniforms={uniforms}
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
