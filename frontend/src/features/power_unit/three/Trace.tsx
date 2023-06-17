@@ -1,6 +1,11 @@
-import { useFrame } from "@react-three/fiber";
-import React, { useMemo, useRef } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { useEngineStore } from "../stores/useEngine";
+import { usePower } from "../hooks/usePower";
+import { useSuperchargerStore } from "../stores/useSupercharger";
+import { useTurbochargerStore } from "../stores/useTurbocharger";
+import { OPACITY_DELAY, OPACITY_STAGGER, POSITION_ANIMATION_DURATION, POSITION_STAGGER } from "./config";
 
 const easingsShader = `
     float linear(float x) {
@@ -32,8 +37,8 @@ const easingsShader = `
 const vertexShader = `
     uniform float u_time;
     uniform float u_time_start;
-    uniform float u_duration;
-    uniform float u_stagger_duration;
+    uniform float u_position_duration;
+    uniform float u_position_stagger;
     uniform float u_count;
     attribute vec3 positionFrom;
     attribute float index;
@@ -44,9 +49,9 @@ const vertexShader = `
   void main() {
     v_index = index;
 
-    float point_delay = cubic_in_out(index / u_count) * u_stagger_duration;
+    float point_delay = linear(index / u_count) * u_position_stagger;
     float point_start = u_time_start + point_delay;
-    float x = (u_time - point_start) / u_duration;
+    float x = (u_time - point_start) / u_position_duration;
     float inter = cubic_in_out(x);
 
     vec3 new_position = mix(positionFrom, position, inter);
@@ -61,7 +66,8 @@ const vertexShader = `
 
 const fragmentShader = `
 uniform float u_time;
-uniform float u_stagger_duration;
+uniform float u_opacity_stagger;
+uniform float u_opacity_delay;
 uniform float u_count;
 varying float v_index;
 
@@ -77,8 +83,8 @@ void main() {
   vec3 color = mix(colorA, colorB, 1.0);
   gl_FragColor.rgb = color;
   
-  float point_delay = linear(v_index / u_count) * u_stagger_duration;
-  gl_FragColor.a = clamp((u_time - opacity_change_delay - point_delay) / opacity_change_duration, 0.0, 1.0);
+  float point_delay = u_opacity_delay + linear(v_index / u_count) * u_opacity_stagger;
+  gl_FragColor.a = clamp((u_time - point_delay) / opacity_change_duration, 0.0, 1.0);
   
   // if (distance(gl_PointCoord, vec2(0.5)) > 0.5) {
   //   gl_FragColor.a = 0.0;
@@ -88,17 +94,28 @@ void main() {
 
 const Trace = () => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
+  const toRef = useRef<THREE.BufferAttribute>(null);
+  const fromRef = useRef<THREE.BufferAttribute>(null);
+  const engine = useEngineStore();
+  const supercharger = useSuperchargerStore();
+  const turbocharger = useTurbochargerStore();
+  const [trace, setTrace] = useState(new Float32Array());
+  const [oldTrace, setOldTrace] = useState(new Float32Array());
+
+  const heights = engine.heights;
+  const [calculatePower] = usePower();
 
   const index = useMemo(() => {
-    return new Float32Array(Array.from(Array(5).keys()));
+    return new Float32Array(Array.from(Array(heights.length).keys()));
   }, []);
 
-  const vertsFrom = new Float32Array([
-    -3, -1, 0, -1, 0, 0, 0, 0, 0, 2, -2, 0, 4, 0, 0,
-  ]);
-  const verts = new Float32Array([
-    -3, -1, 0, -1, 1, 0, 0, 1, 0, 2, 2, 0, 4, -1, 0,
-  ]);
+  const starting_position = useMemo(() => {
+    return new Float32Array(Array(heights.length * 3).fill(0));
+  }, []);
+
+  const starting_position_from = useMemo(() => {
+    return new Float32Array(Array(heights.length * 3).fill(0));
+  }, []);
 
   const uniforms = useMemo(
     () => ({
@@ -106,16 +123,22 @@ const Trace = () => {
         value: 0.0,
       },
       u_time_start: {
-        value: 1.0,
+        value: 0.0,
       },
-      u_duration: {
-        value: 1.0,
+      u_position_duration: {
+        value: POSITION_ANIMATION_DURATION,
       },
-      u_stagger_duration: {
-        value: 0.5,
+      u_position_stagger: {
+        value: POSITION_STAGGER,
+      },
+      u_opacity_stagger: {
+        value: OPACITY_STAGGER,
+      },
+      u_opacity_delay: {
+        value: OPACITY_DELAY,
       },
       u_count: {
-        value: 5.0,
+        value: heights.length,
       },
       u_colorA: { value: new THREE.Color("#FFE486") },
       u_colorB: { value: new THREE.Color("#FEB3D9") },
@@ -128,24 +151,48 @@ const Trace = () => {
     if (shaderMaterialRef.current) {
       shaderMaterialRef.current.uniforms.u_time.value = clock.getElapsedTime();
     }
+    if (toRef.current && fromRef.current) {
+      fromRef.current.set(oldTrace);
+      toRef.current.set(trace);
+      fromRef.current.needsUpdate = true;
+      toRef.current.needsUpdate = true;
+    }
   });
+  const { clock } = useThree();
+
+  useEffect(() => {
+    setOldTrace(trace);
+    let array = new Float32Array(heights.length * 3);
+    for (let i = 0; i < heights.length; i++) {
+      let i3 = i * 3;
+      array[i3 + 0] = heights[i];
+      array[i3 + 1] = calculatePower(heights[i]);
+      array[i3 + 2] = 0;
+    }
+    setTrace(array);
+    if (shaderMaterialRef.current) {
+      shaderMaterialRef.current.uniforms.u_time_start.value =
+        clock.getElapsedTime();
+    }
+  }, [engine, supercharger, turbocharger]);
   return (
-    <points>
+    <line scale-y={0.005}>
       <bufferGeometry>
         <bufferAttribute
+          ref={fromRef}
           attach="attributes-positionFrom"
-          count={vertsFrom.length / 3}
-          array={vertsFrom}
+          count={starting_position_from.length / 3}
+          array={starting_position_from}
           itemSize={3}
         />
         <bufferAttribute
+          ref={toRef}
           attach="attributes-position"
-          count={verts.length / 3}
-          array={verts}
+          count={starting_position.length / 3}
+          array={starting_position}
           itemSize={3}
         />
         <bufferAttribute attach="attributes-index" array={index} itemSize={1} />
-        {/* <bufferAttribute attach="attributes-colors" args={[colors, 3]} /> */}
       </bufferGeometry>
       <shaderMaterial
         ref={shaderMaterialRef}
@@ -154,7 +201,7 @@ const Trace = () => {
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
       />
-    </points>
+    </line>
   );
 };
 
