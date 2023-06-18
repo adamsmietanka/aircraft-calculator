@@ -39,6 +39,9 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, time_st
     eta = eta_prep[1]
     
     fuelcons_arr = basf.new_values_array(fuel_rpm, fuelcons, 6, new_rpm_range)
+    power_arr = basf.new_values_array(rpm, rpm_power, 6, new_rpm_range)
+
+    print(power_arr)
     
     m_i = type_calc[0]
     end_mass = type_calc[1]
@@ -49,8 +52,7 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, time_st
 
     vmin = basf.velocity(m_i, air_density, area, czmax)
 
-    new_velo_range = np.linspace(vmin, vmax, 50)
-    fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
+    fuel_of_power_coeff = np.polyfit(power_arr, fuelcons_arr, 6)
     velocity_range = np.linspace(vmin, vmax, 50)
     eta_coeff = np.polyfit(eta_velo, eta, 6)
 
@@ -69,19 +71,19 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, time_st
             effective_pow_list.append(effective_pow)
 
             if effective_pow <= maxPower and effective_pow >= min(rpm_power):
-                fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
-                burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
+                fuelcons_of_effective_power = np.polyval(fuel_of_power_coeff, effective_pow)
+                burnt_mass = time_step/3600*fuelcons_of_effective_power*effective_pow
                 m_ii = current_mass - burnt_mass
             else:
                 effective_pow = maxPower
-                fuelcons_of_velo = np.polyval(fuel_of_power_coeff, effective_pow)
-                burnt_mass = time_step/3600*fuelcons_of_velo*effective_pow
+                fuelcons_of_effective_power = np.polyval(fuel_of_power_coeff, effective_pow)
+                burnt_mass = time_step/3600*fuelcons_of_effective_power*effective_pow
                 m_ii = current_mass - burnt_mass
                 #print('Power Values Exceeded, Max Available Value Taken.')
                 
 
             A_factor=air_density*area*velocity*velocity*math.sqrt(cx0*3.14*aspectratio)
-            endurance=1000*(efficiency/9.81/velocity/fuelcons_of_velo)*math.sqrt(3.14*aspectratio/cx0)*(math.atan(2*9.81*current_mass/A_factor)-math.atan(2*9.81*m_ii/A_factor))
+            endurance=1000*(efficiency/9.81/velocity/fuelcons_of_effective_power)*math.sqrt(3.14*aspectratio/cx0)*(math.atan(2*9.81*current_mass/A_factor)-math.atan(2*9.81*m_ii/A_factor))
             range=3.6*velocity*endurance
             endurances.append(endurance)
             ranges.append(range)
