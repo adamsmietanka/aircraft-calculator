@@ -113,7 +113,7 @@ const PerformanceExtendedAlg = () => {
               setter={setFlightAltitude}
               step={0.1}
               min={0}
-              label="Height"
+              label="Flight Altitude"
               unit="km"
             />
             <InputDisabled
