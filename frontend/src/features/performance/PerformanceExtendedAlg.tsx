@@ -23,7 +23,7 @@ const PerformanceExtendedAlg = () => {
 
     const startMass = useInitialStore((state) => state.startMass)
     const fuelMass = useInitialStore((state) => state.fuelMass)
-    const fuelcons = useInitialStore((state) => state.fuelcons)
+    const fuelcons = useExtendedStore((state) => state.fuelcons)
     const vmax = useInitialStore((state) => state.vmax)
     const wmax = useInitialStore((state) => state.wmax)
     const area  = useInitialStore((state) => state.area)
@@ -34,6 +34,7 @@ const PerformanceExtendedAlg = () => {
     const setFlightAltitude = useInitialStore((state) => state.setFlightAltitude)
 
     const setMethodType = useExtendedStore((state) => state.setMethodType)
+    const setFuelcons = useExtendedStore((state) => state.setFuelcons)
   
     const [traceExt, setTraceExt] = useState(
       {
@@ -119,6 +120,14 @@ const PerformanceExtendedAlg = () => {
               value={maxPower}
               label="Max Power (IAW Performance Engine)"
               unit="kW"
+            />
+            <InputNumber
+              value={fuelcons}
+              setter={setFuelcons}
+              step={0.001}
+              min={0}
+              label="SFC MAX"
+              unit="kg/kWh"
             />
             <div className="break"></div>
             <input type="submit" value="Save Inputs" className="btn w-full flex items-center justify-center align-self-center"  />

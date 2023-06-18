@@ -127,13 +127,14 @@ const PerformanceInitial = () => {
               <option value="jet-breguet">Jet</option>
             </select>
 
-          <InputNumber
+          <InputSlider
             value={propnumber}
             setter={setPropnumber}
             step={1}
             min={1}
+            max={2}
             label="Number of Engines"
-            unit="-"
+            unit=""
           />
           <InputNumber
             value={nominalPower}
