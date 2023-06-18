@@ -52,7 +52,8 @@ def extended_alg(rpm_input, fuelcons_input, eta_input, airplane: object, time_st
 
     vmin = basf.velocity(m_i, air_density, area, czmax)
 
-    fuel_of_power_coeff = np.polyfit(power_arr, fuelcons_arr, 6)
+    new_velo_range = np.linspace(vmin, vmax, 50)
+    fuel_of_power_coeff = np.polyfit(new_velo_range, fuelcons_arr, 6)
     velocity_range = np.linspace(vmin, vmax, 50)
     eta_coeff = np.polyfit(eta_velo, eta, 6)
 
