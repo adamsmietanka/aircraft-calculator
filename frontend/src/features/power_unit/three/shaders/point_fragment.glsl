@@ -16,4 +16,8 @@ void main() {
   
   float point_delay = u_opacity_delay + linear(v_index / u_count) * u_opacity_stagger;
   gl_FragColor.a = clamp((u_time - point_delay) / opacity_change_duration, 0.0, 1.0);
+  
+  if (distance(gl_PointCoord, vec2(0.5)) > 0.5) {
+    gl_FragColor.a = 0.0;
+  }
 }
