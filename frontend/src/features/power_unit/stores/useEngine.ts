@@ -21,7 +21,7 @@ interface EngineState {
 }
 
 export const useEngineStore = create<EngineState>()((set) => ({
-  seaLevelPower: 1000,
+  seaLevelPower: 800,
   engineSpeed: 3000,
   reductionRatio: 0.4,
   maxAltitude: 10,

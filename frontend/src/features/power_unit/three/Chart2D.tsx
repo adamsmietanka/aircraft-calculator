@@ -11,6 +11,8 @@ const Chart2D = () => {
         <gridHelper rotation-x={Math.PI /2} />
         <axesHelper />
         <Trace />
+        <Trace position-y={0.025}/>
+        <Trace position-x={0.025}/>
       </Canvas>
     </div>
   );
