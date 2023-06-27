@@ -10,7 +10,7 @@ export const POINT_SIZE = 0.5;
 // Chart Animations
 export const POSITION_ANIMATION_DURATION = 0.5;
 export const POSITION_STAGGER = 0.0; // duration between the start of animation of the 1st and last point in a trace
-export const OPACITY_STAGGER = 1.0;
+export const OPACITY_STAGGER = 0.5;
 export const OPACITY_DELAY = 0.5; // duration between render and 1st point appearing
 
 // Power Unit Results

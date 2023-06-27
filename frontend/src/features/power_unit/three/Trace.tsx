@@ -10,9 +10,11 @@ import {
   OPACITY_STAGGER,
   POSITION_ANIMATION_DURATION,
   POSITION_STAGGER,
+  useCSSColors,
 } from "./config";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
+import { useThemeStore } from "../../settings/stores/useTheme";
 
 const Trace = (props: ThreeElements["mesh"]) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
@@ -26,6 +28,13 @@ const Trace = (props: ThreeElements["mesh"]) => {
 
   const heights = engine.heights;
   const [calculatePower] = usePower();
+  
+  const { surfaceColor } = useCSSColors();
+  const theme = useThemeStore((state) => state.theme);
+
+  const color = useMemo(() => {
+    return new THREE.Color(surfaceColor)
+  }, [theme])
 
   const index = useMemo(() => {
     return new Float32Array(Array.from(Array(heights.length).keys()));
@@ -62,8 +71,7 @@ const Trace = (props: ThreeElements["mesh"]) => {
       u_count: {
         value: heights.length,
       },
-      u_colorA: { value: new THREE.Color("#FFE486") },
-      u_colorB: { value: new THREE.Color("#FEB3D9") },
+      u_color: { value:  color},
     }),
     []
   );
@@ -72,6 +80,7 @@ const Trace = (props: ThreeElements["mesh"]) => {
     const { clock } = state;
     if (shaderMaterialRef.current) {
       shaderMaterialRef.current.uniforms.u_time.value = clock.getElapsedTime();
+      shaderMaterialRef.current.uniforms.u_color.value = color;
     }
     if (toRef.current && fromRef.current) {
       fromRef.current.set(oldTrace);
@@ -80,6 +89,7 @@ const Trace = (props: ThreeElements["mesh"]) => {
       toRef.current.needsUpdate = true;
     }
   });
+
   const { clock } = useThree();
 
   useEffect(() => {
@@ -123,7 +133,7 @@ const Trace = (props: ThreeElements["mesh"]) => {
         </bufferGeometry>
         <shaderMaterial
           ref={shaderMaterialRef}
-          blending={THREE.AdditiveBlending}
+          // blending={THREE.AdditiveBlending}
           uniforms={uniforms}
           vertexShader={vertex}
           fragmentShader={fragment}
