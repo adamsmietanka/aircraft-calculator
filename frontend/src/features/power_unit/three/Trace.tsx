@@ -1,10 +1,8 @@
 import { ThreeElements, useFrame, useThree } from "@react-three/fiber";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { useEngineStore } from "../stores/useEngine";
 import { usePower } from "../hooks/usePower";
-import { useSuperchargerStore } from "../stores/useSupercharger";
-import { useTurbochargerStore } from "../stores/useTurbocharger";
 import {
   OPACITY_DELAY,
   OPACITY_STAGGER,
@@ -15,18 +13,18 @@ import {
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
 import { useThemeStore } from "../../settings/stores/useTheme";
+import usePrevious from "../../../hooks/usePrevious";
 
 const Trace = (props: ThreeElements["mesh"]) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
-  const engine = useEngineStore();
-  const supercharger = useSuperchargerStore();
-  const turbocharger = useTurbochargerStore();
-  const [trace, setTrace] = useState(new Float32Array());
-  const [oldTrace, setOldTrace] = useState(new Float32Array());
 
-  const heights = engine.heights;
+  const heights = useEngineStore((state) => state.heights);
+
+  const [trace, setTrace] = useState(new Float32Array());
+  const oldTrace: Float32Array = usePrevious(trace);
+
   const [calculatePower] = usePower();
   
   const { surfaceColor } = useCSSColors();
@@ -93,7 +91,6 @@ const Trace = (props: ThreeElements["mesh"]) => {
   const { clock } = useThree();
 
   useEffect(() => {
-    setOldTrace(trace);
     let array = new Float32Array(heights.length * 3);
     for (let i = 0; i < heights.length; i++) {
       let i3 = i * 3;
@@ -106,7 +103,8 @@ const Trace = (props: ThreeElements["mesh"]) => {
       shaderMaterialRef.current.uniforms.u_time_start.value =
         clock.getElapsedTime();
     }
-  }, [engine, supercharger, turbocharger]);
+  }, [calculatePower]);
+
   return (
     <mesh {...props}>
       <line scale-y={0.005}>
