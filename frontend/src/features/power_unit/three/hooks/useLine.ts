@@ -9,11 +9,12 @@ import {
 } from "../config";
 import * as THREE from "three";
 import usePrevious from "../../../../hooks/usePrevious";
-import { usePower } from "../../hooks/usePower";
 import { useFrame, useThree } from "@react-three/fiber";
+import { Point } from "../Chart2D";
+
 
 const useLine = (
-  points: number[],
+  points: Point[],
   fromRef: React.RefObject<THREE.BufferAttribute>,
   toRef: React.RefObject<THREE.BufferAttribute>,
   shaderMaterialRef: React.RefObject<THREE.ShaderMaterial>
@@ -64,8 +65,6 @@ const useLine = (
   const [trace, setTrace] = useState(new Float32Array());
   const oldTrace: Float32Array = usePrevious(trace);
 
-  const [calculatePower] = usePower();
-
   useFrame((state) => {
     const { clock } = state;
     if (shaderMaterialRef.current) {
@@ -86,8 +85,8 @@ const useLine = (
     let array = new Float32Array(points.length * 3);
     for (let i = 0; i < points.length; i++) {
       let i3 = i * 3;
-      array[i3 + 0] = points[i];
-      array[i3 + 1] = calculatePower(points[i]);
+      array[i3 + 0] = points[i].x;
+      array[i3 + 1] = points[i].y;
       array[i3 + 2] = 0;
     }
     setTrace(array);
@@ -95,7 +94,7 @@ const useLine = (
       shaderMaterialRef.current.uniforms.u_time_start.value =
         clock.getElapsedTime();
     }
-  }, [calculatePower]);
+  }, [points]);
 
   return { index, starting_position, uniforms };
 };

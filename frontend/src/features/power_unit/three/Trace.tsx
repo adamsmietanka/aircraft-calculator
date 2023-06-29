@@ -1,20 +1,28 @@
-import { ThreeElements } from "@react-three/fiber";
 import { useRef } from "react";
-import * as THREE from "three";
-import { useEngineStore } from "../stores/useEngine";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
 import useLine from "./hooks/useLine";
+import { TraceProps } from "./Chart2D";
 
-const Trace = (props: ThreeElements["mesh"]) => {
+const Trace = ({ trace, ...props }: TraceProps) => {
+  return (
+    <mesh position-x={-7.5}>
+      <Line trace={trace} />
+      <Line trace={trace} position-y={0.03} />
+      <Line trace={trace} position-x={0.03} />
+      <Line trace={trace} position-y={-0.03} />
+      <Line trace={trace} position-x={-0.03} />
+    </mesh>
+  );
+};
+
+const Line = ({ trace, ...props }: TraceProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
 
-  const heights = useEngineStore((state) => state.heights);
-
   const { index, starting_position, uniforms } = useLine(
-    heights,
+    trace,
     fromRef,
     toRef,
     shaderMaterialRef

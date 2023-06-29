@@ -5,6 +5,7 @@ import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
 import InputUnits from "../common/inputs/InputUnits";
 import Chart2D from "./three/Chart2D";
+import useEngineChart from "./hooks/useEngineChart";
 
 const PowerUnitEngine = () => {
   const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
@@ -13,6 +14,9 @@ const PowerUnitEngine = () => {
   const setSeaLevelPower = useEngineStore((state) => state.setSeaLevelPower);
   const setMaxAltitude = useEngineStore((state) => state.setMaxAltitude);
   const setKCoefficient = useEngineStore((state) => state.setKCoefficient);
+
+  const points = useEngineChart();
+
   return (
     <div className="flex w-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-1">
@@ -44,7 +48,7 @@ const PowerUnitEngine = () => {
       </div>
       <div>
         <PowerUnitEngineChart />
-        <Chart2D />
+        <Chart2D trace={points}/>
       </div>
     </div>
   );

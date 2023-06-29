@@ -1,19 +1,23 @@
-import React, { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import * as THREE from "three";
+import { Canvas, ThreeElements } from "@react-three/fiber";
 import Trace from "./Trace";
 
-const Chart2D = () => {
+
+export interface Point {
+  x: number;
+  y: number;
+}
+
+export type TraceProps = {
+  trace: Point[];
+} & ThreeElements["mesh"];
+
+const Chart2D = ({ trace, ...props }: TraceProps) => {
   return (
     <div className="h-2/5 w-full">
       <Canvas orthographic camera={{ zoom: 30, position: [0, 0, 10] }}>
         <gridHelper rotation-x={Math.PI / 2} />
         <axesHelper />
-        <mesh position-x={-7.5}>
-          <Trace />
-          <Trace position-y={0.025} />
-          <Trace position-x={0.025} />
-        </mesh>
+        <Trace trace={trace} {...props}/>
       </Canvas>
     </div>
   );
