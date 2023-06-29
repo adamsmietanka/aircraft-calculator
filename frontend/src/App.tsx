@@ -1,13 +1,13 @@
 import "./App.css";
-import { Outlet } from "react-router-dom";
 import Navigation from "./components/Navigation";
+import Steps from "./components/Steps";
 
 function App() {
   return (
     <div className="flex">
       <Navigation />
-      <div className="flex flex-col w-full ml-80">
-        <Outlet />
+      <div className="flex flex-col w-full">
+        <Steps />
       </div>
     </div>
   );

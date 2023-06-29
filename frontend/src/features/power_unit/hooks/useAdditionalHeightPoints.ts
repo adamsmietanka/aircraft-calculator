@@ -28,6 +28,5 @@ export const useAdditionalHeightPoints = () => {
       HGendAltitude,
     ].sort((a, b) => a - b);
     setHeights([...new Set(newHeights)]);
-    console.log([...new Set(newHeights)]);
   }, [LGendAltitude, HGstartAltitude, HGendAltitude, setHeights]);
 };

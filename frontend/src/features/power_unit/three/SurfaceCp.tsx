@@ -1,84 +1,40 @@
-import { ThreeElements, useFrame } from "@react-three/fiber";
-import { verts } from "../../../data/verts";
+import * as THREE from "three";
+import { ThreeElements } from "@react-three/fiber";
+import { Sphere } from "@react-three/drei";
+
 import { usePropellerStore } from "../stores/usePropeller";
 import { useResultsStore } from "../stores/useResults";
 
-import * as THREE from "three";
-import { useRef } from "react";
-import { Html } from "@react-three/drei";
 import VerticalAxis from "./VerticalAxis";
+import { POINTS_BEFORE_MAX_RPM, POINT_SIZE, useCSSColors } from "./config";
+import Surface from "./Surface";
+import { useOptimalFixedAngle } from "../hooks/useOptimalFixedAngle";
 
 const SurfaceCp = (props: ThreeElements["mesh"]) => {
-  const mesh = useRef<THREE.Mesh>(null!);
-  const points = useRef<THREE.Points>(null!);
-  const positionsRef = useRef<THREE.BufferAttribute>(null);
-  const surfacePositionsRef = useRef<THREE.BufferAttribute>(null);
+  const table = useResultsStore.getState().table;
+  const variable = usePropellerStore.getState().variable;
 
-  const blades = usePropellerStore((state) => state.blades);
+  const { traceColor, infoColor, errorColor } = useCSSColors();
 
-  const chartType = "cp";
-
-  const markers = useResultsStore.getState().cpMarkers;
-
-  useFrame((state, dt) => {
-    if (positionsRef.current) {
-      positionsRef.current.set(markers);
-      positionsRef.current.needsUpdate = true;
-    }
-    if (surfacePositionsRef.current) {
-      surfacePositionsRef.current.set(verts[chartType][blades]);
-      surfacePositionsRef.current.needsUpdate = true;
-    }
-  });
-  const style = getComputedStyle(document.body);
-  const p = style.getPropertyValue("--p").replaceAll(" ", ",")
-  console.log(p);
-  const traceColor = new THREE.Color(`hsl(${p})`);
+  const { j_lim } = useOptimalFixedAngle();
 
   return (
-    <mesh {...props} ref={mesh} scale={[0.1, 5, 1]}>
-      <planeGeometry
-        args={[5, 5, 50, 60]}
-        onUpdate={(self) => {
-          self.computeVertexNormals();
-          console.log(self);
-        }}
-      >
-        <bufferAttribute
-          ref={surfacePositionsRef}
-          attach="attributes-position"
-          count={verts[chartType][blades].length / 3}
-          array={verts[chartType][blades]}
-          itemSize={3}
+    <mesh {...props} scale={[0.1, 5, 1]}>
+      <Surface type="cp" />
+      {table.map(({ angle, cp, j }, index) => (
+        <Sphere
+          key={index}
+          position={[angle, cp, j]}
+          scale={[POINT_SIZE * 1, POINT_SIZE * 0.02, POINT_SIZE * 0.1]}
+          material-color={
+            !variable &&
+            (index > POINTS_BEFORE_MAX_RPM || (j_lim === 0 && j === 0))
+              ? errorColor
+              : traceColor
+          }
         />
-      </planeGeometry>
-      <points ref={points}>
-        <bufferGeometry>
-          <bufferAttribute
-            ref={positionsRef}
-            attach="attributes-position"
-            count={markers.length / 3}
-            array={markers}
-            itemSize={3}
-            // usage={THREE.DynamicDrawUsage}
-          />
-        </bufferGeometry>
-        <pointsMaterial
-          attach="material"
-          color={traceColor}
-          size={5}
-          sizeAttenuation={false}
-        />
-      </points>
-
-      <meshStandardMaterial
-        color="lightgreen"
-        side={THREE.DoubleSide}
-        opacity={0.6}
-        transparent
-        wireframe
-      />
-      <VerticalAxis/>
+      ))}
+      <VerticalAxis />
     </mesh>
   );
 };

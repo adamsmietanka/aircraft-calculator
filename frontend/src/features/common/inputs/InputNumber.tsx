@@ -2,13 +2,13 @@ import InfoTooltip from "../InfoTooltip";
 
 interface Props {
   label: string;
-  unit: string;
+  unit?: string;
   value: number;
   step?: number;
   min?: number;
   tooltip?: string;
   disabled?: boolean;
-  setter: (value: number) => void;
+  setter?: (value: number) => void;
 }
 
 const InputNumber = ({
@@ -29,19 +29,21 @@ const InputNumber = ({
           {tooltip && <InfoTooltip text={tooltip} />}
         </span>
       </label>
-      <label className="input-group">
+      <label className="join">
         <input
-          className="input input-bordered w-full"
+          className="input input-bordered w-full join-item"
           type="number"
           step={step}
           value={value}
           min={min}
           disabled={disabled}
-          onChange={(e) => setter(parseFloat(e.target.value))}
+          onChange={(e) => setter && setter(parseFloat(e.target.value))}
         />
-        <span className="flex items-center justify-center w-20 rounded-lg h-12">
-          {unit}
-        </span>
+        {unit && (
+          <div className="flex items-center justify-center w-20 rounded-lg h-12 join-item bg-base-300">
+            {unit}
+          </div>
+        )}
       </label>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Mesh } from "../../data/cp";
+import { Mesh } from "../../features/power_unit/data/cp";
 
 export const generate_verts = (mesh: Mesh) => {
   const results: number[] = [];

@@ -1,10 +1,9 @@
-import React from "react";
-import InputNumber from "../common/inputs/InputNumber";
 import InputSlider from "../common/inputs/InputSlider";
 import { useEngineStore } from "./stores/useEngine";
 import PowerUnitEngineChart from "./PowerUnitEngineChart";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
+import InputUnits from "../common/inputs/InputUnits";
 
 const PowerUnitEngine = () => {
   const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
@@ -16,12 +15,11 @@ const PowerUnitEngine = () => {
   return (
     <div className="flex w-full p-4">
       <div className="flex flex-col w-80 mr-8 space-y-1">
-        <InputNumber
+        <InputUnits
+          type="power"
           value={seaLevelPower}
           setter={setSeaLevelPower}
-          step={50}
           label="Sea Level Power"
-          unit="kW"
         />
         <InputSlider
           label="Maximum altitude"

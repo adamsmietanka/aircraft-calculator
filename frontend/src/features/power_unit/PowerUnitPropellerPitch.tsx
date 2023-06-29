@@ -1,16 +1,17 @@
 import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
-import BladePitch from "../common/BladePitch";
+import { useOptimalFixedAngle } from "./hooks/useOptimalFixedAngle";
+import { ReactComponent as ProfileIcon } from "../../assets/clarkY.svg";
 
-interface Props {
-  tooltip?: string;
-}
 
-const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
+const PowerUnitPropellerPitch = () => {
   const variable = usePropellerStore((state) => state.variable);
   const angle = usePropellerStore((state) => state.angle);
   const setVariable = usePropellerStore((state) => state.setVariable);
   const setAngle = usePropellerStore((state) => state.setAngle);
+
+  const { j_lim } = useOptimalFixedAngle();
+  
   return (
     <div className="form-control">
       <label className="label">
@@ -19,10 +20,20 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
           <InfoTooltip text="A propeller can have a blade with a fixed pitch or a variable one which changes with the speed of the aircraft" />
         </span>
       </label>
-      <label className="input-group">
-        <BladePitch variable={variable} setVariable={setVariable} />
+      <div className="join">
+        <div
+          className="btn w-16 normal-case bg-base-300 join-item"
+          onClick={() => setVariable(!variable)}
+        >
+          <div
+            className="tooltip w-9 svg-color text-color z-50"
+            data-tip={`Click to change to ${variable ? "fixed" : "variable"}`}
+          >
+            <ProfileIcon className={`profile w-8 ${variable && "variable"}`} />
+          </div>
+        </div>
         <input
-          className="input input-bordered w-full"
+          className="input input-bordered w-full join-item"
           type={variable ? "text" : "number"}
           min={10}
           max={60}
@@ -31,11 +42,16 @@ const PowerUnitPropellerPitch = ({ tooltip }: Props) => {
           disabled={variable}
         />
         {!variable && (
-          <span className="flex items-center justify-center w-20 rounded-lg h-12">
-            {"°"}
-          </span>
+          <div className="flex items-center justify-center w-16 h-full join-item bg-base-300">
+            °
+          </div>
         )}
-      </label>
+      </div>
+      {j_lim === 0 && !variable && (
+        <p className="label text-xs text-error">
+          The blade angle is too shallow for this much power!
+        </p>
+      )}
     </div>
   );
 };

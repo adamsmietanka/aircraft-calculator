@@ -13,14 +13,14 @@ interface ResultsState {
   altitude: number;
   step: number;
   points: number;
-  cpMarkers: Float32Array;
-  effMarkers: Float32Array;
+  cpMarkers: number[][];
+  effMarkers: number[][];
   table: TableRow[];
   setAltitude: (value: number) => void;
   setStep: (value: number) => void;
   setPoints: (value: number) => void;
-  setCpMarkers: (value: Float32Array) => void;
-  setEffMarkers: (value: Float32Array) => void;
+  setCpMarkers: (value: number[][]) => void;
+  setEffMarkers: (value: number[][]) => void;
   setTable: (value: TableRow[]) => void;
 }
 
@@ -28,8 +28,8 @@ export const useResultsStore = create<ResultsState>()((set) => ({
   altitude: 0,
   step: 5,
   points: 10,
-  cpMarkers: new Float32Array(),
-  effMarkers: new Float32Array(),
+  cpMarkers: [],
+  effMarkers: [],
   table: [],
   setAltitude: (value) => set((state) => ({ altitude: value })),
   setStep: (value) => set((state) => ({ step: value })),
