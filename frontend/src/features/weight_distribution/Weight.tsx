@@ -7,6 +7,7 @@ import { ReactComponent as Edit } from "../../assets/edit.svg";
 
 import { CoG } from "../../utils/massCalculations";
 import AddComponent from "./AddComponent";
+import WeightDistribution3D from "./three/WeightDistribution3D";
 
 const Weight = () => {
   const [toggleModal, setToggleModal] = useState<boolean>(false);
@@ -119,6 +120,7 @@ const Weight = () => {
           </div>
           {/*right row */}
           <div className="flex flex-col">
+            <WeightDistribution3D />
             <WeightDistributionCharts />
           </div>
         </div>
