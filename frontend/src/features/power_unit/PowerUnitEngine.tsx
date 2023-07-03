@@ -46,7 +46,7 @@ const PowerUnitEngine = () => {
         <PowerUnitEngineSupercharger />
         <PowerUnitEngineTurbocharger />
       </div>
-      <div>
+      <div className="w-1/2">
         <PowerUnitEngineChart />
         <Chart2D trace={points}/>
       </div>
