@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import { useExtendedStore } from "./useExtended";
-import { useInitialStore } from "./useInitial";
+import { useExtendedStore } from "./stores/useExtended";
+import { useInitialStore } from "./stores/useInitial";
 import axios from "axios";
 import PerformanceExtendedChart from "./PerformanceExtendedChart";
 import { usePower } from "../power_unit/hooks/usePower";

@@ -1,5 +1,5 @@
 import { useEffect} from "react";
-import { useInitialStore } from "./useInitial";
+import { useInitialStore } from "./stores/useInitial";
 import Plot from 'react-plotly.js';
 
 interface PerformanceChartProps {

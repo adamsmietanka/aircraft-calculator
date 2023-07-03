@@ -1,4 +1,14 @@
 import create from "zustand";
+import { useCallback } from "react";
+
+export function createVelocitiesArray(veloMax: number, veloMin: number, elements = 100) {
+  var array = [];
+  var step = (veloMax - veloMin) / (elements - 1);
+  for (var i = 0; i < elements; i++){
+    array.push(veloMin + (step * i));
+  }
+  return array
+}
 
 interface InitialState {
   method_type: 'breguet'
@@ -15,6 +25,7 @@ interface InitialState {
   aspectRatio: number;
   cx0: number;
   czmax: number;
+  velocities: number[];
   setProptype: (value: string) => void;
   setPropnumber: (value: number) => void;
   setFlightAltitude: (value: number) => void;
@@ -28,6 +39,7 @@ interface InitialState {
   setAspectRatio: (value: number) => void;
   setCx0: (value: number) => void;
   setCzmax: (value: number) => void;
+  setVelocities: (value: number[]) => void;
 }
 
 export const useInitialStore = create<InitialState>()((set) => ({
@@ -45,6 +57,7 @@ export const useInitialStore = create<InitialState>()((set) => ({
   aspectRatio: 2.855,
   cx0: 0.0269,
   czmax: 1.156,
+  velocities: createVelocitiesArray(54.98, 25, 50),
   setProptype: (value) => set((state) => ({ proptype: value })),
   setPropnumber: (value) => set((state) => ({ propnumber: value })),
   setFlightAltitude: (value) => set((state) => ({ flightAltitude: value })),
@@ -52,10 +65,13 @@ export const useInitialStore = create<InitialState>()((set) => ({
   setStartMass: (value) => set((state) => ({ startMass: value })),
   setFuelMass: (value) => set((state) => ({ fuelMass: value })),
   setFuelcons: (value) => set((state) => ({ fuelcons: value })),
-  setVmax: (value) => set((state) => ({ vmax: value })),
   setWmax: (value) => set((state) => ({ wmax: value })),
   setArea: (value) => set((state) => ({ area: value })),
   setAspectRatio: (value) => set((state) => ({ aspectRatio: value })),
   setCx0: (value) => set((state) => ({ cx0: value })),
   setCzmax: (value) => set((state) => ({ czmax: value })),
+  setVmax: (value) => set((state) => ({
+    vmax: value,
+    velocities: createVelocitiesArray(value, 25, 50)})),
+  setVelocities: (value) => set((state) => ({ velocities: value })),
 }));

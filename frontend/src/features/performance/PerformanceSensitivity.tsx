@@ -1,9 +1,9 @@
-import { useInitialStore } from "./useInitial";
+import { useInitialStore } from "./stores/useInitial";
 import { useState, useEffect } from "react";
 import PerformanceSensitivityRangeChart from "./PerformanceSensitivityRangeChart";
 import PerformanceSensitivityEnduranceChart from "./PerformanceSensitivityEnduranceChart";
 import axios from "axios";
-import { useSensitivityStore } from "./useSensitivity";
+import { useSensitivityStore } from "./stores/useSensitivity";
 import { usePower } from "../power_unit/hooks/usePower";
 
 
