@@ -1,5 +1,5 @@
 
-import { useInitialStore } from "./useInitial";
+import { useInitialStore } from "./stores/useInitial";
 import { useState, useEffect } from "react";
 import PerformanceInitialRangeChart from "./PerformanceInitialRangeChart";
 import PerformanceInitialEnduranceChart from "./PerformanceInitiaEndurancelChart";
@@ -44,75 +44,10 @@ const PerformanceInitial = () => {
     setMaxPower(() => calculatePower(flightAltitude))
   }, [flightAltitude, calculatePower])
 
-  const [trace, setTrace] = useState(
-    {
-      xes: [],
-      xes2: [],
-      xes3: [],
-      yes: [],
-      yes2: [],
-      yes3: [],
-      zes: [],
-      zes2: [],
-      zes3: [],
-    }
-  );
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log({
-      method_type,
-      proptype,
-      propnumber,
-      nominalPower,
-      flightAltitude,
-      startMass,
-      fuelMass,
-      fuelcons,
-      vmax,
-      wmax,
-      area,
-      aspectRatio,
-      cx0,
-      czmax,
-      maxPower
-    });
-    let response = await axios.post("http://127.0.0.1:8000", {
-    method_type,
-    proptype,
-    propnumber,
-    nominalPower,
-    flightAltitude,
-    startMass,
-    fuelMass,
-    fuelcons,
-    vmax,
-    wmax,
-    area,
-    aspectRatio,
-    cx0,
-    czmax,
-    maxPower
-    })
-    console.log(response.data)
-    setTrace((prevState) => ({
-      ...prevState,
-      xes: response.data.xes,
-      xes2: response.data.xes2,
-      xes3: response.data.xes3,
-      yes: response.data.yes,
-      yes2: response.data.yes2,
-      yes3: response.data.yes3,
-      zes: response.data.zes,
-      zes2: response.data.zes2,
-      zes3: response.data.zes3,
-    }))};
-
-
   return (
-    <div className="flex">
-      <div className="flex flex-col w-64 mr-8 space-y-2">
-        <form className="add-form gap-5" onSubmit={onSubmit}>
+    <div className="flex w-full p-4">
+      <div className="flex flex-col w-80 mr-8 space-y-2">
+        <form className="add-form gap-5">
             <label className="label">
               <span className="label-text">Select propulsion type</span>
             </label>
@@ -218,15 +153,8 @@ const PerformanceInitial = () => {
           <div className="break"></div>
           <input type="submit" value="Save Inputs" className="btn w-full flex items-center justify-center align-self-center"  />
         </form>
-      </div> 
-      <div className="flex flex-col w-64 mr-8 space-y-2">
-        <PerformanceInitialRangeChart
-          trace={trace}
-        />
-        <PerformanceInitialEnduranceChart
-          trace={trace}
-        />
       </div>
+      <PerformanceInitialEnduranceChart/> 
     </div>
   );
 };
