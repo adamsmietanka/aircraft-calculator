@@ -19,8 +19,10 @@ const Chart2D = ({ trace, ...props }: TraceProps) => {
       <Canvas orthographic camera={{ zoom: 30, position: [0, 0, 10] }}>
         {/* <gridHelper rotation-x={Math.PI / 2} /> */}
         {/* <axesHelper /> */}
-        <Trace trace={trace} {...props} />
-        <LinesVertical ticks={xTicks} />
+        <mesh position-x={-7.5}>
+          <Trace trace={trace} {...props} />
+          <LinesVertical ticks={xTicks} />
+        </mesh>
       </Canvas>
     </div>
   );

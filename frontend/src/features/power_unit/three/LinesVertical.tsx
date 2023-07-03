@@ -1,8 +1,10 @@
 import { useRef } from "react";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
-import { TraceProps } from "./Chart2D";
 import useLinesVertical from "./hooks/useLinesVertical";
+import { Html } from "@react-three/drei";
+import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
+import useChartUnits from "../../settings/hooks/useChartUnits";
 
 interface AxisProps {
   ticks: number[];
@@ -20,8 +22,10 @@ const LinesVertical = ({ ticks, ...props }: AxisProps) => {
     shaderMaterialRef
   );
 
+  const { displayMultiplier, valueMultiplier, unit } = useChartUnits();
+
   return (
-    <mesh position-x={-7.5} {...props}>
+    <group {...props}>
       <lineSegments>
         <bufferGeometry>
           <bufferAttribute
@@ -52,7 +56,24 @@ const LinesVertical = ({ ticks, ...props }: AxisProps) => {
           fragmentShader={fragment}
         />
       </lineSegments>
-    </mesh>
+      {ticks.map((i) => (
+        <Html
+          key={i}
+          className="select-none text-xs"
+          position={[i * valueMultiplier, -NUMBERS_PADDING, 0]}
+          center
+        >
+          {i * displayMultiplier}
+        </Html>
+      ))}
+      <Html
+        className="select-none w-24"
+        position={[7.5, -TITLE_PADDING, 0]}
+        center
+      >
+        {`Altitude [${unit}]`}
+      </Html>
+    </group>
   );
 };
 
