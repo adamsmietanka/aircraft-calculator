@@ -5,8 +5,6 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./features/home/Home";
-import Steps from "./components/Steps";
-import { performanceUnitSteps, powerUnitSteps, stabilitySteps } from "./utils/steps";
 import {
   PowerUnitEngine,
   PowerUnitPropeller,
@@ -41,7 +39,7 @@ root.render(
             <Route path="propeller" element={<PowerUnitPropeller />} />
             <Route path="results" element={<PowerUnitResults />} />
           </Route>
-          <Route path="performance" element={<Steps/>}>
+          <Route path="performance">
             <Route path="initial_data" element={<PerformanceInitial />} />
             <Route path="perf_extended" element={<PerformanceExtendedAlg />} />
             <Route path="sensitivity" element={<PerformanceSensitivity />} />

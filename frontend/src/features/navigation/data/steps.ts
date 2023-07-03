@@ -20,9 +20,19 @@ const steps: Step[] = [
     path: "results",
   },
   {
-    name: "Performance",
+    name: "Initial Data",
     feature: "performance",
-    path: "",
+    path: "initial_data",
+  },
+  {
+    name: "Extended Algorithm",
+    feature: "performance",
+    path: "perf_extended",
+  },
+  {
+    name: "Sensitivity",
+    feature: "performance",
+    path: "sensitivity",
   },
   {
     name: "Mass Distribution",
