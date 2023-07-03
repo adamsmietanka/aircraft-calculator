@@ -1,9 +1,7 @@
 
 import { useInitialStore } from "./stores/useInitial";
 import { useState, useEffect } from "react";
-import PerformanceInitialRangeChart from "./PerformanceInitialRangeChart";
-import PerformanceInitialEnduranceChart from "./PerformanceInitiaEndurancelChart";
-import axios from "axios";
+import PerformanceInitialEnduranceChart from "./PerformanceInitialChart";
 import { usePower } from "../power_unit/hooks/usePower";
 import InputNumber from "../common/inputs/InputNumber";
 import InputSlider from "../common/inputs/InputSlider";
@@ -46,115 +44,92 @@ const PerformanceInitial = () => {
 
   return (
     <div className="flex w-full p-4">
-      <div className="flex flex-col w-80 mr-8 space-y-2">
-        <form className="add-form gap-5">
-            <label className="label">
-              <span className="label-text">Select propulsion type</span>
-            </label>
-            <select
-              className="select select-bordered w-full"
-              value={proptype}
-              name="proptype"
-              id="propselect"
-              onChange={(e) => setProptype(e.target.value)}
-            >
-              <option value="propeller-breguet">Propeller</option>
-              <option value="jet-breguet">Jet</option>
-            </select>
-
-          <InputSlider
-            value={propnumber}
-            setter={setPropnumber}
-            step={1}
-            min={1}
-            max={2}
-            label="Number of Engines"
-            unit=""
-          />
-          <InputNumber
-            value={nominalPower}
-            setter={setNominalPower}
-            step={0.1}
-            label="Nominal Power"
-            unit="kW"
-          />
-          <InputNumber
-            value={startMass}
-            setter={setStartMass}
-            step={0.01}
-            label="Start Mass"
-            unit="kg"
-          />
-          <InputNumber
-            value={fuelMass}
-            setter={setFuelMass}
-            step={1}
-            label="Mass of Fuel"
-            unit="kg"
-          />
-          <InputNumber
-            value={fuelcons}
-            setter={setFuelcons}
-            step={0.001}
-            label="SFC"
-            unit="kg/kWh"
-          />
-          <InputNumber
-            value={vmax}
-            setter={setVmax}
-            step={0.01}
-            label="Max Velocity"
-            unit="m/s"
-          />
-          <InputNumber
-            value={wmax}
-            setter={setWmax}
-            step={0.01}
-            label="Rate of Climb"
-            unit="m/s"
-          />
-          <InputNumber
-            value={area}
-            setter={setArea}
-            step={0.001}
-            label="Wing area"
-            unit="m^2"
-          />
-          <InputNumber
-            value={aspectRatio}
-            setter={setAspectRatio}
-            step={0.001}
-            label="Aspect Ratio"
-            unit="-"
-          />
-          <InputNumber
-            value={cx0}
-            setter={setCx0}
-            step={0.0001}
-            label="Minimal Drag Coefficient"
-            unit="-"
-          />
-          <InputNumber
-            value={czmax}
-            setter={setCzmax}
-            step={0.001}
-            label="Maximal Lift Coefficient"
-            unit="-"
-          />
-          <InputSlider
-            label="Flight altitude"
-            unit="km"
-            value={flightAltitude}
-            step={0.1}
-            min={0}
-            max={10}
-            setter={setFlightAltitude} 
-          />
-          <div className="break"></div>
-          <input type="submit" value="Save Inputs" className="btn w-full flex items-center justify-center align-self-center"  />
-        </form>
+      <div className="flex flex-col w-80 mr-8 space-y-1">
+        <InputSlider
+          value={propnumber}
+          setter={setPropnumber}
+          step={1}
+          min={1}
+          max={2}
+          label="Number of Engines"
+          unit=""
+        />
+        <InputNumber
+          value={nominalPower}
+          setter={setNominalPower}
+          step={0.1}
+          label="Nominal Power"
+          unit="kW"
+        />
+        <InputNumber
+          value={startMass}
+          setter={setStartMass}
+          step={0.01}
+          label="Start Mass"
+          unit="kg"
+        />
+        <InputNumber
+          value={fuelMass}
+          setter={setFuelMass}
+          step={1}
+          label="Mass of Fuel"
+          unit="kg"
+        />
+        <InputNumber
+          value={fuelcons}
+          setter={setFuelcons}
+          step={0.001}
+          label="SFC"
+          unit="kg/kWh"
+        />
+        <InputNumber
+          value={vmax}
+          setter={setVmax}
+          step={0.01}
+          label="Max Velocity"
+          unit="m/s"
+        />
+        <InputNumber
+          value={area}
+          setter={setArea}
+          step={0.001}
+          label="Wing area"
+          unit="m^2"
+        />
+        <InputNumber
+          value={aspectRatio}
+          setter={setAspectRatio}
+          step={0.001}
+          label="Aspect Ratio"
+          unit="-"
+        />
+        <InputNumber
+          value={cx0}
+          setter={setCx0}
+          step={0.0001}
+          label="Minimal Drag Coefficient"
+          unit="-"
+        />
+        <InputNumber
+          value={czmax}
+          setter={setCzmax}
+          step={0.001}
+          label="Maximal Lift Coefficient"
+          unit="-"
+        />
+        <InputSlider
+          label="Flight altitude"
+          unit="km"
+          value={flightAltitude}
+          step={0.1}
+          min={0}
+          max={10}
+          setter={setFlightAltitude} 
+        />   
       </div>
-      <PerformanceInitialEnduranceChart/> 
+      <div>
+        <PerformanceInitialEnduranceChart/>
+      </div> 
     </div>
   );
 };

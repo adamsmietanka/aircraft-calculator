@@ -1,14 +1,10 @@
 import create from "zustand";
 import { useCallback } from "react";
 
-export function createVelocitiesArray(veloMax: number, veloMin: number, elements = 100) {
-  var array = [];
-  var step = (veloMax - veloMin) / (elements - 1);
-  for (var i = 0; i < elements; i++){
-    array.push(veloMin + (step * i));
-  }
-  return array
-}
+const createValuesArray = (minValue: number, maxValue: number, numElements: number) => {
+  const step = (maxValue - minValue) / (numElements - 1);
+  return Array.from({ length: numElements }, (_, index) => minValue + index * step);
+};
 
 interface InitialState {
   method_type: 'breguet'
@@ -57,7 +53,7 @@ export const useInitialStore = create<InitialState>()((set) => ({
   aspectRatio: 2.855,
   cx0: 0.0269,
   czmax: 1.156,
-  velocities: createVelocitiesArray(54.98, 25, 50),
+  velocities: createValuesArray(25, 50, 50),
   setProptype: (value) => set((state) => ({ proptype: value })),
   setPropnumber: (value) => set((state) => ({ propnumber: value })),
   setFlightAltitude: (value) => set((state) => ({ flightAltitude: value })),
@@ -72,6 +68,6 @@ export const useInitialStore = create<InitialState>()((set) => ({
   setCzmax: (value) => set((state) => ({ czmax: value })),
   setVmax: (value) => set((state) => ({
     vmax: value,
-    velocities: createVelocitiesArray(value, 25, 50)})),
+    velocities: createValuesArray(25, value, 50)})),
   setVelocities: (value) => set((state) => ({ velocities: value })),
 }));

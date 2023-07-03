@@ -5,16 +5,23 @@ import Plot from 'react-plotly.js';
 
 const PerformanceInitialEnduranceChart = () => {
   const velocities = useInitialStore((state) => state.velocities);
-  const [calculateEndurance] = useBreguet();
+  const [calculateEndurance, calculateRange] = useBreguet();
+  
   const endurances = useMemo(
     () => velocities.map(calculateEndurance),
     [calculateEndurance, velocities]
   );
 
+  const ranges = useMemo(
+    () => velocities.map(calculateRange),
+    [calculateRange, velocities]
+  );
+
+  const visibilityArray = ranges.concat(endurances)
 
   const layout = useMemo(
     () => ({
-      title: 'Endurance vs Velocity',
+      title: 'Endurance and Range vs Velocity',
       font: { size: 18 },
       height: window.innerWidth > 960 ? 600 : window.innerHeight * 0.5,
       width: window.innerWidth > 1800 ? 600 : window.innerWidth * 0.5,
@@ -26,9 +33,9 @@ const PerformanceInitialEnduranceChart = () => {
         pad: 4,
       },
       yaxis: {
-        range: [Math.min(...endurances)*0.9, Math.max(...endurances) * 1.1],
+        range: [Math.min(...visibilityArray)*0.9, Math.max(...visibilityArray) * 1.1],
         title: {
-          text: 'Endurance [100*H]',
+          text: '',
           font: { size: 16 },
         },
       },
@@ -39,7 +46,7 @@ const PerformanceInitialEnduranceChart = () => {
           font: { size: 16 },
         },
       },
-    }), [endurances]
+    }), [endurances, ranges]
   );
 
 return (
@@ -51,9 +58,18 @@ return (
           y: endurances,
           type: 'scatter',
           mode: 'lines',
-          line: {dash: 'dash'},
+          line: {dash: 'solid'},
           marker: {color: 'red'},
-          name: 'Const. H-V',
+          name: 'Endurance [100*H]',
+        },
+        {
+          x: velocities,
+          y: ranges,
+          type: 'scatter',
+          mode: 'lines',
+          line: {dash: 'solid'},
+          marker: {color: 'blue'},
+          name: 'Range [km]',
         },
       ]}
       layout={layout}
