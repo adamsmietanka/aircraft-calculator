@@ -4,13 +4,17 @@ import fragment from "./shaders/line.fragment.glsl";
 import { TraceProps } from "./Chart2D";
 import useLinesVertical from "./hooks/useLinesVertical";
 
-const LinesVertical = ({ trace, ...props }: TraceProps) => {
+interface AxisProps {
+  ticks: number[];
+}
+
+const LinesVertical = ({ ticks, ...props }: AxisProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
 
   const { index, starting_position, uniforms } = useLinesVertical(
-    trace,
+    ticks,
     fromRef,
     toRef,
     shaderMaterialRef
