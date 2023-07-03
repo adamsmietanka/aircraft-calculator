@@ -19,7 +19,30 @@ const useLinesVertical = (
   toRef: React.RefObject<THREE.BufferAttribute>,
   shaderMaterialRef: React.RefObject<THREE.ShaderMaterial>
 ) => {
-  let markers = Array.from(Array(16).keys());
+
+  const min = points[0].x;
+  const max = points[points.length - 1].x;
+//   const min = 0.001;
+//   const max = 0.00567;
+  const range = max - min;
+  const log = Math.log10(range);
+  const rem = log % 1;
+  const remainder = rem >= 0 ? rem : 1 + rem;
+  let step = 0; // Examples in the 10^3 range
+  if (remainder > 0.95) step = 2; // For range > 891
+  else if (remainder > 0.65) step = 1; // for range > 446
+  else if (remainder > 0.25) step = 0.5; // for range > 177
+  else step = 0.2; // for range > 89.1
+  step *= Math.pow(10, Math.floor(log));
+
+  const lowerAxisLimit = Math.ceil((min * 1) / step);
+
+  const markers = Array.from(Array(10).keys()).map(
+    (i) => (i + lowerAxisLimit) * step
+  );
+
+//   console.log(step, (min * 1) / step, markers);
+  
   const { gridColor } = useCSSColors();
   const theme = useThemeStore((state) => state.theme);
 
