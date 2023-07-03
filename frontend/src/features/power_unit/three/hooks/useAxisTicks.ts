@@ -2,6 +2,7 @@ import { Point } from "../Chart2D";
 
 const useAxisTicks = (points: Point[]) => {
   const getNormalizedStep = (remainder: number) => {
+    // examples for log(range) ~ 2
     if (remainder > 0.95) return 2; // For range > 891
     else if (remainder > 0.65) return 1; // for range > 446
     else if (remainder > 0.25) return 0.5; // for range > 177

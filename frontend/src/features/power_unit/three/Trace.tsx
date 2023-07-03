@@ -6,13 +6,13 @@ import { TraceProps } from "./Chart2D";
 
 const Trace = ({ trace, ...props }: TraceProps) => {
   return (
-    <mesh position-x={-7.5}>
+    <group>
       <Line trace={trace} />
       <Line trace={trace} position-y={0.03} />
       <Line trace={trace} position-x={0.03} />
       <Line trace={trace} position-y={-0.03} />
       <Line trace={trace} position-x={-0.03} />
-    </mesh>
+    </group>
   );
 };
 
