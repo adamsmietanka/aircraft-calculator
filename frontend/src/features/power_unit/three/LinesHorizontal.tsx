@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
-import useLinesVertical from "./hooks/useLinesVertical";
+import useLinesHorizontal from "./hooks/useLinesHorizontal";
 import { Html } from "@react-three/drei";
 import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
@@ -10,23 +10,22 @@ interface AxisProps {
   ticks: number[];
 }
 
-const LinesVertical = ({ ticks, ...props }: AxisProps) => {
+const LinesHorizontal = ({ ticks, ...props }: AxisProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
 
-  const { index, starting_position, uniforms } = useLinesVertical(
+  const { index, starting_position, uniforms } = useLinesHorizontal(
     ticks,
     fromRef,
     toRef,
     shaderMaterialRef
   );
 
-  const { displayMultiplier, valueMultiplier, unit } =
-    useChartUnits("altitude");
+  const { displayMultiplier, valueMultiplier, unit } = useChartUnits("power");
 
   return (
-    <group {...props}>
+    <mesh scale-y={0.01} {...props}>
       <lineSegments>
         <bufferGeometry>
           <bufferAttribute
@@ -57,25 +56,25 @@ const LinesVertical = ({ ticks, ...props }: AxisProps) => {
           fragmentShader={fragment}
         />
       </lineSegments>
-      {ticks.map((i) => (
+      {ticks.map((j) => (
         <Html
-          key={i}
+          key={j}
           className="select-none text-xs"
-          position={[i * valueMultiplier, -NUMBERS_PADDING, 0]}
+          position={[-NUMBERS_PADDING, j * valueMultiplier, 0]}
           center
         >
-          {i * displayMultiplier}
+          {j * displayMultiplier}
         </Html>
       ))}
       <Html
         className="select-none w-24"
-        position={[7.5, -TITLE_PADDING, 0]}
+        position={[-TITLE_PADDING, 5, 0]}
         center
       >
-        {`Altitude [${unit}]`}
+        {`Power [${unit}]`}
       </Html>
-    </group>
+    </mesh>
   );
 };
 
-export default LinesVertical;
+export default LinesHorizontal;

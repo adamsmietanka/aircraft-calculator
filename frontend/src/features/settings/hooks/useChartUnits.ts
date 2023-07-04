@@ -1,7 +1,7 @@
 import { useGlobalUnitsStore } from "../stores/useGlobalUnits";
 
-const useChartUnits = (type?: string) => {
-  const unit = useGlobalUnitsStore((state) => state.types.altitude);
+const useChartUnits = (type: string) => {
+  const unit = useGlobalUnitsStore((state) => state.types[type]);
 
   interface UnitData {
     displayMultiplier: number;
@@ -11,7 +11,7 @@ const useChartUnits = (type?: string) => {
   const units: Record<string, Record<string, UnitData>> = {
     altitude: {
       ft: {
-        displayMultiplier: 5, //2km turns into 10K feet
+        displayMultiplier: 5, // e.x. 2km turns into 10K feet
         valueMultiplier: 1.524,
       },
       km: {
@@ -19,8 +19,14 @@ const useChartUnits = (type?: string) => {
         valueMultiplier: 1,
       },
     },
+    power: {
+      kW: {
+        displayMultiplier: 1,
+        valueMultiplier: 1,
+      },
+    },
   };
-  const { displayMultiplier, valueMultiplier } = units.altitude[unit];
+  const { displayMultiplier, valueMultiplier } = units[type][unit];
 
   return { displayMultiplier, valueMultiplier, unit };
 };

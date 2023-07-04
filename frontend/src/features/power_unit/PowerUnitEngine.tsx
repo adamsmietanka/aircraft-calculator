@@ -18,7 +18,7 @@ const PowerUnitEngine = () => {
   const points = useEngineChart();
 
   return (
-    <div className="flex w-full p-4">
+    <div className="flex p-4 h-full">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputUnits
           type="power"
@@ -46,10 +46,7 @@ const PowerUnitEngine = () => {
         <PowerUnitEngineSupercharger />
         <PowerUnitEngineTurbocharger />
       </div>
-      <div className="w-1/2">
-        <PowerUnitEngineChart />
-        <Chart2D trace={points}/>
-      </div>
+      <Chart2D trace={points} />
     </div>
   );
 };

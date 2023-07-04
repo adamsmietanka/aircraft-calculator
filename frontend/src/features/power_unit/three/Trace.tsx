@@ -30,7 +30,7 @@ const Line = ({ trace, ...props }: TraceProps) => {
 
   return (
     <mesh {...props}>
-      <line scale-y={0.005}>
+      <line scale-y={0.01}>
         <bufferGeometry>
           <bufferAttribute
             ref={fromRef}
