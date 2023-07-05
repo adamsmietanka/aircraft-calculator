@@ -2,26 +2,29 @@ import { useRef } from "react";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
 import useLine from "./hooks/useLine";
-import { TraceProps } from "./Chart2D";
-import { useFrame } from "@react-three/fiber";
+import { Point } from "./Chart2D";
+import { ThreeElements, Vector3, useFrame } from "@react-three/fiber";
 
-const Trace = ({ trace, scale, ...props }: TraceProps) => {
+interface TraceProps {
+  trace: Point[];
+}
+
+const Trace = ({ ...props }: TraceProps) => {
   return (
     <group>
-      <Line trace={trace} scale={scale} />
-      <Line trace={trace} scale={scale} position-y={0.03} />
-      <Line trace={trace} scale={scale} position-x={0.03} />
-      <Line trace={trace} scale={scale} position-y={-0.03} />
-      <Line trace={trace} scale={scale} position-x={-0.03} />
+      <Line {...props} />
+      <Line {...props} position-y={0.03} />
+      <Line {...props} position-x={0.03} />
+      <Line {...props} position-y={-0.03} />
+      <Line {...props} position-x={-0.03} />
     </group>
   );
 };
 
-const Line = ({ trace, scale, ...props }: TraceProps) => {
+const Line = ({ trace }: TraceProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
-  const meshRef = useRef<THREE.Mesh>(null);
 
   const { index, starting_position, uniforms } = useLine(
     trace,
@@ -30,16 +33,8 @@ const Line = ({ trace, scale, ...props }: TraceProps) => {
     shaderMaterialRef
   );
 
-  // const { xTicks, yTicks, scaleY } = useAxisTicks(trace, xAxis, yAxis);
-
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.scale.setY(scale[1]);
-    }
-  });
-
   return (
-    <mesh ref={meshRef} {...props}>
+    <mesh>
       <line>
         <bufferGeometry>
           <bufferAttribute

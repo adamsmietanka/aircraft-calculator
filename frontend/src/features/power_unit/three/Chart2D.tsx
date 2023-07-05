@@ -1,8 +1,5 @@
 import { Canvas, ThreeElements } from "@react-three/fiber";
-import Trace from "./Trace";
-import LinesVertical from "./LinesVertical";
-import useAxisTicks from "./hooks/useAxisTicks";
-import LinesHorizontal from "./LinesHorizontal";
+import LineChart from "./LineChart";
 
 export interface Point {
   x: number;
@@ -22,21 +19,11 @@ export type ChartProps = {
   yAxis: Axis;
 } & ThreeElements["mesh"];
 
-export type TraceProps = {
-  trace: Point[];
-  scale: number[];
-};
-
-const Chart2D = ({ trace, xAxis, yAxis, ...props }: ChartProps) => {
-  const { xTicks, yTicks, scaleY } = useAxisTicks(trace, xAxis, yAxis);
+const Chart2D = ({ ...props }: ChartProps) => {
   return (
-    <div className="h-4/5 w-3/5">
-      <Canvas orthographic camera={{ zoom: 30, position: [0, 0, 10] }}>
-        <mesh position={[-7.5, -5, 0]}>
-          <Trace trace={trace} scale={[1, scaleY, 1]} {...props} />
-          <LinesVertical ticks={xTicks} axis={xAxis} />
-          <LinesHorizontal ticks={yTicks} scale={scaleY} axis={yAxis} />
-        </mesh>
+    <div className="sticky top-28 h-3/5 w-3/5">
+      <Canvas orthographic camera={{ zoom: 30 }}>
+        <LineChart {...props} />
       </Canvas>
     </div>
   );
