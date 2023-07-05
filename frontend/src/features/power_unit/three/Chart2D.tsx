@@ -9,21 +9,33 @@ export interface Point {
   y: number;
 }
 
-export type TraceProps = {
+export interface Axis {
+  name: string;
+  type?: string;
+  min?: number;
+  max?: number;
+}
+
+export type ChartProps = {
   trace: Point[];
+  xAxis: Axis;
+  yAxis: Axis;
 } & ThreeElements["mesh"];
 
-const Chart2D = ({ trace, ...props }: TraceProps) => {
-  const [xTicks, yTicks] = useAxisTicks(trace);
+export type TraceProps = {
+  trace: Point[];
+  scale: number[];
+};
+
+const Chart2D = ({ trace, xAxis, yAxis, ...props }: ChartProps) => {
+  const { xTicks, yTicks, scaleY } = useAxisTicks(trace, xAxis, yAxis);
   return (
     <div className="h-4/5 w-3/5">
       <Canvas orthographic camera={{ zoom: 30, position: [0, 0, 10] }}>
-        {/* <gridHelper rotation-x={Math.PI / 2} /> */}
-        {/* <axesHelper /> */}
         <mesh position={[-7.5, -5, 0]}>
-          <Trace trace={trace} {...props} />
-          <LinesVertical ticks={xTicks} />
-          <LinesHorizontal ticks={yTicks} />
+          <Trace trace={trace} scale={[1, scaleY, 1]} {...props} />
+          <LinesVertical ticks={xTicks} axis={xAxis} />
+          <LinesHorizontal ticks={yTicks} scale={scaleY} axis={yAxis} />
         </mesh>
       </Canvas>
     </div>

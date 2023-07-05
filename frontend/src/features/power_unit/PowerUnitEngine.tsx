@@ -46,7 +46,16 @@ const PowerUnitEngine = () => {
         <PowerUnitEngineSupercharger />
         <PowerUnitEngineTurbocharger />
       </div>
-      <Chart2D trace={points} />
+      <Chart2D
+        trace={points}
+        xAxis={{ name: "Altitude", type: "altitude" }}
+        yAxis={{
+          name: "Power",
+          type: "power",
+          min: 0,
+          max: seaLevelPower * 1.4,
+        }}
+      />
     </div>
   );
 };
