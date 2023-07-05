@@ -5,12 +5,14 @@ import useLinesVertical from "./hooks/useLinesVertical";
 import { Html } from "@react-three/drei";
 import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
+import { Axis } from "./Chart2D";
 
 interface AxisProps {
   ticks: number[];
+  axis: Axis;
 }
 
-const LinesVertical = ({ ticks, ...props }: AxisProps) => {
+const LinesVertical = ({ ticks, axis, ...props }: AxisProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
@@ -22,8 +24,9 @@ const LinesVertical = ({ ticks, ...props }: AxisProps) => {
     shaderMaterialRef
   );
 
-  const { displayMultiplier, valueMultiplier, unit } =
-    useChartUnits("altitude");
+  const { displayMultiplier, valueMultiplier, unit } = useChartUnits(
+    axis.type as string
+  );
 
   return (
     <group {...props}>
@@ -72,7 +75,7 @@ const LinesVertical = ({ ticks, ...props }: AxisProps) => {
         position={[7.5, -TITLE_PADDING, 0]}
         center
       >
-        {`Altitude [${unit}]`}
+        {`${axis.name} [${unit}]`}
       </Html>
     </group>
   );

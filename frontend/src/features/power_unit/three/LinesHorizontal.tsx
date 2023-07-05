@@ -5,15 +5,20 @@ import useLinesHorizontal from "./hooks/useLinesHorizontal";
 import { Html } from "@react-three/drei";
 import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
+import { Axis } from "./Chart2D";
+import { useFrame } from "@react-three/fiber";
 
 interface AxisProps {
   ticks: number[];
+  axis: Axis;
+  scale: number;
 }
 
-const LinesHorizontal = ({ ticks, ...props }: AxisProps) => {
+const LinesHorizontal = ({ ticks, axis, scale, ...props }: AxisProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
 
   const { index, starting_position, uniforms } = useLinesHorizontal(
     ticks,
@@ -22,58 +27,69 @@ const LinesHorizontal = ({ ticks, ...props }: AxisProps) => {
     shaderMaterialRef
   );
 
-  const { displayMultiplier, valueMultiplier, unit } = useChartUnits("power");
+  const { displayMultiplier, valueMultiplier, unit } = useChartUnits(
+    axis.type as string
+  );
+
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.scale.setY(scale);
+    }
+  });
 
   return (
-    <mesh scale-y={0.01} {...props}>
-      <lineSegments>
-        <bufferGeometry>
-          <bufferAttribute
-            ref={fromRef}
-            attach="attributes-positionFrom"
-            count={starting_position.length / 3}
-            array={starting_position.slice()}
-            itemSize={3}
+    <>
+      <mesh ref={meshRef} {...props}>
+        <lineSegments>
+          <bufferGeometry>
+            <bufferAttribute
+              ref={fromRef}
+              attach="attributes-positionFrom"
+              count={starting_position.length / 3}
+              array={starting_position.slice()}
+              itemSize={3}
+            />
+            <bufferAttribute
+              ref={toRef}
+              attach="attributes-position"
+              count={starting_position.length / 3}
+              array={starting_position}
+              itemSize={3}
+            />
+            <bufferAttribute
+              attach="attributes-index"
+              array={index}
+              itemSize={1}
+            />
+          </bufferGeometry>
+          <shaderMaterial
+            ref={shaderMaterialRef}
+            // blending={THREE.AdditiveBlending}
+            uniforms={uniforms}
+            vertexShader={vertex}
+            fragmentShader={fragment}
           />
-          <bufferAttribute
-            ref={toRef}
-            attach="attributes-position"
-            count={starting_position.length / 3}
-            array={starting_position}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-index"
-            array={index}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        <shaderMaterial
-          ref={shaderMaterialRef}
-          // blending={THREE.AdditiveBlending}
-          uniforms={uniforms}
-          vertexShader={vertex}
-          fragmentShader={fragment}
-        />
-      </lineSegments>
-      {ticks.map((j) => (
-        <Html
-          key={j}
-          className="select-none text-xs"
-          position={[-NUMBERS_PADDING, j * valueMultiplier, 0]}
-          center
-        >
-          {j * displayMultiplier}
-        </Html>
-      ))}
+        </lineSegments>
+
+        {ticks.map((j) => (
+          <Html
+            key={j}
+            className="select-none text-xs"
+            position={[-NUMBERS_PADDING, j * valueMultiplier, 0]}
+            center
+          >
+            {j * displayMultiplier}
+          </Html>
+        ))}
+      </mesh>
       <Html
         className="select-none w-24"
-        position={[-TITLE_PADDING, 5, 0]}
+        position={[-1.5 * TITLE_PADDING, 5, 0]}
         center
       >
-        {`Power [${unit}]`}
+        {`${axis.name} [${unit}]`}
       </Html>
-    </mesh>
+    </>
   );
 };
 

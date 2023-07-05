@@ -1,6 +1,6 @@
-import { Point } from "../Chart2D";
+import { Axis, Point } from "../Chart2D";
 
-const useAxisTicks = (points: Point[]) => {
+const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
   const getNormalizedStep = (remainder: number) => {
     // examples for log(range) ~ 2
     if (remainder > 0.95) return 2; // For range > 891
@@ -24,18 +24,28 @@ const useAxisTicks = (points: Point[]) => {
     return Array.from(Array(10).keys()).map((i) => (i + lowerAxisLimit) * step);
   };
 
-  const minX = points[0].x;
-  const maxX = points[points.length - 1].x;
+  const getMinX = () => {
+    if (xAxis.min === 0) return 0;
+    return xAxis.min || points[0].x;
+  };
 
-  const minY = Math.min(...points.map((p) => p.y));
-  const maxY = Math.max(...points.map((p) => p.y));
+  const getMinY = () => {
+    if (yAxis.min === 0) return 0;
+    return yAxis.min || Math.min(...points.map((p) => p.y));
+  };
 
-  const markersX = getTicks(minX, maxX);
-  const markersY = getTicks(minY, maxY);
+  const minX = getMinX();
+  const maxX = xAxis.max ? xAxis.max : points[points.length - 1].x;
 
-  //   console.log(step, (min * 1) / step, markers);
+  const minY = getMinY();
+  const maxY = yAxis.max ? yAxis.max : Math.max(...points.map((p) => p.y));
 
-  return [markersX, markersY];
+  const xTicks = getTicks(minX, maxX);
+  const yTicks = getTicks(minY, maxY);
+
+  const scaleY = 10 / (maxY - minY);
+
+  return { xTicks, yTicks, scaleY };
 };
 
 export default useAxisTicks;
