@@ -11,14 +11,12 @@ import { useFrame } from "@react-three/fiber";
 interface AxisProps {
   ticks: number[];
   axis: Axis;
-  scale: number;
 }
 
-const LinesHorizontal = ({ ticks, axis, scale, ...props }: AxisProps) => {
+const LinesHorizontal = ({ ticks, axis }: AxisProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
-  const meshRef = useRef<THREE.Mesh>(null);
 
   const { index, starting_position, uniforms } = useLinesHorizontal(
     ticks,
@@ -31,15 +29,9 @@ const LinesHorizontal = ({ ticks, axis, scale, ...props }: AxisProps) => {
     axis.type as string
   );
 
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.scale.setY(scale);
-    }
-  });
-
   return (
     <>
-      <mesh ref={meshRef} {...props}>
+      <mesh>
         <lineSegments>
           <bufferGeometry>
             <bufferAttribute
