@@ -6,6 +6,7 @@ export const useUnits = (value: number, type: string) => {
   const types = useGlobalUnitsStore((state) => state.types);
   const system = useGlobalUnitsStore((state) => state.system);
   const setSpeed = useGlobalUnitsStore((state) => state.setSpeed);
+  const setPower = useGlobalUnitsStore((state) => state.setPower);
   const setAltitude = useGlobalUnitsStore((state) => state.setAltitude);
 
   const [unit, setUnit] = useState(types[type]);
@@ -22,6 +23,7 @@ export const useUnits = (value: number, type: string) => {
 
   useEffect(() => {
     setSpeed(system === "metric" ? "m/s" : "mph");
+    setPower(system === "metric" ? "kW" : "hp");
     setAltitude(system === "metric" ? "km" : "ft");
   }, [system, setSpeed, setAltitude]);
 

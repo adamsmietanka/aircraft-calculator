@@ -43,9 +43,10 @@ const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
   const xTicks = getTicks(minX, maxX);
   const yTicks = getTicks(minY, maxY);
 
-  const scaleY = 10 / (maxY - minY);
+  const scaleX = 15 / (maxX - minX);
+  const scaleY = 15 / (maxY - minY);
 
-  return { xTicks, yTicks, scaleY };
+  return { xTicks, yTicks, scaleX, scaleY };
 };
 
 export default useAxisTicks;
