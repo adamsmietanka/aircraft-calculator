@@ -98,7 +98,6 @@ const useLinesHorizontal = (
       shaderMaterialRef.current.uniforms.u_time_start.value =
         clock.getElapsedTime();
     }
-    console.log(ticks);
   }, [ticks]);
 
   return { index, starting_position, uniforms };

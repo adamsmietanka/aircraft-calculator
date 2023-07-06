@@ -48,7 +48,7 @@ const PowerUnitEngine = () => {
       </div>
       <Chart2D
         trace={points}
-        xAxis={{ name: "Altitude", type: "altitude" }}
+        xAxis={{ name: "Altitude", type: "altitude", max: maxAltitude }}
         yAxis={{
           name: "Power",
           type: "power",

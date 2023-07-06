@@ -1,22 +1,25 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
 import useLinesHorizontal from "./hooks/useLinesHorizontal";
-import { Html } from "@react-three/drei";
+import { Html, Line } from "@react-three/drei";
 import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Axis } from "./Chart2D";
 import { useFrame } from "@react-three/fiber";
+import AnimatedMarker from "./AnimatedMarker";
 
 interface AxisProps {
   ticks: number[];
   axis: Axis;
+  scale: number;
 }
 
-const LinesHorizontal = ({ ticks, axis }: AxisProps) => {
+const LinesHorizontal = ({ ticks, axis, scale }: AxisProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
 
   const { index, starting_position, uniforms } = useLinesHorizontal(
     ticks,
@@ -29,49 +32,18 @@ const LinesHorizontal = ({ ticks, axis }: AxisProps) => {
     axis.type as string
   );
 
+  useFrame(() => {
+    if (meshRef.current && scale) {
+      meshRef.current.scale.setY(scale);
+    }
+  });
+
   return (
     <>
-      <mesh>
-        <lineSegments>
-          <bufferGeometry>
-            <bufferAttribute
-              ref={fromRef}
-              attach="attributes-positionFrom"
-              count={starting_position.length / 3}
-              array={starting_position.slice()}
-              itemSize={3}
-            />
-            <bufferAttribute
-              ref={toRef}
-              attach="attributes-position"
-              count={starting_position.length / 3}
-              array={starting_position}
-              itemSize={3}
-            />
-            <bufferAttribute
-              attach="attributes-index"
-              array={index}
-              itemSize={1}
-            />
-          </bufferGeometry>
-          <shaderMaterial
-            ref={shaderMaterialRef}
-            // blending={THREE.AdditiveBlending}
-            uniforms={uniforms}
-            vertexShader={vertex}
-            fragmentShader={fragment}
-          />
-        </lineSegments>
+      <mesh ref={meshRef}>
 
         {ticks.map((j) => (
-          <Html
-            key={j}
-            className="select-none text-xs"
-            position={[-NUMBERS_PADDING, j * valueMultiplier, 0]}
-            center
-          >
-            {j * displayMultiplier}
-          </Html>
+          <AnimatedMarker y={j} type={axis.type as string} scale={[1,scale]}/>
         ))}
       </mesh>
       <Html

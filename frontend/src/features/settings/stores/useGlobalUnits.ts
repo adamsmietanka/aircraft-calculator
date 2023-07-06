@@ -6,6 +6,7 @@ interface GlobalUnitsState {
   types: Record<string, string>;
   setSystem: (value: string) => void;
   setSpeed: (value: string) => void;
+  setPower: (value: string) => void;
   setAltitude: (value: string) => void;
 }
 
@@ -23,6 +24,12 @@ export const useGlobalUnitsStore = create<GlobalUnitsState>()((set) => ({
         state.types.speed = value;
       })
     ),
+    setPower: (value) =>
+      set(
+        produce((state) => {
+          state.types.power = value;
+        })
+      ),
   setAltitude: (value) =>
     set(
       produce((state) => {

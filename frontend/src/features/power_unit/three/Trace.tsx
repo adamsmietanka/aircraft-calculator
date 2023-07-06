@@ -7,21 +7,30 @@ import { ThreeElements, Vector3, useFrame } from "@react-three/fiber";
 
 interface TraceProps {
   trace: Point[];
+  scale?: number[];
 }
 
-const Trace = ({ ...props }: TraceProps) => {
+const Trace = ({ trace, scale }: TraceProps) => {
+  const meshRef = useRef<THREE.Mesh>(null);
+
+  useFrame(() => {
+    if (meshRef.current && scale) {
+      meshRef.current.scale.setY(scale[1]);
+    }
+  });
+
   return (
-    <group>
-      <Line {...props} />
-      <Line {...props} position-y={0.03} />
-      <Line {...props} position-x={0.03} />
-      <Line {...props} position-y={-0.03} />
-      <Line {...props} position-x={-0.03} />
-    </group>
+    <mesh ref={meshRef}>
+      <Line trace={trace} />
+      <Line trace={trace} position-y={0.03} />
+      <Line trace={trace} position-x={0.03} />
+      <Line trace={trace} position-y={-0.03} />
+      <Line trace={trace} position-x={-0.03} />
+    </mesh>
   );
 };
 
-const Line = ({ trace }: TraceProps) => {
+const Line = ({ trace, scale, ...props }: TraceProps) => {
   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
   const fromRef = useRef<THREE.BufferAttribute>(null);
   const toRef = useRef<THREE.BufferAttribute>(null);
@@ -34,7 +43,7 @@ const Line = ({ trace }: TraceProps) => {
   );
 
   return (
-    <mesh>
+    <mesh {...props}>
       <line>
         <bufferGeometry>
           <bufferAttribute
