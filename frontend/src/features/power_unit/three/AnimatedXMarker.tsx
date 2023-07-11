@@ -24,11 +24,6 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
 
   const [marker] = useSpring(
     () => ({
-    //   from: {
-    //     position: 0,
-    //     scale: scale[0],
-    //   },
-    //   to: { position: 5, scale: scale[0] },
       position: x * valueMultiplier,
       scale: scale[0],
     }),

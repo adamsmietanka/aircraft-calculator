@@ -2,12 +2,20 @@ import { useEffect, useRef } from "react";
 import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
 import useLinesHorizontal from "./hooks/useLinesHorizontal";
-import { Html, Line } from "@react-three/drei";
+import { Html, Line, Text } from "@react-three/drei";
 import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Axis } from "./Chart2D";
 import { useFrame } from "@react-three/fiber";
 import AnimatedYMarker from "./AnimatedYMarker";
+import {
+  animated,
+  config,
+  useChain,
+  useSpring,
+  useSpringRef,
+  useTrail,
+} from "@react-spring/three";
 
 interface AxisProps {
   ticks: number[];
@@ -16,43 +24,55 @@ interface AxisProps {
 }
 
 const LinesHorizontal = ({ ticks, axis, scale }: AxisProps) => {
-  const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
-  const fromRef = useRef<THREE.BufferAttribute>(null);
-  const toRef = useRef<THREE.BufferAttribute>(null);
-  const meshRef = useRef<THREE.Mesh>(null);
+  const AnimatedText = animated(Text);
 
-  const { index, starting_position, uniforms } = useLinesHorizontal(
-    ticks,
-    fromRef,
-    toRef,
-    shaderMaterialRef
+  const markersRef = useSpringRef();
+  const titleRef = useSpringRef();
+
+  const [opacityTrail] = useTrail(
+    ticks.length,
+    () => ({
+      ref: markersRef,
+      delay: 500,
+      from: { opacity: 0 },
+      to: { opacity: 1 },
+    }),
+    []
   );
+
+  const title = useSpring({
+    ref: titleRef,
+    delay: 500,
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: config.molasses,
+  });
+
+  useChain([markersRef, titleRef]);
 
   const { displayMultiplier, valueMultiplier, unit } = useChartUnits(
     axis.type as string
   );
 
-  useFrame(() => {
-    if (meshRef.current && scale) {
-      meshRef.current.scale.setY(scale);
-    }
-  });
-
   return (
-    <>
-      <mesh ref={meshRef}>
-        {ticks.map((j) => (
-          <AnimatedYMarker y={j} type={axis.type as string} scale={[1,scale]}/>
-        ))}
-      </mesh>
-      <Html
-        className="select-none w-24"
-        position={[-1.5 * TITLE_PADDING, 5, 0]}
-        center
+    <mesh>
+      {opacityTrail.map((i, index) => (
+        <AnimatedYMarker
+          key={index}
+          y={ticks[index]}
+          type="power"
+          opacity={i.opacity}
+          scale={[scale]}
+        />
+      ))}
+      <AnimatedText
+        position={[-2 * TITLE_PADDING, 8, 0]}
+        fontSize={0.6}
+        fillOpacity={title.opacity}
       >
         {`${axis.name} [${unit}]`}
-      </Html>
-    </>
+      </AnimatedText>
+    </mesh>
   );
 };
 
