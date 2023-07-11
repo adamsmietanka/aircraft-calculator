@@ -3,7 +3,7 @@ import vertex from "./shaders/line.vertex.glsl";
 import fragment from "./shaders/line.fragment.glsl";
 import useLine from "./hooks/useLine";
 import { Point } from "./Chart2D";
-import { ThreeElements, Vector3, useFrame } from "@react-three/fiber";
+import { animated, useSpring } from "@react-spring/three";
 
 interface TraceProps {
   trace: Point[];
@@ -11,22 +11,21 @@ interface TraceProps {
 }
 
 const Trace = ({ trace, scale }: TraceProps) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-
-  useFrame(() => {
-    if (meshRef.current && scale) {
-      meshRef.current.scale.setY(scale[1]);
-    }
-  });
+  const [spring] = useSpring(
+    () => ({
+      scale,
+    }),
+    [scale]
+  );
 
   return (
-    <mesh ref={meshRef}>
+    <animated.mesh scale={spring.scale}>
       <Line trace={trace} />
       <Line trace={trace} position-y={0.03} />
       <Line trace={trace} position-x={0.03} />
       <Line trace={trace} position-y={-0.03} />
       <Line trace={trace} position-x={-0.03} />
-    </mesh>
+    </animated.mesh>
   );
 };
 

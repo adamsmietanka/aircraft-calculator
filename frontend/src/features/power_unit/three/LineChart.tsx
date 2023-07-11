@@ -13,7 +13,7 @@ const LineChart = ({ trace, xAxis, yAxis }: ChartProps) => {
   return (
     <>
       <mesh position={[-7.5, -5, 0]}>
-        <Trace trace={trace} scale={[1, scaleY]} />
+        <Trace trace={trace} scale={[scaleX, scaleY, 1]} />
         <LinesVertical ticks={xTicks} scale={scaleX} axis={xAxis} />
         <LinesHorizontal ticks={yTicks} scale={scaleY} axis={yAxis} />
       </mesh>

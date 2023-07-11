@@ -7,7 +7,7 @@ import { NUMBERS_PADDING, TITLE_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Axis } from "./Chart2D";
 import { useFrame } from "@react-three/fiber";
-import AnimatedMarker from "./AnimatedMarker";
+import AnimatedYMarker from "./AnimatedYMarker";
 
 interface AxisProps {
   ticks: number[];
@@ -41,9 +41,8 @@ const LinesHorizontal = ({ ticks, axis, scale }: AxisProps) => {
   return (
     <>
       <mesh ref={meshRef}>
-
         {ticks.map((j) => (
-          <AnimatedMarker y={j} type={axis.type as string} scale={[1,scale]}/>
+          <AnimatedYMarker y={j} type={axis.type as string} scale={[1,scale]}/>
         ))}
       </mesh>
       <Html
