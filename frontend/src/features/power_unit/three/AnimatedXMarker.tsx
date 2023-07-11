@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useSpring, animated, SpringValue } from "@react-spring/three";
 import { Text } from "@react-three/drei";
-import { NUMBERS_PADDING } from "./config";
+import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { AdditiveBlending } from "three";
 import { useFrame } from "@react-three/fiber";
@@ -16,6 +16,7 @@ interface Props {
 const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
+  const { gridColor } = useCSSColors();
   const AnimatedText = animated(Text);
 
   const position = useMemo(() => {
@@ -47,6 +48,7 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
         fontSize={0.4}
         position={marker.position.to((x) => [x, -NUMBERS_PADDING, 0])}
         scale={marker.scale.to((scale) => [1 / scale, 1, 1])}
+        color={gridColor}
         fillOpacity={opacity}
       >
         {x * displayMultiplier}
@@ -62,7 +64,7 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
           />
         </bufferGeometry>
         <animated.lineBasicMaterial
-          color="white"
+          color={gridColor}
           opacity={opacity}
           blending={AdditiveBlending}
         />

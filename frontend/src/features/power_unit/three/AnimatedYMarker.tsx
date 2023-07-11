@@ -7,7 +7,7 @@ import {
   SpringValue,
 } from "@react-spring/three";
 import { Line, Text } from "@react-three/drei";
-import { NUMBERS_PADDING } from "./config";
+import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { useFrame } from "@react-three/fiber";
 import { AdditiveBlending } from "three";
@@ -22,6 +22,7 @@ interface Props {
 const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
+  const { gridColor } = useCSSColors();
   const AnimatedText = animated(Text);
 
   const position = useMemo(() => {
@@ -53,7 +54,7 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
         fontSize={0.4}
         position={marker.position.to((y) => [-1.5 * NUMBERS_PADDING, y, 0])}
         scale={marker.scale.to((scale) => [1, 1 / scale, 1])}
-        color={"grey"}
+        color={gridColor}
         fillOpacity={opacity}
       >
         {y * displayMultiplier}
@@ -69,7 +70,7 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
           />
         </bufferGeometry>
         <animated.lineBasicMaterial
-          color="white"
+          color={gridColor}
           opacity={opacity}
           blending={AdditiveBlending}
         />

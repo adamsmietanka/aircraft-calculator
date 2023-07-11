@@ -1,5 +1,5 @@
 import { Text } from "@react-three/drei";
-import { TITLE_PADDING } from "./config";
+import { TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Axis } from "./Chart2D";
 import {
@@ -21,20 +21,18 @@ interface AxisProps {
 
 const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
   const AnimatedText = animated(Text);
+  const { gridColor } = useCSSColors();
 
   const markersRef = useSpringRef();
   const titleRef = useSpringRef();
 
-  const [opacityTrail] = useTrail(
-    ticks.length,
-    () => ({
-      ref: markersRef,
-      delay: 500,
-      from: { opacity: 0 },
-      to: { opacity: 1 },
-    }),
-    []
-  );
+  const opacityTrail = useTrail(ticks.length, {
+    ref: markersRef,
+    delay: 500,
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    opacity: 0,
+  });
 
   const title = useSpring({
     ref: titleRef,
@@ -63,7 +61,8 @@ const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
       ))}
       <AnimatedText
         position={[9, -TITLE_PADDING, 0]}
-        fontSize={0.6}
+        fontSize={0.5}
+        color={gridColor}
         fillOpacity={title.opacity}
       >
         {`${axis.name} [${unit}]`}
