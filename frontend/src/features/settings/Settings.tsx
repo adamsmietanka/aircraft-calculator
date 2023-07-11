@@ -44,7 +44,7 @@ const Settings = () => {
             setter={units.setSpeed}
           />
           <InputRadio
-            label="Speed"
+            label="Power"
             value={units.types.power}
             values={["kW", "hp"]
             }
