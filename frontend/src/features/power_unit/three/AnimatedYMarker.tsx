@@ -4,91 +4,77 @@ import {
   animated,
   useSpringRef,
   a,
+  SpringValue,
 } from "@react-spring/three";
 import { Line, Text } from "@react-three/drei";
 import { NUMBERS_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
+import { useFrame } from "@react-three/fiber";
+import { AdditiveBlending } from "three";
 
 interface Props {
   y: number;
   type: string;
   scale: number[];
-}
-function BasicLine() {
-  const ref = useRef<THREE.Line>();
-
-  const starting_position = useMemo(() => {
-    return new Float32Array([0, 0, 0, 10, 0, 0]);
-  }, []);
-
-  return (
-    <animated.line>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={starting_position.length / 3}
-          array={starting_position}
-          itemSize={3}
-        />
-      </bufferGeometry>
-      <lineBasicMaterial color="white" />
-    </animated.line>
-  );
+  opacity: SpringValue<number>;
 }
 
-const AnimatedYMarker = ({ y, type, scale }: Props) => {
-  const AnimatedLine = a(Line);
+const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
+  const positionRef = useRef<THREE.BufferAttribute>(null);
+  const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const AnimatedText = animated(Text);
 
-  const { displayMultiplier, valueMultiplier } = useChartUnits(type);
+  const position = useMemo(() => {
+    return new Float32Array([0, 0, 0, 200, 0, 0]);
+  }, []);
 
-  const markersRef = useSpringRef();
-  const titleRef = useSpringRef();
-
-  const [springs, api] = useSpring(
+  const [marker] = useSpring(
     () => ({
-      ref: markersRef,
-      position: [0, 0, 0],
-      opacity: 1,
-    })
+      position: y * valueMultiplier,
+      scale: scale[0],
+    }),
+    [y, valueMultiplier, scale]
   );
 
-  const [opacitySpring, opacityApi] = useSpring(() => ({
-    ref: titleRef,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-  }));
+  useFrame(() => {
+    const interpolatedY = marker.position.get();
+    position.set([interpolatedY], 1);
+    position.set([interpolatedY], 4);
 
-  useEffect(() => {
-    api.start({
-      position: [0, y * valueMultiplier, 0],
-    });
-  }, [y, valueMultiplier]);
+    if (positionRef.current) {
+      positionRef.current.set(position);
+      positionRef.current.needsUpdate = true;
+    }
+  });
 
   return (
-    <>
-      <animated.mesh position={springs.position}>
-        <AnimatedLine
-          points={[
-            [0, 0, 0],
-            [1000, 0, 0],
-          ]}
-          opacity={springs.opacity}
-          lineWidth={1}
-          color={"gray"}
+    <animated.mesh scale={marker.scale.to((scale) => [1, scale, 1])}>
+      <AnimatedText
+        fontSize={0.4}
+        position={marker.position.to((y) => [-1.5 * NUMBERS_PADDING, y, 0])}
+        scale={marker.scale.to((scale) => [1, 1 / scale, 1])}
+        color={"grey"}
+        fillOpacity={opacity}
+      >
+        {y * displayMultiplier}
+      </AnimatedText>
+      <animated.line>
+        <bufferGeometry>
+          <bufferAttribute
+            ref={positionRef}
+            attach="attributes-position"
+            count={position.length / 3}
+            array={position}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <animated.lineBasicMaterial
+          color="white"
+          opacity={opacity}
+          blending={AdditiveBlending}
         />
-        <BasicLine />
-        <AnimatedText
-          fontSize={0.4}
-          position={[-1.5 * NUMBERS_PADDING, 0, 0]}
-          scale={[1, 1 / scale[1], 1]}
-          color={"grey"}
-          fillOpacity={springs.opacity}
-        >
-          {y * displayMultiplier}
-        </AnimatedText>
-      </animated.mesh>
-    </>
+      </animated.line>
+    </animated.mesh>
   );
 };
 
