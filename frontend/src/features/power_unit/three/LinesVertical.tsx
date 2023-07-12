@@ -8,10 +8,10 @@ import {
   useSpringRef,
   useSpring,
   useChain,
-  useSprings,
   config,
 } from "@react-spring/three";
 import AnimatedXMarker from "./AnimatedXMarker";
+import useChartSize from "./hooks/useChartSize";
 
 interface AxisProps {
   ticks: number[];
@@ -22,6 +22,7 @@ interface AxisProps {
 const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
+  const { width } = useChartSize();
 
   const markersRef = useSpringRef();
   const titleRef = useSpringRef();
@@ -60,8 +61,8 @@ const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
         />
       ))}
       <AnimatedText
-        position={[9, -TITLE_PADDING, 0]}
-        fontSize={0.5}
+        position={[width / 2, -TITLE_PADDING, 0]}
+        fontSize={0.6}
         color={gridColor}
         fillOpacity={title.opacity}
       >

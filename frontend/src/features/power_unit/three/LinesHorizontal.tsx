@@ -1,12 +1,7 @@
-import { useEffect, useRef } from "react";
-import vertex from "./shaders/line.vertex.glsl";
-import fragment from "./shaders/line.fragment.glsl";
-import useLinesHorizontal from "./hooks/useLinesHorizontal";
-import { Html, Line, Text } from "@react-three/drei";
-import { NUMBERS_PADDING, TITLE_PADDING, useCSSColors } from "./config";
+import { Text } from "@react-three/drei";
+import { TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Axis } from "./Chart2D";
-import { useFrame } from "@react-three/fiber";
 import AnimatedYMarker from "./AnimatedYMarker";
 import {
   animated,
@@ -16,6 +11,7 @@ import {
   useSpringRef,
   useTrail,
 } from "@react-spring/three";
+import useChartSize from "./hooks/useChartSize";
 
 interface AxisProps {
   ticks: number[];
@@ -26,6 +22,7 @@ interface AxisProps {
 const LinesHorizontal = ({ ticks, axis, scale }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
+  const { height } = useChartSize();
 
   const markersRef = useSpringRef();
   const titleRef = useSpringRef();
@@ -63,8 +60,8 @@ const LinesHorizontal = ({ ticks, axis, scale }: AxisProps) => {
         />
       ))}
       <AnimatedText
-        position={[-2 * TITLE_PADDING, 8, 0]}
-        fontSize={0.5}
+        position={[-2 * TITLE_PADDING, height / 2, 0]}
+        fontSize={0.6}
         color={gridColor}
         fillOpacity={title.opacity}
       >
