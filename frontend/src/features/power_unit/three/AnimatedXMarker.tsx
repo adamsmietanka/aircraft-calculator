@@ -20,7 +20,7 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
   const AnimatedText = animated(Text);
 
   const position = useMemo(() => {
-    return new Float32Array([0, 0, 0, 0, 15, 0]);
+    return new Float32Array([0, 0, 0, 0, 25, 0]);
   }, []);
 
   const [marker] = useSpring(
@@ -45,7 +45,7 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
   return (
     <animated.mesh scale={marker.scale.to((scale) => [scale, 1, 1])}>
       <AnimatedText
-        fontSize={0.4}
+        fontSize={0.5}
         position={marker.position.to((x) => [x, -NUMBERS_PADDING, 0])}
         scale={marker.scale.to((scale) => [1 / scale, 1, 1])}
         color={gridColor}

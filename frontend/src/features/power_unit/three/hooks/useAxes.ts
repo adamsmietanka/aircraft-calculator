@@ -1,4 +1,5 @@
 import { Axis, Point } from "../Chart2D";
+import useChartSize from "./useChartSize";
 
 const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
   const getNormalizedStep = (remainder: number) => {
@@ -24,6 +25,8 @@ const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
     return Array.from(Array(10).keys()).map((i) => (i + lowerAxisLimit) * step);
   };
 
+  const { width, height } = useChartSize();
+
   const getMinX = () => {
     if (xAxis.min === 0) return 0;
     return xAxis.min || points[0].x;
@@ -43,8 +46,8 @@ const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
   const xTicks = getTicks(minX, maxX);
   const yTicks = getTicks(minY, maxY);
 
-  const scaleX = 15 / (maxX - minX);
-  const scaleY = 15 / (maxY - minY);
+  const scaleX = width / (maxX - minX);
+  const scaleY = height / (maxY - minY);
 
   return { xTicks, yTicks, scaleX, scaleY };
 };

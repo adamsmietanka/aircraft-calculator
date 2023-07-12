@@ -1,12 +1,10 @@
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   useSpring,
   animated,
-  useSpringRef,
-  a,
   SpringValue,
 } from "@react-spring/three";
-import { Line, Text } from "@react-three/drei";
+import { Text } from "@react-three/drei";
 import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { useFrame } from "@react-three/fiber";
@@ -51,7 +49,7 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
   return (
     <animated.mesh scale={marker.scale.to((scale) => [1, scale, 1])}>
       <AnimatedText
-        fontSize={0.4}
+        fontSize={0.5}
         position={marker.position.to((y) => [-1.5 * NUMBERS_PADDING, y, 0])}
         scale={marker.scale.to((scale) => [1, 1 / scale, 1])}
         color={gridColor}
