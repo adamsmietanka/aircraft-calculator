@@ -12,7 +12,7 @@ const useChartUnits = (type: string) => {
     altitude: {
       ft: {
         displayMultiplier: 5, // e.x. 2km turns into 10K feet
-        valueMultiplier: 1.524,
+        valueMultiplier: 1.524, // 2 km * 1.524 = 3.048 km = 10k ft
       },
       km: {
         displayMultiplier: 1,
@@ -25,8 +25,8 @@ const useChartUnits = (type: string) => {
         valueMultiplier: 1,
       },
       hp: {
-        displayMultiplier: 1,
-        valueMultiplier: 0.73549875,
+        displayMultiplier: 2,
+        valueMultiplier: 1.4709975,
       },
     },
   };
