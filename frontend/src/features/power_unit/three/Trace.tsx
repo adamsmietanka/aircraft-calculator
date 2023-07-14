@@ -26,7 +26,7 @@ declare module "@react-three/fiber" {
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 interface TraceProps {
-  trace: Point[];
+  trace: number[][];
   scale?: number[];
 }
 
@@ -99,41 +99,41 @@ const Trace = ({ trace, scale }: TraceProps) => {
     config: config.slow,
   });
 
-  const [marker] = useSpring(
-    () => ({
-      start: [trace[0].x, trace[0].y, 0],
-      end: [trace[10].x, trace[10].y, 0],
-    }),
-    [trace]
-  );
+  // const [marker] = useSpring(
+  //   () => ({
+  //     start: [trace[0].x, trace[0].y, 0],
+  //     end: [trace[10].x, trace[10].y, 0],
+  //   }),
+  //   [trace]
+  // );
 
   const meshRef = useRef<THREE.Mesh>(null);
   const geometryRef = useRef<MeshLineGeometry>(null);
 
-  useFrame(() => {
-    const interpolatedX = test.opacity.get();
-    const interpolatedStart = marker.start.get();
-    const interpolatedEnd = marker.end.get();
-    console.log(interpolatedStart);
-    // position.set([interpolatedX], 0);
-    // position.set([interpolatedX], 3);
+  // useFrame(() => {
+  //   const interpolatedX = test.opacity.get();
+  //   const interpolatedStart = marker.start.get();
+  //   const interpolatedEnd = marker.end.get();
+  //   console.log(interpolatedStart);
+  //   // position.set([interpolatedX], 0);
+  //   // position.set([interpolatedX], 3);
 
-    if (meshRef.current && geometryRef.current) {
-      // console.log(geometryRef.current);
-      meshRef.current.material.opacity = interpolatedX;
-      geometryRef.current.setPoints([...interpolatedStart, ...interpolatedEnd]);
-      // meshRef.current.set(position);
-      // meshRef.current.needsUpdate = true;
-    }
-  });
+  //   if (meshRef.current && geometryRef.current) {
+  //     // console.log(geometryRef.current);
+  //     meshRef.current.material.opacity = interpolatedX;
+  //     geometryRef.current.setPoints([...interpolatedStart, ...interpolatedEnd]);
+  //     // meshRef.current.set(position);
+  //     // meshRef.current.needsUpdate = true;
+  //   }
+  // });
 
   return (
     <animated.mesh scale={spring.scale}>
       {opacityTrail.map((i, index) => (
         <Line
           key={index}
-          start={[trace[index].x, trace[index].y, 0]}
-          end={[trace[index + 1].x, trace[index + 1].y, 0]}
+          start={trace[index]}
+          end={trace[index + 1]}
           opacity={i.opacity}
         />
       ))}
@@ -141,52 +141,52 @@ const Trace = ({ trace, scale }: TraceProps) => {
   );
 };
 
-const MyLine = ({ trace, scale, ...props }: TraceProps) => {
-  const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
-  const fromRef = useRef<THREE.BufferAttribute>(null);
-  const toRef = useRef<THREE.BufferAttribute>(null);
+// const MyLine = ({ trace, scale, ...props }: TraceProps) => {
+//   const shaderMaterialRef = useRef<THREE.ShaderMaterial>(null);
+//   const fromRef = useRef<THREE.BufferAttribute>(null);
+//   const toRef = useRef<THREE.BufferAttribute>(null);
 
-  const { index, starting_position, uniforms } = useLine(
-    trace,
-    fromRef,
-    toRef,
-    shaderMaterialRef
-  );
+//   const { index, starting_position, uniforms } = useLine(
+//     trace,
+//     fromRef,
+//     toRef,
+//     shaderMaterialRef
+//   );
 
-  return (
-    <mesh {...props}>
-      <line>
-        <bufferGeometry>
-          <bufferAttribute
-            ref={fromRef}
-            attach="attributes-positionFrom"
-            count={starting_position.length / 3}
-            array={starting_position.slice()}
-            itemSize={3}
-          />
-          <bufferAttribute
-            ref={toRef}
-            attach="attributes-position"
-            count={starting_position.length / 3}
-            array={starting_position}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-index"
-            array={index}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        <shaderMaterial
-          ref={shaderMaterialRef}
-          // blending={THREE.AdditiveBlending}
-          uniforms={uniforms}
-          vertexShader={vertex}
-          fragmentShader={fragment}
-        />
-      </line>
-    </mesh>
-  );
-};
+//   return (
+//     <mesh {...props}>
+//       <line>
+//         <bufferGeometry>
+//           <bufferAttribute
+//             ref={fromRef}
+//             attach="attributes-positionFrom"
+//             count={starting_position.length / 3}
+//             array={starting_position.slice()}
+//             itemSize={3}
+//           />
+//           <bufferAttribute
+//             ref={toRef}
+//             attach="attributes-position"
+//             count={starting_position.length / 3}
+//             array={starting_position}
+//             itemSize={3}
+//           />
+//           <bufferAttribute
+//             attach="attributes-index"
+//             array={index}
+//             itemSize={1}
+//           />
+//         </bufferGeometry>
+//         <shaderMaterial
+//           ref={shaderMaterialRef}
+//           // blending={THREE.AdditiveBlending}
+//           uniforms={uniforms}
+//           vertexShader={vertex}
+//           fragmentShader={fragment}
+//         />
+//       </line>
+//     </mesh>
+//   );
+// };
 
 export default Trace;

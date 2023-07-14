@@ -7,7 +7,7 @@ const useEngineChart = () => {
   const [calculatePower] = usePower();
 
   const points = useMemo(
-    () => heights.map((x) => ({ x, y: calculatePower(x) })),
+    () => heights.map((x) => [x, calculatePower(x), 0]),
     [calculatePower]
   );
   return points;
