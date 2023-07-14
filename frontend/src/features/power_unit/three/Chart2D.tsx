@@ -1,11 +1,6 @@
 import { Canvas, ThreeElements } from "@react-three/fiber";
 import LineChart from "./LineChart";
 
-export interface Point {
-  x: number;
-  y: number;
-}
-
 export interface Axis {
   name: string;
   type?: string;
@@ -14,7 +9,7 @@ export interface Axis {
 }
 
 export type ChartProps = {
-  trace: Point[];
+  trace: number[][];
   xAxis: Axis;
   yAxis: Axis;
 } & ThreeElements["mesh"];
