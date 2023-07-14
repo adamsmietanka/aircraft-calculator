@@ -14,7 +14,7 @@ import { Point } from "../Chart2D";
 
 
 const useLine = (
-  points: Point[],
+  points: number[],
   fromRef: React.RefObject<THREE.BufferAttribute>,
   toRef: React.RefObject<THREE.BufferAttribute>,
   shaderMaterialRef: React.RefObject<THREE.ShaderMaterial>
@@ -85,8 +85,8 @@ const useLine = (
     let array = new Float32Array(points.length * 3);
     for (let i = 0; i < points.length; i++) {
       let i3 = i * 3;
-      array[i3 + 0] = points[i].x;
-      array[i3 + 1] = points[i].y;
+      array[i3 + 0] = points[i][0];
+      array[i3 + 1] = points[i][1];
       array[i3 + 2] = 0;
     }
     setTrace(array);

@@ -1,7 +1,7 @@
 import { Axis, Point } from "../Chart2D";
 import useChartSize from "./useChartSize";
 
-const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
+const useAxisTicks = (points: number[][], xAxis: Axis, yAxis: Axis) => {
   const getNormalizedStep = (remainder: number) => {
     // examples for log(range) ~ 2
     if (remainder > 0.95) return 2; // For range > 891
@@ -29,19 +29,19 @@ const useAxisTicks = (points: Point[], xAxis: Axis, yAxis: Axis) => {
 
   const getMinX = () => {
     if (xAxis.min === 0) return 0;
-    return xAxis.min || points[0].x;
+    return xAxis.min || points[0][0];
   };
 
   const getMinY = () => {
     if (yAxis.min === 0) return 0;
-    return yAxis.min || Math.min(...points.map((p) => p.y));
+    return yAxis.min || Math.min(...points.map((p) => p[1]));
   };
 
   const minX = getMinX();
-  const maxX = xAxis.max ? xAxis.max : points[points.length - 1].x;
+  const maxX = xAxis.max ? xAxis.max : points[points.length - 1][0];
 
   const minY = getMinY();
-  const maxY = yAxis.max ? yAxis.max : Math.max(...points.map((p) => p.y));
+  const maxY = yAxis.max ? yAxis.max : Math.max(...points.map((p) => p[1]));
 
   const xTicks = getTicks(minX, maxX);
   const yTicks = getTicks(minY, maxY);
