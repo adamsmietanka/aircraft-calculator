@@ -1,9 +1,5 @@
 import { useMemo, useRef } from "react";
-import {
-  useSpring,
-  animated,
-  SpringValue,
-} from "@react-spring/three";
+import { useSpring, animated, SpringValue } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
@@ -69,7 +65,7 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={opacity}
+          opacity={opacity.to((o) => o / 2)}
           blending={AdditiveBlending}
         />
       </animated.line>
