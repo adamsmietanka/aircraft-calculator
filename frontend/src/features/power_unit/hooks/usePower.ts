@@ -1,5 +1,5 @@
 import { useTurbochargerStore } from "../stores/useTurbocharger";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { useEngineStore } from "../stores/useEngine";
 import { GearState, useSuperchargerStore } from "../stores/useSupercharger";
 
@@ -13,6 +13,10 @@ export const usePower = () => {
   const engine = useEngineStore();
   const turbocharger = useTurbochargerStore();
   const supercharger = useSuperchargerStore();
+
+  useEffect(() => {
+    supercharger.setLGstartPower(engine.seaLevelPower);
+  }, [engine.seaLevelPower]);
 
   const curvePower = useCallback(
     (curveStart: number, curveStartPower: number, height: number) => {

@@ -16,6 +16,7 @@ interface SuperchargerState {
   highGear: GearState;
   setEnabled: (value: boolean) => void;
   setLGendAltitude: (value: number) => void;
+  setLGstartPower: (value: number) => void;
   setLGendPower: (value: number) => void;
   setHGEnabled: (value: boolean) => void;
   setHGstartAltitude: (value: number) => void;
@@ -53,6 +54,12 @@ export const useSuperchargerStore = create<SuperchargerState>()(
         set(
           produce((state) => {
             state.lowGear.endPower = value;
+          })
+        ),
+      setLGstartPower: (value) =>
+        set(
+          produce((state) => {
+            state.lowGear.startPower = value;
           })
         ),
       setHGEnabled: (value) =>
