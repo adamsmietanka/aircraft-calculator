@@ -1,6 +1,5 @@
 import InputSlider from "../common/inputs/InputSlider";
 import { useEngineStore } from "./stores/useEngine";
-import PowerUnitEngineChart from "./PowerUnitEngineChart";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
 import InputUnits from "../common/inputs/InputUnits";
