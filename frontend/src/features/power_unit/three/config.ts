@@ -20,10 +20,22 @@ export const useCSSColors = () => {
   const theme = useThemeStore((state) => state.theme);
 
   const traceColor = useMemo(() => getHSLColorFromCSS("p"), [theme]);
+  const primaryColor = useMemo(() => getHSLColorFromCSS("p"), [theme]);
+  const secondaryColor = useMemo(() => getHSLColorFromCSS("s"), [theme]);
+  const accentColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const surfaceColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const gridColor = useMemo(() => getHSLColorFromCSS("bc"), [theme]);
   const infoColor = useMemo(() => getHSLColorFromCSS("in"), [theme]);
   const errorColor = useMemo(() => getHSLColorFromCSS("er"), [theme]);
 
-  return { traceColor, surfaceColor, gridColor, infoColor, errorColor };
+  return {
+    traceColor,
+    primaryColor,
+    secondaryColor,
+    accentColor,
+    surfaceColor,
+    gridColor,
+    infoColor,
+    errorColor,
+  };
 };

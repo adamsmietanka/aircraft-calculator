@@ -22,7 +22,7 @@ const PowerUnitPropeller = () => {
 
   const { power, propellerSpeed, Cn, J, machTip } = usePropeller();
 
-  const points = usePropellerChart();
+  const traces = usePropellerChart();
 
   return (
     <div className="flex w-full p-4 h-full">
@@ -86,7 +86,7 @@ const PowerUnitPropeller = () => {
       <div className="sticky top-1/4 h-3/5 w-3/5">
         <Canvas orthographic camera={{ zoom: 30 }}>
           <LineChart
-            trace={points}
+            traces={traces}
             xAxis={{ name: "Cn" }}
             yAxis={{
               name: "J",

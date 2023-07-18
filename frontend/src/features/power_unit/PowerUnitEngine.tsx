@@ -49,7 +49,7 @@ const PowerUnitEngine = () => {
       <div className="sticky top-1/4 h-3/5 w-3/5">
         <Canvas orthographic camera={{ zoom: 30 }}>
           <LineChart
-            trace={points}
+            traces={[{ name: "Power", points }]}
             xAxis={{ name: "Altitude", type: "altitude", max: maxAltitude }}
             yAxis={{
               name: "Power",
