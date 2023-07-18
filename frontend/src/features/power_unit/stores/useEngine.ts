@@ -29,7 +29,7 @@ export const useEngineStore = create<EngineState>()(
       reductionRatio: 0.4,
       maxAltitude: 10,
       kCoefficient: 0.1,
-      heights: createHeightsArray(15),
+      heights: createHeightsArray(16),
       superchargerEnabled: false,
       setSeaLevelPower: (value) => set((state) => ({ seaLevelPower: value })),
       setEngineSpeed: (value) => set((state) => ({ engineSpeed: value })),

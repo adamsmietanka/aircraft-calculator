@@ -22,7 +22,7 @@ const useAxisTicks = (points: number[][], xAxis: Axis, yAxis: Axis) => {
 
     const lowerAxisLimit = Math.ceil((min * 1) / step);
 
-    return Array.from(Array(10).keys()).map((i) => (i + lowerAxisLimit) * step);
+    return Array.from(Array(15).keys()).map((i) => (i + lowerAxisLimit) * step);
   };
 
   const { width, height } = useChartSize();

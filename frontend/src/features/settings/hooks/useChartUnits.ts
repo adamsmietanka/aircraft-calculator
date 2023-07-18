@@ -25,8 +25,8 @@ const useChartUnits = (type: string) => {
         valueMultiplier: 1,
       },
       hp: {
-        displayMultiplier: 2,
-        valueMultiplier: 1.4709975,
+        displayMultiplier: 1,
+        valueMultiplier: 0.73549875,
       },
     },
   };
