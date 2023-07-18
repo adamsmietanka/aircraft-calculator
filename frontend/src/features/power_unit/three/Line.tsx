@@ -24,8 +24,8 @@ interface TraceProps {
 const Line = ({ trace, scale, color, springRef }: TraceProps) => {
   const test = useSpring({
     ref: springRef,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
+    from: { offset: 1 },
+    to: { offset: 0 },
     // config: config.slow,
   });
 
@@ -42,23 +42,27 @@ const Line = ({ trace, scale, color, springRef }: TraceProps) => {
 
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
-    const interpolatedOpacity = test.opacity.get();
-
-    const numberOfPoints =
-      Math.ceil(interpolatedOpacity * trace.points.length) * 3;
+    const interpolatedOffset = test.offset.get();
 
     if (geometryRef.current && materialRef.current) {
-      numberOfPoints > 50 &&
-        geometryRef.current.setPoints(
-          interpolatedPoints.slice(0, numberOfPoints)
-        );
+      materialRef.current.dashOffset = interpolatedOffset;
+      materialRef.current.dashRatio = interpolatedOffset;
+      geometryRef.current.setPoints(interpolatedPoints);
     }
   });
 
   return (
     <animated.mesh scale={marker.scale}>
       <meshLineGeometry ref={geometryRef} points={[0, 0, 0]} />
-      <meshLineMaterial ref={materialRef} lineWidth={0.015} color={color} />
+      <meshLineMaterial
+        ref={materialRef}
+        dashArray={1}
+        dashOffset={1}
+        dashRatio={0.5}
+        transparent
+        lineWidth={0.015}
+        color={color}
+      />
     </animated.mesh>
   );
 };
