@@ -1,8 +1,8 @@
 import useAxes from "./hooks/useAxes";
-import Trace from "./Trace";
+import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
-import useChartSize from "./hooks/useChartSize";
+import { useCSSColors } from "./config";
 
 export interface Axis {
   name: string;
@@ -11,36 +11,52 @@ export interface Axis {
   max?: number;
 }
 
+export interface Trace {
+  name: string;
+  points: number[][];
+}
+
 export type ChartProps = {
-  trace: number[][];
+  traces: Trace[];
   xAxis: Axis;
   yAxis: Axis;
 };
 
-const LineChart = ({ trace, xAxis, yAxis }: ChartProps) => {
+const LineChart = ({ traces, xAxis, yAxis }: ChartProps) => {
   const { xTicks, yTicks, scaleX, scaleY, minX, minY, midX, midY } = useAxes(
-    trace,
+    traces,
     xAxis,
     yAxis
   );
 
+  const { primaryColor, secondaryColor, accentColor } = useCSSColors();
+
+  const colors = [primaryColor, secondaryColor, accentColor];
+
   return (
     <mesh position={[-0.9 * midX, -0.9 * midY, 0]}>
       <LinesVertical
+        axis={xAxis}
         ticks={xTicks}
         scale={scaleX}
         mid={midX}
-        axis={xAxis}
         min={minY}
       />
       <LinesHorizontal
+        axis={yAxis}
         ticks={yTicks}
         scale={scaleY}
         mid={midY}
-        axis={yAxis}
         min={minX}
       />
-      <Trace trace={trace} scale={[scaleX, scaleY, 1]} />
+      {traces.map((trace, index) => (
+        <Line
+          key={index}
+          trace={trace}
+          scale={[scaleX, scaleY, 1]}
+          color={colors[index]}
+        />
+      ))}
     </mesh>
   );
 };

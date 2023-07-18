@@ -4,6 +4,7 @@ import { extend, useFrame } from "@react-three/fiber";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { Object3DNode, MaterialNode } from "@react-three/fiber";
 import { useCSSColors } from "./config";
+import { Trace } from "./LineChart";
 
 declare module "@react-three/fiber" {
   interface ThreeElements {
@@ -15,11 +16,12 @@ declare module "@react-three/fiber" {
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 interface TraceProps {
-  trace: number[][];
+  trace: Trace;
   scale?: number[];
+  color: string;
 }
 
-const Trace = ({ trace, scale }: TraceProps) => {
+const Line = ({ trace, scale, color }: TraceProps) => {
   const test = useSpring({
     delay: 1000,
     from: { opacity: 0 },
@@ -29,7 +31,7 @@ const Trace = ({ trace, scale }: TraceProps) => {
 
   const [marker] = useSpring(
     () => ({
-      points: trace.flat(),
+      points: trace.points.flat(),
       scale,
     }),
     [trace, scale]
@@ -45,7 +47,7 @@ const Trace = ({ trace, scale }: TraceProps) => {
     const interpolatedOpacity = test.opacity.get();
 
     const numberOfPoints =
-      Math.ceil(interpolatedOpacity * trace.length) * 3;
+      Math.ceil(interpolatedOpacity * trace.points.length) * 3;
 
     if (geometryRef.current && materialRef.current) {
       numberOfPoints > 50 &&
@@ -55,17 +57,12 @@ const Trace = ({ trace, scale }: TraceProps) => {
     }
   });
 
-
   return (
     <animated.mesh scale={marker.scale}>
       <meshLineGeometry ref={geometryRef} points={[0, 0, 0]} />
-      <meshLineMaterial
-        ref={materialRef}
-        lineWidth={0.015}
-        color={traceColor}
-      />
+      <meshLineMaterial ref={materialRef} lineWidth={0.015} color={color} />
     </animated.mesh>
   );
 };
 
-export default Trace;
+export default Line;
