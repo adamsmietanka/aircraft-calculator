@@ -1,4 +1,4 @@
-import { Axis } from "../Chart2D";
+import { Axis } from "../LineChart";
 import useChartSize from "./useChartSize";
 
 const useAxisTicks = (points: number[][], xAxis: Axis, yAxis: Axis) => {
