@@ -7,7 +7,7 @@ import { useFrame } from "@react-three/fiber";
 
 interface Props {
   x: number;
-  type: string;
+  type: string | undefined;
   scale: number[];
   opacity: SpringValue<number>;
 }

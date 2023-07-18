@@ -34,7 +34,7 @@ const LineChart = ({ traces, xAxis, yAxis }: ChartProps) => {
 
   const colors = [primaryColor, "green", "orange"];
   const springRefs = traces.map(() => useSpringRef());
-  useChain(springRefs)
+  useChain(springRefs);
 
   return (
     <mesh position={[-0.9 * midX, -0.9 * midY, 0]}>
