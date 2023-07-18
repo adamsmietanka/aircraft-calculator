@@ -22,7 +22,7 @@ export const useAdditionalHeightPoints = () => {
 
   useEffect(() => {
     const newHeights = [
-      ...createHeightsArray(15),
+      ...createHeightsArray(16),
       LGendAltitude,
       HGstartAltitude,
       HGendAltitude,
