@@ -16,7 +16,7 @@ export type ChartProps = {
 
 const Chart2D = ({ ...props }: ChartProps) => {
   return (
-    <div className="sticky top-28 h-3/5 w-3/5">
+    <div className="sticky top-1/4 h-3/5 w-3/5">
       <Canvas orthographic camera={{ zoom: 30 }}>
         <LineChart {...props} />
       </Canvas>
