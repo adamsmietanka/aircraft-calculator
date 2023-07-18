@@ -3,6 +3,7 @@ import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
 import { useCSSColors } from "./config";
+import { useChain, useSpringRef } from "@react-spring/three";
 
 export interface Axis {
   name: string;
@@ -31,7 +32,9 @@ const LineChart = ({ traces, xAxis, yAxis }: ChartProps) => {
 
   const { primaryColor, secondaryColor, accentColor } = useCSSColors();
 
-  const colors = [primaryColor, secondaryColor, accentColor];
+  const colors = [primaryColor, "green", "orange"];
+  const springRefs = traces.map(() => useSpringRef());
+  useChain(springRefs)
 
   return (
     <mesh position={[-0.9 * midX, -0.9 * midY, 0]}>
@@ -55,6 +58,7 @@ const LineChart = ({ traces, xAxis, yAxis }: ChartProps) => {
           trace={trace}
           scale={[scaleX, scaleY, 1]}
           color={colors[index]}
+          springRef={springRefs[index]}
         />
       ))}
     </mesh>
