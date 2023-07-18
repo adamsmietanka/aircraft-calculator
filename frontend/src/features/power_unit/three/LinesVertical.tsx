@@ -17,9 +17,11 @@ interface AxisProps {
   ticks: number[];
   axis: Axis;
   scale: number;
+  min: number;
+  mid: number;
 }
 
-const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
+const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
   const { width } = useChartSize();
@@ -50,7 +52,7 @@ const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
   );
 
   return (
-    <mesh {...props}>
+    <mesh position={[0, min, 0]}>
       {opacityTrail.map((i, index) => (
         <AnimatedXMarker
           key={index}
@@ -61,12 +63,12 @@ const LinesVertical = ({ ticks, axis, scale, ...props }: AxisProps) => {
         />
       ))}
       <AnimatedText
-        position={[width / 2, -TITLE_PADDING, 0]}
+        position={[mid, -TITLE_PADDING, 0]}
         fontSize={0.6}
         color={gridColor}
         fillOpacity={title.opacity}
       >
-      {`${axis.name} ${unit && `[${unit}]`}`}
+        {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>
     </mesh>
   );

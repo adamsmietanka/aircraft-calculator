@@ -18,13 +18,28 @@ export type ChartProps = {
 };
 
 const LineChart = ({ trace, xAxis, yAxis }: ChartProps) => {
-  const { xTicks, yTicks, scaleX, scaleY } = useAxes(trace, xAxis, yAxis);
-  const { width, height } = useChartSize();
+  const { xTicks, yTicks, scaleX, scaleY, minX, minY, midX, midY } = useAxes(
+    trace,
+    xAxis,
+    yAxis
+  );
 
   return (
-    <mesh position={[-0.4 * width, -0.5 * height, 0]}>
-      <LinesVertical ticks={xTicks} scale={scaleX} axis={xAxis} />
-      <LinesHorizontal ticks={yTicks} scale={scaleY} axis={yAxis} />
+    <mesh position={[-0.9 * midX, -0.9 * midY, 0]}>
+      <LinesVertical
+        ticks={xTicks}
+        scale={scaleX}
+        mid={midX}
+        axis={xAxis}
+        min={minY}
+      />
+      <LinesHorizontal
+        ticks={yTicks}
+        scale={scaleY}
+        mid={midY}
+        axis={yAxis}
+        min={minX}
+      />
       <Trace trace={trace} scale={[scaleX, scaleY, 1]} />
     </mesh>
   );

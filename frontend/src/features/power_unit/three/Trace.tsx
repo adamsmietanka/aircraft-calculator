@@ -46,7 +46,6 @@ const Trace = ({ trace, scale }: TraceProps) => {
 
     const numberOfPoints =
       Math.ceil(interpolatedOpacity * trace.length) * 3;
-    console.log(numberOfPoints);
 
     if (geometryRef.current && materialRef.current) {
       numberOfPoints > 50 &&

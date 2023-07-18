@@ -3,7 +3,6 @@ import { useSpring, animated, SpringValue } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import { AdditiveBlending } from "three";
 import { useFrame } from "@react-three/fiber";
 
 interface Props {
