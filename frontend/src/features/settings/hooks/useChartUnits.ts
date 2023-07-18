@@ -1,6 +1,6 @@
 import { useGlobalUnitsStore } from "../stores/useGlobalUnits";
 
-const useChartUnits = (type: string) => {
+const useChartUnits = (type: string | undefined) => {
   interface UnitData {
     displayMultiplier: number;
     valueMultiplier: number;
@@ -27,7 +27,6 @@ const useChartUnits = (type: string) => {
         valueMultiplier: 0.73549875,
       },
     },
-    undefined: {},
   };
 
   if (type) {

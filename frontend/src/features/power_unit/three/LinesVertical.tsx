@@ -10,7 +10,6 @@ import {
   config,
 } from "@react-spring/three";
 import AnimatedXMarker from "./AnimatedXMarker";
-import useChartSize from "./hooks/useChartSize";
 import { Axis } from "./LineChart";
 
 interface AxisProps {
@@ -24,7 +23,6 @@ interface AxisProps {
 const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
-  const { width } = useChartSize();
 
   const markersRef = useSpringRef();
   const titleRef = useSpringRef();
@@ -47,7 +45,7 @@ const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
 
   useChain([markersRef, titleRef]);
 
-  const { displayMultiplier, valueMultiplier, unit } = useChartUnits(
+  const { unit } = useChartUnits(
     axis.type as string
   );
 
@@ -57,7 +55,7 @@ const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
         <AnimatedXMarker
           key={index}
           x={ticks[index]}
-          type="altitude"
+          type={axis.type}
           opacity={i.opacity}
           scale={[scale]}
         />

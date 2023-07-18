@@ -10,7 +10,6 @@ import {
   useSpringRef,
   useTrail,
 } from "@react-spring/three";
-import useChartSize from "./hooks/useChartSize";
 import { Axis } from "./LineChart";
 
 interface AxisProps {
@@ -24,7 +23,6 @@ interface AxisProps {
 const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
-  const { height } = useChartSize();
 
   const markersRef = useSpringRef();
   const titleRef = useSpringRef();
@@ -46,7 +44,7 @@ const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
 
   useChain([markersRef, titleRef]);
 
-  const { displayMultiplier, valueMultiplier, unit } = useChartUnits(
+  const { unit } = useChartUnits(
     axis.type as string
   );
 
@@ -56,7 +54,7 @@ const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
         <AnimatedYMarker
           key={index}
           y={ticks[index]}
-          type="power"
+          type={axis.type}
           opacity={i.opacity}
           scale={[scale]}
         />
