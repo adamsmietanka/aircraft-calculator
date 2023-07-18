@@ -42,6 +42,7 @@ const useAxisTicks = (points: number[][], xAxis: Axis, yAxis: Axis) => {
 
   const minY = getMinY();
   const maxY = yAxis.max ? yAxis.max : Math.max(...points.map((p) => p[1]));
+  console.log(minX, maxX, minY, maxY);
 
   const xTicks = getTicks(minX, maxX);
   const yTicks = getTicks(minY, maxY);
@@ -49,7 +50,16 @@ const useAxisTicks = (points: number[][], xAxis: Axis, yAxis: Axis) => {
   const scaleX = width / (maxX - minX);
   const scaleY = height / (maxY - minY);
 
-  return { xTicks, yTicks, scaleX, scaleY };
+  return {
+    xTicks,
+    yTicks,
+    scaleX,
+    scaleY,
+    minX: minX * scaleX,
+    minY: minY * scaleY,
+    midX: (scaleX * (minX + maxX)) / 2,
+    midY: (scaleY * (minY + maxY)) / 2,
+  };
 };
 
 export default useAxisTicks;
