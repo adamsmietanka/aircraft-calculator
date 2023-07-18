@@ -65,7 +65,7 @@ const LinesHorizontal = ({ ticks, axis, scale }: AxisProps) => {
         color={gridColor}
         fillOpacity={title.opacity}
       >
-        {`${axis.name} [${unit}]`}
+        {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>
     </mesh>
   );
