@@ -64,8 +64,6 @@ const Trace = ({ trace, scale }: TraceProps) => {
         ref={materialRef}
         lineWidth={0.015}
         color={traceColor}
-        transparent
-        // wireframe
       />
     </animated.mesh>
   );

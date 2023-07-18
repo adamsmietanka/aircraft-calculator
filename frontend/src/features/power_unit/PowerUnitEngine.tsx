@@ -3,8 +3,9 @@ import { useEngineStore } from "./stores/useEngine";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
 import InputUnits from "../common/inputs/InputUnits";
-import Chart2D from "./three/Chart2D";
 import useEngineChart from "./hooks/useEngineChart";
+import { Canvas } from "@react-three/fiber";
+import LineChart from "./three/LineChart";
 
 const PowerUnitEngine = () => {
   const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
@@ -45,16 +46,20 @@ const PowerUnitEngine = () => {
         <PowerUnitEngineSupercharger />
         <PowerUnitEngineTurbocharger />
       </div>
-      <Chart2D
-        trace={points}
-        xAxis={{ name: "Altitude", type: "altitude", max: maxAltitude }}
-        yAxis={{
-          name: "Power",
-          type: "power",
-          min: 0,
-          max: seaLevelPower * 1.4,
-        }}
-      />
+      <div className="sticky top-1/4 h-3/5 w-3/5">
+        <Canvas orthographic camera={{ zoom: 30 }}>
+          <LineChart
+            trace={points}
+            xAxis={{ name: "Altitude", type: "altitude", max: maxAltitude }}
+            yAxis={{
+              name: "Power",
+              type: "power",
+              min: 0,
+              max: seaLevelPower * 1.4,
+            }}
+          />
+        </Canvas>
+      </div>
     </div>
   );
 };

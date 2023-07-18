@@ -1,7 +1,6 @@
 import { Text } from "@react-three/drei";
 import { TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import { Axis } from "./Chart2D";
 import {
   useTrail,
   animated,
@@ -12,6 +11,7 @@ import {
 } from "@react-spring/three";
 import AnimatedXMarker from "./AnimatedXMarker";
 import useChartSize from "./hooks/useChartSize";
+import { Axis } from "./LineChart";
 
 interface AxisProps {
   ticks: number[];

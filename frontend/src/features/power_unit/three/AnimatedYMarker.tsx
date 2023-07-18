@@ -4,7 +4,6 @@ import { Text } from "@react-three/drei";
 import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { useFrame } from "@react-three/fiber";
-import { AdditiveBlending } from "three";
 
 interface Props {
   y: number;
