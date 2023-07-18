@@ -1,9 +1,8 @@
 import { useRef } from "react";
-import { animated, useSpring, config } from "@react-spring/three";
+import { animated, useSpring, config, SpringRef } from "@react-spring/three";
 import { extend, useFrame } from "@react-three/fiber";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { Object3DNode, MaterialNode } from "@react-three/fiber";
-import { useCSSColors } from "./config";
 import { Trace } from "./LineChart";
 
 declare module "@react-three/fiber" {
@@ -19,14 +18,15 @@ interface TraceProps {
   trace: Trace;
   scale?: number[];
   color: string;
+  springRef: SpringRef;
 }
 
-const Line = ({ trace, scale, color }: TraceProps) => {
+const Line = ({ trace, scale, color, springRef }: TraceProps) => {
   const test = useSpring({
-    delay: 1000,
+    ref: springRef,
     from: { opacity: 0 },
     to: { opacity: 1 },
-    config: config.slow,
+    // config: config.slow,
   });
 
   const [marker] = useSpring(
@@ -39,8 +39,6 @@ const Line = ({ trace, scale, color }: TraceProps) => {
 
   const geometryRef = useRef<MeshLineGeometry>(null);
   const materialRef = useRef<MeshLineMaterial>(null);
-
-  const { traceColor } = useCSSColors();
 
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
