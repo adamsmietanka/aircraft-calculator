@@ -1,7 +1,6 @@
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
 import PowerUnitResults3D from "./three/PowerUnitResults3D";
-import PowerUnitResultsPowerChart from "./PowerUnitResultsPowerChart";
 
 import { usePowerUnitResults } from "./hooks/usePowerUnitResults";
 import { useResultsStore } from "./stores/useResults";
@@ -19,10 +18,28 @@ const PowerUnitResults = () => {
   const [power, Cp] = usePowerUnitResults();
 
   const table = useResultsStore((state) => state.table);
-  const traces = [
+  const tracesPower = [
     {
       name: "power",
       points: table.map(({ v, prop_power }) => [v, prop_power, 0]),
+    },
+  ];
+  const tracesAngle = [
+    {
+      name: "angle",
+      points: table.map(({ v, angle }) => [v, angle, 0]),
+    },
+  ];
+  const tracesRPM = [
+    {
+      name: "RPM",
+      points: table.map(({ v, rpm }) => [v, rpm, 0]),
+    },
+  ];
+  const tracesCp = [
+    {
+      name: "Cp",
+      points: table.map(({ v, cp }) => [v, cp, 0]),
     },
   ];
 
@@ -54,14 +71,44 @@ const PowerUnitResults = () => {
       </div>
       <div className="flex flex-col space-y-4 w-3/5">
         <PowerUnitResults3D />
-        <div className="h-2/5">
+        <div className="grid grid-cols-2 gap-4 h-1/2">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
-              traces={traces}
+              traces={tracesPower}
               xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
               yAxis={{
                 name: "Power",
                 type: "power",
+              }}
+            />
+          </Canvas>
+          <Canvas orthographic camera={{ zoom: 30 }}>
+            <LineChart
+              traces={tracesAngle}
+              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
+              yAxis={{
+                name: "Angle",
+                min: 0,
+              }}
+            />
+          </Canvas>
+          <Canvas orthographic camera={{ zoom: 30 }}>
+            <LineChart
+              traces={tracesRPM}
+              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
+              yAxis={{
+                name: "RPM",
+                min: 0,
+              }}
+            />
+          </Canvas>
+          <Canvas orthographic camera={{ zoom: 30 }}>
+            <LineChart
+              traces={tracesCp}
+              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
+              yAxis={{
+                name: "Cp",
+                min: 0,
               }}
             />
           </Canvas>

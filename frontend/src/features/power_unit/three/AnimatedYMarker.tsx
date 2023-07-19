@@ -50,7 +50,9 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
         color={gridColor}
         fillOpacity={opacity}
       >
-        {y * displayMultiplier}
+        {y > 1 || y === 0
+          ? y * displayMultiplier
+          : (y * displayMultiplier).toFixed(2)}
       </AnimatedText>
       <animated.line>
         <bufferGeometry>

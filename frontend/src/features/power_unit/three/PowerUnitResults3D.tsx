@@ -18,7 +18,7 @@ const Lights = () => {
 const PowerUnitResults3D = () => {
   const settings = useSettingsStore();
   return (
-    <div className="h-1/2 w-full">
+    <div className="h-2/5 w-full">
       <Canvas orthographic camera={{ zoom: 30, position: [-10, 10, 15] }}>
         <Lights />
         <SurfaceCp position={[-1, 0, 0]} />

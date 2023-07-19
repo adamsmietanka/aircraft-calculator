@@ -7,6 +7,8 @@ export interface TableRow {
   angle: number;
   eff: number;
   prop_power: number;
+  rpm: number;
+  beforeMaxRPM: boolean;
 }
 
 interface ResultsState {
