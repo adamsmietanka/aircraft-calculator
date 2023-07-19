@@ -4,6 +4,7 @@ import { useResultsStore } from "../stores/useResults";
 import { Html, Sphere } from "@react-three/drei";
 import { POINT_SIZE, useCSSColors } from "./config";
 import Surface from "./Surface";
+import AnimatedSphere from "./AnimatedSphere";
 
 const SurfaceEff = (props: ThreeElements["mesh"]) => {
   const table = useResultsStore.getState().table;
@@ -14,11 +15,10 @@ const SurfaceEff = (props: ThreeElements["mesh"]) => {
     <mesh {...props} scale={[0.1, 5, 1]}>
       <Surface type="eff" />
       {table.map(({ angle, eff, j, beforeMaxRPM }, index) => (
-        <Sphere
+        <AnimatedSphere
           key={index}
           position={[angle, eff, j]}
-          scale={[POINT_SIZE * 1, POINT_SIZE * 0.02, POINT_SIZE * 0.1]}
-          material-color={beforeMaxRPM ? traceColor : errorColor}
+          beforeMaxRPM={beforeMaxRPM}
         />
       ))}
       <Html
