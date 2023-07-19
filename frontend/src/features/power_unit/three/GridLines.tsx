@@ -9,8 +9,8 @@ const GridLines = () => {
         <Line
           key={i}
           points={[
-            [i - 5, 0, -5],
-            [i - 5, 0, 20],
+            [i - 5, -0.01, -5],
+            [i - 5, -0.01, 20],
           ]}
           transparent
           opacity={GRID_OPACITY}
@@ -22,8 +22,8 @@ const GridLines = () => {
         <Line
           key={j}
           points={[
-            [-5, 0, j - 5],
-            [10, 0, j - 5],
+            [-5, -0.01, j - 5],
+            [10, -0.01, j - 5],
           ]}
           color={gridColor}
           transparent
