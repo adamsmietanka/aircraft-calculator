@@ -6,6 +6,7 @@ import { useResultsStore } from "../stores/useResults";
 import VerticalAxis from "./VerticalAxis";
 import { POINT_SIZE, useCSSColors } from "./config";
 import Surface from "./Surface";
+import AnimatedSphere from "./AnimatedSphere";
 
 const SurfaceCp = (props: ThreeElements["mesh"]) => {
   const table = useResultsStore.getState().table;
@@ -16,11 +17,10 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
     <mesh {...props} scale={[0.1, 5, 1]}>
       <Surface type="cp" />
       {table.map(({ angle, cp, j, beforeMaxRPM }, index) => (
-        <Sphere
+        <AnimatedSphere
           key={index}
           position={[angle, cp, j]}
-          scale={[POINT_SIZE * 1, POINT_SIZE * 0.02, POINT_SIZE * 0.1]}
-          material-color={beforeMaxRPM ? traceColor : errorColor}
+          beforeMaxRPM={beforeMaxRPM}
         />
       ))}
       <VerticalAxis />
