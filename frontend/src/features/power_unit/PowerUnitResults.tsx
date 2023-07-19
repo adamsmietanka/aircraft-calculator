@@ -10,9 +10,11 @@ import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
 import InputNumber from "../common/inputs/InputNumber";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "./three/LineChart";
+import { usePropellerStore } from "./stores/usePropeller";
 
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);
+  const speed = usePropellerStore((state) => state.cruiseSpeed);
   const setAltitude = useResultsStore((state) => state.setAltitude);
   const [power, Cp] = usePowerUnitResults();
 
@@ -56,7 +58,7 @@ const PowerUnitResults = () => {
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={traces}
-              xAxis={{ name: "Speed", type: "speed" }}
+              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
               yAxis={{
                 name: "Power",
                 type: "power",
