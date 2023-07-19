@@ -3,6 +3,7 @@ import { useThemeStore } from "../../settings/stores/useTheme";
 import { useMemo } from "react";
 
 export const GRID_WIDTH = 1.0;
+export const GRID_OPACITY = 0.1;
 export const NUMBERS_PADDING = 0.5;
 export const TITLE_PADDING = 1.5;
 export const POINT_SIZE = 0.5;
