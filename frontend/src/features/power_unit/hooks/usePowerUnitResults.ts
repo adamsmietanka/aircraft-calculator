@@ -31,15 +31,29 @@ export const usePowerUnitResults = () => {
 
   const { power, propellerSpeed, Cp } = useCp();
 
+  const calculateNumberOfPointsForFixedProp = (
+    j_lim: number,
+    j_end: number
+  ) => {
+    const points = 1.2 * speed;
+    const pointsBeforeMaxRPM = Math.ceil((points * j_lim) / j_end);
+    const pointsAfterMaxRPM = points - pointsBeforeMaxRPM;
+    return { pointsBeforeMaxRPM, pointsAfterMaxRPM };
+  };
+
   const points_fixed = useMemo(() => {
     let points: number[] = [];
     const j_lim = barycentricJ(cpMesh, angle, Cp);
     const j_end = barycentricJ(cpMesh, angle, 0);
-    for (let i = 0; i < POINTS_BEFORE_MAX_RPM; i++) {
-      points.push((i * j_lim) / POINTS_BEFORE_MAX_RPM);
+
+    const { pointsBeforeMaxRPM, pointsAfterMaxRPM } =
+      calculateNumberOfPointsForFixedProp(j_lim, j_end);
+
+    for (let i = 0; i < pointsBeforeMaxRPM; i++) {
+      points.push((i * j_lim) / pointsBeforeMaxRPM);
     }
-    for (let i = 0; i < 11; i++) {
-      points.push(j_lim + (i * (j_end - j_lim)) / 10);
+    for (let i = 0; i < pointsAfterMaxRPM; i++) {
+      points.push(j_lim + (i * (j_end - j_lim)) / pointsAfterMaxRPM);
     }
     return points;
   }, [cpMesh, angle, Cp]);
@@ -49,7 +63,7 @@ export const usePowerUnitResults = () => {
     const cpMarkers: number[][] = [];
     const effMarkers: number[][] = [];
     if (variable) {
-      for (let v = 0; v <= 1.2 * speed; v += 1) {
+      for (let v = 0; v < 1.2 * speed; v += 1) {
         const j = v / (propellerSpeed * diameter);
         const cp = Cp;
         // const rpm = propellerSpeed * 60 / Ratio

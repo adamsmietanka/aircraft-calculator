@@ -60,7 +60,8 @@ const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
         />
       ))}
       <AnimatedText
-        position={[-2 * TITLE_PADDING, mid, 0]}
+        position={[-1.25 * TITLE_PADDING, mid, 0]}
+        rotation-z={Math.PI/2}
         fontSize={0.6}
         color={gridColor}
         fillOpacity={title.opacity}
