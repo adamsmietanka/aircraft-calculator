@@ -27,6 +27,25 @@ const useChartUnits = (type: string | undefined) => {
         valueMultiplier: 0.73549875,
       },
     },
+    speed: {
+      "m/s": {
+        displayMultiplier: 1,
+        valueMultiplier: 1,
+      },
+      mph: {
+        displayMultiplier: 2.5,
+        valueMultiplier: 1.1176,
+      },
+      "km/h": {
+        displayMultiplier: 2.5,
+        valueMultiplier: 0.6944445,
+      },
+      kn: {
+        displayMultiplier: 2.5,
+        valueMultiplier: 1.287,
+      },
+
+    },
   };
 
   if (type) {
