@@ -65,7 +65,7 @@ const useAxisTicks = (traces: Trace[], xAxis: Axis, yAxis: Axis) => {
   }
 
   const scaleX = width / (maxX - minX);
-  const scaleY = height / (maxY - minY);
+  const scaleY = 0.8*height / (maxY - minY);
 
   return {
     xTicks,

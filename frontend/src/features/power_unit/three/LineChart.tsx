@@ -54,7 +54,7 @@ const LineChart = ({ traces, xAxis, yAxis, point }: ChartProps) => {
   });
 
   return (
-    <mesh position={[-0.9 * midX, -0.9 * midY, 0]}>
+    <mesh position={[-0.9 * midX, -0.8 * midY, 0]}>
       <LinesVertical
         axis={xAxis}
         ticks={xTicks}

@@ -1,5 +1,4 @@
-import { ThreeElements } from "@react-three/fiber";
-import { Sphere } from "@react-three/drei";
+import { ThreeElements, useThree } from "@react-three/fiber";
 
 import { useResultsStore } from "../stores/useResults";
 
@@ -21,6 +20,7 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
           key={index}
           position={[angle, cp, j]}
           color={beforeMaxRPM ? traceColor : errorColor}
+          scale={[POINT_SIZE * 1, POINT_SIZE * 0.02, POINT_SIZE * 0.1]}
         />
       ))}
       <VerticalAxis />

@@ -1,20 +1,15 @@
 import { SpringRef, animated, useSpring } from "@react-spring/three";
 import { Sphere } from "@react-three/drei";
-import { POINT_SIZE, useCSSColors } from "./config";
 
 interface Props {
   position: number[];
-  scale?: number[];
-  beforeMaxRPM?: boolean;
+  scale: number[];
   color: string;
   springRef?: SpringRef;
-
 }
 
 const AnimatedSphere = ({ position, color, scale, springRef }: Props) => {
   const ASphere = animated(Sphere);
-
-  const { traceColor, infoColor, errorColor } = useCSSColors();
 
   const test = useSpring({
     ref: springRef,
@@ -32,9 +27,7 @@ const AnimatedSphere = ({ position, color, scale, springRef }: Props) => {
   return (
     <ASphere
       position={marker.position}
-      scale={
-        scale ? scale : [POINT_SIZE * 1, POINT_SIZE * 0.02, POINT_SIZE * 0.1]
-      }
+      scale={scale}
       material-color={color}
       material-transparent
       material-opacity={test.opacity}
