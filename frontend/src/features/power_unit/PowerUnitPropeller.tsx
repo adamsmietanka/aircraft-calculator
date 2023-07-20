@@ -91,6 +91,7 @@ const PowerUnitPropeller = () => {
             yAxis={{
               name: "J",
             }}
+            point={{x: Cn, y: J}}
           />
         </Canvas>
       </div>

@@ -1,8 +1,8 @@
 import { ThreeElements } from "@react-three/fiber";
 import { useResultsStore } from "../stores/useResults";
 
-import { Html, Sphere } from "@react-three/drei";
-import { POINT_SIZE, useCSSColors } from "./config";
+import { Html } from "@react-three/drei";
+import { useCSSColors } from "./config";
 import Surface from "./Surface";
 import AnimatedSphere from "./AnimatedSphere";
 
@@ -18,7 +18,7 @@ const SurfaceEff = (props: ThreeElements["mesh"]) => {
         <AnimatedSphere
           key={index}
           position={[angle, eff, j]}
-          beforeMaxRPM={beforeMaxRPM}
+          color={beforeMaxRPM ? traceColor : errorColor}
         />
       ))}
       <Html
