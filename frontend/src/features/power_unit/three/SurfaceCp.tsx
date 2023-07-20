@@ -20,7 +20,7 @@ const SurfaceCp = (props: ThreeElements["mesh"]) => {
         <AnimatedSphere
           key={index}
           position={[angle, cp, j]}
-          beforeMaxRPM={beforeMaxRPM}
+          color={beforeMaxRPM ? traceColor : errorColor}
         />
       ))}
       <VerticalAxis />
