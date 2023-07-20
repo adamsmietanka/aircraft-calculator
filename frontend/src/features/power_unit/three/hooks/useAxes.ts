@@ -54,8 +54,15 @@ const useAxisTicks = (traces: Trace[], xAxis: Axis, yAxis: Axis) => {
         ...traces.map(({ points }) => points.map(([x, y, z]) => y)).flat()
       );
 
-  const xTicks = getTicks(minX, maxX);
-  const yTicks = getTicks(minY, maxY);
+  let xTicks = getTicks(minX, maxX);
+  let yTicks = getTicks(minY, maxY);
+
+  if (width < 10) {
+    xTicks = xTicks.map((x) => x * 2);
+  }
+  if (height < 10) {
+    yTicks = yTicks.map((y) => y * 2);
+  }
 
   const scaleX = width / (maxX - minX);
   const scaleY = height / (maxY - minY);
