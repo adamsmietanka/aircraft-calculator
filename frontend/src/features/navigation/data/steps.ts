@@ -5,6 +5,16 @@ export interface Step {
 }
 const steps: Step[] = [
   {
+    name: "Wing",
+    feature: "aerodynamics",
+    path: "wing",
+  },
+  {
+    name: "Fuselage",
+    feature: "aerodynamics",
+    path: "fuselage",
+  },
+  {
     name: "Engine",
     feature: "powerunit",
     path: "engine",

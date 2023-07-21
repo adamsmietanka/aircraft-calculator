@@ -9,11 +9,12 @@ import {
   PowerUnitEngine,
   PowerUnitPropeller,
   PowerUnitResults,
-  Aerodynamics,
+  Wing,
   Performance,
   Settings,
   Turn,
   Weight,
+  Fuselage,
 } from "./features";
 
 import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
@@ -31,7 +32,10 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
-          <Route path="aerodynamics" element={<Aerodynamics />} />
+          <Route path="aerodynamics">
+            <Route path="wing" element={<Wing />} />
+            <Route path="fuselage" element={<Fuselage />} />
+          </Route>
           <Route path="powerunit">
             <Route path="engine" element={<PowerUnitEngine />} />
             <Route path="propeller" element={<PowerUnitPropeller />} />
