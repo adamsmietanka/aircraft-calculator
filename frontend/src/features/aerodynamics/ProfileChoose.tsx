@@ -2,8 +2,11 @@ import React, { useEffect, useMemo } from "react";
 import profiles from "./data/profiles";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "../power_unit/three/LineChart";
+import { useWingStore } from "./stores/useWing";
 
 const ProfileTable = () => {
+  const wing = useWingStore();
+
   const tableData = useMemo(() => {
     return Object.keys(profiles).map((profile) => {
       const cz = profiles[profile].cz;
@@ -14,7 +17,6 @@ const ProfileTable = () => {
           return previous;
         }
       });
-      console.log(profile, highest);
       return {
         name: profile,
         maxCz: highest[1],
@@ -35,7 +37,12 @@ const ProfileTable = () => {
         </thead>
         <tbody>
           {tableData.map((row) => (
-            <tr className="">
+            <tr
+              className={`${
+                wing.profile === parseInt(row.name) && "bg-base-200"
+              } cursor-pointer`}
+              onClick={() => wing.setProfile(parseInt(row.name))}
+            >
               <td>{row.name}</td>
               <td>{row.maxCz.toFixed(2)}</td>
               <td>{row.angleOfMaxCz}</td>
@@ -48,14 +55,20 @@ const ProfileTable = () => {
 };
 
 const ProfileChoose = () => {
-  useEffect(() => {
-    console.log(profiles[2415].cz.map(([x]) => x));
-  }, []);
+  const wing = useWingStore();
 
-  const points = useMemo(
-    () => profiles[2415].cz.map(([x, y, y2]) => [x, y2, 0]),
-    []
-  );
+//   useEffect(() => {
+//     console.log(profiles[2415].cz.map(([x]) => x));
+//   }, []);
+
+  const points = useMemo(() => {
+    // console.log(wing.profile);
+    const filtered = profiles[wing.profile].cz.filter(
+      ([x]) => -5 < x && x < 15
+    );
+    console.log(filtered.length);
+    return filtered.map(([x, y, y2]) => [x, y, 0]);
+  }, [wing.profile]);
 
   return (
     <div className="form-control">
@@ -78,11 +91,11 @@ const ProfileChoose = () => {
           Catalog
         </button>
         <dialog id="profile_modal" className="modal">
-          <form method="dialog" className="modal-box max-w-full">
+          <form method="dialog" className="modal-box max-w-full max-h-full">
             <h3>Profile Catalog</h3>
             <div className="flex">
               <ProfileTable />
-              <div className="h-72 w-2/5">
+              <div className="h-96 w-2/5">
                 <Canvas orthographic camera={{ zoom: 30 }}>
                   <LineChart
                     traces={[{ name: "Power", points }]}
