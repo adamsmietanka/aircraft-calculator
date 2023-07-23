@@ -39,9 +39,9 @@ const ProfileTable = () => {
           {tableData.map((row) => (
             <tr
               className={`${
-                wing.profile === parseInt(row.name) && "bg-base-200"
+                wing.profile === row.name && "bg-base-200"
               } cursor-pointer`}
-              onClick={() => wing.setProfile(parseInt(row.name))}
+              onClick={() => wing.setProfile(row.name)}
             >
               <td>{row.name}</td>
               <td>{row.maxCz.toFixed(2)}</td>
@@ -57,16 +57,10 @@ const ProfileTable = () => {
 const ProfileChoose = () => {
   const wing = useWingStore();
 
-//   useEffect(() => {
-//     console.log(profiles[2415].cz.map(([x]) => x));
-//   }, []);
-
   const points = useMemo(() => {
-    // console.log(wing.profile);
     const filtered = profiles[wing.profile].cz.filter(
       ([x]) => -5 < x && x < 15
     );
-    console.log(filtered.length);
     return filtered.map(([x, y, y2]) => [x, y, 0]);
   }, [wing.profile]);
 

@@ -6,12 +6,12 @@ interface WingState {
   tipX: number;
   span: number;
   isRectangular: boolean;
-  profile: number;
+  profile: string;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
   setTipX: (value: number) => void;
   setSpan: (value: number) => void;
-  setProfile: (value: number) => void;
+  setProfile: (value: string) => void;
 }
 
 export const useWingStore = create<WingState>()((set) => ({
@@ -20,7 +20,7 @@ export const useWingStore = create<WingState>()((set) => ({
   tipX: 0.5,
   span: 8,
   isRectangular: true,
-  profile: 2412,
+  profile: "2412",
   setChord: (value) => set((state) => ({ chord: value })),
   setChordTip: (value) => set((state) => ({ chordTip: value })),
   setTipX: (value) => set((state) => ({ tipX: value })),
