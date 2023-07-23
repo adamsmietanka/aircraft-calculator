@@ -2,6 +2,9 @@ import { getHSLColorFromCSS } from "../../../utils/getCSScolor";
 import { useThemeStore } from "../../settings/stores/useTheme";
 import { useMemo } from "react";
 
+//Profile
+export const NUMBER_OF_AIRFOIL_POINTS = 50;
+
 export const GRID_WIDTH = 1.0;
 export const GRID_OPACITY = 0.1;
 export const NUMBERS_PADDING = 0.5;

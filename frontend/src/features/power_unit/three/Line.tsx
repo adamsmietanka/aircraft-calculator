@@ -18,7 +18,7 @@ interface TraceProps {
   trace: Trace;
   scale?: number[];
   color: string;
-  springRef: SpringRef;
+  springRef?: SpringRef;
 }
 
 const Line = ({ trace, scale, color, springRef }: TraceProps) => {

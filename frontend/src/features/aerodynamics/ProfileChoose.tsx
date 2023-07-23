@@ -3,6 +3,20 @@ import profiles from "./data/profiles";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "../power_unit/three/LineChart";
 import { useWingStore } from "./stores/useWing";
+import useProfile from "./hooks/useProfile";
+import ShapeVisualizer from "./three/ShapeVisualizer";
+
+const Profile = () => {
+  const points = useProfile();
+
+  return (
+    <div className="h-96 w-2/5">
+      <Canvas orthographic camera={{ zoom: 30 }}>
+        <ShapeVisualizer trace={{ name: "Power", points }} />
+      </Canvas>
+    </div>
+  );
+};
 
 const ProfileTable = () => {
   const wing = useWingStore();
@@ -100,6 +114,7 @@ const ProfileChoose = () => {
                   />
                 </Canvas>
               </div>
+              <Profile />
             </div>
           </form>
           <form method="dialog" className="modal-backdrop">

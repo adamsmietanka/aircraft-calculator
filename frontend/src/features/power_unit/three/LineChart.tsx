@@ -46,13 +46,6 @@ const LineChart = ({ traces, xAxis, yAxis, point }: ChartProps) => {
   point && springRefs.push(useSpringRef());
   useChain(springRefs);
 
-  const line = useSpring({
-    delay: 500,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-    config: config.molasses,
-  });
-
   return (
     <mesh position={[-0.9 * midX, -0.8 * midY, 0]}>
       <LinesVertical
