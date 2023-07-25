@@ -7,39 +7,38 @@ import InputNumber from "../common/inputs/InputNumber";
 import InputSlider from "../common/inputs/InputSlider";
 
 const PerformanceInitial = () => {
-  const method_type = useInitialStore((state) => state.method_type)
-  const proptype = useInitialStore((state) => state.proptype)
+
   const propnumber = useInitialStore((state) => state.propnumber)
-  const nominalPower = useInitialStore((state) => state.nominalPower)
+
   const flightAltitude = useInitialStore((state) => state.flightAltitude)
   const startMass = useInitialStore((state) => state.startMass)
   const fuelMass = useInitialStore((state) => state.fuelMass)
   const fuelcons = useInitialStore((state) => state.fuelcons)
   const vmax = useInitialStore((state) => state.vmax)
-  const wmax = useInitialStore((state) => state.wmax)
+
   const area  = useInitialStore((state) => state.area)
   const aspectRatio = useInitialStore((state) => state.aspectRatio)
   const cx0 = useInitialStore((state) => state.cx0)
   const czmax = useInitialStore((state) => state.czmax)
-  const setProptype = useInitialStore((state) => state.setProptype)
+
   const setPropnumber = useInitialStore((state) => state.setPropnumber)
-  const setNominalPower = useInitialStore((state) => state.setNominalPower)
+
   const setFlightAltitude = useInitialStore((state) => state.setFlightAltitude)
   const setStartMass = useInitialStore((state) => state.setStartMass)
   const setFuelMass = useInitialStore((state) => state.setFuelMass)
   const setFuelcons = useInitialStore((state) => state.setFuelcons)
   const setVmax = useInitialStore((state) => state.setVmax)
-  const setWmax = useInitialStore((state) => state.setWmax)
+
   const setArea = useInitialStore((state) => state.setArea)
   const setAspectRatio = useInitialStore((state) => state.setAspectRatio)
   const setCx0 = useInitialStore((state) => state.setCx0)
   const setCzmax = useInitialStore((state) => state.setCzmax)
 
   const [calculatePower] = usePower();
-  const [maxPower, setMaxPower] = useState(calculatePower(0))
+  const [nominalPower, setNominalPower] = useState(calculatePower(0))
 
   useEffect(() => {
-    setMaxPower(() => calculatePower(flightAltitude))
+    setNominalPower(() => calculatePower(flightAltitude))
   }, [flightAltitude, calculatePower])
 
   return (
@@ -54,12 +53,22 @@ const PerformanceInitial = () => {
           label="Number of Engines"
           unit=""
         />
+        <InputSlider
+          label="Flight altitude"
+          unit="km"
+          value={flightAltitude}
+          step={0.1}
+          min={0}
+          max={6}
+          setter={setFlightAltitude} 
+        />   
         <InputNumber
           value={nominalPower}
           setter={setNominalPower}
           step={0.1}
           label="Nominal Power"
           unit="kW"
+          disabled={true}
         />
         <InputNumber
           value={startMass}
@@ -117,15 +126,6 @@ const PerformanceInitial = () => {
           label="Maximal Lift Coefficient"
           unit="-"
         />
-        <InputSlider
-          label="Flight altitude"
-          unit="km"
-          value={flightAltitude}
-          step={0.1}
-          min={0}
-          max={10}
-          setter={setFlightAltitude} 
-        />   
       </div>
       <div>
         <PerformanceInitialEnduranceChart/>
