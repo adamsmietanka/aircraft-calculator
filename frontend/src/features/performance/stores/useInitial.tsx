@@ -1,5 +1,4 @@
 import create from "zustand";
-import { useCallback } from "react";
 
 const createValuesArray = (minValue: number, maxValue: number, numElements: number) => {
   const step = (maxValue - minValue) / (numElements - 1);
@@ -7,7 +6,7 @@ const createValuesArray = (minValue: number, maxValue: number, numElements: numb
 };
 
 interface InitialState {
-  method_type: 'breguet'
+
   proptype: string;
   propnumber: number;
   flightAltitude: number;
@@ -16,12 +15,14 @@ interface InitialState {
   fuelMass: number;
   fuelcons: number;
   vmax: number;
+  vmin: number;
   wmax: number;
   area: number;
   aspectRatio: number;
   cx0: number;
   czmax: number;
   velocities: number[];
+
   setProptype: (value: string) => void;
   setPropnumber: (value: number) => void;
   setFlightAltitude: (value: number) => void;
@@ -30,6 +31,7 @@ interface InitialState {
   setFuelMass: (value: number) => void;
   setFuelcons: (value: number) => void;
   setVmax: (value: number) => void;
+  setVmin: (value: number) => void;
   setWmax: (value: number) => void;
   setArea: (value: number) => void;
   setAspectRatio: (value: number) => void;
@@ -39,7 +41,7 @@ interface InitialState {
 }
 
 export const useInitialStore = create<InitialState>()((set) => ({
-  method_type: 'breguet',
+
   proptype: 'propeller-breguet',
   propnumber: 1,
   flightAltitude: 0,
@@ -48,12 +50,14 @@ export const useInitialStore = create<InitialState>()((set) => ({
   fuelMass: 71,
   fuelcons: 0.267,
   vmax: 54.98,
+  vmin: 25,
   wmax: 2.88,
   area: 14.865,
   aspectRatio: 2.855,
   cx0: 0.0269,
   czmax: 1.156,
   velocities: createValuesArray(25, 50, 50),
+
   setProptype: (value) => set((state) => ({ proptype: value })),
   setPropnumber: (value) => set((state) => ({ propnumber: value })),
   setFlightAltitude: (value) => set((state) => ({ flightAltitude: value })),
@@ -66,8 +70,7 @@ export const useInitialStore = create<InitialState>()((set) => ({
   setAspectRatio: (value) => set((state) => ({ aspectRatio: value })),
   setCx0: (value) => set((state) => ({ cx0: value })),
   setCzmax: (value) => set((state) => ({ czmax: value })),
-  setVmax: (value) => set((state) => ({
-    vmax: value,
-    velocities: createValuesArray(25, value, 50)})),
+  setVmax: (value) => set((state) => ({ vmax: value})),
   setVelocities: (value) => set((state) => ({ velocities: value })),
+  setVmin: (value) => set((state) => ({ vmin: value }))
 }));
