@@ -5,7 +5,8 @@ import { useWingStore } from "../stores/useWing";
 const useProfile = () => {
   const profile = useWingStore((state) => state.profile);
 
-  const [points, setPoints] = useState<number[][]>([]);
+  const [profilePoints, setProfilePoints] = useState<number[][]>([]);
+  const [chordPoints, setChordPoints] = useState<number[][]>([]);
 
   const M = parseInt(profile[0]) / 100;
   const P = parseInt(profile[1]) / 10;
@@ -39,9 +40,11 @@ const useProfile = () => {
 
   const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
 
-  const getPoints = useCallback(() => {
+  useEffect(() => {
     let upper = [];
     let lower = [];
+    let chord = [];
+
     for (let i = 0; i <= NUMBER_OF_AIRFOIL_POINTS; i++) {
       const x = cosineSpacing(i / NUMBER_OF_AIRFOIL_POINTS);
       const theta = Math.atan(getCamberGradient(x));
@@ -58,17 +61,14 @@ const useProfile = () => {
         y - halfThickness * Math.cos(theta),
         0,
       ]);
+      chord.push([x, y, 0]);
     }
-    const points = [...upper, ...lower]
-    console.log(points, profile);
-    return points;
-  }, [profile, getCamberY]);
 
-  useEffect(() => {
-    setPoints(getPoints());
+    setProfilePoints([...upper, ...lower.reverse()]);
+    setChordPoints(chord);
   }, [profile]);
 
-  return points;
+  return { profilePoints, chordPoints };
 };
 
 export default useProfile;

@@ -7,12 +7,17 @@ import useProfile from "./hooks/useProfile";
 import ShapeVisualizer from "./three/ShapeVisualizer";
 
 const Profile = () => {
-  const points = useProfile();
+  const { profilePoints, chordPoints } = useProfile();
 
   return (
     <div className="h-96 w-2/5">
       <Canvas orthographic camera={{ zoom: 30 }}>
-        <ShapeVisualizer trace={{ name: "Power", points }} />
+        <ShapeVisualizer
+          traces={[
+            { name: "Outline", points: profilePoints },
+            { name: "Chord", points: chordPoints },
+          ]}
+        />
       </Canvas>
     </div>
   );
@@ -27,9 +32,8 @@ const ProfileTable = () => {
       const highest = cz.reduce((previous, current) => {
         if (current[1] > previous[1]) {
           return current;
-        } else {
-          return previous;
         }
+        return previous;
       });
       return {
         name: profile,
@@ -101,7 +105,7 @@ const ProfileChoose = () => {
         <dialog id="profile_modal" className="modal">
           <form method="dialog" className="modal-box max-w-full max-h-full">
             <h3>Profile Catalog</h3>
-            <div className="flex">
+            <div className="flex space-x-4">
               <ProfileTable />
               <div className="h-96 w-2/5">
                 <Canvas orthographic camera={{ zoom: 30 }}>
