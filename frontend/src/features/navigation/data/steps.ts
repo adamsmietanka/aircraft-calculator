@@ -20,7 +20,7 @@ const steps: Step[] = [
     path: "results",
   },
   {
-    name: "Initial Data",
+    name: "Range & Endurance",
     feature: "performance",
     path: "initial_data",
   },
