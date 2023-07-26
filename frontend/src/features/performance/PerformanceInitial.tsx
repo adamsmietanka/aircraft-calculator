@@ -15,7 +15,7 @@ const PerformanceInitial = () => {
   const fuelMass = useInitialStore((state) => state.fuelMass)
   const fuelcons = useInitialStore((state) => state.fuelcons)
   const vmax = useInitialStore((state) => state.vmax)
-
+  const nominalPower = useInitialStore((state) => state.nominalPower)
   const area  = useInitialStore((state) => state.area)
   const aspectRatio = useInitialStore((state) => state.aspectRatio)
   const cx0 = useInitialStore((state) => state.cx0)
@@ -28,17 +28,17 @@ const PerformanceInitial = () => {
   const setFuelMass = useInitialStore((state) => state.setFuelMass)
   const setFuelcons = useInitialStore((state) => state.setFuelcons)
   const setVmax = useInitialStore((state) => state.setVmax)
-
+  const setNominalPower = useInitialStore((state) => state.setNominalPower)
   const setArea = useInitialStore((state) => state.setArea)
   const setAspectRatio = useInitialStore((state) => state.setAspectRatio)
   const setCx0 = useInitialStore((state) => state.setCx0)
   const setCzmax = useInitialStore((state) => state.setCzmax)
 
   const [calculatePower] = usePower();
-  const [nominalPower, setNominalPower] = useState(calculatePower(0))
+  const [maxPower, setMaxPower] = useState(calculatePower(0))
 
   useEffect(() => {
-    setNominalPower(() => calculatePower(flightAltitude))
+    setMaxPower(() => calculatePower(flightAltitude))
   }, [flightAltitude, calculatePower])
 
   return (
@@ -68,7 +68,6 @@ const PerformanceInitial = () => {
           step={0.1}
           label="Nominal Power"
           unit="kW"
-          disabled={true}
         />
         <InputNumber
           value={startMass}
