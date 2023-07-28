@@ -22,7 +22,12 @@ const useAxisTicks = (traces: Trace[], xAxis: Axis, yAxis: Axis) => {
 
     const lowerAxisLimit = Math.ceil((min * 1) / step);
 
-    return Array.from(Array(15).keys()).map((i) => (i + lowerAxisLimit) * step);
+    const ticks = Array.from(Array(15).keys()).map(
+      (i) => (i + lowerAxisLimit) * step
+    );
+    
+    // fix floating point precision (TODO: maybe use decimal.js)
+    return ticks.map((t) => parseFloat(t.toFixed(7)));;
   };
 
   const { width, height } = useChartSize();
