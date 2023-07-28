@@ -45,9 +45,7 @@ const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
 
   useChain([markersRef, titleRef]);
 
-  const { unit } = useChartUnits(
-    axis.type as string
-  );
+  const { unit } = useChartUnits(axis.type as string);
 
   return (
     <mesh position={[0, min, 0]}>
@@ -61,7 +59,7 @@ const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
         />
       ))}
       <AnimatedText
-        position={[mid, -TITLE_PADDING, 0]}
+        position={[mid + 1.5, -TITLE_PADDING, 0]}
         fontSize={0.6}
         color={gridColor}
         fillOpacity={title.opacity}

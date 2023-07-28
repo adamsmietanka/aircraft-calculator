@@ -47,7 +47,7 @@ const LineChart = ({ traces, xAxis, yAxis, point }: ChartProps) => {
   useChain(springRefs);
 
   return (
-    <mesh position={[-0.9 * midX, -0.8 * midY, 0]}>
+    <mesh position={[-midX, -midY, 0]}>
       <LinesVertical
         axis={xAxis}
         ticks={xTicks}

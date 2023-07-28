@@ -65,7 +65,7 @@ const useAxisTicks = (traces: Trace[], xAxis: Axis, yAxis: Axis) => {
   }
 
   const scaleX = width / (maxX - minX);
-  const scaleY = 0.8*height / (maxY - minY);
+  const scaleY = height / (maxY - minY);
 
   return {
     xTicks,
@@ -74,8 +74,8 @@ const useAxisTicks = (traces: Trace[], xAxis: Axis, yAxis: Axis) => {
     scaleY,
     minX: minX * scaleX,
     minY: minY * scaleY,
-    midX: (scaleX * (minX + maxX)) / 2,
-    midY: (scaleY * (minY + maxY)) / 2,
+    midX: (scaleX * (minX + maxX) - 3) / 2,
+    midY: (scaleY * (minY + maxY) - 2) / 2,
   };
 };
 

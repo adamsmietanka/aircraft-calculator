@@ -9,12 +9,12 @@ interface ShapeProps {
 
 const ShapeVisualizer = ({ traces }: ShapeProps) => {
   const { viewport } = useThree();
-  const scale = viewport.width * 0.9;
+  const scale = 0.99 * viewport.width;
 
   const colors = ["green", "yellow", "blue"];
 
   return (
-    <mesh position={[-0.45 * scale, 0, 0]} scale={scale}>
+    <mesh position={[-0.5 * scale, 0, 0]} scale={scale}>
       {traces.map((trace, index) => (
         <Line trace={trace} scale={[1, 1, 1]} color={colors[index]} />
       ))}

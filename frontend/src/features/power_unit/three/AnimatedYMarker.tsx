@@ -52,7 +52,7 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
       >
         {y > 1 || y === 0
           ? y * displayMultiplier
-          : (y * displayMultiplier).toFixed(2)}
+          : (y * displayMultiplier).toFixed(3)}
       </AnimatedText>
       <animated.line>
         <bufferGeometry>
