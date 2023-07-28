@@ -44,7 +44,7 @@ export const linearInterpolation = (
   y1: number,
   x: number
 ): number => {
-  if (x0 === x1) {
+  if (x0 === x1 || x1 === undefined) {
     return y0; // Avoid division by zero
   }
 

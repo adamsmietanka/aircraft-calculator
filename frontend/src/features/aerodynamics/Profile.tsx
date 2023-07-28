@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo } from "react";
-import profiles from "./data/profiles";
+import profiles from "./data/profiles_interpolated";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "../power_unit/three/LineChart";
 import { useWingStore } from "./stores/useWing";
 import useProfile from "./hooks/useProfile";
 import ShapeVisualizer from "./three/ShapeVisualizer";
+import generate_coefficients from "./utils/generator";
 
 const ProfileOutline = () => {
   const { profilePoints, chordPoints } = useProfile();
@@ -43,7 +44,7 @@ const ProfileTable = () => {
     });
   }, []);
   return (
-    <div className="">
+    <div className="h-full">
       <table className="table">
         {/* head */}
         <thead>
@@ -62,8 +63,8 @@ const ProfileTable = () => {
               onClick={() => wing.setProfile(row.name)}
             >
               <td>{row.name}</td>
-              <td>{row.maxCz.toFixed(2)}</td>
-              <td>{row.angleOfMaxCz}</td>
+              <td>{row.maxCz.toFixed(3)}</td>
+              <td>{row.angleOfMaxCz.toFixed(1)}</td>
             </tr>
           ))}
         </tbody>
@@ -76,31 +77,50 @@ const Profile = () => {
   const wing = useWingStore();
 
   const points = useMemo(() => {
-    const filtered = profiles[wing.profile].cz.filter(
-      ([x]) => -5 < x && x < 15
-    );
+    const filtered = profiles[wing.profile].cz;
     return filtered.map(([x, y, y2]) => [x, y, 0]);
   }, [wing.profile]);
 
+  const pointsCd = useMemo(() => {
+    const filtered = profiles[wing.profile].cd;
+    return filtered.map(([x, y, y2]) => [x, y, 0]);
+  }, [wing.profile]);
+
+  useEffect(() => {
+    generate_coefficients();
+  });
+
   return (
-    <div className="flex flex-col">
-      <h3>Profile Catalog</h3>
-      <div className="flex space-x-4">
+      <div className="flex space-x-4 h-full">
         <ProfileTable />
-        <div className="h-96 w-2/5">
+        <div className="h-4/5 w-2/5">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={[{ name: "Power", points }]}
-              xAxis={{ name: "Angle of Attack" }}
+              xAxis={{ name: "Angle of Attack", min: -10, max: 20 }}
               yAxis={{
                 name: "Cz",
+                min: -1,
+                max: 1.5,
+              }}
+            />
+          </Canvas>
+        </div>
+        <div className="h-4/5 w-2/5">
+          <Canvas orthographic camera={{ zoom: 30 }}>
+            <LineChart
+              traces={[{ name: "Power", points: pointsCd }]}
+              xAxis={{ name: "Coefficient of Lift (Cl)", min: -1.5, max: 1.5 }}
+              yAxis={{
+                name: "Cd",
+                min: 0,
+                max: 0.02,
               }}
             />
           </Canvas>
         </div>
         <ProfileOutline />
       </div>
-    </div>
   );
 };
 
