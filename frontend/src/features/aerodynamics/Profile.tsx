@@ -28,7 +28,7 @@ const ProfileTable = () => {
   const wing = useWingStore();
 
   const tableData = useMemo(() => {
-    return Object.keys(profiles).map((profile) => {
+    let table = Object.keys(profiles).map((profile) => {
       const cz = profiles[profile].cz;
       const cd = profiles[profile].cd;
       const highest = cz.reduce((previous, current) => {
@@ -54,6 +54,7 @@ const ProfileTable = () => {
         czOfMinCd: lowest[0],
       };
     });
+    return table.sort((a, b) => a.name.localeCompare(b.name));
   }, []);
   return (
     <div className="">
