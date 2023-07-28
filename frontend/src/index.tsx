@@ -15,6 +15,7 @@ import {
   Turn,
   Weight,
   Fuselage,
+  Profile,
 } from "./features";
 
 import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
@@ -33,6 +34,7 @@ root.render(
         <Route path="/" element={<App />}>
           <Route index element={<Home />} />
           <Route path="aerodynamics">
+            <Route path="profile" element={<Profile />} />
             <Route path="wing" element={<Wing />} />
             <Route path="fuselage" element={<Fuselage />} />
           </Route>

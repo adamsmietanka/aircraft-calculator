@@ -6,7 +6,7 @@ import { useWingStore } from "./stores/useWing";
 import useProfile from "./hooks/useProfile";
 import ShapeVisualizer from "./three/ShapeVisualizer";
 
-const Profile = () => {
+const ProfileOutline = () => {
   const { profilePoints, chordPoints } = useProfile();
 
   return (
@@ -72,7 +72,7 @@ const ProfileTable = () => {
   );
 };
 
-const ProfileChoose = () => {
+const Profile = () => {
   const wing = useWingStore();
 
   const points = useMemo(() => {
@@ -83,20 +83,25 @@ const ProfileChoose = () => {
   }, [wing.profile]);
 
   return (
-    <div className="form-control">
-      <label className="label">
-        <span className="label-text flex">Profile</span>
-      </label>
-      <select className="select select-bordered join-item w-60">
-        <option disabled selected>
-          Filter
-        </option>
-        <option>Sci-fi</option>
-        <option>Drama</option>
-        <option>Action</option>
-      </select>
+    <div className="flex flex-col">
+      <h3>Profile Catalog</h3>
+      <div className="flex space-x-4">
+        <ProfileTable />
+        <div className="h-96 w-2/5">
+          <Canvas orthographic camera={{ zoom: 30 }}>
+            <LineChart
+              traces={[{ name: "Power", points }]}
+              xAxis={{ name: "Angle of Attack" }}
+              yAxis={{
+                name: "Cz",
+              }}
+            />
+          </Canvas>
+        </div>
+        <ProfileOutline />
+      </div>
     </div>
   );
 };
 
-export default ProfileChoose;
+export default Profile;
