@@ -120,7 +120,7 @@ const Profile = () => {
               traces={[{ name: "Power", points }]}
               xAxis={{ name: "Angle of Attack", min: -10, max: 20 }}
               yAxis={{
-                name: "Cz",
+                name: "Cl",
                 min: -1,
                 max: 1.5,
               }}
