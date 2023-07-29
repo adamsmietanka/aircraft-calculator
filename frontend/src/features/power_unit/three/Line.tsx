@@ -26,7 +26,7 @@ const Line = ({ trace, scale, color, springRef }: TraceProps) => {
     ref: springRef,
     from: { offset: 1 },
     to: { offset: 0 },
-    // config: config.slow,
+    config: config.slow,
   });
 
   const [marker] = useSpring(

@@ -64,7 +64,7 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={opacity.to((o) => o / 2)}
+          opacity={opacity.to((o) => (x === 0 ? o : o / 3))}
           transparent
         />
       </animated.line>
