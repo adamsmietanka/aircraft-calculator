@@ -19,7 +19,7 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
   const AnimatedText = animated(Text);
 
   const position = useMemo(() => {
-    return new Float32Array([0, 0, 0, 0, 25, 0]);
+    return new Float32Array([0, 0, 0, 0, 50, 0]);
   }, []);
 
   const [marker] = useSpring(
