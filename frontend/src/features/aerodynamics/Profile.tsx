@@ -113,8 +113,8 @@ const Profile = () => {
         <ProfileTable />
         <ProfileOutline />
       </div>
-      <div className="flex h-4/5 w-full">
-        <div className="w-2/5" style={{ height: "90vh" }}>
+      <div className="flex w-full">
+        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "82vh" }}>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={[{ name: "Power", points }]}
@@ -127,7 +127,7 @@ const Profile = () => {
             />
           </Canvas>
         </div>
-        <div className="w-2/5" style={{ height: "90vh" }}>
+        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "82vh" }}>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={[{ name: "Power", points: pointsCd }]}
