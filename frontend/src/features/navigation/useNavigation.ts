@@ -7,7 +7,11 @@ interface NavigationState {
 }
 
 export const useNavigationStore = create<NavigationState>()((set) => ({
-  routes: { powerunit: "engine", stability: "longitudinal-moment" },
+  routes: {
+    aerodynamics: "profile",
+    powerunit: "engine",
+    stability: "longitudinal-moment",
+  },
   setRoute: (route, subroute) =>
     set(
       produce((state) => {
