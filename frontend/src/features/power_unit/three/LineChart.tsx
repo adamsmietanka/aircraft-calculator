@@ -57,8 +57,6 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
   point && springRefs.push(useSpringRef());
   useChain(springRefs);
 
-  useEffect(() => store && store.subscribe(console.log), []);
-
   return (
     <mesh position={[-midX, -midY, 0]}>
       <Plane
@@ -77,6 +75,12 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
             store.setState({ x: parseFloat(x.toPrecision(3)) });
 
           // min <= x && console.log(x.toPrecision(4), y.toPrecision(4));
+        }}
+        onPointerEnter={(e) => {
+          store && store.setState({ hover: true });
+        }}
+        onPointerLeave={(e) => {
+          store && store.setState({ hover: false });
         }}
       />
       <LinesVertical
@@ -103,7 +107,11 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
         />
       ))}
       {store && (
-        <HoverMarker store={store} scale={[scaleX, scaleY, 0]} type={yAxis.type} />
+        <HoverMarker
+          store={store}
+          scale={[scaleX, scaleY, 1]}
+          type={yAxis.type}
+        />
       )}
       {point && (
         <AnimatedSphere

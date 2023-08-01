@@ -16,11 +16,9 @@ interface Props {
 }
 
 const HoverMarker = ({ store, type, scale }: Props) => {
-  const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const { gridColor, primaryColor, backgroundColor } = useCSSColors();
   const AnimatedText = animated(Text);
-  console.log(valueMultiplier, type);
 
   const position = useMemo(() => {
     return new Float32Array([0, 0, 0, 200, 0, 0]);
@@ -35,6 +33,13 @@ const HoverMarker = ({ store, type, scale }: Props) => {
     []
   );
 
+  const [opacitySpring, opacityApi] = useSpring(
+    () => ({
+      opacity: 0,
+    }),
+    []
+  );
+
   const [scaleSpring] = useSpring(
     () => ({
       x: scale[0],
@@ -43,9 +48,10 @@ const HoverMarker = ({ store, type, scale }: Props) => {
     [scale]
   );
 
-  const changeY = ({ x, y }: ChartStore) => {
-    console.log(x, y);
+  const changeY = ({ x, y, hover }: ChartStore) => {
     api.start({ x: x, y: y, points: [0, y, 0, x, y, 0, x, 0, 0] });
+    hover && opacityApi.start({ opacity: 1 });
+    hover || opacityApi.start({ opacity: 0 });
   };
 
   useEffect(() => store.subscribe(changeY), []);
@@ -55,8 +61,10 @@ const HoverMarker = ({ store, type, scale }: Props) => {
 
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
+    const interpolatedOpacity = opacitySpring.opacity.get();
 
     if (geometryRef.current && materialRef.current) {
+      materialRef.current.opacity = interpolatedOpacity;
       geometryRef.current.setPoints(interpolatedPoints);
     }
   });
@@ -68,9 +76,10 @@ const HoverMarker = ({ store, type, scale }: Props) => {
         position={marker.y.to((y) => [-1.5 * NUMBERS_PADDING, y, 0])}
         scale={scaleSpring.y.to((y) => [1, 1 / y, 1])}
         color={primaryColor}
-        fillOpacity={1}
+        fillOpacity={opacitySpring.opacity}
         outlineWidth={0.2}
         outlineColor={backgroundColor}
+        outlineOpacity={opacitySpring.opacity}
       >
         {(marker.y.goal / valueMultiplier).toPrecision(4)}
       </AnimatedText>

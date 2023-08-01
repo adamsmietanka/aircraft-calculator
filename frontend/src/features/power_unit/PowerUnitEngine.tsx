@@ -17,13 +17,15 @@ import {
 export interface ChartStore {
   x: number;
   y: number;
+  hover: boolean;
   setY: (value: number) => void;
 }
 
 const useChartStore = create<ChartStore>()((set) => ({
-  x: 2,
-  y: 2,
-  setY: (value) => set((state) => ({ y: value })),
+    x: 2,
+    y: 2,
+    hover: false,
+    setY: (value) => set((state) => ({ y: value })),
 }));
 
 const findUpperBoundArray = (
