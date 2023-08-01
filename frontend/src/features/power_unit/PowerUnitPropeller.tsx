@@ -3,10 +3,12 @@ import { useEngineStore } from "./stores/useEngine";
 import { usePropellerStore } from "./stores/usePropeller";
 import PowerUnitPropellerBlades from "./PowerUnitPropellerBlades";
 import PowerUnitPropellerPitch from "./PowerUnitPropellerPitch";
-import PowerUnitPropellerChart from "./PowerUnitPropellerChart";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
 import InputUnits from "../common/inputs/InputUnits";
 import { usePropeller } from "./hooks/usePropeller";
+import usePropellerChart from "./hooks/usePropellerChart";
+import { Canvas } from "@react-three/fiber";
+import LineChart from "./three/LineChart";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);
@@ -20,8 +22,10 @@ const PowerUnitPropeller = () => {
 
   const { power, propellerSpeed, Cn, J, machTip } = usePropeller();
 
+  const traces = usePropellerChart();
+
   return (
-    <div className="flex w-full p-4">
+    <div className="flex w-full p-4 h-full">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputNumber
           value={engineSpeed}
@@ -79,8 +83,17 @@ const PowerUnitPropeller = () => {
         <PowerUnitPropellerDiameter />
         <InputNumber disabled value={machTip} label="Blade Tip Mach number" />
       </div>
-      <div>
-        <PowerUnitPropellerChart Cn={Cn} J={J} />
+      <div className="sticky top-1/4 h-3/5 w-3/5">
+        <Canvas orthographic camera={{ zoom: 30 }}>
+          <LineChart
+            traces={traces}
+            xAxis={{ name: "Cn" }}
+            yAxis={{
+              name: "J",
+            }}
+            point={{x: Cn, y: J}}
+          />
+        </Canvas>
       </div>
       <div />
     </div>

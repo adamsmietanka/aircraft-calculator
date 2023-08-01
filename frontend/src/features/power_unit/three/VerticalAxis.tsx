@@ -2,6 +2,7 @@ import { Html, Line } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import {
+  GRID_OPACITY,
   GRID_WIDTH,
   NUMBERS_PADDING,
   TITLE_PADDING,
@@ -31,6 +32,8 @@ const BackMesh = () => {
             [60, i, 0],
             [60, i, 15],
           ]}
+          transparent
+          opacity={GRID_OPACITY}
           color={gridColor}
           lineWidth={i % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
@@ -44,6 +47,8 @@ const BackMesh = () => {
             [60, 1, i],
           ]}
           color={gridColor}
+          transparent
+          opacity={GRID_OPACITY}
           lineWidth={i % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
       ))}
@@ -89,6 +94,8 @@ const SideMesh = () => {
             [60, i, 0],
           ]}
           color={gridColor}
+          transparent
+          opacity={GRID_OPACITY}
           lineWidth={i % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
       ))}
@@ -101,6 +108,8 @@ const SideMesh = () => {
             [10 + i * 10, 1, 0],
           ]}
           color={gridColor}
+          transparent
+          opacity={GRID_OPACITY}
           lineWidth={i % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
       ))}

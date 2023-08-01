@@ -22,24 +22,20 @@ const InputSlider = ({
       <label className="label">
         <span className="label-text">{label}</span>
       </label>
-      <label className="flex items-center">
-        <div className="flex w-full pr-2">
-          <input
-            type="range"
-            min={min}
-            max={max}
-            step={step}
-            value={value}
-            onChange={(e) => setter(parseFloat(e.target.value))}
-            className="range range-xs"
-          />
-        </div>
-        <span
-          className="flex items-center justify-center w-24 rounded-lg h-12 bg-base-span"
-        >
+      <div className="join items-center">
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => setter(parseFloat(e.target.value))}
+          className="range range-xs join-item pr-2"
+        />
+        <span className="flex items-center justify-center w-20 h-12 bg-base-300 join-item">
           {value} {unit}
         </span>
-      </label>
+      </div>
     </div>
   );
 };

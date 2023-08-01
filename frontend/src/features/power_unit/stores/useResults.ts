@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 
 export interface TableRow {
   v: number;
@@ -7,6 +7,8 @@ export interface TableRow {
   angle: number;
   eff: number;
   prop_power: number;
+  rpm: number;
+  beforeMaxRPM: boolean;
 }
 
 interface ResultsState {

@@ -1,22 +1,5 @@
 import { Line } from "@react-three/drei";
-import { GRID_WIDTH, useCSSColors } from "./config";
-
-const vertexShader = `
-  varying vec3 vColor;
-  
-  void main() {
-    vColor = position.xyz;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const fragmentShader = `
-  varying vec3 vColor;
-  
-  void main() {
-    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-  }
-`;
+import { GRID_OPACITY, GRID_WIDTH, useCSSColors } from "./config";
 
 const GridLines = () => {
   const { gridColor } = useCSSColors();
@@ -26,11 +9,11 @@ const GridLines = () => {
         <Line
           key={i}
           points={[
-            [i - 5, 0, -5],
-            [i - 5, 0, 20],
+            [i - 5, -0.01, -5],
+            [i - 5, -0.01, 20],
           ]}
-          //   vertexShader={vertexShader}
-          //   fragmentShader={fragmentShader}
+          transparent
+          opacity={GRID_OPACITY}
           color={gridColor}
           lineWidth={i % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
@@ -39,12 +22,12 @@ const GridLines = () => {
         <Line
           key={j}
           points={[
-            [-5, 0, j - 5],
-            [10, 0, j - 5],
+            [-5, -0.01, j - 5],
+            [10, -0.01, j - 5],
           ]}
-          //   vertexShader={vertexShader}
-          //   fragmentShader={fragmentShader}
           color={gridColor}
+          transparent
+          opacity={GRID_OPACITY}
           lineWidth={j % 5 === 0 ? GRID_WIDTH * 2 : GRID_WIDTH}
         />
       ))}
