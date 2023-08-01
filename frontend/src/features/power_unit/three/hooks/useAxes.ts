@@ -80,7 +80,7 @@ const useAxisTicks = (traces: Trace[], xAxis: Axis, yAxis: Axis) => {
     minX: minX * scaleX,
     minY: minY * scaleY,
     midX: (scaleX * (minX + maxX) - 3) / 2,
-    midY: (scaleY * (minY + maxY) - 2) / 2,
+    midY: (scaleY * (minY + maxY) -1) / 2,
   };
 };
 
