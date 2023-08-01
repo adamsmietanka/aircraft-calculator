@@ -19,11 +19,11 @@ export interface ChartStore {
 }
 
 const useChartStore = create<ChartStore>()((set) => ({
-    x: 2,
-    y: 2,
-    hover: false,
-    locked: false,
-    setY: (value) => set((state) => ({ y: value })),
+  x: 2,
+  y: 2,
+  hover: false,
+  locked: false,
+  setY: (value) => set((state) => ({ y: value })),
 }));
 
 const findUpperBoundArray = (
@@ -120,12 +120,14 @@ const PowerUnitEngine = () => {
           {/* <gridHelper rotation-x={Math.PI / 2} /> */}
           <LineChart
             traces={[{ name: "Power", points }]}
-            xAxis={{ name: "Altitude", type: "altitude", max: maxAltitude }}
-            yAxis={{
-              name: "Power",
-              type: "power",
-              min: 0,
-              max: seaLevelPower * 1.4,
+            axes={{
+              x: { name: "Altitude", type: "altitude", max: maxAltitude },
+              y: {
+                name: "Power",
+                type: "power",
+                min: 0,
+                max: seaLevelPower * 1.4,
+              },
             }}
             store={useChartStore}
           />

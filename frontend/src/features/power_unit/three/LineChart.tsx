@@ -35,18 +35,13 @@ export interface Point {
 
 export type ChartProps = {
   traces: Trace[];
-  xAxis: Axis;
-  yAxis: Axis;
+  axes: Record<string, Axis>;
   point?: Point;
   store?: UseBoundStore<StoreApi<ChartStore>>;
 };
 
-const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
-  const { xTicks, yTicks, scaleX, scaleY, minX, minY, midX, midY } = useAxes(
-    traces,
-    xAxis,
-    yAxis
-  );
+const LineChart = ({ traces, axes, point, store }: ChartProps) => {
+  const { ticks, scale, min, mid, step } = useAxes(traces, axes);
 
   const { primaryColor, secondaryColor, accentColor, errorColor } =
     useCSSColors();
@@ -58,20 +53,20 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
   useChain(springRefs);
 
   return (
-    <mesh position={[-midX, -midY, 0]}>
+    <mesh position={[-mid.x, -mid.y, 0]}>
       <Plane
         args={[200, 200]}
-        position-x={100 + minX}
-        position-y={100 + minY}
+        position-x={100 + min.x}
+        position-y={100 + min.y}
         material-transparent
         material-opacity={0}
         onPointerMove={(e) => {
-          const x = (e.point.x + midX) / scaleX;
-          const min = minX / scaleX;
+          const x = (e.point.x + mid.x) / scale[0];
+          const minX = min.x / scale[0];
           const locked = store && store.getState().locked;
 
           !locked &&
-            min <= x &&
+            minX <= x &&
             store &&
             store.setState({ x: parseFloat(x.toPrecision(3)) });
         }}
@@ -86,24 +81,24 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
         }}
       />
       <LinesVertical
-        axis={xAxis}
-        ticks={xTicks}
-        scale={scaleX}
-        mid={midX}
-        min={minY}
+        axis={axes.x}
+        ticks={ticks.x}
+        scale={scale[0]}
+        mid={mid.x}
+        min={min.y}
       />
       <LinesHorizontal
-        axis={yAxis}
-        ticks={yTicks}
-        scale={scaleY}
-        mid={midY}
-        min={minX}
+        axis={axes.y}
+        ticks={ticks.y}
+        scale={scale[1]}
+        mid={mid.y}
+        min={min.x}
       />
       {traces.map((trace, index) => (
         <Line
           key={index}
           trace={trace}
-          scale={[scaleX, scaleY, 1]}
+          scale={scale}
           color={colors[index]}
           springRef={springRefs[index]}
         />
@@ -111,13 +106,14 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
       {store && (
         <HoverMarker
           store={store}
-          scale={[scaleX, scaleY, 1]}
-          type={yAxis.type}
+          scale={scale}
+          step={step}
+          axes={axes}
         />
       )}
       {point && (
         <AnimatedSphere
-          position={[point.x * scaleX, point.y * scaleY, 0]}
+          position={[point.x * scale[0], point.y * scale[1], 0]}
           scale={[0.25, 0.25, 0.25]}
           color={errorColor}
           springRef={springRefs[springRefs.length - 1]}
