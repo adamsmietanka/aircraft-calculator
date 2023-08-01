@@ -5,6 +5,16 @@ import LinesHorizontal from "./LinesHorizontal";
 import { useCSSColors } from "./config";
 import { config, useChain, useSpring, useSpringRef } from "@react-spring/three";
 import AnimatedSphere from "./AnimatedSphere";
+import { Plane } from "@react-three/drei";
+import { useEffect, useMemo } from "react";
+import {
+  findUpperBound,
+  linearInterpolation,
+} from "../../../utils/interpolation/binarySearch";
+import { ChartStore } from "../PowerUnitEngine";
+import { StoreApi, UseBoundStore } from "zustand";
+import { useThree } from "@react-three/fiber";
+import HoverMarker from "../../common/three/HoverMarker";
 
 export interface Axis {
   name: string;
@@ -28,9 +38,10 @@ export type ChartProps = {
   xAxis: Axis;
   yAxis: Axis;
   point?: Point;
+  store?: UseBoundStore<StoreApi<ChartStore>>;
 };
 
-const LineChart = ({ traces, xAxis, yAxis, point }: ChartProps) => {
+const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
   const { xTicks, yTicks, scaleX, scaleY, minX, minY, midX, midY } = useAxes(
     traces,
     xAxis,
@@ -46,8 +57,28 @@ const LineChart = ({ traces, xAxis, yAxis, point }: ChartProps) => {
   point && springRefs.push(useSpringRef());
   useChain(springRefs);
 
+  useEffect(() => store && store.subscribe(console.log), []);
+
   return (
     <mesh position={[-midX, -midY, 0]}>
+      <Plane
+        args={[200, 200]}
+        position-x={-2 * minX}
+        material-transparent
+        material-opacity={0.01}
+        onPointerMove={(e) => {
+          const x = (e.point.x + midX) / scaleX;
+          // const y = (e.point.y + midY) / scaleY;
+          const min = minX / scaleX;
+          // const max = maxX / scaleX;
+
+          min <= x &&
+            store &&
+            store.setState({ x: parseFloat(x.toPrecision(3)) });
+
+          // min <= x && console.log(x.toPrecision(4), y.toPrecision(4));
+        }}
+      />
       <LinesVertical
         axis={xAxis}
         ticks={xTicks}
@@ -71,6 +102,9 @@ const LineChart = ({ traces, xAxis, yAxis, point }: ChartProps) => {
           springRef={springRefs[index]}
         />
       ))}
+      {store && (
+        <HoverMarker store={store} scale={[scaleX, scaleY, 0]} type={yAxis.type} />
+      )}
       {point && (
         <AnimatedSphere
           position={[point.x * scaleX, point.y * scaleY, 0]}
