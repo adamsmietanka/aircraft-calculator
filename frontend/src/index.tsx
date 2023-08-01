@@ -10,11 +10,13 @@ import {
   PowerUnitPropeller,
   PowerUnitResults,
   Aerodynamics,
-  Performance,
   Settings,
   Turn,
   Weight,
+
 } from "./features";
+import { PerformanceExtendedAlg, PerformanceInitial} from "./features/performance";
+import PerformanceSensitivity from "./features/performance/PerformanceSensitivity";
 
 import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
 import StabilityRodForce from "./features/stabillity/StabilityRodForce";
@@ -37,7 +39,11 @@ root.render(
             <Route path="propeller" element={<PowerUnitPropeller />} />
             <Route path="results" element={<PowerUnitResults />} />
           </Route>
-          <Route path="performance" element={<Performance />} />
+          <Route path="performance">
+            <Route path="initial_data" element={<PerformanceInitial />} />
+            <Route path="perf_extended" element={<PerformanceExtendedAlg />} />
+            <Route path="sensitivity" element={<PerformanceSensitivity />} />
+          </Route>
           <Route path="weight" element={<Weight />} />
           <Route path="stability">
             <Route
