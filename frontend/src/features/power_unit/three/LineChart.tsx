@@ -61,26 +61,28 @@ const LineChart = ({ traces, xAxis, yAxis, point, store }: ChartProps) => {
     <mesh position={[-midX, -midY, 0]}>
       <Plane
         args={[200, 200]}
-        position-x={-2 * minX}
+        position-x={100 + minX}
+        position-y={100 + minY}
         material-transparent
-        material-opacity={0.01}
+        material-opacity={0}
         onPointerMove={(e) => {
           const x = (e.point.x + midX) / scaleX;
-          // const y = (e.point.y + midY) / scaleY;
           const min = minX / scaleX;
-          // const max = maxX / scaleX;
+          const locked = store && store.getState().locked;
 
-          min <= x &&
+          !locked &&
+            min <= x &&
             store &&
             store.setState({ x: parseFloat(x.toPrecision(3)) });
-
-          // min <= x && console.log(x.toPrecision(4), y.toPrecision(4));
         }}
         onPointerEnter={(e) => {
           store && store.setState({ hover: true });
         }}
         onPointerLeave={(e) => {
           store && store.setState({ hover: false });
+        }}
+        onClick={(e) => {
+          store && store.setState((state) => ({ locked: !state.locked }));
         }}
       />
       <LinesVertical

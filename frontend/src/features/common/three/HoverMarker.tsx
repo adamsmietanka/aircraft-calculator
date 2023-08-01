@@ -1,6 +1,6 @@
 import { animated, to, useSpring } from "@react-spring/three";
 import { useFrame } from "@react-three/fiber";
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { NUMBERS_PADDING, useCSSColors } from "../../power_unit/three/config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { MeshLineGeometry, Text } from "@react-three/drei";
@@ -12,17 +12,12 @@ interface Props {
   store: UseBoundStore<StoreApi<ChartStore>>;
   type: string | undefined;
   scale: number[];
-  //   opacity: SpringValue<number>;
 }
 
 const HoverMarker = ({ store, type, scale }: Props) => {
-  const { displayMultiplier, valueMultiplier } = useChartUnits(type);
+  const { valueMultiplier } = useChartUnits(type);
   const { gridColor, primaryColor, backgroundColor } = useCSSColors();
   const AnimatedText = animated(Text);
-
-  const position = useMemo(() => {
-    return new Float32Array([0, 0, 0, 200, 0, 0]);
-  }, []);
 
   const [marker, api] = useSpring(
     () => ({
@@ -36,6 +31,7 @@ const HoverMarker = ({ store, type, scale }: Props) => {
   const [opacitySpring, opacityApi] = useSpring(
     () => ({
       opacity: 0,
+      width: 2,
     }),
     []
   );
@@ -48,10 +44,12 @@ const HoverMarker = ({ store, type, scale }: Props) => {
     [scale]
   );
 
-  const changeY = ({ x, y, hover }: ChartStore) => {
+  const changeY = ({ x, y, hover, locked }: ChartStore) => {
     api.start({ x: x, y: y, points: [0, y, 0, x, y, 0, x, 0, 0] });
     hover && opacityApi.start({ opacity: 1 });
-    hover || opacityApi.start({ opacity: 0 });
+    locked || hover || opacityApi.start({ opacity: 0 });
+    locked && opacityApi.start({ width: 2 });
+    locked || opacityApi.start({ width: 1 });
   };
 
   useEffect(() => store.subscribe(changeY), []);
@@ -62,9 +60,11 @@ const HoverMarker = ({ store, type, scale }: Props) => {
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
     const interpolatedOpacity = opacitySpring.opacity.get();
+    const interpolatedWidth = opacitySpring.width.get();
 
     if (geometryRef.current && materialRef.current) {
       materialRef.current.opacity = interpolatedOpacity;
+      materialRef.current.lineWidth = interpolatedWidth * 0.005;
       geometryRef.current.setPoints(interpolatedPoints);
     }
   });

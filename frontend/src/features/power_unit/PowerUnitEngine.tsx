@@ -8,16 +8,13 @@ import { Canvas } from "@react-three/fiber";
 import LineChart from "./three/LineChart";
 
 import { StoreApi, UseBoundStore, create } from "zustand";
-import { useCallback, useEffect, useMemo } from "react";
-import {
-  // findUpperBound,
-  linearInterpolation,
-} from "../../utils/interpolation/binarySearch";
+import { useEffect } from "react";
 
 export interface ChartStore {
   x: number;
   y: number;
   hover: boolean;
+  locked: boolean;
   setY: (value: number) => void;
 }
 
@@ -25,6 +22,7 @@ const useChartStore = create<ChartStore>()((set) => ({
     x: 2,
     y: 2,
     hover: false,
+    locked: false,
     setY: (value) => set((state) => ({ y: value })),
 }));
 
@@ -72,7 +70,6 @@ const useChartCalculations = (
 
   useEffect(() => {
     const y = linearInterpolationArray(points, storeInstance.x);
-    // console.log(y);
     storeInstance.setY(y);
   }, [points, storeInstance.x]);
 };
