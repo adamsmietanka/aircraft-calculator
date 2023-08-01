@@ -29,6 +29,7 @@ export const useCSSColors = () => {
   const accentColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const surfaceColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const gridColor = useMemo(() => getHSLColorFromCSS("bc"), [theme]);
+  const backgroundColor = useMemo(() => getHSLColorFromCSS("b1"), [theme]);
   const infoColor = useMemo(() => getHSLColorFromCSS("in"), [theme]);
   const errorColor = useMemo(() => getHSLColorFromCSS("er"), [theme]);
 
@@ -39,6 +40,7 @@ export const useCSSColors = () => {
     accentColor,
     surfaceColor,
     gridColor,
+    backgroundColor,
     infoColor,
     errorColor,
   };
