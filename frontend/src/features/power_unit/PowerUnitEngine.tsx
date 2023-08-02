@@ -70,7 +70,7 @@ const useChartCalculations = (
 
   useEffect(() => {
     const y = linearInterpolationArray(points, storeInstance.x);
-    storeInstance.setY(y);
+    storeInstance.setY(y);  
   }, [points, storeInstance.x]);
 };
 
@@ -117,7 +117,6 @@ const PowerUnitEngine = () => {
       </div>
       <div className="sticky top-1/4 h-3/5 w-3/5">
         <Canvas orthographic camera={{ zoom: 30 }}>
-          {/* <gridHelper rotation-x={Math.PI / 2} /> */}
           <LineChart
             traces={[{ name: "Power", points }]}
             axes={{

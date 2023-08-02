@@ -8,6 +8,7 @@ import { StoreApi, UseBoundStore } from "zustand";
 import { ChartStore } from "../../power_unit/PowerUnitEngine";
 import { MeshLineMaterial } from "meshline";
 import { Axis } from "../../power_unit/three/LineChart";
+import round from "../../../utils/interpolation/round";
 
 interface Props {
   store: UseBoundStore<StoreApi<ChartStore>>;
@@ -90,12 +91,12 @@ const HoverMarker = ({ store, axes, scale, step }: Props) => {
         outlineColor={backgroundColor}
         outlineOpacity={opacitySpring.opacity}
       >
-        {(marker.x.goal / xMultiplier).toPrecision(4)}
+      {round(marker.x.goal / xMultiplier, step.x/100)}
       </AnimatedText>
       <AnimatedText
         fontSize={0.6}
         position={to([marker.y, scaleSpring.x], (y, scale) => [
-          (-1.75 * NUMBERS_PADDING) / scale,
+          (-1.5 * NUMBERS_PADDING) / scale,
           y,
           0,
         ])}
@@ -106,7 +107,7 @@ const HoverMarker = ({ store, axes, scale, step }: Props) => {
         outlineColor={backgroundColor}
         outlineOpacity={opacitySpring.opacity}
       >
-        {(marker.y.goal / yMultiplier).toPrecision(4)}
+        {round(marker.y.goal / yMultiplier, step.y/200)}
       </AnimatedText>
 
         <meshLineGeometry ref={geometryRef} points={[0, 0, 0, 1000, 1000, 0]} />

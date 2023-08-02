@@ -118,11 +118,13 @@ const Profile = () => {
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={[{ name: "Power", points }]}
-              xAxis={{ name: "Angle of Attack", min: -10, max: 20 }}
-              yAxis={{
-                name: "Cl",
-                min: -1,
-                max: 1.5,
+              axes={{
+                x: { name: "Angle of Attack", min: -10, max: 20 },
+                y: {
+                  name: "Cl",
+                  min: -1,
+                  max: 1.5,
+                },
               }}
             />
           </Canvas>
@@ -131,15 +133,17 @@ const Profile = () => {
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={[{ name: "Power", points: pointsCd }]}
-              xAxis={{
-                name: "Coefficient of Lift (Cl)",
-                min: -1.5,
-                max: 1.5,
-              }}
-              yAxis={{
-                name: "Cd",
-                min: 0,
-                max: 0.02,
+              axes={{
+                x: {
+                  name: "Coefficient of Lift (Cl)",
+                  min: -1.5,
+                  max: 1.5,
+                },
+                y: {
+                  name: "Cd",
+                  min: 0,
+                  max: 0.02,
+                },
               }}
             />
           </Canvas>

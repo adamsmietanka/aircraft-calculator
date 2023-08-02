@@ -77,7 +77,7 @@ const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
   return {
     ticks: { x: xTicks, y: yTicks },
     scale: [scaleX, scaleY, 1],
-    min: { x: minX, y: minY },
+    min: { x: minX * scaleX, y: minY * scaleY },
     mid: {
       x: (scaleX * (minX + maxX) - 3) / 2,
       y: (scaleY * (minY + maxY) - 1) / 2,

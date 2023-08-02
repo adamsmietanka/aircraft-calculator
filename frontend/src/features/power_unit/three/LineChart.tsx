@@ -3,18 +3,11 @@ import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
 import { useCSSColors } from "./config";
-import { config, useChain, useSpring, useSpringRef } from "@react-spring/three";
+import { useChain, useSpringRef } from "@react-spring/three";
 import AnimatedSphere from "./AnimatedSphere";
-import { Plane } from "@react-three/drei";
-import { useEffect, useMemo } from "react";
-import {
-  findUpperBound,
-  linearInterpolation,
-} from "../../../utils/interpolation/binarySearch";
 import { ChartStore } from "../PowerUnitEngine";
 import { StoreApi, UseBoundStore } from "zustand";
-import { useThree } from "@react-three/fiber";
-import HoverMarker from "../../common/three/HoverMarker";
+import Hover from "../../common/three/Hover";
 
 export interface Axis {
   name: string;
@@ -54,32 +47,6 @@ const LineChart = ({ traces, axes, point, store }: ChartProps) => {
 
   return (
     <mesh position={[-mid.x, -mid.y, 0]}>
-      <Plane
-        args={[200, 200]}
-        position-x={100 + min.x}
-        position-y={100 + min.y}
-        material-transparent
-        material-opacity={0}
-        onPointerMove={(e) => {
-          const x = (e.point.x + mid.x) / scale[0];
-          const minX = min.x / scale[0];
-          const locked = store && store.getState().locked;
-
-          !locked &&
-            minX <= x &&
-            store &&
-            store.setState({ x: parseFloat(x.toPrecision(3)) });
-        }}
-        onPointerEnter={(e) => {
-          store && store.setState({ hover: true });
-        }}
-        onPointerLeave={(e) => {
-          store && store.setState({ hover: false });
-        }}
-        onClick={(e) => {
-          store && store.setState((state) => ({ locked: !state.locked }));
-        }}
-      />
       <LinesVertical
         axis={axes.x}
         ticks={ticks.x}
@@ -104,11 +71,13 @@ const LineChart = ({ traces, axes, point, store }: ChartProps) => {
         />
       ))}
       {store && (
-        <HoverMarker
-          store={store}
+        <Hover
+          axes={axes}
+          min={min}
+          mid={mid}
           scale={scale}
           step={step}
-          axes={axes}
+          store={store}
         />
       )}
       {point && (
