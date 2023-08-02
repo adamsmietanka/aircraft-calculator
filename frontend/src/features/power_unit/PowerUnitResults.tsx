@@ -75,40 +75,48 @@ const PowerUnitResults = () => {
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={tracesPower}
-              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
-              yAxis={{
-                name: "Power",
-                type: "power",
+              axes={{
+                x: { name: "Speed", type: "speed", max: 1.2 * speed },
+                y: {
+                  name: "Power",
+                  type: "power",
+                },
               }}
             />
           </Canvas>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={tracesAngle}
-              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
-              yAxis={{
-                name: "Angle",
-                min: 0,
+              axes={{
+                x: { name: "Speed", type: "speed", max: 1.2 * speed },
+                y: {
+                  name: "Angle",
+                  min: 0,
+                },
               }}
             />
           </Canvas>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={tracesRPM}
-              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
-              yAxis={{
-                name: "RPM",
-                min: 0,
+              axes={{
+                x: { name: "Speed", type: "speed", max: 1.2 * speed },
+                y: {
+                  name: "RPM",
+                  min: 0,
+                },
               }}
             />
           </Canvas>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               traces={tracesCp}
-              xAxis={{ name: "Speed", type: "speed", max: 1.2 * speed }}
-              yAxis={{
-                name: "Cp",
-                min: 0,
+              axes={{
+                x: { name: "Speed", type: "speed", max: 1.2 * speed },
+                y: {
+                  name: "Cp",
+                  min: 0,
+                },
               }}
             />
           </Canvas>

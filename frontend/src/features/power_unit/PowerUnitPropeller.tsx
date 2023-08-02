@@ -87,11 +87,13 @@ const PowerUnitPropeller = () => {
         <Canvas orthographic camera={{ zoom: 30 }}>
           <LineChart
             traces={traces}
-            xAxis={{ name: "Cn" }}
-            yAxis={{
-              name: "J",
+            axes={{
+              x: { name: "Cn" },
+              y: {
+                name: "J",
+              },
             }}
-            point={{x: Cn, y: J}}
+            point={{ x: Cn, y: J }}
           />
         </Canvas>
       </div>
