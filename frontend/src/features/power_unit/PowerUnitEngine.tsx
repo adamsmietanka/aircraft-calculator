@@ -9,6 +9,7 @@ import LineChart from "./three/LineChart";
 
 import { StoreApi, UseBoundStore, create } from "zustand";
 import { useEffect } from "react";
+import { linearInterpolationArray } from "../../utils/interpolation/binarySearchArray";
 
 export interface ChartStore {
   x: number;
@@ -26,42 +27,6 @@ const useChartStore = create<ChartStore>()((set) => ({
   setY: (value) => set((state) => ({ y: value })),
 }));
 
-const findUpperBoundArray = (
-  arr: number[][],
-  target: number,
-  axis = 0
-): number => {
-  let low = 0;
-  let high = arr.length - 1;
-  let upperBound = -1;
-
-  while (low <= high) {
-    const mid = Math.floor((low + high) / 2);
-
-    if (arr[mid][axis] >= target) {
-      high = mid - 1; // Target is in the left half of the array
-      upperBound = mid; // Update the lower bound
-    } else {
-      low = mid + 1;
-    }
-  }
-
-  return upperBound;
-};
-
-const linearInterpolationArray = (points: number[][], x: number): number => {
-  const index = findUpperBoundArray(points, x);
-  const [x0, y0] = points[index - 1];
-  const [x1, y1] = points[index];
-
-  if (x0 === x1 || x1 === undefined) {
-    return y0; // Avoid division by zero
-  }
-
-  const y = y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
-  return y;
-};
-
 const useChartCalculations = (
   store: UseBoundStore<StoreApi<ChartStore>>,
   points: number[][]
@@ -71,6 +36,7 @@ const useChartCalculations = (
   useEffect(() => {
     const y = linearInterpolationArray(points, storeInstance.x);
     storeInstance.setY(y);  
+    console.log(storeInstance)
   }, [points, storeInstance.x]);
 };
 
