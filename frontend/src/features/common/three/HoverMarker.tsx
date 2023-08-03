@@ -14,10 +14,11 @@ interface Props {
   store: UseBoundStore<StoreApi<ChartStore>>;
   axes: Record<string, Axis>;
   scale: number[];
+  min: Record<string, number>;
   step: Record<string, number>;
 }
 
-const HoverMarker = ({ store, axes, scale, step }: Props) => {
+const HoverMarker = ({ store, axes, scale, min, step }: Props) => {
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
   const { gridColor, primaryColor, backgroundColor } = useCSSColors();
@@ -49,7 +50,11 @@ const HoverMarker = ({ store, axes, scale, step }: Props) => {
   );
 
   const changeY = ({ x, y, hover, locked }: ChartStore) => {
-    api.start({ x: x, y: y, points: [0, y, 0, x, y, 0, x, 0, 0] });
+    api.start({
+      x: x,
+      y: y,
+      points: [min.x / scale[0], y, 0, x, y, 0, x, min.y / scale[1], 0],
+    });
     hover && opacityApi.start({ opacity: 1 });
     locked || hover || opacityApi.start({ opacity: 0 });
     locked && opacityApi.start({ width: 2 });
@@ -81,7 +86,7 @@ const HoverMarker = ({ store, axes, scale, step }: Props) => {
         fontSize={0.6}
         position={to([marker.x, scaleSpring.y], (x, scale) => [
           x,
-          -NUMBERS_PADDING / scale,
+          (min.y - NUMBERS_PADDING) / scale,
           0,
         ])}
         scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [1 / x, 1 / y, 1])}
@@ -91,12 +96,12 @@ const HoverMarker = ({ store, axes, scale, step }: Props) => {
         outlineColor={backgroundColor}
         outlineOpacity={opacitySpring.opacity}
       >
-      {round(marker.x.goal / xMultiplier, step.x/100)}
+        {round(marker.x.goal / xMultiplier, step.x / 100)}
       </AnimatedText>
       <AnimatedText
         fontSize={0.6}
         position={to([marker.y, scaleSpring.x], (y, scale) => [
-          (-1.5 * NUMBERS_PADDING) / scale,
+          (min.x - 1.5 * NUMBERS_PADDING) / scale,
           y,
           0,
         ])}
@@ -107,19 +112,19 @@ const HoverMarker = ({ store, axes, scale, step }: Props) => {
         outlineColor={backgroundColor}
         outlineOpacity={opacitySpring.opacity}
       >
-        {round(marker.y.goal / yMultiplier, step.y/200)}
+        {round(marker.y.goal / yMultiplier, step.y / 100)}
       </AnimatedText>
 
-        <meshLineGeometry ref={geometryRef} points={[0, 0, 0, 1000, 1000, 0]} />
-        <meshLineMaterial
-          ref={materialRef}
-          dashArray={0.01}
-          dashOffset={1}
-          dashRatio={0.8}
-          transparent
-          lineWidth={0.005}
-          color={gridColor}
-        />
+      <meshLineGeometry ref={geometryRef} points={[0, 0, 0, 1000, 1000, 0]} />
+      <meshLineMaterial
+        ref={materialRef}
+        dashArray={0.01}
+        dashOffset={1}
+        dashRatio={0.8}
+        transparent
+        lineWidth={0.005}
+        color={gridColor}
+      />
     </animated.mesh>
   );
 };

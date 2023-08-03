@@ -16,7 +16,6 @@ interface HoverProps {
 }
 
 const Hover = ({ axes, min, mid, scale, step, store }: HoverProps) => {
-  console.log(step.x / 100);
   return (
     <>
       <Plane
@@ -44,7 +43,7 @@ const Hover = ({ axes, min, mid, scale, step, store }: HoverProps) => {
           store.setState((state) => ({ locked: !state.locked }));
         }}
       />
-      <HoverMarker store={store} scale={scale} step={step} axes={axes} />
+      <HoverMarker store={store} scale={scale} step={step} axes={axes} min={min} />
     </>
   );
 };
