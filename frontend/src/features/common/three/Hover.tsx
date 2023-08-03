@@ -1,5 +1,4 @@
-import React from "react";
-import { Axis, ChartProps } from "../../power_unit/three/LineChart";
+import { Axis } from "../../power_unit/three/LineChart";
 import { Plane } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
 import { ChartStore } from "../../power_unit/PowerUnitEngine";
@@ -43,7 +42,13 @@ const Hover = ({ axes, min, mid, scale, step, store }: HoverProps) => {
           store.setState((state) => ({ locked: !state.locked }));
         }}
       />
-      <HoverMarker store={store} scale={scale} step={step} axes={axes} min={min} />
+      <HoverMarker
+        store={store}
+        scale={scale}
+        step={step}
+        axes={axes}
+        min={min}
+      />
     </>
   );
 };

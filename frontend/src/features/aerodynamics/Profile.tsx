@@ -80,7 +80,9 @@ export const useLiftStore = create<ChartStore>()((set) => ({
   y: 2,
   hover: false,
   locked: false,
+  setX: (value) => set(() => ({ x: value })),
   setY: (value) => set((state) => ({ y: value })),
+  setLocked: (value) => set(() => ({ locked: value })),
 }));
 
 const Profile = () => {

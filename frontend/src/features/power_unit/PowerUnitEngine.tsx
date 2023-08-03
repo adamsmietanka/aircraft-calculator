@@ -16,7 +16,9 @@ export interface ChartStore {
   y: number;
   hover: boolean;
   locked: boolean;
+  setX: (value: number) => void;
   setY: (value: number) => void;
+  setLocked: (value: boolean) => void;
 }
 
 const useChartStore = create<ChartStore>()((set) => ({
@@ -24,7 +26,9 @@ const useChartStore = create<ChartStore>()((set) => ({
   y: 2,
   hover: false,
   locked: false,
-  setY: (value) => set((state) => ({ y: value })),
+  setX: (value) => set(() => ({ x: value })),
+  setY: (value) => set(() => ({ y: value })),
+  setLocked: (value) => set(() => ({ locked: value })),
 }));
 
 const useChartCalculations = (
@@ -35,8 +39,8 @@ const useChartCalculations = (
 
   useEffect(() => {
     const y = linearInterpolationArray(points, storeInstance.x);
-    storeInstance.setY(y);  
-    console.log(storeInstance)
+    storeInstance.setY(y);
+    console.log(storeInstance);
   }, [points, storeInstance.x]);
 };
 

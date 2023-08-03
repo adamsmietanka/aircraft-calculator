@@ -55,7 +55,7 @@ const HoverMarker = ({ store, axes, scale, min, step }: Props) => {
       y: y,
       points: [min.x / scale[0], y, 0, x, y, 0, x, min.y / scale[1], 0],
     });
-    hover && opacityApi.start({ opacity: 1 });
+    (locked || hover) && opacityApi.start({ opacity: 1 });
     locked || hover || opacityApi.start({ opacity: 0 });
     locked && opacityApi.start({ width: 2 });
     locked || opacityApi.start({ width: 1 });

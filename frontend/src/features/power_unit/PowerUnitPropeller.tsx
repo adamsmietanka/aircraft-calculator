@@ -22,7 +22,7 @@ const PowerUnitPropeller = () => {
 
   const { power, propellerSpeed, Cn, J, machTip } = usePropeller();
 
-  const traces = usePropellerChart();
+  const { traces, usePropellerChartStore } = usePropellerChart({ x: Cn, y: J });
 
   return (
     <div className="flex w-full p-4 h-full">
@@ -93,6 +93,7 @@ const PowerUnitPropeller = () => {
                 name: "J",
               },
             }}
+            store={usePropellerChartStore}
             point={{ x: Cn, y: J }}
           />
         </Canvas>
