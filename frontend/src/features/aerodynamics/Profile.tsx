@@ -3,26 +3,11 @@ import profiles from "./data/profiles_interpolated";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "../power_unit/three/LineChart";
 import { useWingStore } from "./stores/useWing";
-import useProfile from "./hooks/useProfile";
-import ShapeVisualizer from "./three/ShapeVisualizer";
+import ProfileVisualizer from "./three/ProfileVisualizer";
 import generate_coefficients from "./utils/generator";
-
-const ProfileOutline = () => {
-  const { profilePoints, chordPoints } = useProfile();
-
-  return (
-    <div className="h-96">
-      <Canvas orthographic camera={{ zoom: 30 }}>
-        <ShapeVisualizer
-          traces={[
-            { name: "Outline", points: profilePoints },
-            { name: "Chord", points: chordPoints },
-          ]}
-        />
-      </Canvas>
-    </div>
-  );
-};
+import { create } from "zustand";
+import { ChartStore } from "../power_unit/PowerUnitEngine";
+import { linearInterpolationArray } from "../../utils/interpolation/binarySearchArray";
 
 const ProfileTable = () => {
   const wing = useWingStore();
@@ -90,6 +75,14 @@ const ProfileTable = () => {
   );
 };
 
+export const useLiftStore = create<ChartStore>()((set) => ({
+  x: 2,
+  y: 2,
+  hover: false,
+  locked: false,
+  setY: (value) => set((state) => ({ y: value })),
+}));
+
 const Profile = () => {
   const wing = useWingStore();
 
@@ -103,15 +96,27 @@ const Profile = () => {
     return filtered.map(([x, y, y2]) => [x, y, 0]);
   }, [wing.profile]);
 
+  const storeInstance = useLiftStore();
+
+  useEffect(() => {
+    const y = linearInterpolationArray(points, storeInstance.x);
+    storeInstance.setY(y);
+    console.log(storeInstance);
+  }, [points, storeInstance.x]);
+
   useEffect(() => {
     generate_coefficients();
-  });
+  }, []);
 
   return (
     <div className="flex space-x-4 h-full mt-4">
       <div className="flex flex-col">
         <ProfileTable />
-        <ProfileOutline />
+        <div className="h-96">
+          <Canvas orthographic camera={{ zoom: 30 }}>
+            <ProfileVisualizer />
+          </Canvas>
+        </div>
       </div>
       <div className="flex w-full">
         <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "82vh" }}>
@@ -126,6 +131,7 @@ const Profile = () => {
                   max: 1.5,
                 },
               }}
+              store={useLiftStore}
             />
           </Canvas>
         </div>
