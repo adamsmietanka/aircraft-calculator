@@ -10,6 +10,7 @@ import InputNumber from "../common/inputs/InputNumber";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "./three/LineChart";
 import { usePropellerStore } from "./stores/usePropeller";
+import useResultsChart from "./hooks/useResultsChart";
 
 const PowerUnitResults = () => {
   const altitude = useResultsStore((state) => state.altitude);
@@ -17,31 +18,13 @@ const PowerUnitResults = () => {
   const setAltitude = useResultsStore((state) => state.setAltitude);
   const [power, Cp] = usePowerUnitResults();
 
-  const table = useResultsStore((state) => state.table);
-  const tracesPower = [
-    {
-      name: "power",
-      points: table.map(({ v, prop_power }) => [v, prop_power, 0]),
-    },
-  ];
-  const tracesAngle = [
-    {
-      name: "angle",
-      points: table.map(({ v, angle }) => [v, angle, 0]),
-    },
-  ];
-  const tracesRPM = [
-    {
-      name: "RPM",
-      points: table.map(({ v, rpm }) => [v, rpm, 0]),
-    },
-  ];
-  const tracesCp = [
-    {
-      name: "Cp",
-      points: table.map(({ v, cp }) => [v, cp, 0]),
-    },
-  ];
+  const {
+    tracesPower,
+    tracesAngle,
+    tracesRPM,
+    tracesCp,
+    useResultsChartStore,
+  } = useResultsChart();
 
   return (
     <div className="flex w-full h-full p-4">
@@ -74,6 +57,7 @@ const PowerUnitResults = () => {
         <div className="grid grid-cols-2 gap-4 h-1/2">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              name="Propeller Power"
               traces={tracesPower}
               axes={{
                 x: { name: "Speed", type: "speed", max: 1.2 * speed },
@@ -82,10 +66,12 @@ const PowerUnitResults = () => {
                   type: "power",
                 },
               }}
+              store={useResultsChartStore}
             />
           </Canvas>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              name="Propeller Angle"
               traces={tracesAngle}
               axes={{
                 x: { name: "Speed", type: "speed", max: 1.2 * speed },
@@ -94,10 +80,12 @@ const PowerUnitResults = () => {
                   min: 0,
                 },
               }}
+              store={useResultsChartStore}
             />
           </Canvas>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              name="Propeller Speed"
               traces={tracesRPM}
               axes={{
                 x: { name: "Speed", type: "speed", max: 1.2 * speed },
@@ -106,10 +94,12 @@ const PowerUnitResults = () => {
                   min: 0,
                 },
               }}
+              store={useResultsChartStore}
             />
           </Canvas>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              name="Coefficient of Power"
               traces={tracesCp}
               axes={{
                 x: { name: "Speed", type: "speed", max: 1.2 * speed },
@@ -118,6 +108,7 @@ const PowerUnitResults = () => {
                   min: 0,
                 },
               }}
+              store={useResultsChartStore}
             />
           </Canvas>
         </div>

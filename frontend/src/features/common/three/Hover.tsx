@@ -6,6 +6,7 @@ import HoverMarker from "./HoverMarker";
 import round from "../../../utils/interpolation/round";
 
 interface HoverProps {
+  name: string;
   axes: Record<string, Axis>;
   min: Record<string, number>;
   mid: Record<string, number>;
@@ -14,7 +15,7 @@ interface HoverProps {
   store: UseBoundStore<StoreApi<ChartStore>>;
 }
 
-const Hover = ({ axes, min, mid, scale, step, store }: HoverProps) => {
+const Hover = ({ name, axes, min, mid, scale, step, store }: HoverProps) => {
   return (
     <>
       <Plane
@@ -43,6 +44,7 @@ const Hover = ({ axes, min, mid, scale, step, store }: HoverProps) => {
         }}
       />
       <HoverMarker
+        name={name}
         store={store}
         scale={scale}
         step={step}

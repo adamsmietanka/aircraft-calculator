@@ -13,12 +13,14 @@ import { linearInterpolationArray } from "../../utils/interpolation/binarySearch
 
 export interface ChartStore {
   x: number;
-  y: number;
+  y: number | Record<string, number>;
   hover: boolean;
+  show: boolean;
   locked: boolean;
   setX: (value: number) => void;
   setY: (value: number) => void;
   setLocked: (value: boolean) => void;
+  set: (value: Partial<ChartStore>) => void;
 }
 
 const useChartStore = create<ChartStore>()((set) => ({

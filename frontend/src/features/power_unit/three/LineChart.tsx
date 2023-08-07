@@ -27,13 +27,14 @@ export interface Point {
 }
 
 export type ChartProps = {
+  name: string;
   traces: Trace[];
   axes: Record<string, Axis>;
   point?: Point;
   store?: UseBoundStore<StoreApi<ChartStore>>;
 };
 
-const LineChart = ({ traces, axes, point, store }: ChartProps) => {
+const LineChart = ({ name, traces, axes, point, store }: ChartProps) => {
   const { ticks, scale, min, mid, step } = useAxes(traces, axes);
 
   const { primaryColor, secondaryColor, accentColor, errorColor } =
@@ -72,6 +73,7 @@ const LineChart = ({ traces, axes, point, store }: ChartProps) => {
       ))}
       {store && (
         <Hover
+          name={name}
           axes={axes}
           min={min}
           mid={mid}

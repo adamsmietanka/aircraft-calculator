@@ -11,6 +11,7 @@ import { Axis } from "../../power_unit/three/LineChart";
 import round from "../../../utils/interpolation/round";
 
 interface Props {
+  name: string;
   store: UseBoundStore<StoreApi<ChartStore>>;
   axes: Record<string, Axis>;
   scale: number[];
@@ -18,7 +19,7 @@ interface Props {
   step: Record<string, number>;
 }
 
-const HoverMarker = ({ store, axes, scale, min, step }: Props) => {
+const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
   const { gridColor, primaryColor, backgroundColor } = useCSSColors();
@@ -51,7 +52,11 @@ const HoverMarker = ({ store, axes, scale, min, step }: Props) => {
     });
   };
 
-  const updateMarker = ({ x, y, hover, locked }: ChartStore) => {
+  const updateMarker = ({ x, y, hover, show, locked }: ChartStore) => {
+    if (typeof y !== "number") {
+      y = y[name];
+    }
+    
     updatePosition(x, y);
     if (locked) {
       hoverApi.start({ opacity: 1, width: 2 });
@@ -86,6 +91,13 @@ const HoverMarker = ({ store, axes, scale, min, step }: Props) => {
       geometryRef.current.setPoints(interpolatedPoints);
     }
   });
+
+  const y = store.getState().y;
+
+  const displayY = round(
+    (hoverSpring.y.goal || (typeof y === "number" ? y : y[name])) / yMultiplier,
+    step.y / 100
+  );
 
   return (
     <animated.mesh
@@ -124,10 +136,7 @@ const HoverMarker = ({ store, axes, scale, min, step }: Props) => {
         outlineColor={backgroundColor}
         outlineOpacity={hoverSpring.opacity}
       >
-        {round(
-          (hoverSpring.y.goal || store.getState().y) / yMultiplier,
-          step.y / 100
-        )}
+        {displayY}
       </AnimatedText>
 
       <meshLineGeometry ref={geometryRef} points={[0, 0, 0, 1000, 1000, 0]} />
