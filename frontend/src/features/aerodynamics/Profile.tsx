@@ -24,10 +24,10 @@ const Profile = () => {
               name="Coefficient of Lift"
               traces={[{ name: "Power", points }]}
               axes={{
-                x: { name: "Angle of Attack", min: -10, max: 20 },
+                x: { name: "Angle of Attack", min: -20, max: 20 },
                 y: {
                   name: "Cl",
-                  min: -1,
+                  min: -1.5,
                   max: 1.5,
                 },
               }}

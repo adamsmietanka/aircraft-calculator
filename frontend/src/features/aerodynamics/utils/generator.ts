@@ -17,7 +17,7 @@ const getCz = (profile: string) => {
       }
       return array;
     })
-    .filter(([x, y]) => y !== 0 && -10 <= x && x <= 20);
+    .filter(([x, y]) => y !== 0 && -20 <= x && x <= 20);
   const startX = oldCz[0][0];
   const endX = oldCz[oldCz.length - 1][0];
 
