@@ -52,6 +52,7 @@ const Profile = () => {
                   max: 0.02,
                 },
               }}
+              store={useProfileChartsStore}
             />
           </Canvas>
         </div>

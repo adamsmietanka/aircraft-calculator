@@ -5,14 +5,17 @@ import { NUMBERS_PADDING, useCSSColors } from "../../power_unit/three/config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { MeshLineGeometry, Text } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
-import { ChartStore } from "../../power_unit/PowerUnitEngine";
+import {
+  AnotherChartStore,
+  ChartStore,
+} from "../../power_unit/PowerUnitEngine";
 import { MeshLineMaterial } from "meshline";
 import { Axis } from "../../power_unit/three/LineChart";
 import round from "../../../utils/interpolation/round";
 
 interface Props {
   name: string;
-  store: UseBoundStore<StoreApi<ChartStore>>;
+  store: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
   axes: Record<string, Axis>;
   scale: number[];
   min: Record<string, number>;
@@ -52,15 +55,24 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
     });
   };
 
-  const updateMarker = ({ x, y, hover, show, locked }: ChartStore) => {
+  const updateMarker = ({
+    x,
+    y,
+    show,
+    locked,
+  }: ChartStore | AnotherChartStore) => {
+    // get the values from the proper objects in store
+    if (typeof x !== "number") {
+      x = x[name];
+    }
     if (typeof y !== "number") {
       y = y[name];
     }
-    
+
     updatePosition(x, y);
-    if (locked) {
+    if (!!locked) {
       hoverApi.start({ opacity: 1, width: 2 });
-    } else if (hover) {
+    } else if (show) {
       hoverApi.start({ opacity: 1, width: 1 });
     } else {
       hoverApi.start({ opacity: 0 });
@@ -91,11 +103,17 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
       geometryRef.current.setPoints(interpolatedPoints);
     }
   });
+  const x = store.getState().x;
+
+  const displayX = round(
+    (typeof x === "number" ? x : x[name]) / xMultiplier,
+    step.x / 100
+  );
 
   const y = store.getState().y;
 
   const displayY = round(
-    (hoverSpring.y.goal || (typeof y === "number" ? y : y[name])) / yMultiplier,
+    (typeof y === "number" ? y : y[name]) / yMultiplier,
     step.y / 100
   );
 
@@ -117,10 +135,7 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
         outlineColor={backgroundColor}
         outlineOpacity={hoverSpring.opacity}
       >
-        {round(
-          (hoverSpring.x.goal || store.getState().x) / xMultiplier,
-          step.x / 100
-        )}
+        {displayX}
       </AnimatedText>
       <AnimatedText
         fontSize={0.6}

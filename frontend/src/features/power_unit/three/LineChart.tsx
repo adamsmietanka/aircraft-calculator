@@ -5,7 +5,7 @@ import LinesHorizontal from "./LinesHorizontal";
 import { useCSSColors } from "./config";
 import { useChain, useSpringRef } from "@react-spring/three";
 import AnimatedSphere from "./AnimatedSphere";
-import { ChartStore } from "../PowerUnitEngine";
+import { AnotherChartStore, ChartStore } from "../PowerUnitEngine";
 import { StoreApi, UseBoundStore } from "zustand";
 import Hover from "../../common/three/Hover";
 
@@ -31,7 +31,7 @@ export type ChartProps = {
   traces: Trace[];
   axes: Record<string, Axis>;
   point?: Point;
-  store?: UseBoundStore<StoreApi<ChartStore>>;
+  store?: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
 };
 
 const LineChart = ({ name, traces, axes, point, store }: ChartProps) => {

@@ -17,7 +17,7 @@ const ProfileVisualizer = () => {
 
   const [rotationSpring] = useSpring(
     () => ({
-      x: locked || hover ? x : 0,
+      x: locked || hover ? x["Coefficient of Lift"] : 0,
     }),
     [x, hover, locked]
   );
