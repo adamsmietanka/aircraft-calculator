@@ -1,4 +1,4 @@
-import { Axis, Trace } from "../../../common/three/LineChart";
+import { Axis, Trace } from "../LineChart";
 import useChartSize from "./useChartSize";
 
 const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {

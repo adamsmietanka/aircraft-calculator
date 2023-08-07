@@ -1,4 +1,4 @@
-import useAxes from "../../power_unit/three/hooks/useAxes";
+import useAxes from "./hooks/useAxes";
 import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
