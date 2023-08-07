@@ -18,6 +18,7 @@ const useProfileCharts = () => {
   const wing = useWingStore();
 
   const x = useProfileChartsStore((state) => state.x);
+  const y = useProfileChartsStore((state) => state.y);
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
   const setCharts = useProfileChartsStore((state) => state.set);
@@ -47,27 +48,32 @@ const useProfileCharts = () => {
   }, [points]);
 
   const pointsCd = useMemo(
-    () => profiles[wing.profile].cd.map(([x, y, y2]) => [x, y, 0]),
+    () => profiles[wing.profile].cd.map(([x, y, y2]) => [y, x, 0]),
     [wing.profile]
+  );
+
+  const pointsCdReversed = useMemo(
+    () => profiles[wing.profile].cd.map(([x, y, y2]) => [x, y, 0]),
+    [pointsCd]
   );
 
   useEffect(() => {
     if (locked === "Coefficient of Lift" || hover["Coefficient of Lift"]) {
       const aoa = x["Coefficient of Lift"];
       const Cl = linearInterpolationArray(points, aoa);
-      const Cd = linearInterpolationArray(pointsCd, Cl);
+      const Cd = linearInterpolationArray(pointsCdReversed, Cl);
       setCharts({
-        x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cl },
-        y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cd },
+        x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
+        y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
     }
     if (locked === "Coefficient of Drag" || hover["Coefficient of Drag"]) {
-      const Cl = x["Coefficient of Drag"];
-      const Cd = linearInterpolationArray(pointsCd, Cl);
+      const Cl = y["Coefficient of Drag"];
+      const Cd = linearInterpolationArray(pointsCdReversed, Cl);
       const aoa = linearInterpolationArray(pointsClMonotonic, Cl);
       setCharts({
-        x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cl },
-        y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cd },
+        x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
+        y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
     }
   }, [
@@ -75,7 +81,7 @@ const useProfileCharts = () => {
     pointsClMonotonic,
     hover["Coefficient of Lift"],
     x["Coefficient of Lift"],
-    x["Coefficient of Drag"],
+    y["Coefficient of Drag"],
     locked,
   ]);
 

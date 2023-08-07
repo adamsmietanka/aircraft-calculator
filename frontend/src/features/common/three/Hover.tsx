@@ -16,9 +16,19 @@ interface HoverProps {
   scale: Array<number>;
   step: Record<string, number>;
   store: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
+  yHover: boolean;
 }
 
-const Hover = ({ name, axes, min, mid, scale, step, store }: HoverProps) => {
+const Hover = ({
+  name,
+  axes,
+  min,
+  mid,
+  scale,
+  step,
+  store,
+  yHover,
+}: HoverProps) => {
   return (
     <>
       <Plane
@@ -28,15 +38,30 @@ const Hover = ({ name, axes, min, mid, scale, step, store }: HoverProps) => {
         material-transparent
         material-opacity={0}
         onPointerMove={(e) => {
-          const x = round((e.point.x + mid.x) / scale[0], step.x / 10);
-          const locked = store.getState().locked;
-          const oldX = store.getState().x;
+          if (yHover) {
+            const y = round((e.point.y + mid.y) / scale[1], step.y / 10);
+            const locked = store.getState().locked;
+            const oldY = store.getState().y;
+            console.log(y)
 
-          if (!locked && x !== oldX) {
-            if (typeof oldX === "number") {
-              store.setState({ x });
-            } else {
-              store.setState({ x: { ...oldX, [name]: x } });
+            if (!locked) {
+              if (typeof oldY === "number") {
+                store.setState({ y });
+              } else {
+                store.setState({ y: { ...oldY, [name]: y } });
+              }
+            }
+          } else {
+            const x = round((e.point.x + mid.x) / scale[0], step.x / 10);
+            const locked = store.getState().locked;
+            const oldX = store.getState().x;
+
+            if (!locked) {
+              if (typeof oldX === "number") {
+                store.setState({ x });
+              } else {
+                store.setState({ x: { ...oldX, [name]: x } });
+              }
             }
           }
         }}

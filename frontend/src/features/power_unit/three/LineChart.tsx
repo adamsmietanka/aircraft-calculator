@@ -32,9 +32,17 @@ export type ChartProps = {
   axes: Record<string, Axis>;
   point?: Point;
   store?: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
+  yHover?: boolean;
 };
 
-const LineChart = ({ name, traces, axes, point, store }: ChartProps) => {
+const LineChart = ({
+  name,
+  traces,
+  axes,
+  point,
+  store,
+  yHover = false,
+}: ChartProps) => {
   const { ticks, scale, min, mid, step } = useAxes(traces, axes);
 
   const { primaryColor, secondaryColor, accentColor, errorColor } =
@@ -80,6 +88,7 @@ const LineChart = ({ name, traces, axes, point, store }: ChartProps) => {
           scale={scale}
           step={step}
           store={store}
+          yHover={yHover}
         />
       )}
       {point && (
