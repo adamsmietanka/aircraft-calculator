@@ -27,7 +27,7 @@ const PowerUnitResults = () => {
   } = useResultsChart();
 
   return (
-    <div className="flex w-full h-full p-4">
+    <div className="flex w-full h-full p-6">
       <div className="flex flex-col w-80 mr-8 space-y-2">
         <InputUnits
           type="altitude"

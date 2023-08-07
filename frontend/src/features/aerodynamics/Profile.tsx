@@ -8,17 +8,17 @@ const Profile = () => {
   const { points, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   return (
-    <div className="flex space-x-4 h-full mt-4">
+    <div className="flex space-x-4 h-full p-6">
       <div className="flex flex-col">
         <ProfileTable />
-        <div className="h-64">
+        <div className="h-60">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <ProfileVisualizer />
           </Canvas>
         </div>
       </div>
       <div className="flex w-full">
-        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "80vh" }}>
+        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "76vh" }}>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               name="Coefficient of Lift"
@@ -35,7 +35,7 @@ const Profile = () => {
             />
           </Canvas>
         </div>
-        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "80vh" }}>
+        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "76vh" }}>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               name="Coefficient of Drag"

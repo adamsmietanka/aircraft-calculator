@@ -6,7 +6,7 @@ import { useWingStore } from "./stores/useWing";
 const Fuselage = () => {
   const wing = useWingStore();
   return (
-    <div className="flex p-4 h-full">
+    <div className="flex p-6 h-full">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputUnits
           type="power"

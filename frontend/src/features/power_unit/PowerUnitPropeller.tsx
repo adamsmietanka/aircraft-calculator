@@ -25,7 +25,7 @@ const PowerUnitPropeller = () => {
   const { traces, usePropellerChartStore } = usePropellerChart({ x: Cn, y: J });
 
   return (
-    <div className="flex w-full p-4 h-full">
+    <div className="flex w-full p-6 h-full">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputNumber
           value={engineSpeed}

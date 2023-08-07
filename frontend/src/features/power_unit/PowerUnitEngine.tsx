@@ -18,7 +18,7 @@ const PowerUnitEngine = () => {
   const { points, useEngineChartStore } = useEngineChart();
 
   return (
-    <div className="flex p-4 h-full">
+    <div className="flex p-6 h-full">
       <div className="flex flex-col w-80 mr-8 space-y-1">
         <InputUnits
           type="power"
