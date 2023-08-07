@@ -5,8 +5,8 @@ import { ReactComponent as Engine } from "../assets/engine.svg";
 import { ReactComponent as Scales } from "../assets/scales.svg";
 import { ReactComponent as Curve } from "../assets/curve.svg";
 import React from "react";
-import Link from "./Link";
 import { Settings } from "../features";
+import { NavLink } from "react-router-dom";
 
 const links = [
   { to: "/", name: "Home", icon: <Home /> },
@@ -43,13 +43,25 @@ const links = [
 ];
 const Navigation = () => {
   return (
-    <div className="sticky flex flex-col justify-between h-screen top-0 w-96 p-2 bg-base">
-      <div className="w-full">
+    <div className="sticky flex flex-col justify-between h-screen top-0 p-2 bg-base z-50">
+      <div className="flex flex-col">
         {links.map((l) => (
-          <Link key={l.to} to={l.to}>
-            {React.cloneElement(l.icon, { className: "w-6 mr-2" })}
-            {l.name}
-          </Link>
+          <NavLink to={l.to}>
+            {({ isActive }) => (
+              <div
+                className="tooltip tooltip-hover tooltip-right z-50"
+                data-tip={l.name}
+              >
+                <button
+                  className={`btn btn-block btn-ghost justify-start ${
+                    isActive && "bg-base-300"
+                  }`}
+                >
+                  {React.cloneElement(l.icon, { className: "w-6" })}
+                </button>
+              </div>
+            )}
+          </NavLink>
         ))}
       </div>
       <Settings />
