@@ -2,10 +2,10 @@ import { useEffect, useMemo } from "react";
 import { useWingStore } from "../stores/useWing";
 import profiles from "../data/profiles_interpolated";
 import { create } from "zustand";
-import { AnotherChartStore } from "../../power_unit/PowerUnitEngine";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
+import { MarkersStore } from "../../common/three/Hover";
 
-export const useProfileChartsStore = create<AnotherChartStore>()((set) => ({
+export const useProfileChartsStore = create<MarkersStore>()((set) => ({
   x: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
   y: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
   hover: { "Coefficient of Lift": false, "Coefficient of Drag": false },

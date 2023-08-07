@@ -7,45 +7,6 @@ import useEngineChart from "./hooks/useEngineChart";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "./three/LineChart";
 
-import { StoreApi, UseBoundStore, create } from "zustand";
-import { useEffect } from "react";
-import { linearInterpolationArray } from "../../utils/interpolation/binarySearchArray";
-
-export interface ChartStore {
-  x: number;
-  y: number | Record<string, number>;
-  hover: boolean;
-  show: boolean;
-  locked: boolean;
-  setX: (value: number) => void;
-  setY: (value: number) => void;
-  setLocked: (value: boolean) => void;
-  set: (value: Partial<ChartStore>) => void;
-}
-
-const useChartStore = create<ChartStore>()((set) => ({
-  x: 2,
-  y: 2,
-  hover: false,
-  locked: false,
-  setX: (value) => set(() => ({ x: value })),
-  setY: (value) => set(() => ({ y: value })),
-  setLocked: (value) => set(() => ({ locked: value })),
-}));
-
-const useChartCalculations = (
-  store: UseBoundStore<StoreApi<ChartStore>>,
-  points: number[][]
-) => {
-  const storeInstance = store();
-
-  useEffect(() => {
-    const y = linearInterpolationArray(points, storeInstance.x);
-    storeInstance.setY(y);
-    console.log(storeInstance);
-  }, [points, storeInstance.x]);
-};
-
 const PowerUnitEngine = () => {
   const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
   const maxAltitude = useEngineStore((state) => state.maxAltitude);
@@ -54,9 +15,7 @@ const PowerUnitEngine = () => {
   const setMaxAltitude = useEngineStore((state) => state.setMaxAltitude);
   const setKCoefficient = useEngineStore((state) => state.setKCoefficient);
 
-  const points = useEngineChart();
-
-  useChartCalculations(useChartStore, points);
+  const { points, useEngineChartStore } = useEngineChart();
 
   return (
     <div className="flex p-4 h-full">
@@ -90,6 +49,7 @@ const PowerUnitEngine = () => {
       <div className="sticky top-1/4 h-3/5 w-3/5">
         <Canvas orthographic camera={{ zoom: 30 }}>
           <LineChart
+            name="Engine Altitude Performance"
             traces={[{ name: "Power", points }]}
             axes={{
               x: { name: "Altitude", type: "altitude", max: maxAltitude },
@@ -100,7 +60,7 @@ const PowerUnitEngine = () => {
                 max: seaLevelPower * 1.4,
               },
             }}
-            store={useChartStore}
+            store={useEngineChartStore}
           />
         </Canvas>
       </div>

@@ -2,18 +2,15 @@ import { useEffect, useMemo } from "react";
 import { useResultsStore } from "../stores/useResults";
 import { Trace } from "../three/LineChart";
 import { create } from "zustand";
-import { ChartStore } from "../PowerUnitEngine";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
+import { SynchronizedXMarkersStore } from "../../common/three/Hover";
 
-const useResultsChartStore = create<ChartStore>()((set) => ({
+const useResultsChartStore = create<SynchronizedXMarkersStore>()((set) => ({
   x: 2,
   y: { "Propeller Power": 2, "Propeller Angle": 2 },
   hover: false,
   show: false,
   locked: false,
-  setX: (value) => set({ x: value }),
-  setY: (value) => set({ y: value }),
-  setLocked: (value) => set({ locked: value }),
   set: (value) => set(value),
 }));
 

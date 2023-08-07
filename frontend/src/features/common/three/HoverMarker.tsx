@@ -5,17 +5,16 @@ import { NUMBERS_PADDING, useCSSColors } from "../../power_unit/three/config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { MeshLineGeometry, Text } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
-import {
-  AnotherChartStore,
-  ChartStore,
-} from "../../power_unit/PowerUnitEngine";
 import { MeshLineMaterial } from "meshline";
 import { Axis } from "../../power_unit/three/LineChart";
 import round from "../../../utils/interpolation/round";
+import { MarkersStore, SimpleMarkerStore, SynchronizedXMarkersStore } from "./Hover";
 
 interface Props {
   name: string;
-  store: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
+  store: UseBoundStore<
+    StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
+  >;
   axes: Record<string, Axis>;
   scale: number[];
   min: Record<string, number>;
@@ -60,7 +59,7 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
     y,
     show,
     locked,
-  }: ChartStore | AnotherChartStore) => {
+  }: SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore) => {
     // get the values from the proper objects in store
     if (typeof x !== "number") {
       x = x[name];

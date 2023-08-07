@@ -5,9 +5,8 @@ import LinesHorizontal from "./LinesHorizontal";
 import { useCSSColors } from "./config";
 import { useChain, useSpringRef } from "@react-spring/three";
 import AnimatedSphere from "./AnimatedSphere";
-import { AnotherChartStore, ChartStore } from "../PowerUnitEngine";
 import { StoreApi, UseBoundStore } from "zustand";
-import Hover from "../../common/three/Hover";
+import Hover, { MarkersStore, SimpleMarkerStore, SynchronizedXMarkersStore } from "../../common/three/Hover";
 
 export interface Axis {
   name: string;
@@ -31,7 +30,9 @@ export type ChartProps = {
   traces: Trace[];
   axes: Record<string, Axis>;
   point?: Point;
-  store?: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
+  store?: UseBoundStore<
+    StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
+  >;
   yHover?: boolean;
 };
 

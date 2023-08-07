@@ -1,12 +1,35 @@
 import { Axis } from "../../power_unit/three/LineChart";
 import { Plane } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
-import {
-  AnotherChartStore,
-  ChartStore,
-} from "../../power_unit/PowerUnitEngine";
 import HoverMarker from "./HoverMarker";
 import round from "../../../utils/interpolation/round";
+
+export interface SimpleMarkerStore {
+  x: number;
+  y: number;
+  hover: boolean;
+  show: boolean;
+  locked: boolean;
+  set: (value: Partial<SimpleMarkerStore>) => void;
+}
+
+export interface SynchronizedXMarkersStore {
+  x: number;
+  y: number | Record<string, number>;
+  hover: boolean | Record<string, boolean>;
+  show: boolean;
+  locked: boolean;
+  set: (value: Partial<SynchronizedXMarkersStore>) => void;
+}
+
+export interface MarkersStore {
+  x: Record<string, number>;
+  y: Record<string, number>;
+  hover: Record<string, boolean>;
+  show: boolean;
+  locked: string | boolean;
+  set: (value: Partial<MarkersStore>) => void;
+}
 
 interface HoverProps {
   name: string;
@@ -15,7 +38,9 @@ interface HoverProps {
   mid: Record<string, number>;
   scale: Array<number>;
   step: Record<string, number>;
-  store: UseBoundStore<StoreApi<ChartStore | AnotherChartStore>>;
+  store: UseBoundStore<
+    StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
+  >;
   yHover: boolean;
 }
 
@@ -42,7 +67,6 @@ const Hover = ({
             const y = round((e.point.y + mid.y) / scale[1], step.y / 10);
             const locked = store.getState().locked;
             const oldY = store.getState().y;
-            console.log(y)
 
             if (!locked) {
               if (typeof oldY === "number") {

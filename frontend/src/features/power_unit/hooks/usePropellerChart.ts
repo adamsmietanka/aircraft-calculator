@@ -2,25 +2,22 @@ import { useEffect, useMemo } from "react";
 import { data } from "../data/prop";
 import { Point, Trace } from "../three/LineChart";
 import { create } from "zustand";
-import { ChartStore } from "../PowerUnitEngine";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
+import { SimpleMarkerStore } from "../../common/three/Hover";
 
-const usePropellerChartStore = create<ChartStore>()((set) => ({
+const usePropellerChartStore = create<SimpleMarkerStore>()((set) => ({
   x: 2,
   y: 2,
   hover: false,
+  show: false,
   locked: false,
-  setX: (value) => set(() => ({ x: value })),
-  setY: (value) => set(() => ({ y: value })),
-  setLocked: (value) => set(() => ({ locked: value })),
+  set: (value) => set(value),
 }));
 
 const usePropellerChart = ({ x, y }: Point) => {
   const hover = usePropellerChartStore((state) => state.hover);
   const xHover = usePropellerChartStore((state) => state.x);
-  const setX = usePropellerChartStore((state) => state.setX);
-  const setY = usePropellerChartStore((state) => state.setY);
-  const setLocked = usePropellerChartStore((state) => state.setLocked);
+  const set = usePropellerChartStore((state) => state.set);
 
   const traces = useMemo<Trace[]>(
     () => [
@@ -42,13 +39,10 @@ const usePropellerChart = ({ x, y }: Point) => {
 
   useEffect(() => {
     if (hover) {
-      setLocked(false);
       const y = linearInterpolationArray(traces[0].points, xHover);
-      setY(y);
+      set({ locked: false, y });
     } else {
-      setLocked(true);
-      setX(x);
-      setY(y);
+      set({ locked: true, x, y });
     }
   }, [traces, xHover, hover, x, y]);
 
