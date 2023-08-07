@@ -8,7 +8,7 @@ import InputUnits from "../common/inputs/InputUnits";
 import PowerUnitPropellerDiameter from "./PowerUnitPropellerDiameter";
 import InputNumber from "../common/inputs/InputNumber";
 import { Canvas } from "@react-three/fiber";
-import LineChart from "./three/LineChart";
+import LineChart from "../common/three/LineChart";
 import { usePropellerStore } from "./stores/usePropeller";
 import useResultsChart from "./hooks/useResultsChart";
 

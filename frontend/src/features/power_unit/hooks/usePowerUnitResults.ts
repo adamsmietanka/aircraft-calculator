@@ -10,7 +10,7 @@ import { useEffect, useMemo } from "react";
 import { usePropellerStore } from "../stores/usePropeller";
 import { useEngineStore } from "../stores/useEngine";
 import { useCp } from "./useCp";
-import { POINTS_BEFORE_MAX_RPM } from "../three/config";
+import { POINTS_BEFORE_MAX_RPM } from "../../common/three/config";
 
 export const usePowerUnitResults = () => {
   const reductionRatio = useEngineStore((state) => state.reductionRatio);

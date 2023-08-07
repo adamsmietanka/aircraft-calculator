@@ -1,5 +1,5 @@
 import { Canvas } from "@react-three/fiber";
-import LineChart from "../power_unit/three/LineChart";
+import LineChart from "../common/three/LineChart";
 import ProfileVisualizer from "./three/ProfileVisualizer";
 import useProfileCharts from "./hooks/useProfileCharts";
 import ProfileTable from "./ProfileTable";

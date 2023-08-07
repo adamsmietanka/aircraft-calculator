@@ -1,4 +1,4 @@
-import useAxes from "./hooks/useAxes";
+import useAxes from "../../power_unit/three/hooks/useAxes";
 import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
@@ -6,7 +6,11 @@ import { useCSSColors } from "./config";
 import { useChain, useSpringRef } from "@react-spring/three";
 import AnimatedSphere from "./AnimatedSphere";
 import { StoreApi, UseBoundStore } from "zustand";
-import Hover, { MarkersStore, SimpleMarkerStore, SynchronizedXMarkersStore } from "../../common/three/Hover";
+import Hover, {
+  MarkersStore,
+  SimpleMarkerStore,
+  SynchronizedXMarkersStore,
+} from "./Hover";
 
 export interface Axis {
   name: string;

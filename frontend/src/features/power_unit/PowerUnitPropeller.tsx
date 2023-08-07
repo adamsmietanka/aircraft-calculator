@@ -8,7 +8,7 @@ import InputUnits from "../common/inputs/InputUnits";
 import { usePropeller } from "./hooks/usePropeller";
 import usePropellerChart from "./hooks/usePropellerChart";
 import { Canvas } from "@react-three/fiber";
-import LineChart from "./three/LineChart";
+import LineChart from "../common/three/LineChart";
 
 const PowerUnitPropeller = () => {
   const engineSpeed = useEngineStore((state) => state.engineSpeed);

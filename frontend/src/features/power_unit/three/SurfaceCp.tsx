@@ -3,9 +3,9 @@ import { ThreeElements, useThree } from "@react-three/fiber";
 import { useResultsStore } from "../stores/useResults";
 
 import VerticalAxis from "./VerticalAxis";
-import { POINT_SIZE, useCSSColors } from "./config";
+import { POINT_SIZE, useCSSColors } from "../../common/three/config";
 import Surface from "./Surface";
-import AnimatedSphere from "./AnimatedSphere";
+import AnimatedSphere from "../../common/three/AnimatedSphere";
 
 const SurfaceCp = (props: ThreeElements["mesh"]) => {
   const table = useResultsStore.getState().table;

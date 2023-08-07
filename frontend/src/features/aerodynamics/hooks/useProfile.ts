@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { NUMBER_OF_AIRFOIL_POINTS } from "../../power_unit/three/config";
+import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
 import { useWingStore } from "../stores/useWing";
 
 const useProfile = () => {

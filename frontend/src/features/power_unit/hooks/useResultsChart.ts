@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { useResultsStore } from "../stores/useResults";
-import { Trace } from "../three/LineChart";
+import { Trace } from "../../common/three/LineChart";
 import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import { SynchronizedXMarkersStore } from "../../common/three/Hover";

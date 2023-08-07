@@ -6,7 +6,7 @@ import {
   POSITION_ANIMATION_DURATION,
   POSITION_STAGGER,
   useCSSColors,
-} from "../config";
+} from "../../../common/three/config";
 import * as THREE from "three";
 import usePrevious from "../../../../hooks/usePrevious";
 import { useFrame, useThree } from "@react-three/fiber";

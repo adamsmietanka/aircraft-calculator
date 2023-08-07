@@ -2,9 +2,9 @@ import { ThreeElements } from "@react-three/fiber";
 import { useResultsStore } from "../stores/useResults";
 
 import { Html } from "@react-three/drei";
-import { POINT_SIZE, useCSSColors } from "./config";
+import { POINT_SIZE, useCSSColors } from "../../common/three/config";
 import Surface from "./Surface";
-import AnimatedSphere from "./AnimatedSphere";
+import AnimatedSphere from "../../common/three/AnimatedSphere";
 
 const SurfaceEff = (props: ThreeElements["mesh"]) => {
   const table = useResultsStore.getState().table;

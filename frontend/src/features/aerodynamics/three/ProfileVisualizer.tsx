@@ -1,6 +1,6 @@
-import Line from "../../power_unit/three/Line";
+import Line from "../../common/three/Line";
 import { useThree } from "@react-three/fiber";
-import { useCSSColors } from "../../power_unit/three/config";
+import { useCSSColors } from "../../common/three/config";
 import { animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";

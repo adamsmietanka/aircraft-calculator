@@ -1,14 +1,18 @@
 import { animated, to, useSpring } from "@react-spring/three";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { NUMBERS_PADDING, useCSSColors } from "../../power_unit/three/config";
+import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { MeshLineGeometry, Text } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
 import { MeshLineMaterial } from "meshline";
-import { Axis } from "../../power_unit/three/LineChart";
+import { Axis } from "./LineChart";
 import round from "../../../utils/interpolation/round";
-import { MarkersStore, SimpleMarkerStore, SynchronizedXMarkersStore } from "./Hover";
+import {
+  MarkersStore,
+  SimpleMarkerStore,
+  SynchronizedXMarkersStore,
+} from "./Hover";
 
 interface Props {
   name: string;

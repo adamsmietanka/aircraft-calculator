@@ -1,4 +1,4 @@
-import { Axis } from "../../power_unit/three/LineChart";
+import { Axis } from "./LineChart";
 import { Plane } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
 import HoverMarker from "./HoverMarker";

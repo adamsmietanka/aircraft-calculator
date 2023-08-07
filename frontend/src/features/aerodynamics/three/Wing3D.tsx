@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useWingStore } from "../stores/useWing";
-import AnimatedSphere from "../../power_unit/three/AnimatedSphere";
+import AnimatedSphere from "../../common/three/AnimatedSphere";
 import { Sphere, TransformControls } from "@react-three/drei";
 import {
   BufferGeometry,

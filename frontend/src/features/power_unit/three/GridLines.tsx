@@ -1,5 +1,9 @@
 import { Line } from "@react-three/drei";
-import { GRID_OPACITY, GRID_WIDTH, useCSSColors } from "./config";
+import {
+  GRID_OPACITY,
+  GRID_WIDTH,
+  useCSSColors,
+} from "../../common/three/config";
 
 const GridLines = () => {
   const { gridColor } = useCSSColors();

@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from "react";
 import { data } from "../data/prop";
-import { Point, Trace } from "../three/LineChart";
+import { Point, Trace } from "../../common/three/LineChart";
 import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import { SimpleMarkerStore } from "../../common/three/Hover";

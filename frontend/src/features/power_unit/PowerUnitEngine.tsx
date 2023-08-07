@@ -5,7 +5,7 @@ import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
 import InputUnits from "../common/inputs/InputUnits";
 import useEngineChart from "./hooks/useEngineChart";
 import { Canvas } from "@react-three/fiber";
-import LineChart from "./three/LineChart";
+import LineChart from "../common/three/LineChart";
 
 const PowerUnitEngine = () => {
   const seaLevelPower = useEngineStore((state) => state.seaLevelPower);
