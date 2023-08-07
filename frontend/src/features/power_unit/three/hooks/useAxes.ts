@@ -19,7 +19,8 @@ const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
     return getNormalizedStep(remainder) * Math.pow(10, Math.floor(log));
   };
 
-  const getTicks = (min: number, step: number) => {
+  const getTicks = (min: number, step: number, size: number) => {
+    if (size < 10) step *= 2;
     const lowerAxisLimit = Math.ceil((min * 1) / step);
 
     const ticks = Array.from(Array(15).keys()).map(
@@ -61,15 +62,8 @@ const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
 
   let xStep = getStep(minX, maxX);
   let yStep = getStep(minY, maxY);
-  let xTicks = getTicks(minX, xStep);
-  let yTicks = getTicks(minY, yStep);
-
-  if (width < 10) {
-    xTicks = xTicks.map((x) => x * 2);
-  }
-  if (height < 10) {
-    yTicks = yTicks.map((y) => y * 2);
-  }
+  let xTicks = getTicks(minX, xStep, width);
+  let yTicks = getTicks(minY, yStep, height);
 
   const scaleX = width / (maxX - minX);
   const scaleY = height / (maxY - minY);
