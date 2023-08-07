@@ -4,7 +4,6 @@ import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
 import { useCSSColors } from "./config";
 import { useChain, useSpringRef } from "@react-spring/three";
-import AnimatedSphere from "./AnimatedSphere";
 import { StoreApi, UseBoundStore } from "zustand";
 import Hover, {
   MarkersStore,
@@ -94,14 +93,6 @@ const LineChart = ({
           step={step}
           store={store}
           yHover={yHover}
-        />
-      )}
-      {point && (
-        <AnimatedSphere
-          position={[point.x * scale[0], point.y * scale[1], 0]}
-          scale={[0.25, 0.25, 0.25]}
-          color={errorColor}
-          springRef={springRefs[springRefs.length - 1]}
         />
       )}
     </mesh>
