@@ -70,7 +70,6 @@ const useResultsChart = () => {
       const yRPM = linearInterpolationArray(tracesRPM[0].points, x);
       const yCp = linearInterpolationArray(tracesCp[0].points, x);
       setCharts({
-        x,
         y: {
           "Propeller Power": yPower,
           "Propeller Angle": yAngle,

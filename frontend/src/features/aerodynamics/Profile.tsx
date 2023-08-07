@@ -1,13 +1,11 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import profiles from "./data/profiles_interpolated";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "../power_unit/three/LineChart";
 import { useWingStore } from "./stores/useWing";
 import ProfileVisualizer from "./three/ProfileVisualizer";
 import generate_coefficients from "./utils/generator";
-import { create } from "zustand";
-import { ChartStore } from "../power_unit/PowerUnitEngine";
-import { linearInterpolationArray } from "../../utils/interpolation/binarySearchArray";
+import useProfileCharts from "./hooks/useProfileCharts";
 
 const ProfileTable = () => {
   const wing = useWingStore();
@@ -75,36 +73,8 @@ const ProfileTable = () => {
   );
 };
 
-export const useLiftStore = create<ChartStore>()((set) => ({
-  x: 2,
-  y: 2,
-  hover: false,
-  locked: false,
-  setX: (value) => set(() => ({ x: value })),
-  setY: (value) => set((state) => ({ y: value })),
-  setLocked: (value) => set(() => ({ locked: value })),
-}));
-
 const Profile = () => {
-  const wing = useWingStore();
-
-  const points = useMemo(() => {
-    const filtered = profiles[wing.profile].cz;
-    return filtered.map(([x, y, y2]) => [x, y, 0]);
-  }, [wing.profile]);
-
-  const pointsCd = useMemo(() => {
-    const filtered = profiles[wing.profile].cd;
-    return filtered.map(([x, y, y2]) => [x, y, 0]);
-  }, [wing.profile]);
-
-  const storeInstance = useLiftStore();
-
-  useEffect(() => {
-    const y = linearInterpolationArray(points, storeInstance.x);
-    storeInstance.setY(y);
-    console.log(storeInstance);
-  }, [points, storeInstance.x]);
+  const { points, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   useEffect(() => {
     generate_coefficients();
@@ -124,6 +94,7 @@ const Profile = () => {
         <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "82vh" }}>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              name="Coefficient of Lift"
               traces={[{ name: "Power", points }]}
               axes={{
                 x: { name: "Angle of Attack", min: -10, max: 20 },
@@ -133,13 +104,14 @@ const Profile = () => {
                   max: 1.5,
                 },
               }}
-              store={useLiftStore}
+              store={useProfileChartsStore}
             />
           </Canvas>
         </div>
         <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "82vh" }}>
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              name="Coefficient of Drag"
               traces={[{ name: "Power", points: pointsCd }]}
               axes={{
                 x: {

@@ -1,14 +1,14 @@
 import Line from "../../power_unit/three/Line";
 import { useThree } from "@react-three/fiber";
 import { useCSSColors } from "../../power_unit/three/config";
-import { useLiftStore } from "../Profile";
 import { animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
+import { useProfileChartsStore } from "../hooks/useProfileCharts";
 
 const ProfileVisualizer = () => {
-  const x = useLiftStore((state) => state.x);
-  const hover = useLiftStore((state) => state.hover);
-  const locked = useLiftStore((state) => state.locked);
+  const x = useProfileChartsStore((state) => state.x);
+  const hover = useProfileChartsStore((state) => state.hover);
+  const locked = useProfileChartsStore((state) => state.locked);
 
   const { width } = useThree((state) => state.viewport);
   const scale = 0.99 * width;
@@ -22,8 +22,7 @@ const ProfileVisualizer = () => {
     [x, hover, locked]
   );
 
-  const { primaryColor, secondaryColor } =
-    useCSSColors();
+  const { primaryColor, secondaryColor } = useCSSColors();
 
   return (
     <animated.mesh
