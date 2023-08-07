@@ -58,32 +58,21 @@ const useProfileCharts = () => {
   );
 
   useEffect(() => {
+    let aoa, Cd, Cl;
     if (locked === "Coefficient of Lift" || hover["Coefficient of Lift"]) {
-      const aoa = x["Coefficient of Lift"];
-      const Cl = linearInterpolationArray(points, aoa);
-      const Cd = linearInterpolationArray(pointsCdReversed, Cl);
-      setCharts({
-        x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
-        y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
-      });
+      aoa = x["Coefficient of Lift"];
+      Cl = linearInterpolationArray(points, aoa);
+      Cd = linearInterpolationArray(pointsCdReversed, Cl);
+    } else {
+      Cl = y["Coefficient of Drag"];
+      Cd = linearInterpolationArray(pointsCdReversed, Cl);
+      aoa = linearInterpolationArray(pointsClMonotonic, Cl);
     }
-    if (locked === "Coefficient of Drag" || hover["Coefficient of Drag"]) {
-      const Cl = y["Coefficient of Drag"];
-      const Cd = linearInterpolationArray(pointsCdReversed, Cl);
-      const aoa = linearInterpolationArray(pointsClMonotonic, Cl);
-      setCharts({
-        x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
-        y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
-      });
-    }
-  }, [
-    points,
-    pointsClMonotonic,
-    hover["Coefficient of Lift"],
-    x["Coefficient of Lift"],
-    y["Coefficient of Drag"],
-    locked,
-  ]);
+    setCharts({
+      x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
+      y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
+    });
+  }, [points, x["Coefficient of Lift"], y["Coefficient of Drag"]]);
 
   return { points, pointsCd, useProfileChartsStore };
 };
