@@ -5,7 +5,7 @@ const findUpperBoundArray = (
 ): number => {
   let low = 0;
   let high = arr.length - 1;
-  let upperBound = -1;
+  let upperBound = arr.length - 1;
 
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
@@ -26,6 +26,10 @@ export const linearInterpolationArray = (
   x: number
 ): number => {
   const index = findUpperBoundArray(points, x);
+  
+  if (index === 0) return points[0][1];
+  if (index === points.length - 1) return points[points.length - 1][1];
+  
   const [x0, y0] = points[index - 1];
   const [x1, y1] = points[index];
 
