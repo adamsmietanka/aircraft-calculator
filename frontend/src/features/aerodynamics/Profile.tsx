@@ -3,6 +3,7 @@ import LineChart from "../common/three/LineChart";
 import ProfileVisualizer from "./three/ProfileVisualizer";
 import useProfileCharts from "./hooks/useProfileCharts";
 import ProfileTable from "./ProfileTable";
+import ProfileChoose from "./ProfileChoose";
 
 const Profile = () => {
   const { points, pointsCd, useProfileChartsStore } = useProfileCharts();
@@ -10,8 +11,8 @@ const Profile = () => {
   return (
     <div className="flex space-x-4 h-full p-6">
       <div className="flex flex-col">
-        <ProfileTable />
-        <div className="h-60">
+        <ProfileChoose />
+        <div className="relative top-1/4 h-60">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <ProfileVisualizer />
           </Canvas>
