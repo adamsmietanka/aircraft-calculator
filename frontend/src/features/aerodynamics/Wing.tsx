@@ -19,6 +19,20 @@ const Wing = () => {
           step={0.1}
         />
         <InputNumber
+          value={wing.chordTip}
+          setter={wing.setChordTip}
+          label="Tip Chord"
+          unit="m"
+          step={0.1}
+        />
+        <InputNumber
+          value={wing.angle}
+          setter={wing.setAngle}
+          label="Sweep Angle"
+          unit="°"
+          step={1}
+        />
+        <InputNumber
           value={wing.span}
           setter={wing.setSpan}
           label="Wing Span"

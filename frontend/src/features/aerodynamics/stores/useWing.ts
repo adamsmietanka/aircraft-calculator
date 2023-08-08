@@ -1,17 +1,20 @@
 import { create } from "zustand";
 
-interface WingState {
+export interface WingState {
   chord: number;
   chordTip: number;
   tipX: number;
   span: number;
+  angle: number;
   isRectangular: boolean;
   profile: string;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
   setTipX: (value: number) => void;
   setSpan: (value: number) => void;
+  setAngle: (value: number) => void;
   setProfile: (value: string) => void;
+  set: (value: Partial<WingState>) => void;
 }
 
 export const useWingStore = create<WingState>()((set) => ({
@@ -19,11 +22,14 @@ export const useWingStore = create<WingState>()((set) => ({
   chordTip: 1,
   tipX: 0.5,
   span: 8,
+  angle: 15,
   isRectangular: true,
   profile: "2412",
-  setChord: (value) => set((state) => ({ chord: value })),
-  setChordTip: (value) => set((state) => ({ chordTip: value })),
-  setTipX: (value) => set((state) => ({ tipX: value })),
-  setSpan: (value) => set((state) => ({ span: value })),
-  setProfile: (value) => set((state) => ({ profile: value })),
+  setChord: (value) => set({ chord: value }),
+  setChordTip: (value) => set({ chordTip: value }),
+  setTipX: (value) => set({ tipX: value }),
+  setSpan: (value) => set({ span: value }),
+  setAngle: (value) => set({ angle: value }),
+  setProfile: (value) => set({ profile: value }),
+  set: (value) => set(value),
 }));
