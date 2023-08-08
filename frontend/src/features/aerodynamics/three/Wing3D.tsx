@@ -1,16 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { WingState, useWingStore } from "../stores/useWing";
 import AnimatedSphere from "../../common/three/AnimatedSphere";
 import { Sphere, TransformControls } from "@react-three/drei";
-import {
-  BufferGeometry,
-  Material,
-  Mesh,
-  NormalBufferAttributes,
-  Object3D,
-} from "three";
-import { useFrame } from "@react-three/fiber";
+import { Mesh } from "three";
 import round from "../../../utils/interpolation/round";
+import { useChain, useSpringRef } from "@react-spring/three";
+import Line from "../../common/three/Line";
 
 const Wing3D = () => {
   const wing = useWingStore();
@@ -20,6 +21,11 @@ const Wing3D = () => {
   const trailingFuselage = useRef<Mesh>(null);
 
   const SCALE = 0.25;
+
+  const getXTip = useCallback(
+    () => (Math.tan((wing.angle * Math.PI) / 180) * wing.span) / 2,
+    [wing.span, wing.angle]
+  );
 
   const updateWing = ({ chord, chordTip, span, angle }: WingState) => {
     if (leadingTip.current && trailingTip.current && trailingFuselage.current) {
@@ -42,6 +48,25 @@ const Wing3D = () => {
     const state = useWingStore.getState();
     updateWing(state);
   }, []);
+
+  const springRef = useSpringRef();
+
+  useChain([springRef]);
+  const trace = useMemo(() => {
+    const xTip = getXTip();
+    return {
+      name: "",
+      points: [
+        [0, 0, 0],
+        [xTip, wing.span / 2, 0],
+        [xTip + wing.chordTip, wing.span / 2, 0],
+        [wing.chord, 0, 0],
+        [xTip + wing.chordTip, -wing.span / 2, 0],
+        [xTip, -wing.span / 2, 0],
+        [0, 0, 0],
+      ],
+    };
+  }, [wing]);
 
   return (
     <>
@@ -101,6 +126,12 @@ const Wing3D = () => {
         position={[0, 0, 0]}
         scale={[SCALE, SCALE, SCALE]}
         material-color={"red"}
+      />
+      <Line
+        trace={trace}
+        scale={[1, 1, 1]}
+        color={"red"}
+        springRef={springRef}
       />
     </>
   );

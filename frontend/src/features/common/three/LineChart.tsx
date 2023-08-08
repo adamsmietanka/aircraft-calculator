@@ -55,7 +55,6 @@ const LineChart = ({
   const colors = [primaryColor, "green", "orange"];
   const springRefs = traces.map(() => useSpringRef());
 
-  point && springRefs.push(useSpringRef());
   useChain(springRefs);
 
   return (
