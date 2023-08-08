@@ -1,3 +1,4 @@
+import round from "../../../utils/interpolation/round";
 import InfoTooltip from "../InfoTooltip";
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
   min?: number;
   tooltip?: string;
   disabled?: boolean;
+  roundTo?: number;
   setter?: (value: number) => void;
 }
 
@@ -19,6 +21,7 @@ const InputNumber = ({
   min = 0,
   tooltip,
   disabled = false,
+  roundTo = 0.001,
   setter,
 }: Props) => {
   return (
@@ -34,7 +37,7 @@ const InputNumber = ({
           className="input input-bordered w-full join-item"
           type="number"
           step={step}
-          value={value}
+          value={round(value, roundTo)}
           min={min}
           disabled={disabled}
           onChange={(e) => setter && setter(parseFloat(e.target.value))}

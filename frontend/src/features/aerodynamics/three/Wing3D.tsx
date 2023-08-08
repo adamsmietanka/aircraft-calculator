@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { WingState, useWingStore } from "../stores/useWing";
 import AnimatedSphere from "../../common/three/AnimatedSphere";
 import { Sphere, TransformControls } from "@react-three/drei";
@@ -79,7 +73,7 @@ const Wing3D = () => {
         onChange={(e) => {
           const obj = e?.target.object;
           if (obj) {
-            const { isTip, isTrailing } = obj.userData;
+            const { isTip, isTrailing, isFuselage } = obj.userData;
             const { x, y } = obj.position;
 
             if (isTip) {
@@ -92,7 +86,7 @@ const Wing3D = () => {
 
                 useWingStore.setState({ chordTip: round(x - xTip, 0.1) });
               }
-            } else {
+            } else if (isFuselage) {
               useWingStore.setState({ chord: round(x, 0.1) });
             }
           }
@@ -122,6 +116,7 @@ const Wing3D = () => {
       />
       <Sphere
         ref={trailingFuselage}
+        userData={{ isFuselage: true }}
         onClick={(e) => setActive(e.object)}
         position={[0, 0, 0]}
         scale={[SCALE, SCALE, SCALE]}
