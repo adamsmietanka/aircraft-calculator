@@ -9,6 +9,7 @@ export interface WingState {
   isRectangular: boolean;
   profile: string;
   reynolds: number;
+  stallVelocity: number;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
   setTipX: (value: number) => void;
@@ -16,6 +17,7 @@ export interface WingState {
   setAngle: (value: number) => void;
   setProfile: (value: string) => void;
   setReynolds: (value: number) => void;
+  setStallVelocity: (value: number) => void;
   set: (value: Partial<WingState>) => void;
 }
 
@@ -28,6 +30,7 @@ export const useWingStore = create<WingState>()((set) => ({
   isRectangular: true,
   profile: "2412",
   reynolds: 1,
+  stallVelocity: 30,
   setChord: (value) => set({ chord: value }),
   setChordTip: (value) => set({ chordTip: value }),
   setTipX: (value) => set({ tipX: value }),
@@ -35,5 +38,6 @@ export const useWingStore = create<WingState>()((set) => ({
   setAngle: (value) => set({ angle: value }),
   setProfile: (value) => set({ profile: value }),
   setReynolds: (value) => set({ reynolds: value }),
+  setStallVelocity: (value) => set({ stallVelocity: value }),
   set: (value) => set(value),
 }));

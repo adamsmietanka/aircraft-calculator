@@ -4,10 +4,11 @@ import InputNumber from "../common/inputs/InputNumber";
 import Wing3D from "./three/Wing3D";
 import ProfileChoose from "./ProfileChoose";
 import useWingAerodynamics from "./hooks/useWingAerodynamics";
+import InputUnits from "../common/inputs/InputUnits";
 
 const Wing = () => {
   const wing = useWingStore();
-  const { area, aspectRatio, meanAerodynamicChord } = useWingAerodynamics();
+  const { area, aspectRatio, meanAerodynamicChord, stallReynolds } = useWingAerodynamics();
 
   return (
     <div className="flex p-6 h-full">
@@ -60,6 +61,18 @@ const Wing = () => {
           value={meanAerodynamicChord}
           label="Mean Aerodynamic Chord"
           unit="m"
+        />
+        <InputUnits
+          type="speed"
+          value={wing.stallVelocity}
+          setter={wing.setStallVelocity}
+          label="Stall Velocity"
+        />
+        <InputNumber
+          disabled
+          value={stallReynolds/ 1000000}
+          label="Stall Reynolds Number"
+          unit="10⁶"
         />
       </div>
       <div className="sticky top-1/4 h-3/5 w-3/5">
