@@ -1,7 +1,11 @@
-export const findUpperBound = (arr: number[], target: number): number => {
+export const findUpperBound = (
+  arr: number[],
+  target: number,
+  extrapolate: boolean = false
+): number => {
   let low = 0;
   let high = arr.length - 1;
-  let upperBound = -1;
+  let upperBound = extrapolate ? arr.length - 1 : -1;
 
   while (low <= high) {
     const mid = Math.floor((low + high) / 2);
@@ -13,6 +17,7 @@ export const findUpperBound = (arr: number[], target: number): number => {
       low = mid + 1;
     }
   }
+  if (extrapolate && upperBound === 0) upperBound = 1;
 
   return upperBound;
 };
@@ -42,7 +47,7 @@ export const linearInterpolation = (
   y0: number,
   x1: number,
   y1: number,
-  x: number
+  x: number,
 ): number => {
   if (x0 === x1 || x1 === undefined) {
     return y0; // Avoid division by zero
