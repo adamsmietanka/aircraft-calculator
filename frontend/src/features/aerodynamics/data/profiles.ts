@@ -11,7 +11,7 @@ export const reynolds: Record<string,number[]> = {
   4415: [3,6,9]
 }
 
-const profiles: Record<string, Record<string, number[][]>> = {
+const profiles: Record<string, Record<string, Array<Array<number|null>>>> = {
   "0009": {
     cz: [
       [-15.1514, 0, -0.89696, 0],

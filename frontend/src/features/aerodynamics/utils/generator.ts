@@ -17,7 +17,10 @@ const getCoefficients = (profile: string) => {
       }
       return array;
     })
-    .filter(([x, y]) => y !== 0 && -20 <= x && x <= 20);
+    .filter(
+      ([x, y]) => y !== 0 && y !== null && x !== null && -20 <= x && x <= 20
+    ) as number[][];
+
   const startX = oldCz[0][0];
   const endX = oldCz[oldCz.length - 1][0];
 
@@ -62,7 +65,7 @@ const getCoefficients = (profile: string) => {
       }
       return array;
     })
-    .filter(([x, y]) => y !== 0);
+    .filter(([x, y]) => y !== 0 && y !== null) as number[][];
 
   X = oldCd.map(([x, y]) => x);
   Y = oldCd.map(([x, y]) => y);
