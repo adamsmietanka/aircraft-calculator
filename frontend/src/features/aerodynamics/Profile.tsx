@@ -2,16 +2,17 @@ import { Canvas } from "@react-three/fiber";
 import LineChart from "../common/three/LineChart";
 import ProfileVisualizer from "./three/ProfileVisualizer";
 import useProfileCharts from "./hooks/useProfileCharts";
-import ProfileTable from "./ProfileTable";
 import ProfileChoose from "./ProfileChoose";
+import ProfileReynolds from "./ProfileReynolds";
 
 const Profile = () => {
   const { points, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   return (
     <div className="flex space-x-4 h-full p-6">
-      <div className="flex flex-col">
+      <div className="flex flex-col space-y-1">
         <ProfileChoose />
+        <ProfileReynolds />
         <div className="relative top-1/4 h-60">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <ProfileVisualizer />
