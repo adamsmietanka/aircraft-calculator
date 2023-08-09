@@ -9,79 +9,24 @@ import profiles from "../data/profiles";
 const INDEX_OF_COEFFICIENT = 2;
 const NUMBER_OF_POINTS = 100;
 
-const getCoefficients = (profile: string) => {
-  const oldCz = profiles[profile].cz
-    .map((array) => {
-      if (array.length > 2) {
-        return [array[0], array[INDEX_OF_COEFFICIENT]];
-      }
-      return array;
-    })
-    .filter(
-      ([x, y]) => y !== 0 && y !== null && x !== null && -20 <= x && x <= 20
-    ) as number[][];
+const generatePoints = (
+  start: number,
+  end: number,
+  XY: number[][],
+  extrapolate = true
+) => {
+  let X = XY.map(([x, y]) => x);
+  let Y = XY.map(([x, y]) => y);
+  let result = [];
 
-  const startX = oldCz[0][0];
-  const endX = oldCz[oldCz.length - 1][0];
-
-  let cz = [];
-  let cd = [];
-
-  let X = oldCz.map(([x, y]) => x);
-  let Y = oldCz.map(([x, y]) => y);
-
-  // generate 100x points
   for (let i = 0; i <= NUMBER_OF_POINTS; i++) {
-    let x = startX + (i * (endX - startX)) / NUMBER_OF_POINTS;
+    let x = start + (i * (end - start)) / NUMBER_OF_POINTS;
     // fix floating point precision
     if (i === NUMBER_OF_POINTS) {
-      x = endX;
+      x = end;
     }
-    const index = findUpperBound(X, x);
-    const y = linearInterpolation(
-      X[index],
-      Y[index],
-      X[index + 1],
-      Y[index + 1],
-      x
-    );
-    cz.push([x, y]);
-  }
-
-  // get lowest and highest Coefficient of Lift from the generated points
-  const highestCz = cz.reduce((previous, current) =>
-    current[1] > previous[1] ? current : previous
-  )[1];
-
-  const lowestCz = cz.reduce((previous, current) =>
-    current[1] < previous[1] ? current : previous
-  )[1];
-  console.log(profiles);
-
-  let oldCd = profiles[profile].cd
-    .map((array) => {
-      if (array.length > 2) {
-        return [array[0], array[INDEX_OF_COEFFICIENT]];
-      }
-      return array;
-    })
-    .filter(([x, y]) => y !== 0 && y !== null) as number[][];
-
-  X = oldCd.map(([x, y]) => x);
-  Y = oldCd.map(([x, y]) => y);
-
-  // generate 100x cd points between min and max Coefficient of Lift
-  for (let i = 0; i <= NUMBER_OF_POINTS; i++) {
-    let x = lowestCz + (i * (highestCz - lowestCz)) / NUMBER_OF_POINTS;
-    // fix floating point precision
-    if (i === NUMBER_OF_POINTS) {
-      x = highestCz;
-    }
-    const index = findUpperBound(X, x, true);
-    console.log(
-      findUpperBound([-22, -20, 0], 2, true),
-      linearInterpolation(0, 0, 1, 1, 1.5)
-    );
+    console.log(extrapolate);
+    const index = findUpperBound(X, x, extrapolate);
     const y = linearInterpolation(
       X[index - 1],
       Y[index - 1],
@@ -89,17 +34,50 @@ const getCoefficients = (profile: string) => {
       Y[index],
       x
     );
-    cd.push([x, y]);
+    result.push([x, y]);
   }
-  // console.log(profile, cd, lowestCz, highestCz);
+  return result;
+};
 
-  return { cz, cd };
+const getCoefficients = (profile: string) => {
+  let result: Record<string, number[][][]> = { cz: [], cd: [] };
+  for (let i = 1; i <= 3; i++) {
+    const oldCz = profiles[profile].cz
+      .map((array) => [array[0], array[i]])
+      .filter(
+        ([x, y]) => y !== 0 && y !== null && x !== null && -20 <= x && x <= 20
+      ) as number[][];
+
+    const startX = oldCz[0][0];
+    const endX = oldCz[oldCz.length - 1][0];
+
+    let cz = generatePoints(startX, endX, oldCz);
+
+    // get lowest and highest Coefficient of Lift from the generated points
+    const highestCz = cz.reduce((previous, current) =>
+      current[1] > previous[1] ? current : previous
+    )[1];
+
+    const lowestCz = cz.reduce((previous, current) =>
+      current[1] < previous[1] ? current : previous
+    )[1];
+
+    let oldCd = profiles[profile].cd
+      .map((array) => [array[0], array[i]])
+      .filter(([x, y]) => y !== 0 && y !== null) as number[][];
+
+    let cd = generatePoints(lowestCz, highestCz, oldCd, true);
+    result.cz.push(cz);
+    result.cd.push(cd);
+  }
+
+  return result;
 };
 
 const generate_coefficients = () => {
   let newProfiles: Record<
     string,
-    Record<string, number[][] | number | number[]>
+    Record<string, number[][][] | number | number[]>
   > = {};
   Object.keys(profiles).forEach((profile) => {
     newProfiles[profile] = getCoefficients(profile);
@@ -108,5 +86,3 @@ const generate_coefficients = () => {
 };
 
 export default generate_coefficients;
-
-// const filtered = profiles[wing.profile].cz.filter(([x]) => -5 < x && x < 15);

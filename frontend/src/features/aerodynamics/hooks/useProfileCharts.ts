@@ -24,8 +24,9 @@ const useProfileCharts = () => {
   const setCharts = useProfileChartsStore((state) => state.set);
 
   const points = useMemo(
-    () => profiles[wing.profile].cz.map(([x, y, y2]) => [x, y, 0]),
-    [wing.profile]
+    () =>
+      profiles[wing.profile].cz[wing.reynolds].map(([x, y]) => [x, y, 0]),
+    [wing.profile, wing.reynolds]
   );
 
   const pointsClMonotonic = useMemo(() => {
@@ -48,12 +49,13 @@ const useProfileCharts = () => {
   }, [points]);
 
   const pointsCd = useMemo(
-    () => profiles[wing.profile].cd.map(([x, y, y2]) => [y, x, 0]),
-    [wing.profile]
+    () =>
+      profiles[wing.profile].cd[wing.reynolds].map(([x, y]) => [y, x, 0]),
+    [wing.profile, wing.reynolds]
   );
 
   const pointsCdReversed = useMemo(
-    () => profiles[wing.profile].cd.map(([x, y, y2]) => [x, y, 0]),
+    () => pointsCd.map(([y, x]) => [x, y, 0]),
     [pointsCd]
   );
 

@@ -42,7 +42,7 @@ const ProfileChoose = () => {
         </div>
 
         <button
-          className="btn join-item bg-base-300"
+          className="btn join-item bg-base-300 w-24"
           onClick={() => (window as any).profile_modal.showModal()}
         >
           Catalog

@@ -7,8 +7,8 @@ const ProfileTable = () => {
 
   const tableData = useMemo(() => {
     let table = Object.keys(profiles).map((profile) => {
-      const cz = profiles[profile].cz;
-      const cd = profiles[profile].cd;
+      const cz = profiles[profile].cz[wing.reynolds];
+      const cd = profiles[profile].cd[wing.reynolds];
       const highest = cz.reduce((previous, current) => {
         if (current[1] > previous[1]) {
           return current;
@@ -33,7 +33,7 @@ const ProfileTable = () => {
       };
     });
     return table.sort((a, b) => a.name.localeCompare(b.name));
-  }, []);
+  }, [wing.reynolds]);
 
   return (
     <div className="">

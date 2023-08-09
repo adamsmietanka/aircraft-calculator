@@ -46,7 +46,7 @@ const Profile = () => {
                 x: {
                   name: "Coefficient of Drag (Cd)",
                   min: 0,
-                  max: 0.021,
+                  max: 0.026,
                 },
                 y: {
                   name: "Cl",
