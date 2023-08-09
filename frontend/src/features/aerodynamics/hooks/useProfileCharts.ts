@@ -24,8 +24,7 @@ const useProfileCharts = () => {
   const setCharts = useProfileChartsStore((state) => state.set);
 
   const points = useMemo(
-    () =>
-      profiles[wing.profile].cz[wing.reynolds].map(([x, y]) => [x, y, 0]),
+    () => profiles[wing.profile].cz[wing.reynolds].map(([x, y]) => [x, y, 0]),
     [wing.profile, wing.reynolds]
   );
 
@@ -49,8 +48,7 @@ const useProfileCharts = () => {
   }, [points]);
 
   const pointsCd = useMemo(
-    () =>
-      profiles[wing.profile].cd[wing.reynolds].map(([x, y]) => [y, x, 0]),
+    () => profiles[wing.profile].cd[wing.reynolds].map(([x, y]) => [y, x, 0]),
     [wing.profile, wing.reynolds]
   );
 
@@ -74,7 +72,12 @@ const useProfileCharts = () => {
       x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
       y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
     });
-  }, [points, x["Coefficient of Lift"], y["Coefficient of Drag"]]);
+  }, [
+    wing.profile,
+    wing.reynolds,
+    x["Coefficient of Lift"],
+    y["Coefficient of Drag"],
+  ]);
 
   return { points, pointsCd, useProfileChartsStore };
 };

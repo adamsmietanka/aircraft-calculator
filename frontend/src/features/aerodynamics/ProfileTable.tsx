@@ -1,39 +1,11 @@
 import { useMemo } from "react";
 import { useWingStore } from "./stores/useWing";
 import profiles from "./data/profiles_interpolated";
+import useProfileTable from "./hooks/useProfileTable";
 
 const ProfileTable = () => {
   const wing = useWingStore();
-
-  const tableData = useMemo(() => {
-    let table = Object.keys(profiles).map((profile) => {
-      const cz = profiles[profile].cz[wing.reynolds];
-      const cd = profiles[profile].cd[wing.reynolds];
-      const highest = cz.reduce((previous, current) => {
-        if (current[1] > previous[1]) {
-          return current;
-        }
-        return previous;
-      });
-      let lowest = [0, 0.9];
-      if (cd.length) {
-        lowest = cd.reduce((previous, current) => {
-          if (current[1] < previous[1]) {
-            return current;
-          }
-          return previous;
-        });
-      }
-      return {
-        name: profile,
-        maxCz: highest[1],
-        angleOfMaxCz: highest[0],
-        minCd: lowest[1],
-        czOfMinCd: lowest[0],
-      };
-    });
-    return table.sort((a, b) => a.name.localeCompare(b.name));
-  }, [wing.reynolds]);
+  const { table } = useProfileTable();
 
   return (
     <div className="">
@@ -49,7 +21,7 @@ const ProfileTable = () => {
           </tr>
         </thead>
         <tbody>
-          {tableData.map((row) => (
+          {table.map((row) => (
             <tr
               className={`${
                 wing.profile === row.name && "bg-base-200"

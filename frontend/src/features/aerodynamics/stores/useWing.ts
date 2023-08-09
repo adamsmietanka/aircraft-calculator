@@ -27,7 +27,7 @@ export const useWingStore = create<WingState>()((set) => ({
   angle: 15,
   isRectangular: true,
   profile: "2412",
-  reynolds: 0,
+  reynolds: 1,
   setChord: (value) => set({ chord: value }),
   setChordTip: (value) => set({ chordTip: value }),
   setTipX: (value) => set({ tipX: value }),
