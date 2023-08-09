@@ -110,11 +110,6 @@ const Wing3D = () => {
         material-color={"red"}
       />
       <Sphere
-        position={[0, 0, 0]}
-        scale={[SCALE, SCALE, SCALE]}
-        material-color={"red"}
-      />
-      <Sphere
         ref={trailingFuselage}
         userData={{ isFuselage: true }}
         onClick={(e) => setActive(e.object)}
