@@ -18,27 +18,37 @@ const ProfileChoose = () => {
       <label className="label">
         <span className="label-text flex">Profile</span>
       </label>
-      <label className="join w-80">
-        <div className="w-full">
-          <select
-            className="select select-bordered join-item w-full"
-            onChange={(e) => setProfile(e.target.value)}
+      <div className="join h-12 w-full input input-bordered p-0">
+        <div className="dropdown dropdown-hover h-full w-full">
+          <label
+            tabIndex={0}
+            className="flex items-center justify-between p-4 cursor-pointer z-10 w-full h-full"
           >
-            {profileList.map((p) => (
-              <option key={p} selected={profile === p}>
-                {p}
-              </option>
-            ))}
-          </select>
+            NACA {profile}
+          </label>
+          <ul
+            tabIndex={0}
+            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            {profileList.map(
+              (p) =>
+                p !== profile && (
+                  <li key={p}>
+                    <button onClick={() => setProfile(p)}>NACA {p}</button>
+                  </li>
+                )
+            )}
+          </ul>
         </div>
+
         <button
           className="btn join-item bg-base-300"
           onClick={() => (window as any).profile_modal.showModal()}
         >
           Catalog
         </button>
-        <dialog id="profile_modal" className="modal">
-          <form method="dialog" className="modal-box max-w-2xl max-h-full">
+        <dialog id="profile_modal" className="modal ">
+          <form method="dialog" className="modal-box max-w-l max-h-full">
             <h3>Profile Catalog</h3>
             <div className="">
               <ProfileTable />
@@ -48,7 +58,8 @@ const ProfileChoose = () => {
             <button>close</button>
           </form>
         </dialog>
-      </label>
+      </div>
+      
     </div>
   );
 };
