@@ -5,6 +5,7 @@ import { animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import Vector from "./Vector";
+import AirStream from "./AirStream";
 
 const ProfileVisualizer = () => {
   const x = useProfileChartsStore((state) => state.x);
@@ -13,41 +14,30 @@ const ProfileVisualizer = () => {
   const locked = useProfileChartsStore((state) => state.locked);
 
   const { width } = useThree((state) => state.viewport);
-  const scale = 0.99 * width;
+  const scale = 0.96 * width;
 
   const { profilePoints, chordPoints } = useProfile();
 
+  const show =
+    !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
+
   const [rotationSpring] = useSpring(
     () => ({
-      x:
-        locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"]
-          ? x["Coefficient of Lift"]
-          : 0,
+      x: show ? x["Coefficient of Lift"] : 0,
     }),
     [x, y, hover, locked]
   );
 
-  const { primaryColor, secondaryColor, errorColor } = useCSSColors();
+  const { primaryColor, secondaryColor, errorColor, gridColor } =
+    useCSSColors();
 
   return (
     <animated.mesh position={[-0.25 * scale, 0, 0]} scale={scale}>
-      <Vector
-        value={y["Coefficient of Lift"]}
-        rotation={0}
-        show={
-          !!locked ||
-          hover["Coefficient of Lift"] ||
-          hover["Coefficient of Drag"]
-        }
-      />
+      <Vector value={y["Coefficient of Lift"]} rotation={0} show={show} />
       <Vector
         value={50 * x["Coefficient of Drag"]}
         rotation={-Math.PI / 2}
-        show={
-          !!locked ||
-          hover["Coefficient of Lift"] ||
-          hover["Coefficient of Drag"]
-        }
+        show={show}
         color={errorColor}
       />
       <animated.mesh
@@ -57,6 +47,16 @@ const ProfileVisualizer = () => {
           trace={{ name: "Outline", points: profilePoints }}
           scale={[1, 1, 1]}
           color={primaryColor}
+        />
+        <AirStream
+          points={profilePoints.slice(0, 50)}
+          show={show}
+          positionY={0.03}
+        />
+        <AirStream
+          points={profilePoints.slice(50, 100).reverse()}
+          show={show}
+          positionY={-0.03}
         />
         <Line
           trace={{ name: "Chord", points: chordPoints }}

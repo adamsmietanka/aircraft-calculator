@@ -58,7 +58,7 @@ const Vector = ({ value, rotation, show, color }: VectorProps) => {
           [spring.value, spring.direction],
           (v, dir) => dir * 0.05 + VECTOR_MULTIPLIER * v - VECTOR_TIP_LENGTH / 2
         )}
-        scale={0.05}
+        scale={0.06}
         color={color ? color : primaryColor}
         anchorX="left"
         anchorY="middle"
