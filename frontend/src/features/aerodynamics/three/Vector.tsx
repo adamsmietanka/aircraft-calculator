@@ -33,7 +33,7 @@ const Vector = ({
       value,
       size: VECTOR_MULTIPLIER * value - Math.sign(value) * VECTOR_TIP_LENGTH,
       direction: Math.sign(value),
-      opacity: show ? 1 : 0,
+      opacity: show && value !== 0 ? 1 : 0,
     }),
     [value, show]
   );
@@ -66,7 +66,7 @@ const Vector = ({
         )}
         position-x={0.02}
       >
-        <AnimatedHtml color={color} show={show}>
+        <AnimatedHtml color={color} show={show && value !== 0}>
           <Formula tex={tex} />
         </AnimatedHtml>
       </animated.mesh>
