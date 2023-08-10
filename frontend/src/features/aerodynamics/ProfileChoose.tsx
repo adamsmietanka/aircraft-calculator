@@ -48,7 +48,7 @@ const ProfileChoose = () => {
           Catalog
         </button>
         <dialog id="profile_modal" className="modal ">
-          <form method="dialog" className="modal-box max-w-l max-h-full">
+          <form method="dialog" className="modal-box max-w-xl max-h-full">
             <h3>Profile Catalog</h3>
             <div className="">
               <ProfileTable />

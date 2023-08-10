@@ -1,6 +1,4 @@
-import { useMemo } from "react";
 import { useWingStore } from "./stores/useWing";
-import profiles from "./data/profiles_interpolated";
 import useProfileTable from "./hooks/useProfileTable";
 
 const ProfileTable = () => {
@@ -16,6 +14,7 @@ const ProfileTable = () => {
             <th>Profile</th>
             <th>Max Cz</th>
             <th>Angle</th>
+            <th>Angle of Zero Lift</th>
             <th>Min Cd</th>
             <th>Cz of Min Cd</th>
           </tr>
@@ -23,6 +22,7 @@ const ProfileTable = () => {
         <tbody>
           {table.map((row) => (
             <tr
+              key={row.name}
               className={`${
                 wing.profile === row.name && "bg-base-200"
               } cursor-pointer`}
@@ -30,7 +30,8 @@ const ProfileTable = () => {
             >
               <td>{row.name}</td>
               <td>{row.maxCz.toFixed(3)}</td>
-              <td>{row.angleOfMaxCz.toFixed(1)}</td>
+              <td>{row.angleOfMaxCz.toFixed(1)}°</td>
+              <td>{row.angleOfZeroCl.toFixed(2)}°</td>
               <td>{row.minCd.toFixed(4)}</td>
               <td>{row.czOfMinCd.toFixed(2)}</td>
             </tr>
