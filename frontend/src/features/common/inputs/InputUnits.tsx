@@ -6,6 +6,7 @@ interface Props {
   small?: boolean;
   label: string;
   value: number;
+  min?: number;
   tooltip?: string;
   disabled?: boolean;
   setter?: (value: number) => void;
@@ -16,6 +17,7 @@ const InputUnits = ({
   small = false,
   label,
   value,
+  min = 0,
   tooltip,
   disabled = false,
   setter,
@@ -41,7 +43,7 @@ const InputUnits = ({
           type="number"
           step={step}
           value={displayValue}
-          min={0}
+          min={min}
           disabled={disabled}
           onChange={(e) =>
             setter && setter(parseFloat(e.target.value) * multiplier)

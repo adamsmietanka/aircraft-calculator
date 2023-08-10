@@ -3,10 +3,18 @@ import profiles from "../data/profiles_interpolated";
 import { useWingStore } from "../stores/useWing";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 
-const useProfileTable = () => {
-  const wing = useWingStore();
+export interface Row {
+  name: string;
+  maxCz: number;
+  angleOfMaxCz: number;
+  angleOfZeroCl: number;
+  minCd: number;
+  CdOfZeroCl: number;
+  czOfMinCd: number;
+}
 
-  const tableData = useMemo(
+const useProfileTable = (index: number, profile?: string) => {
+  const tableData = useMemo<Row[][]>(
     () =>
       [0, 1, 2].map((reynoldsIndex) => {
         let tableForReynolds = Object.keys(profiles).map((profile) => {
@@ -26,7 +34,6 @@ const useProfileTable = () => {
           );
 
           const CdOfZeroCl = linearInterpolationArray(cd, 0);
-          console.log(profile, CdOfZeroCl)
 
           return {
             name: profile,
@@ -43,6 +50,8 @@ const useProfileTable = () => {
     []
   );
 
-  return { tableAllReynolds: tableData, table: tableData[wing.reynolds] };
+  return profile
+    ? tableData[index].find((row) => row.name === profile)
+    : tableData[index];
 };
 export default useProfileTable;

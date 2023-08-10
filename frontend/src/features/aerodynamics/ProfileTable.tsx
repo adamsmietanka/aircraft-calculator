@@ -1,9 +1,9 @@
 import { useWingStore } from "./stores/useWing";
-import useProfileTable from "./hooks/useProfileTable";
+import useProfileTable, { Row } from "./hooks/useProfileTable";
 
 const ProfileTable = () => {
   const wing = useWingStore();
-  const { table } = useProfileTable();
+  const table = useProfileTable(wing.reynolds) as Row[];
 
   return (
     <div className="">

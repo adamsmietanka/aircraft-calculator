@@ -5,10 +5,18 @@ import Wing3D from "./three/Wing3D";
 import ProfileChoose from "./ProfileChoose";
 import useWingAerodynamics from "./hooks/useWingAerodynamics";
 import InputUnits from "../common/inputs/InputUnits";
+import LineChart from "../common/three/LineChart";
 
 const Wing = () => {
   const wing = useWingStore();
-  const { area, aspectRatio, meanAerodynamicChord, stallReynolds } = useWingAerodynamics();
+  const {
+    area,
+    aspectRatio,
+    meanAerodynamicChord,
+    stallReynolds,
+    pointsCl,
+    pointsCd,
+  } = useWingAerodynamics();
 
   return (
     <div className="flex p-6 h-full">
@@ -66,18 +74,57 @@ const Wing = () => {
           type="speed"
           value={wing.stallVelocity}
           setter={wing.setStallVelocity}
+          min={30}
           label="Stall Velocity"
         />
         <InputNumber
           disabled
-          value={stallReynolds/ 1000000}
+          value={stallReynolds / 1000000}
           label="Stall Reynolds Number"
           unit="10⁶"
         />
       </div>
-      <div className="sticky top-1/4 h-3/5 w-3/5">
+      <div
+        className="sticky flex top-1/4 h-3/5 w-3/4"
+        style={{ height: "65vh" }}
+      >
         <Canvas orthographic camera={{ zoom: 30 }}>
           <Wing3D />
+        </Canvas>
+        <Canvas orthographic camera={{ zoom: 30 }}>
+          <LineChart
+            name="Coefficient of Lift"
+            traces={[{ name: "Power", points: pointsCl }]}
+            axes={{
+              x: { name: "Angle of Attack", min: -20, max: 20 },
+              y: {
+                name: "Coefficient of Lift (Cl)",
+                min: -1.5,
+                max: 1.5,
+              },
+            }}
+            // store={useProfileChartsStore}
+          />
+        </Canvas>
+        <Canvas orthographic camera={{ zoom: 30 }}>
+          <LineChart
+            name="Coefficient of Drag"
+            traces={[{ name: "Power", points: pointsCd }]}
+            axes={{
+              x: {
+                name: "Coefficient of Drag (Cd)",
+                min: 0,
+                max: 0.026,
+              },
+              y: {
+                name: "Cl",
+                min: -1.5,
+                max: 1.5,
+              },
+            }}
+            // store={useProfileChartsStore}
+            // yHover
+          />
         </Canvas>
       </div>
     </div>
