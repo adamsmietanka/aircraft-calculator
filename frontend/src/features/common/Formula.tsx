@@ -6,7 +6,7 @@ declare global {
   }
 }
 
-const Formula = ({ tex = "" }) => {
+const Formula = ({ tex = "", className = "" }) => {
   useEffect(() => {
     if (typeof window?.MathJax !== "undefined") {
       window.MathJax.typesetClear();
@@ -14,7 +14,7 @@ const Formula = ({ tex = "" }) => {
     }
   }, [tex]);
 
-  return <p>{`\\(${tex}\\)`}</p>;
+  return <p className={className}>{`\\(${tex}\\)`}</p>;
 };
 
 export default Formula;

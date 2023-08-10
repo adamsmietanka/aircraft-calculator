@@ -11,7 +11,26 @@ export interface Row {
   minCd: number;
   CdOfZeroCl: number;
   czOfMinCd: number;
+  slope: number;
 }
+
+const linearRegression = (points: number[][]) => {
+  const X = points.map(([x, y]) => x);
+  const Y = points.map(([x, y]) => y);
+  const x_mean = X.reduce((a, b) => a + b, 0) / X.length;
+  const y_mean = Y.reduce((a, b) => a + b, 0) / Y.length;
+
+  //Equations to solve for slope:
+  let slope = 0,
+    slope_numerator = 0,
+    slope_denominator = 0;
+  for (let i = 0; i < X.length; i++) {
+    slope_numerator += (X[i] - x_mean) * (Y[i] - y_mean);
+    slope_denominator += Math.pow(X[i] - x_mean, 2);
+  }
+
+  return slope_numerator / slope_denominator;
+};
 
 const useProfileTable = (index: number, profile?: string) => {
   const tableData = useMemo<Row[][]>(
@@ -35,6 +54,8 @@ const useProfileTable = (index: number, profile?: string) => {
 
           const CdOfZeroCl = linearInterpolationArray(cd, 0);
 
+          const slope = (linearRegression(cz.slice(20, 70)) * 180) / Math.PI;
+
           return {
             name: profile,
             maxCz: highestCz[1],
@@ -43,6 +64,7 @@ const useProfileTable = (index: number, profile?: string) => {
             minCd: lowestCd[1],
             CdOfZeroCl,
             czOfMinCd: lowestCd[0],
+            slope,
           };
         });
         return tableForReynolds.sort((a, b) => a.name.localeCompare(b.name));
