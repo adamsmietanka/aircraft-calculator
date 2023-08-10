@@ -13,7 +13,7 @@ const Profile = () => {
       <div className="flex flex-col space-y-1">
         <ProfileChoose />
         <ProfileReynolds />
-        <div className="relative top-1/4 h-60">
+        <div className="relative top-1/4 h-72">
           <Canvas orthographic camera={{ zoom: 30 }}>
             <ProfileVisualizer />
           </Canvas>

@@ -4,9 +4,11 @@ import { useCSSColors } from "../../common/three/config";
 import { animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
+import Vector from "./Vector";
 
 const ProfileVisualizer = () => {
   const x = useProfileChartsStore((state) => state.x);
+  const y = useProfileChartsStore((state) => state.y);
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
@@ -22,27 +24,46 @@ const ProfileVisualizer = () => {
           ? x["Coefficient of Lift"]
           : 0,
     }),
-    [x, hover, locked]
+    [x, y, hover, locked]
   );
 
-  const { primaryColor, secondaryColor } = useCSSColors();
+  const { primaryColor, secondaryColor, errorColor } = useCSSColors();
 
   return (
-    <animated.mesh
-      position={[-0.25 * scale, 0, 0]}
-      scale={scale}
-      rotation-z={rotationSpring.x.to((x) => (-x * Math.PI) / 180)}
-    >
-      <Line
-        trace={{ name: "Outline", points: profilePoints }}
-        scale={[1, 1, 1]}
-        color={primaryColor}
+    <animated.mesh position={[-0.25 * scale, 0, 0]} scale={scale}>
+      <Vector
+        value={y["Coefficient of Lift"]}
+        rotation={0}
+        show={
+          !!locked ||
+          hover["Coefficient of Lift"] ||
+          hover["Coefficient of Drag"]
+        }
       />
-      <Line
-        trace={{ name: "Chord", points: chordPoints }}
-        scale={[1, 1, 1]}
-        color={secondaryColor}
+      <Vector
+        value={50 * x["Coefficient of Drag"]}
+        rotation={-Math.PI / 2}
+        show={
+          !!locked ||
+          hover["Coefficient of Lift"] ||
+          hover["Coefficient of Drag"]
+        }
+        color={errorColor}
       />
+      <animated.mesh
+        rotation-z={rotationSpring.x.to((x) => (-x * Math.PI) / 180)}
+      >
+        <Line
+          trace={{ name: "Outline", points: profilePoints }}
+          scale={[1, 1, 1]}
+          color={primaryColor}
+        />
+        <Line
+          trace={{ name: "Chord", points: chordPoints }}
+          scale={[1, 1, 1]}
+          color={secondaryColor}
+        />
+      </animated.mesh>
     </animated.mesh>
   );
 };
