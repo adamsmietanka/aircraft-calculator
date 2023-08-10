@@ -116,7 +116,7 @@ const Wing = () => {
               x: {
                 name: "Coefficient of Drag (Cd)",
                 min: 0,
-                max: 0.041,
+                max: 0.21,
               },
               y: {
                 name: "Cl",
