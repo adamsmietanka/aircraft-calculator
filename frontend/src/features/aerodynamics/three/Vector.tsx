@@ -1,29 +1,38 @@
 import { animated, to, useSpring } from "@react-spring/three";
-import { Cone, Cylinder, Text } from "@react-three/drei";
+import { Cone, Cylinder } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
+import Formula from "../../common/Formula";
+import AnimatedHtml from "./AnimatedHtml";
 
 const VECTOR_MULTIPLIER = 0.2;
 const VECTOR_WIDTH = 0.005;
 const VECTOR_TIP_LENGTH = 0.04;
 
 interface VectorProps {
+  tex: string;
   value: number;
   rotation: number;
   show: boolean;
   color?: string;
 }
 
-const Vector = ({ value, rotation, show, color }: VectorProps) => {
+const Vector = ({
+  tex,
+  value,
+  rotation,
+  show,
+  color = "primary",
+}: VectorProps) => {
   const AnimatedCylinder = animated(Cylinder);
   const AnimatedCone = animated(Cone);
-  const AnimatedText = animated(Text);
 
-  const { primaryColor, secondaryColor } = useCSSColors();
+  const { colors } = useCSSColors();
 
   const [spring] = useSpring(
     () => ({
       value,
-      direction: value > 0 ? 1 : -1,
+      size: VECTOR_MULTIPLIER * value - Math.sign(value) * VECTOR_TIP_LENGTH,
+      direction: Math.sign(value),
       opacity: show ? 1 : 0,
     }),
     [value, show]
@@ -33,40 +42,34 @@ const Vector = ({ value, rotation, show, color }: VectorProps) => {
     <mesh rotation-z={rotation} position-z={0.1}>
       <AnimatedCylinder
         args={[VECTOR_WIDTH, VECTOR_WIDTH, 1, 32]}
-        scale-y={spring.value.to(
-          (v) => VECTOR_MULTIPLIER * v - VECTOR_TIP_LENGTH
-        )}
-        position-y={spring.value.to(
-          (v) => (VECTOR_MULTIPLIER * v - VECTOR_TIP_LENGTH) / 2
-        )}
-        material-color={color ? color : primaryColor}
+        scale-y={spring.size}
+        position-y={spring.size.to((v) => v / 2)}
         material-transparent
+        material-color={colors[color]}
         material-opacity={spring.opacity}
       />
       <AnimatedCone
         args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position-y={spring.value.to(
-          (v) => VECTOR_MULTIPLIER * v - VECTOR_TIP_LENGTH / 2
+        position-y={to(
+          [spring.size, spring.direction],
+          (v, dir) => v + (dir * VECTOR_TIP_LENGTH) / 2
         )}
         rotation-z={spring.direction.to((dir) => ((1 - dir) * Math.PI) / 2)}
-        material-color={color ? color : primaryColor}
         material-transparent
+        material-color={colors[color]}
         material-opacity={spring.opacity}
       />
-      <AnimatedText
+      <animated.mesh
         position-y={to(
           [spring.value, spring.direction],
-          (v, dir) => dir * 0.05 + VECTOR_MULTIPLIER * v - VECTOR_TIP_LENGTH / 2
+          (v, dir) => dir * 0.05 + VECTOR_MULTIPLIER * v
         )}
-        scale={0.06}
-        color={color ? color : primaryColor}
-        anchorX="left"
-        anchorY="middle"
-        fillOpacity={spring.opacity}
-        rotation-z={-rotation}
+        position-x={0.02}
       >
-        F
-      </AnimatedText>
+        <AnimatedHtml color={color} show={show}>
+          <Formula tex={tex} />
+        </AnimatedHtml>
+      </animated.mesh>
     </mesh>
   );
 };

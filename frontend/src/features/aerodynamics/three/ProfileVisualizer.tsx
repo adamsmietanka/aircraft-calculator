@@ -33,12 +33,18 @@ const ProfileVisualizer = () => {
 
   return (
     <animated.mesh position={[-0.25 * scale, 0, 0]} scale={scale}>
-      <Vector value={y["Coefficient of Lift"]} rotation={0} show={show} />
       <Vector
+        tex="\bf F_L"
+        value={y["Coefficient of Lift"]}
+        rotation={0}
+        show={show}
+      />
+      <Vector
+        tex="\bf F_D"
         value={50 * x["Coefficient of Drag"]}
         rotation={-Math.PI / 2}
         show={show}
-        color={errorColor}
+        color="error"
       />
       <animated.mesh
         rotation-z={rotationSpring.x.to((x) => (-x * Math.PI) / 180)}
@@ -61,6 +67,7 @@ const ProfileVisualizer = () => {
         <Line
           trace={{ name: "Chord", points: chordPoints }}
           scale={[1, 1, 1]}
+          width={0.5}
           color={secondaryColor}
         />
       </animated.mesh>

@@ -32,6 +32,14 @@ export const useCSSColors = () => {
   const backgroundColor = useMemo(() => getHSLColorFromCSS("b1"), [theme]);
   const infoColor = useMemo(() => getHSLColorFromCSS("in"), [theme]);
   const errorColor = useMemo(() => getHSLColorFromCSS("er"), [theme]);
+  const colors = useMemo<Record<string, string>>(
+    () => ({
+      primary: primaryColor,
+      secondary: secondaryColor,
+      error: errorColor,
+    }),
+    [theme]
+  );
 
   return {
     traceColor,
@@ -43,5 +51,6 @@ export const useCSSColors = () => {
     backgroundColor,
     infoColor,
     errorColor,
+    colors,
   };
 };

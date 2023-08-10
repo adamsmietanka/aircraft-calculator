@@ -17,11 +17,12 @@ extend({ MeshLineGeometry, MeshLineMaterial });
 interface TraceProps {
   trace: Trace;
   scale?: number[];
+  width?: number;
   color: string;
   springRef?: SpringRef;
 }
 
-const Line = ({ trace, scale, color, springRef }: TraceProps) => {
+const Line = ({ trace, scale, width = 1, color, springRef }: TraceProps) => {
   const test = useSpring({
     ref: springRef,
     from: { offset: 1 },
@@ -60,7 +61,7 @@ const Line = ({ trace, scale, color, springRef }: TraceProps) => {
         dashOffset={1}
         dashRatio={0.5}
         transparent
-        lineWidth={0.015}
+        lineWidth={width * 0.015}
         color={color}
       />
     </animated.mesh>
