@@ -6,7 +6,7 @@ import ProfileChoose from "./ProfileChoose";
 import ProfileReynolds from "./ProfileReynolds";
 
 const Profile = () => {
-  const { points, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   return (
     <div className="flex space-x-4 h-full p-6">
@@ -24,7 +24,7 @@ const Profile = () => {
           <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
               name="Coefficient of Lift"
-              traces={[{ name: "Power", points }]}
+              traces={[{ name: "Power", points: pointsCl }]}
               axes={{
                 x: { name: "Angle of Attack", min: -20, max: 20 },
                 y: {
