@@ -21,6 +21,7 @@ const useWingAerodynamics = () => {
   const chord = useWingStore((state) => state.chord);
   const chordTip = useWingStore((state) => state.chordTip);
   const stallVelocity = useWingStore((state) => state.stallVelocity);
+  const material = useWingStore((state) => state.material);
 
   const KINEMATIC_VISCOSITY = 1.4207e-5;
 
@@ -39,11 +40,16 @@ const useWingAerodynamics = () => {
   const { pointsCl, pointsCd } = useProfileData(closestIndex);
 
   const { maxCz, CdOfZeroCl } = useProfileTable(closestIndex, profile) as Row;
-  console.log(maxCz, CdOfZeroCl);
 
   const Cxmin2 = CdOfZeroCl * Math.pow(stallReynolds / 10000000, 0.11);
   const deltaCxRe = (Cz: number) =>
     (Cxmin2 - CdOfZeroCl) * (1 - Math.abs(Cz / maxCz));
+
+  const CdMaterial = CdOfZeroCl * (material ? 0.15 : 0.5);
+
+  const getCdWing = (Cl: number, Cd: number) => {
+    return Cd + deltaCxRe(Cl) + CdMaterial;
+  };
 
   return {
     area,
@@ -52,7 +58,7 @@ const useWingAerodynamics = () => {
     meanAerodynamicChord,
     stallReynolds,
     pointsCl,
-    pointsCd: pointsCd.map(([y, x, z]) => [y + deltaCxRe(x), x, z]),
+    pointsCd: pointsCd.map(([y, x, z]) => [getCdWing(x, y), x, z]),
   };
 };
 

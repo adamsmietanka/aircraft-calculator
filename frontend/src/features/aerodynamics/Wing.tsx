@@ -6,6 +6,7 @@ import ProfileChoose from "./ProfileChoose";
 import useWingAerodynamics from "./hooks/useWingAerodynamics";
 import InputUnits from "../common/inputs/InputUnits";
 import LineChart from "../common/three/LineChart";
+import WingMaterial from "./WingMaterial";
 
 const Wing = () => {
   const wing = useWingStore();
@@ -50,6 +51,7 @@ const Wing = () => {
           step={0.1}
         />
         <ProfileChoose />
+        <WingMaterial />
         <InputNumber
           disabled
           value={area}
@@ -114,7 +116,7 @@ const Wing = () => {
               x: {
                 name: "Coefficient of Drag (Cd)",
                 min: 0,
-                max: 0.026,
+                max: 0.041,
               },
               y: {
                 name: "Cl",
