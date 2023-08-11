@@ -98,7 +98,7 @@ const Wing = () => {
             name="Coefficient of Lift"
             traces={[{ name: "Power", points: pointsCl }]}
             axes={{
-              x: { name: "Angle of Attack", min: -20, max: 20 },
+              x: { name: "Angle of Attack", min: -20, max: 25 },
               y: {
                 name: "Coefficient of Lift (Cl)",
                 min: -1.5,
@@ -116,7 +116,6 @@ const Wing = () => {
               x: {
                 name: "Coefficient of Drag (Cd)",
                 min: 0,
-                max: 0.21,
               },
               y: {
                 name: "Cl",

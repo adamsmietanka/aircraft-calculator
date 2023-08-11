@@ -51,12 +51,6 @@ const useWingAerodynamics = () => {
 
   const CdMaterial = CdOfZeroCl * (material ? 0.15 : 0.5);
 
-  const getBeta25 = () => {
-    const xTip = (Math.tan((angle * Math.PI) / 180) * span) / 2;
-    const x = xTip + (chordTip - chord) / 4;
-    return (Math.atan((2 * x) / span) * 180) / Math.PI;
-  };
-
   const getFirstGlauertCoefficient = () => {
     const tau1 =
       0.023 * Math.pow(aspectRatio / slope, 3) -
@@ -77,6 +71,12 @@ const useWingAerodynamics = () => {
   const getAlphaInduced = (Cl: number) =>
     ((Cl / (Math.PI * aspectRatio)) * (1 + firstGlauertCoefficient) * 180) /
     Math.PI;
+
+  const getBeta25 = () => {
+    const xTip = (Math.tan((angle * Math.PI) / 180) * span) / 2;
+    const x = xTip + (chordTip - chord) / 4;
+    return (Math.atan((2 * x) / span) * 180) / Math.PI;
+  };
 
   const getSecondGlauertCoefficient = () => {
     const beta25 = getBeta25();

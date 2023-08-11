@@ -38,6 +38,7 @@ const ProfileVisualizer = () => {
         value={y["Coefficient of Lift"]}
         rotation={0}
         show={show}
+        color="primary"
       />
       <Vector
         tex="\bf F_D"
