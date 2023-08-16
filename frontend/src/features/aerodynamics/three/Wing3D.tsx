@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { WingState, useWingStore } from "../stores/useWing";
 import AnimatedSphere from "../../common/three/AnimatedSphere";
 import { Sphere, TransformControls } from "@react-three/drei";
@@ -9,21 +9,41 @@ import Line from "../../common/three/Line";
 
 const Wing3D = () => {
   const wing = useWingStore();
-  const [active, setActive] = useState<Mesh>(null!);
+  const [active, setActive] = useState<THREE.Object3D>(null!);
+
   const leadingTip = useRef<Mesh>(null);
   const trailingTip = useRef<Mesh>(null);
   const trailingFuselage = useRef<Mesh>(null);
 
   const SCALE = 0.25;
 
-  const getXTip = useCallback(
-    () => (Math.tan((wing.angle * Math.PI) / 180) * wing.span) / 2,
-    [wing.span, wing.angle]
-  );
+  const getXTip = (angle: number, span: number) =>
+    (Math.tan((angle * Math.PI) / 180) * span) / 2;
+
+  const onTransform = (e: THREE.Event | undefined) => {
+    if (e && e.target.object) {
+      const { isTip, isTrailing, isFuselage } = e.target.object.userData;
+      const { x, y } = e.target.object.position;
+
+      if (isTip) {
+        useWingStore.setState({ span: round(y * 2, 0.1) });
+
+        if (isTrailing) {
+          const angle = useWingStore.getState().angle;
+          const span = useWingStore.getState().span;
+          const xTip = getXTip(angle, span);
+
+          useWingStore.setState({ chordTip: round(x - xTip, 0.1) });
+        }
+      } else if (isFuselage) {
+        useWingStore.setState({ chord: round(x, 0.1) });
+      }
+    }
+  };
 
   const updateWing = ({ chord, chordTip, span, angle }: WingState) => {
     if (leadingTip.current && trailingTip.current && trailingFuselage.current) {
-      const xTip = (Math.tan((angle * Math.PI) / 180) * span) / 2;
+      const xTip = getXTip(angle, span);
 
       leadingTip.current.position.setY(span / 2);
       leadingTip.current.position.setX(xTip);
@@ -46,8 +66,9 @@ const Wing3D = () => {
   const springRef = useSpringRef();
 
   useChain([springRef]);
+
   const trace = useMemo(() => {
-    const xTip = getXTip();
+    const xTip = getXTip(wing.angle, wing.span);
     return {
       name: "",
       points: [
@@ -67,30 +88,10 @@ const Wing3D = () => {
       <gridHelper rotation-x={Math.PI / 2} />
       <TransformControls
         position={[1, 1, 1]}
-        size={0.75}
+        size={0.5}
         showZ={false}
         mode="translate"
-        onChange={(e) => {
-          const obj = e?.target.object;
-          if (obj) {
-            const { isTip, isTrailing, isFuselage } = obj.userData;
-            const { x, y } = obj.position;
-
-            if (isTip) {
-              useWingStore.setState({ span: round(y * 2, 0.1) });
-              if (isTrailing) {
-                const angle = useWingStore.getState().angle;
-                const span = useWingStore.getState().span;
-                const oldChord = useWingStore.getState().chordTip;
-                const xTip = (Math.tan((angle * Math.PI) / 180) * span) / 2;
-
-                useWingStore.setState({ chordTip: round(x - xTip, 0.1) });
-              }
-            } else if (isFuselage) {
-              useWingStore.setState({ chord: round(x, 0.1) });
-            }
-          }
-        }}
+        onChange={onTransform}
         object={active}
       />
       <Sphere
