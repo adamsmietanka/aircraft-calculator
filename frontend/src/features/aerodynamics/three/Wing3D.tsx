@@ -4,7 +4,12 @@ import AnimatedSphere from "../../common/three/AnimatedSphere";
 import { Sphere, TransformControls } from "@react-three/drei";
 import { Mesh } from "three";
 import round from "../../../utils/interpolation/round";
-import { useChain, useSpringRef } from "@react-spring/three";
+import {
+  useChain,
+  useSpringRef,
+  animated,
+  useSpring,
+} from "@react-spring/three";
 import Line from "../../common/three/Line";
 
 const Wing3D = () => {
@@ -83,12 +88,21 @@ const Wing3D = () => {
     };
   }, [wing]);
 
+  const AnimatedTransform = animated(TransformControls);
+
+  const [gizmoSpring] = useSpring(
+    () => ({
+      size: !!active ? 0.5 : 0,
+    }),
+    [active]
+  );
+  
   return (
     <>
       <gridHelper rotation-x={Math.PI / 2} />
-      <TransformControls
+      <AnimatedTransform
         position={[1, 1, 1]}
-        size={0.5}
+        size={gizmoSpring.size}
         showZ={false}
         mode="translate"
         onChange={onTransform}
