@@ -72,9 +72,10 @@ const Wing3D = () => {
     updateWing(state);
   }, []);
 
-  const springRef = useSpringRef();
+  const lineRef = useSpringRef();
+  const scaleRef = useSpringRef();
 
-  useChain([springRef]);
+  useChain([lineRef, scaleRef]);
 
   const trace = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
@@ -114,7 +115,11 @@ const Wing3D = () => {
 
   return (
     <animated.mesh scale={wingSpring.scale}>
-      <Scale length={getStep(0, wing.span / 1.5)} scale={wingSpring.scale} />
+      <Scale
+        length={getStep(0, wing.span / 1.5)}
+        scale={wingSpring.scale}
+        springRef={scaleRef}
+      />
       <AnimatedTransform
         scale={wingSpring.scale.to((scale) => 1 / scale)}
         position={[1, 1, 1]}
@@ -158,7 +163,7 @@ const Wing3D = () => {
         trace={trace}
         scale={[1, 1, 1]}
         color={primaryColor}
-        springRef={springRef}
+        springRef={lineRef}
       />
     </animated.mesh>
   );

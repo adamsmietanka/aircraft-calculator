@@ -35,6 +35,16 @@ export const unitData: Record<string, Record<string, UnitData>> = {
       multiplier: 0.0003048,
     },
   },
+  length: {
+    m: {
+      step: 0.1,
+      multiplier: 1,
+    },
+    ft: {
+      step: 1,
+      multiplier: 0.3048,
+    },
+  },
   power: {
     kW: {
       step: 10,

@@ -1,5 +1,11 @@
 import { useMemo, useRef } from "react";
-import { useSpring, animated, SpringValue, to } from "@react-spring/three";
+import {
+  useSpring,
+  animated,
+  SpringValue,
+  SpringRef,
+  config,
+} from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { useFrame } from "@react-three/fiber";
@@ -8,28 +14,36 @@ import { useCSSColors } from "../../common/three/config";
 interface Props {
   length: number;
   scale: SpringValue<number>;
-  opacity?: SpringValue<number>;
+  springRef?: SpringRef;
 }
 
-const SCALE_CENTER = 2;
+const SCALE_CENTER = 2.5;
 const SCALE_SIDE_HEIGHT = 0.2;
 
-const Scale = ({ length, opacity, scale }: Props) => {
+const Scale = ({ length, springRef, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
-  const { displayMultiplier, valueMultiplier } = useChartUnits("altitude");
+  
+  const { displayMultiplier, valueMultiplier, unit } = useChartUnits("length");
   const { gridColor } = useCSSColors();
   const AnimatedText = animated(Text);
+
+  const object = useSpring({
+    ref: springRef,
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: config.slow,
+  });
+
+  const [marker] = useSpring(
+    () => ({
+      length: length * valueMultiplier,
+    }),
+    [valueMultiplier, length]
+  );
 
   const position = useMemo(() => {
     return new Float32Array(3 * 6);
   }, []);
-
-  const [marker] = useSpring(
-    () => ({
-      length,
-    }),
-    [valueMultiplier, length]
-  );
 
   useFrame(() => {
     const interpolatedLength = marker.length.get();
@@ -64,9 +78,9 @@ const Scale = ({ length, opacity, scale }: Props) => {
         ])}
         scale={scale.to((scale) => 1 / scale)}
         color={gridColor}
-        fillOpacity={opacity}
+        fillOpacity={object.opacity}
       >
-        {length} m
+        {length * displayMultiplier} {unit}
       </AnimatedText>
       <animated.lineSegments>
         <bufferGeometry>
@@ -78,10 +92,9 @@ const Scale = ({ length, opacity, scale }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial
+        <animated.lineBasicMaterial
           color={gridColor}
-          //   opacity={opacity.to((o) => (y === 0 ? o : o / 3))}
-          opacity={1}
+          opacity={object.opacity.to((o) => o)}
           transparent
         />
       </animated.lineSegments>
