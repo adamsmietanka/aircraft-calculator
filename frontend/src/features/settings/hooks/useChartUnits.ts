@@ -8,13 +8,23 @@ const useChartUnits = (type: string | undefined) => {
 
   const units: Record<string, Record<string, UnitData>> = {
     altitude: {
+      km: {
+        displayMultiplier: 1,
+        valueMultiplier: 1,
+      },
       ft: {
         displayMultiplier: 5, // e.x. 2km turns into 10K feet
         valueMultiplier: 1.524, // 2 km * 1.524 = 3.048 km = 10k ft
       },
-      km: {
+    },
+    length: {
+      m: {
         displayMultiplier: 1,
         valueMultiplier: 1,
+      },
+      ft: {
+        displayMultiplier: 5,
+        valueMultiplier: 1.524,
       },
     },
     power: {

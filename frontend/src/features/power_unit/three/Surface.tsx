@@ -4,7 +4,7 @@ import * as THREE from "three";
 
 import { verts } from "../data/verts";
 import { usePropellerStore } from "../stores/usePropeller";
-import { useCSSColors } from "./config";
+import { useCSSColors } from "../../common/three/config";
 import { useSettingsStore } from "../../settings/stores/useSettings";
 
 interface Props {

@@ -7,7 +7,7 @@ import {
   NUMBERS_PADDING,
   TITLE_PADDING,
   useCSSColors,
-} from "./config";
+} from "../../common/three/config";
 
 const vertical_ticks = [0, 0.2, 0.4, 0.6, 0.8, 1];
 

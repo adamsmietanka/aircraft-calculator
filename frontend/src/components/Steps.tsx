@@ -32,7 +32,7 @@ const Steps = () => {
   return (
     <>
       {featureSteps && featureSteps.length > 1 && (
-        <ul className="sticky top-0 steps z-50 p-4 bg-base-100">
+        <ul className="sticky top-0 steps z-40 p-4 bg-base-100">
           {featureSteps.map((step) => (
             <li
               key={step.name}

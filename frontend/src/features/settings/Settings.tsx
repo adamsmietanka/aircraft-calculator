@@ -22,8 +22,7 @@ const Settings = () => {
         className="btn btn-block btn-ghost justify-start"
         onClick={() => (window as any).settings_modal.showModal()}
       >
-        <Cog className="mr-2" />
-        Settings
+        <Cog className="w-6" />
       </button>
       <dialog id="settings_modal" className="modal">
         <form method="dialog" className="modal-box">

@@ -1,8 +1,24 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { data } from "../data/prop";
-import { Trace } from "../three/LineChart";
+import { Point, Trace } from "../../common/three/LineChart";
+import { create } from "zustand";
+import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
+import { SimpleMarkerStore } from "../../common/three/Hover";
 
-const usePropellerChart = () => {
+const usePropellerChartStore = create<SimpleMarkerStore>()((set) => ({
+  x: 2,
+  y: 2,
+  hover: false,
+  show: false,
+  locked: false,
+  set: (value) => set(value),
+}));
+
+const usePropellerChart = ({ x, y }: Point) => {
+  const hover = usePropellerChartStore((state) => state.hover);
+  const xHover = usePropellerChartStore((state) => state.x);
+  const set = usePropellerChartStore((state) => state.set);
+
   const traces = useMemo<Trace[]>(
     () => [
       {
@@ -20,7 +36,17 @@ const usePropellerChart = () => {
     ],
     []
   );
-  return traces;
+
+  useEffect(() => {
+    if (hover) {
+      const y = linearInterpolationArray(traces[0].points, xHover);
+      set({ locked: false, y });
+    } else {
+      set({ locked: true, x, y });
+    }
+  }, [traces, xHover, hover, x, y]);
+
+  return { traces, usePropellerChartStore };
 };
 
 export default usePropellerChart;

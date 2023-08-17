@@ -2,6 +2,9 @@ import { getHSLColorFromCSS } from "../../../utils/getCSScolor";
 import { useThemeStore } from "../../settings/stores/useTheme";
 import { useMemo } from "react";
 
+//Profile
+export const NUMBER_OF_AIRFOIL_POINTS = 50;
+
 export const GRID_WIDTH = 1.0;
 export const GRID_OPACITY = 0.1;
 export const NUMBERS_PADDING = 0.5;
@@ -26,8 +29,17 @@ export const useCSSColors = () => {
   const accentColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const surfaceColor = useMemo(() => getHSLColorFromCSS("a"), [theme]);
   const gridColor = useMemo(() => getHSLColorFromCSS("bc"), [theme]);
+  const backgroundColor = useMemo(() => getHSLColorFromCSS("b1"), [theme]);
   const infoColor = useMemo(() => getHSLColorFromCSS("in"), [theme]);
   const errorColor = useMemo(() => getHSLColorFromCSS("er"), [theme]);
+  const colors = useMemo<Record<string, string>>(
+    () => ({
+      primary: primaryColor,
+      secondary: secondaryColor,
+      error: errorColor,
+    }),
+    [theme]
+  );
 
   return {
     traceColor,
@@ -36,7 +48,9 @@ export const useCSSColors = () => {
     accentColor,
     surfaceColor,
     gridColor,
+    backgroundColor,
     infoColor,
     errorColor,
+    colors,
   };
 };
