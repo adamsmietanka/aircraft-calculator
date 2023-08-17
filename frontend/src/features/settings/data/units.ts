@@ -14,6 +14,10 @@ export const unitMultipliers: Record<string, Record<string, number>> = {
     m: 1,
     ft: 0.3048,
   },
+  area: {
+    m2: 1,
+    ft2: 0.09290304,
+  },
   power: {
     kW: 1,
     hp: 0.73549875,

@@ -7,6 +7,7 @@ interface GlobalUnitsState {
   setSystem: (value: string) => void;
   setAltitude: (value: string) => void;
   setLength: (value: string) => void;
+  setArea: (value: string) => void;
   setSpeed: (value: string) => void;
   setPower: (value: string) => void;
 }
@@ -16,6 +17,7 @@ export const useGlobalUnitsStore = create<GlobalUnitsState>()((set) => ({
   types: {
     altitude: "km",
     length: "m",
+    area: "m2",
     speed: "m/s",
     power: "kW",
   },
@@ -30,6 +32,12 @@ export const useGlobalUnitsStore = create<GlobalUnitsState>()((set) => ({
     set(
       produce((state) => {
         state.types.length = value;
+      })
+    ),
+  setArea: (value) =>
+    set(
+      produce((state) => {
+        state.types.area = value;
       })
     ),
   setSpeed: (value) =>

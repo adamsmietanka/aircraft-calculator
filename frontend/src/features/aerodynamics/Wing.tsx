@@ -49,12 +49,11 @@ const Wing = () => {
         />
         <ProfileChoose />
         <WingMaterial />
-        <InputNumber
+        <InputUnits
+          label="Wing Surface Area"
+          type="area"
           disabled
           value={area}
-          label="Wing Surface Area"
-          roundTo={0.01}
-          unit="m²"
         />
         <InputNumber
           disabled
