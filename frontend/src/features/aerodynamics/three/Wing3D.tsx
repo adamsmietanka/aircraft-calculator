@@ -14,6 +14,7 @@ import Line from "../../common/three/Line";
 import { useThree } from "@react-three/fiber";
 import { useCSSColors } from "../../common/three/config";
 import { getStep } from "../../common/three/hooks/useAxes";
+import Scale from "./Scale";
 
 const Wing3D = () => {
   const wing = useWingStore();
@@ -111,11 +112,9 @@ const Wing3D = () => {
   const { primaryColor, secondaryColor, errorColor, gridColor } =
     useCSSColors();
 
-  console.log(getStep(0, wing.span/2));
-
   return (
     <animated.mesh scale={wingSpring.scale}>
-      {/* <gridHelper rotation-x={Math.PI / 2} /> */}
+      <Scale length={getStep(0, wing.span / 1.2)} scale={wingSpring.scale} />
       <AnimatedTransform
         scale={wingSpring.scale.to((scale) => 1 / scale)}
         position={[1, 1, 1]}
