@@ -1,5 +1,6 @@
 import InfoTooltip from "../InfoTooltip";
 import { useUnits } from "../../settings/hooks/useUnits";
+import Formula from "../Formula";
 
 interface Props {
   type: string;
@@ -49,12 +50,12 @@ const InputUnits = ({
             setter && setter(parseFloat(e.target.value) * multiplier)
           }
         />
-        <div className="dropdown dropdown-hover dropdown-right join-item">
+        <div className="dropdown dropdown-hover dropdown-right join-item z-10">
           <label
             tabIndex={0}
             className="flex items-center justify-center cursor-pointer bg-base-span z-10 w-16 h-full"
           >
-            {unit}
+            <Formula tex={`${unit}`} />
           </label>
           <ul
             tabIndex={0}
@@ -67,7 +68,7 @@ const InputUnits = ({
                     <button
                       className={`flex justify-center ${!small && "h-12"}`}
                     >
-                      {u}
+                      <Formula tex={`${units[u]}`} />
                     </button>
                   </li>
                 )

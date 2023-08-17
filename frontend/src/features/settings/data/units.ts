@@ -23,3 +23,29 @@ export const unitMultipliers: Record<string, Record<string, number>> = {
     hp: 0.73549875,
   },
 };
+
+export const unitDisplay: Record<string, Record<string, string>> = {
+  speed: {
+    "m/s": "\\frac{m}{s}",
+    "km/h": "\\frac{km}{h}",
+    mph: "mph",
+    kn: "kn",
+  },
+  altitude: {
+    km: "km",
+    m: "m",
+    ft: "ft",
+  },
+  length: {
+    m: "m",
+    ft: "ft",
+  },
+  area: {
+    m2: "m^2",
+    ft2: "ft^2",
+  },
+  power: {
+    kW: "kW",
+    hp: "hp",
+  },
+};

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGlobalUnitsStore } from "../stores/useGlobalUnits";
-import { unitMultipliers } from "../data/units";
+import { unitDisplay, unitMultipliers } from "../data/units";
 import { getStep } from "../../common/three/hooks/useAxes";
 import round from "../../../utils/interpolation/round";
 
@@ -33,9 +33,9 @@ export const useUnits = (value: number, type: string) => {
   }, [system, setSpeed, setAltitude]);
 
   return {
-    unit,
+    unit: unitDisplay[type][unit],
     setUnit,
-    units: unitMultipliers[type],
+    units: unitDisplay[type],
     multiplier,
     step,
     displayValue,
