@@ -12,6 +12,7 @@ interface Props {
 }
 
 const SCALE_CENTER = 2;
+const SCALE_SIDE_HEIGHT = 0.2;
 
 const Scale = ({ length, opacity, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
@@ -20,7 +21,7 @@ const Scale = ({ length, opacity, scale }: Props) => {
   const AnimatedText = animated(Text);
 
   const position = useMemo(() => {
-    return new Float32Array([0, 0, 0, -0.5, 0, 0]);
+    return new Float32Array(3 * 6);
   }, []);
 
   const [marker] = useSpring(
@@ -33,16 +34,18 @@ const Scale = ({ length, opacity, scale }: Props) => {
   useFrame(() => {
     const interpolatedLength = marker.length.get();
     const interpolatedScale = scale.get();
-    
-    position.set(
-      [
-        -(SCALE_CENTER / interpolatedScale - interpolatedLength / 2),
-        0,
-        0,
-        -(SCALE_CENTER / interpolatedScale + interpolatedLength / 2),
-      ],
-      0
-    );
+
+    const xStart = -(SCALE_CENTER / interpolatedScale - interpolatedLength / 2);
+    const xEnd = -(SCALE_CENTER / interpolatedScale + interpolatedLength / 2);
+    const y = SCALE_SIDE_HEIGHT / interpolatedScale;
+
+    position.set([xStart, 0, 0, xEnd, 0, 0], 0);
+
+    //left side
+    position.set([xEnd, y, 0, xEnd, -y, 0], 6);
+
+    //right side
+    position.set([xStart, y, 0, xStart, -y, 0], 12);
 
     if (positionRef.current) {
       positionRef.current.set(position);
@@ -54,7 +57,7 @@ const Scale = ({ length, opacity, scale }: Props) => {
     <animated.mesh>
       <AnimatedText
         fontSize={0.5}
-        position={to([marker.length, scale], (length, scale) => [
+        position={scale.to((scale) => [
           -(SCALE_CENTER / scale),
           -0.5 / scale,
           0,
@@ -65,7 +68,7 @@ const Scale = ({ length, opacity, scale }: Props) => {
       >
         {length} m
       </AnimatedText>
-      <animated.line>
+      <animated.lineSegments>
         <bufferGeometry>
           <bufferAttribute
             ref={positionRef}
@@ -81,7 +84,7 @@ const Scale = ({ length, opacity, scale }: Props) => {
           opacity={1}
           transparent
         />
-      </animated.line>
+      </animated.lineSegments>
     </animated.mesh>
   );
 };
