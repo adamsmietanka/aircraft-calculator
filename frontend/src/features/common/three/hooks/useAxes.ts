@@ -1,24 +1,24 @@
 import { Axis, Trace } from "../LineChart";
 import useChartSize from "./useChartSize";
 
+const getNormalizedStep = (remainder: number) => {
+  // examples for log(range) ~ 2
+  if (remainder > 0.95) return 2; // For range > 891
+  else if (remainder > 0.65) return 1; // for range > 446
+  else if (remainder > 0.25) return 0.5; // for range > 177
+  return 0.2; // for range > 89.1
+};
+
+export const getStep = (min: number, max: number) => {
+  const range = max - min;
+  const log = Math.log10(range);
+  const rem = log % 1;
+  const remainder = rem >= 0 ? rem : 1 + rem;
+
+  return getNormalizedStep(remainder) * Math.pow(10, Math.floor(log));
+};
+
 const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
-  const getNormalizedStep = (remainder: number) => {
-    // examples for log(range) ~ 2
-    if (remainder > 0.95) return 2; // For range > 891
-    else if (remainder > 0.65) return 1; // for range > 446
-    else if (remainder > 0.25) return 0.5; // for range > 177
-    return 0.2; // for range > 89.1
-  };
-
-  const getStep = (min: number, max: number) => {
-    const range = max - min;
-    const log = Math.log10(range);
-    const rem = log % 1;
-    const remainder = rem >= 0 ? rem : 1 + rem;
-
-    return getNormalizedStep(remainder) * Math.pow(10, Math.floor(log));
-  };
-
   const getTicks = (min: number, step: number, size: number) => {
     if (size < 10) step *= 2;
     const lowerAxisLimit = Math.ceil((min * 1) / step);

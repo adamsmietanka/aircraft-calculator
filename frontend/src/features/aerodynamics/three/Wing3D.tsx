@@ -11,6 +11,9 @@ import {
   useSpring,
 } from "@react-spring/three";
 import Line from "../../common/three/Line";
+import { useThree } from "@react-three/fiber";
+import { useCSSColors } from "../../common/three/config";
+import { getStep } from "../../common/three/hooks/useAxes";
 
 const Wing3D = () => {
   const wing = useWingStore();
@@ -92,15 +95,29 @@ const Wing3D = () => {
 
   const [gizmoSpring] = useSpring(
     () => ({
-      size: !!active ? 0.5 : 0,
+      size: !!active ? 0.6 : 0,
     }),
     [active]
   );
-  
+  const { height } = useThree((state) => state.viewport);
+
+  const [wingSpring] = useSpring(
+    () => ({
+      scale: (0.8 * height) / wing.span,
+    }),
+    [wing.span, height]
+  );
+
+  const { primaryColor, secondaryColor, errorColor, gridColor } =
+    useCSSColors();
+
+  console.log(getStep(0, wing.span/2));
+
   return (
-    <>
-      <gridHelper rotation-x={Math.PI / 2} />
+    <animated.mesh scale={wingSpring.scale}>
+      {/* <gridHelper rotation-x={Math.PI / 2} /> */}
       <AnimatedTransform
+        scale={wingSpring.scale.to((scale) => 1 / scale)}
         position={[1, 1, 1]}
         size={gizmoSpring.size}
         showZ={false}
@@ -111,34 +128,40 @@ const Wing3D = () => {
       <Sphere
         ref={trailingTip}
         userData={{ isTip: true, isTrailing: true }}
-        onClick={(e) => setActive(e.object)}
-        position={[0, 0, 0]}
+        onClick={(e) => {
+          console.log(self);
+          setActive(e.object);
+        }}
         scale={[SCALE, SCALE, SCALE]}
-        material-color={"green"}
+        material-color={primaryColor}
+        material-transparent
+        material-opacity={0.5}
       />
       <Sphere
         ref={leadingTip}
         userData={{ isTip: true }}
         onClick={(e) => setActive(e.object)}
-        position={[0, 0, 0]}
         scale={[SCALE, SCALE, SCALE]}
-        material-color={"red"}
+        material-color={primaryColor}
+        material-transparent
+        material-opacity={0.5}
       />
       <Sphere
         ref={trailingFuselage}
         userData={{ isFuselage: true }}
         onClick={(e) => setActive(e.object)}
-        position={[0, 0, 0]}
         scale={[SCALE, SCALE, SCALE]}
-        material-color={"red"}
+        material-color={primaryColor}
+        material-transparent
+        material-opacity={0.5}
       />
       <Line
         trace={trace}
         scale={[1, 1, 1]}
-        color={"red"}
+        color={primaryColor}
         springRef={springRef}
       />
-    </>
+    </animated.mesh>
   );
 };
 
