@@ -1,4 +1,4 @@
-import { ThreeElements, useThree } from "@react-three/fiber";
+import { ThreeElements } from "@react-three/fiber";
 
 import { useResultsStore } from "../stores/useResults";
 
