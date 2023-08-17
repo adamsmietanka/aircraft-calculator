@@ -9,8 +9,7 @@ const getNormalizedStep = (remainder: number) => {
   return 0.2; // for range > 89.1
 };
 
-export const getStep = (min: number, max: number) => {
-  const range = max - min;
+export const getStep = (range: number) => {
   const log = Math.log10(range);
   const rem = log % 1;
   const remainder = rem >= 0 ? rem : 1 + rem;
@@ -60,8 +59,8 @@ const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
         ...traces.map(({ points }) => points.map(([x, y, z]) => y)).flat()
       );
 
-  let xStep = getStep(minX, maxX);
-  let yStep = getStep(minY, maxY);
+  let xStep = getStep(maxX - minX);
+  let yStep = getStep(maxY - minY);
   let xTicks = getTicks(minX, xStep, width);
   let yTicks = getTicks(minY, yStep, height);
 

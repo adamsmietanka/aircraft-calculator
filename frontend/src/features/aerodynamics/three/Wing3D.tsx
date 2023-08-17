@@ -116,7 +116,7 @@ const Wing3D = () => {
   return (
     <animated.mesh scale={wingSpring.scale}>
       <Scale
-        length={getStep(0, wing.span / 1.5)}
+        length={getStep(wing.span / 1.5)}
         scale={wingSpring.scale}
         springRef={scaleRef}
       />

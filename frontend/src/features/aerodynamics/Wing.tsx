@@ -22,19 +22,17 @@ const Wing = () => {
   return (
     <div className="flex p-6 h-full">
       <div className="flex flex-col w-80 mr-8 space-y-1">
-        <InputNumber
+        <InputUnits
+          label="Wing Chord"
+          type="length"
           value={wing.chord}
           setter={wing.setChord}
-          label="Wing Chord"
-          unit="m"
-          step={0.1}
         />
-        <InputNumber
+        <InputUnits
+          label="Tip Chord"
+          type="length"
           value={wing.chordTip}
           setter={wing.setChordTip}
-          label="Tip Chord"
-          unit="m"
-          step={0.1}
         />
         <InputNumber
           value={wing.angle}
@@ -43,12 +41,11 @@ const Wing = () => {
           unit="°"
           step={1}
         />
-        <InputNumber
+        <InputUnits
+          label="Wing Span"
+          type="length"
           value={wing.span}
           setter={wing.setSpan}
-          label="Wing Span"
-          unit="m"
-          step={0.1}
         />
         <ProfileChoose />
         <WingMaterial />
@@ -65,12 +62,12 @@ const Wing = () => {
           value={aspectRatio}
           label="Wing Aspect Ratio"
         />
-        <InputNumber
+        <InputUnits
+          label="Mean Aerodynamic Chord"
+          type="length"
           disabled
           tooltip="MAC is the chord of a rectangular wing with the same area and span as those of the given wing"
           value={meanAerodynamicChord}
-          label="Mean Aerodynamic Chord"
-          unit="m"
         />
         <InputUnits
           type="speed"

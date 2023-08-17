@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useGlobalUnitsStore } from "../stores/useGlobalUnits";
-import { unitData } from "../data/units";
+import { unitMultipliers } from "../data/units";
+import { getStep } from "../../common/three/hooks/useAxes";
 
 export const useUnits = (value: number, type: string) => {
   const types = useGlobalUnitsStore((state) => state.types);
@@ -12,11 +13,10 @@ export const useUnits = (value: number, type: string) => {
 
   const [unit, setUnit] = useState(types[type]);
 
-  const { multiplier, step } = unitData[type][unit];
-  const displayValue =
-    step < 1
-      ? Math.round((value * 100) / multiplier) / 100
-      : Math.round(value / multiplier);
+  const multiplier = unitMultipliers[type][unit];
+  const step = getStep((0.1 * value) / multiplier);
+
+  const displayValue = Math.round((value * 1000) / multiplier) / 1000;
 
   useEffect(() => {
     setUnit(() => types[type]);
@@ -32,7 +32,7 @@ export const useUnits = (value: number, type: string) => {
   return {
     unit,
     setUnit,
-    units: unitData[type],
+    units: unitMultipliers[type],
     multiplier,
     step,
     displayValue,

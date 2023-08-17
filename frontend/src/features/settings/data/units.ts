@@ -1,58 +1,21 @@
-interface UnitData {
-  step: number;
-  multiplier: number;
-}
-export const unitData: Record<string, Record<string, UnitData>> = {
+export const unitMultipliers: Record<string, Record<string, number>> = {
   speed: {
-    "m/s": {
-      step: 1,
-      multiplier: 1,
-    },
-    "km/h": {
-      step: 1,
-      multiplier: 0.277778,
-    },
-    mph: {
-      step: 1,
-      multiplier: 0.44704,
-    },
-    kn: {
-      step: 1,
-      multiplier: 0.514444,
-    },
+    "m/s": 1,
+    "km/h": 0.277778,
+    mph: 0.44704,
+    kn: 0.514444,
   },
   altitude: {
-    km: {
-      step: 0.1,
-      multiplier: 1,
-    },
-    m: {
-      step: 100,
-      multiplier: 0.001,
-    },
-    ft: {
-      step: 1000,
-      multiplier: 0.0003048,
-    },
+    km: 1,
+    m: 0.001,
+    ft: 0.0003048,
   },
   length: {
-    m: {
-      step: 0.1,
-      multiplier: 1,
-    },
-    ft: {
-      step: 1,
-      multiplier: 0.3048,
-    },
+    m: 1,
+    ft: 0.3048,
   },
   power: {
-    kW: {
-      step: 10,
-      multiplier: 1,
-    },
-    hp: {
-      step: 10,
-      multiplier: 0.73549875,
-    },
+    kW: 1,
+    hp: 0.73549875,
   },
 };

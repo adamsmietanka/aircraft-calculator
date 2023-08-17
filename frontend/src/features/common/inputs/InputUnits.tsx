@@ -49,7 +49,7 @@ const InputUnits = ({
             setter && setter(parseFloat(e.target.value) * multiplier)
           }
         />
-        <div className="dropdown dropdown-hover dropdown-right join-item z-50">
+        <div className="dropdown dropdown-hover dropdown-right join-item">
           <label
             tabIndex={0}
             className="flex items-center justify-center cursor-pointer bg-base-span z-10 w-16 h-full"
