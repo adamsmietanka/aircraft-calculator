@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { WingState, useWingStore } from "../stores/useWing";
-import AnimatedSphere from "../../common/three/AnimatedSphere";
 import { Sphere, TransformControls } from "@react-three/drei";
 import { Mesh } from "three";
-import round from "../../../utils/interpolation/round";
 import {
   useChain,
   useSpringRef,
@@ -35,17 +33,17 @@ const Wing3D = () => {
       const { x, y } = e.target.object.position;
 
       if (isTip) {
-        useWingStore.setState({ span: round(y * 2, 0.1) });
+        useWingStore.setState({ span: y * 2 });
 
         if (isTrailing) {
           const angle = useWingStore.getState().angle;
           const span = useWingStore.getState().span;
           const xTip = getXTip(angle, span);
 
-          useWingStore.setState({ chordTip: round(x - xTip, 0.1) });
+          useWingStore.setState({ chordTip: x - xTip });
         }
       } else if (isFuselage) {
-        useWingStore.setState({ chord: round(x, 0.1) });
+        useWingStore.setState({ chord: x });
       }
     }
   };
@@ -94,6 +92,7 @@ const Wing3D = () => {
   }, [wing]);
 
   const AnimatedTransform = animated(TransformControls);
+  const AnimatedSphere = animated(Sphere);
 
   const [gizmoSpring] = useSpring(
     () => ({
@@ -101,13 +100,18 @@ const Wing3D = () => {
     }),
     [active]
   );
-  const { height } = useThree((state) => state.viewport);
+  const { height, width } = useThree((state) => state.viewport);
 
   const [wingSpring] = useSpring(
     () => ({
-      scale: (0.8 * height) / wing.span,
+      scale: Math.min(
+        (0.8 * height) / wing.span,
+        (0.5 * width) / (getXTip(wing.angle, wing.span) + wing.chordTip + 0.5),
+        (0.5 * width) / (wing.chord + 0.5)
+      ),
+      rotationZ: ((90 - wing.angle) * Math.PI) / 180,
     }),
-    [wing.span, height]
+    [wing.span, wing.angle, wing.chord, wing.chordTip, height]
   );
 
   const { primaryColor, secondaryColor, errorColor, gridColor } =
@@ -122,39 +126,51 @@ const Wing3D = () => {
       />
       <AnimatedTransform
         scale={wingSpring.scale.to((scale) => 1 / scale)}
-        position={[1, 1, 1]}
         size={gizmoSpring.size}
         showZ={false}
+        showY={!active?.userData.isFuselage && active?.userData.isTrailing}
         mode="translate"
         onChange={onTransform}
         object={active}
+        space="local"
+        translationSnap={0.1}
       />
-      <Sphere
+      <AnimatedSphere
         ref={trailingTip}
         userData={{ isTip: true, isTrailing: true }}
-        onClick={(e) => {
-          console.log(self);
-          setActive(e.object);
-        }}
-        scale={[SCALE, SCALE, SCALE]}
+        onClick={(e) => setActive(e.object)}
+        scale={wingSpring.scale.to((scale) => [
+          SCALE / scale,
+          SCALE / scale,
+          SCALE / scale,
+        ])}
         material-color={primaryColor}
         material-transparent
         material-opacity={0.5}
       />
-      <Sphere
+      <AnimatedSphere
         ref={leadingTip}
-        userData={{ isTip: true }}
+        userData={{ isTip: true, isTrailing: false }}
         onClick={(e) => setActive(e.object)}
-        scale={[SCALE, SCALE, SCALE]}
+        scale={wingSpring.scale.to((scale) => [
+          SCALE / scale,
+          SCALE / scale,
+          SCALE / scale,
+        ])}
+        rotation-z={wingSpring.rotationZ}
         material-color={primaryColor}
         material-transparent
         material-opacity={0.5}
       />
-      <Sphere
+      <AnimatedSphere
         ref={trailingFuselage}
-        userData={{ isFuselage: true }}
+        userData={{ isFuselage: true, isTrailing: true }}
         onClick={(e) => setActive(e.object)}
-        scale={[SCALE, SCALE, SCALE]}
+        scale={wingSpring.scale.to((scale) => [
+          SCALE / scale,
+          SCALE / scale,
+          SCALE / scale,
+        ])}
         material-color={primaryColor}
         material-transparent
         material-opacity={0.5}
