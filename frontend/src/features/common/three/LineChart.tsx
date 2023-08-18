@@ -2,7 +2,6 @@ import useAxes from "./hooks/useAxes";
 import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
-import { useCSSColors } from "./config";
 import { useChain, useSpringRef } from "@react-spring/three";
 import { StoreApi, UseBoundStore } from "zustand";
 import Hover, {
@@ -49,10 +48,7 @@ const LineChart = ({
 }: ChartProps) => {
   const { ticks, scale, min, mid, step } = useAxes(traces, axes);
 
-  const { primaryColor, secondaryColor, accentColor, errorColor } =
-    useCSSColors();
-
-  const colors = [primaryColor, "green", "orange"];
+  const colors = ["primary", "green", "orange"];
   const springRefs = traces.map(() => useSpringRef());
 
   useChain(springRefs);
