@@ -7,7 +7,10 @@ const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
 
 const useWingSprings = (active: Object3D<Event>) => {
-  const wing = useWingStore();
+  const chord = useWingStore((state) => state.chord);
+  const chordTip = useWingStore((state) => state.chordTip);
+  const angle = useWingStore((state) => state.angle);
+  const span = useWingStore((state) => state.span);
 
   const [gizmoSpring] = useSpring(
     () => ({
@@ -20,15 +23,17 @@ const useWingSprings = (active: Object3D<Event>) => {
   const [wingSpring] = useSpring(
     () => ({
       scale: Math.min(
-        (0.8 * height) / wing.span,
-        (0.5 * width) / (getXTip(wing.angle, wing.span) + wing.chordTip + 0.5),
-        (0.5 * width) / (wing.chord + 0.5)
+        (0.8 * height) / span,
+        (0.5 * width) / (getXTip(angle, span) + chordTip + 0.5),
+        (0.5 * width) / (chord + 0.5)
       ),
-      rotationZ: ((90 - wing.angle) * Math.PI) / 180,
-      x: getXTip(wing.angle, wing.span),
-      y: wing.span / 2,
+      rotationZ: ((90 - angle) * Math.PI) / 180,
+      x: getXTip(angle, span),
+      y: span / 2,
+      chord,
+      chordTip,
     }),
-    [wing.span, wing.angle, wing.chord, wing.chordTip, height]
+    [span, angle, chord, chordTip, height]
   );
   return { gizmoSpring, wingSpring };
 };
