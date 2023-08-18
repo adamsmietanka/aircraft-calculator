@@ -1,6 +1,4 @@
-import { useRef } from "react";
 import { TransformControls } from "@react-three/drei";
-import { Mesh } from "three";
 import { useChain, useSpringRef, animated } from "@react-spring/three";
 import Line from "../../common/three/Line";
 import Scale from "./Scale";
@@ -10,15 +8,7 @@ import WingSpheres from "./WingSpheres";
 import WingInputs from "./WingInputs";
 
 const Wing3D = () => {
-  const leadingTip = useRef<Mesh>(null);
-  const trailingTip = useRef<Mesh>(null);
-  const trailingFuselage = useRef<Mesh>(null);
-
-  const { onTransform, trace, active, setActive, step } = useWing3D(
-    leadingTip,
-    trailingTip,
-    trailingFuselage
-  );
+  const { onTransform, trace, active, setActive, step } = useWing3D();
 
   const { gizmoSpring, wingSpring } = useWingSprings(active);
 
@@ -40,15 +30,15 @@ const Wing3D = () => {
         onChange={onTransform}
         object={active}
         space="local"
-        translationSnap={0.1}
       />
       <WingSpheres
-        leadingTip={leadingTip}
-        trailingTip={trailingTip}
-        trailingFuselage={trailingFuselage}
         scale={wingSpring.scale}
         rotationZ={wingSpring.rotationZ}
         onClick={(e) => setActive(e.object)}
+        chord={wingSpring.chord}
+        chordTip={wingSpring.chordTip}
+        x={wingSpring.x}
+        y={wingSpring.y}
       />
       <WingInputs scale={wingSpring.scale} x={wingSpring.x} y={wingSpring.y} />
       <Line trace={trace} scale={[1, 1, 1]} springRef={lineRef} />

@@ -1,59 +1,64 @@
-import { SpringValue, animated } from "@react-spring/three";
+import { SpringValue, animated, to } from "@react-spring/three";
 import { Sphere } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
 import React from "react";
 import { Mesh } from "three";
 import { useCSSColors } from "../../common/three/config";
+import { useWingStore } from "../stores/useWing";
 
 const AnimatedSphere = animated(Sphere);
 
 const SPHERE_SIZE = 0.25;
 
 interface Props {
-  leadingTip: React.RefObject<Mesh>;
-  trailingTip: React.RefObject<Mesh>;
-  trailingFuselage: React.RefObject<Mesh>;
   scale: SpringValue<number>;
   rotationZ: SpringValue<number>;
   onClick: (e: ThreeEvent<MouseEvent>) => void;
+  chord: SpringValue<number>;
+  chordTip: SpringValue<number>;
+  x: SpringValue<number>;
+  y: SpringValue<number>;
 }
 
 const WingSpheres = ({
-  leadingTip,
-  trailingTip,
-  trailingFuselage,
   scale,
   rotationZ,
   onClick,
+  chord,
+  chordTip,
+  x,
+  y,
 }: Props) => {
-  const { primaryColor } =
-    useCSSColors();
+  const { primaryColor } = useCSSColors();
+
   return (
     <>
       <AnimatedSphere
-        ref={trailingTip}
-        userData={{ isTip: true, isTrailing: true }}
-        onClick={onClick}
-        scale={scale.to((scale) => SPHERE_SIZE / scale)}
-        material-color={primaryColor}
-        material-transparent
-        material-opacity={0.5}
-      />
-      <AnimatedSphere
-        ref={leadingTip}
         userData={{ isTip: true, isTrailing: false }}
         onClick={onClick}
         scale={scale.to((scale) => SPHERE_SIZE / scale)}
         rotation-z={rotationZ}
+        position-x={x}
+        position-y={y}
         material-color={primaryColor}
         material-transparent
         material-opacity={0.5}
       />
       <AnimatedSphere
-        ref={trailingFuselage}
+        userData={{ isTip: true, isTrailing: true }}
+        onClick={onClick}
+        scale={scale.to((scale) => SPHERE_SIZE / scale)}
+        position-x={to([x, chordTip], (x, chordTip) => x + chordTip)}
+        position-y={y}
+        material-color={primaryColor}
+        material-transparent
+        material-opacity={0.5}
+      />
+      <AnimatedSphere
         userData={{ isFuselage: true, isTrailing: true }}
         onClick={onClick}
         scale={scale.to((scale) => SPHERE_SIZE / scale)}
+        position-x={chord}
         material-color={primaryColor}
         material-transparent
         material-opacity={0.5}
