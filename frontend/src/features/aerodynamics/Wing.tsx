@@ -28,12 +28,6 @@ const Wing = () => {
           value={wing.chord}
           setter={wing.setChord}
         />
-        <InputUnits
-          label="Tip Chord"
-          type="length"
-          value={wing.chordTip}
-          setter={wing.setChordTip}
-        />
         <InputNumber
           value={wing.angle}
           setter={wing.setAngle}
