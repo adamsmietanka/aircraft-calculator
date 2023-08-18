@@ -7,6 +7,7 @@ import Scale from "./Scale";
 import useWing3D from "./hooks/useWing3D";
 import useWingSprings from "./hooks/useWingSprings";
 import WingSpheres from "./WingSpheres";
+import WingInputs from "./WingInputs";
 
 const Wing3D = () => {
   const leadingTip = useRef<Mesh>(null);
@@ -49,11 +50,8 @@ const Wing3D = () => {
         rotationZ={wingSpring.rotationZ}
         onClick={(e) => setActive(e.object)}
       />
-      <Line
-        trace={trace}
-        scale={[1, 1, 1]}
-        springRef={lineRef}
-      />
+      <WingInputs scale={wingSpring.scale} x={wingSpring.x} y={wingSpring.y} />
+      <Line trace={trace} scale={[1, 1, 1]} springRef={lineRef} />
     </animated.mesh>
   );
 };
