@@ -15,12 +15,13 @@ import { Axis } from "./LineChart";
 interface AxisProps {
   ticks: number[];
   axis: Axis;
-  scale: number;
+  scale: number[];
   min: number;
+  max: Record<string, number>;
   mid: number;
 }
 
-const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
+const LinesVertical = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
 
@@ -48,25 +49,27 @@ const LinesVertical = ({ ticks, axis, scale, min, mid }: AxisProps) => {
   const { unit } = useChartUnits(axis.type as string);
 
   return (
-    <mesh position={[0, min, 0]}>
+    <>
       {opacityTrail.map((i, index) => (
         <AnimatedXMarker
           key={index}
           x={ticks[index]}
+          min={min}
+          max={max}
           type={axis.type}
           opacity={i.opacity}
-          scale={[scale]}
+          scale={scale}
         />
       ))}
       <AnimatedText
-        position={[mid + 1.5, -TITLE_PADDING, 0]}
+        position={[mid + 1.5, min - TITLE_PADDING, 0]}
         fontSize={0.6}
         color={gridColor}
         fillOpacity={title.opacity}
       >
         {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>
-    </mesh>
+    </>
   );
 };
 

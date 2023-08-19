@@ -15,12 +15,13 @@ import { Axis } from "./LineChart";
 interface AxisProps {
   ticks: number[];
   axis: Axis;
-  scale: number;
+  scale: number[];
   min: number;
+  max: Record<string, number>;
   mid: number;
 }
 
-const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
+const LinesHorizontal = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
 
@@ -47,18 +48,20 @@ const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
   const { unit } = useChartUnits(axis.type as string);
 
   return (
-    <mesh position={[min, 0, 0]}>
+    <>
       {opacityTrail.map((i, index) => (
         <AnimatedYMarker
           key={index}
           y={ticks[index]}
+          min={min}
+          max={max}
           type={axis.type}
           opacity={i.opacity}
-          scale={[scale]}
+          scale={scale}
         />
       ))}
       <AnimatedText
-        position={[-1.2 * TITLE_PADDING, mid + 1, 0]}
+        position={[min - 1.2 * TITLE_PADDING, mid + 1, 0.5]}
         rotation-z={Math.PI / 2}
         fontSize={0.6}
         color={gridColor}
@@ -66,7 +69,7 @@ const LinesHorizontal = ({ ticks, axis, scale, min, mid }: AxisProps) => {
       >
         {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>
-    </mesh>
+    </>
   );
 };
 

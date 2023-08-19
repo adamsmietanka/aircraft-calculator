@@ -35,6 +35,7 @@ interface HoverProps {
   name: string;
   axes: Record<string, Axis>;
   min: Record<string, number>;
+  max: Record<string, number>;
   mid: Record<string, number>;
   scale: Array<number>;
   step: Record<string, number>;
@@ -48,6 +49,7 @@ const Hover = ({
   name,
   axes,
   min,
+  max,
   mid,
   scale,
   step,
@@ -57,9 +59,9 @@ const Hover = ({
   return (
     <>
       <Plane
-        args={[200, 200]}
-        position-x={100 + min.x}
-        position-y={100 + min.y}
+        args={[max.x - min.x, max.y - min.y]}
+        position-x={(min.x + max.x) / 2}
+        position-y={(min.y + max.y) / 2}
         material-transparent
         material-opacity={0}
         onPointerMove={(e) => {

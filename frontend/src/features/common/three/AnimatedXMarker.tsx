@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useSpring, animated, SpringValue } from "@react-spring/three";
+import { useSpring, animated, SpringValue, to } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
@@ -7,12 +7,14 @@ import { useFrame } from "@react-three/fiber";
 
 interface Props {
   x: number;
+  min: number;
+  max: Record<string, number>;
   type: string | undefined;
   scale: number[];
   opacity: SpringValue<number>;
 }
 
-const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
+const AnimatedXMarker = ({ x, min, max, type, opacity, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const { gridColor } = useCSSColors();
@@ -32,8 +34,8 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
 
   useFrame(() => {
     const interpolatedX = marker.position.get();
-    position.set([interpolatedX], 0);
-    position.set([interpolatedX], 3);
+    position.set([interpolatedX, min, 0], 0);
+    position.set([interpolatedX, max.y, 0], 3);
 
     if (positionRef.current) {
       positionRef.current.set(position);
@@ -45,10 +47,10 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
     <animated.mesh scale={marker.scale.to((scale) => [scale, 1, 1])}>
       <AnimatedText
         fontSize={0.5}
-        position={marker.position.to((x) => [x, -NUMBERS_PADDING, 0])}
+        position={marker.position.to((x) => [x, min - NUMBERS_PADDING, 0])}
         scale={marker.scale.to((scale) => [1 / scale, 1, 1])}
         color={gridColor}
-        fillOpacity={opacity}
+        fillOpacity={opacity.to((o) => (x <= max.x / scale[0] ? o : 0))}
       >
         {x * displayMultiplier}
       </AnimatedText>
@@ -64,7 +66,9 @@ const AnimatedXMarker = ({ x, type, opacity, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={opacity.to((o) => (x === 0 ? o : o / 3))}
+          opacity={opacity.to((o) =>
+            x > max.x / scale[0] ? 0 : x === 0 ? o : o / 3
+          )}
           transparent
         />
       </animated.line>

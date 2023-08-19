@@ -46,7 +46,7 @@ const LineChart = ({
   store,
   yHover = false,
 }: ChartProps) => {
-  const { ticks, scale, min, mid, step } = useAxes(traces, axes);
+  const { ticks, scale, min, max, mid, step } = useAxes(traces, axes);
 
   const colors = ["primary", "green", "orange"];
   const springRefs = traces.map(() => useSpringRef());
@@ -58,16 +58,18 @@ const LineChart = ({
       <LinesVertical
         axis={axes.x}
         ticks={ticks.x}
-        scale={scale[0]}
+          scale={scale}
         mid={mid.x}
         min={min.y}
+          max={max}
       />
       <LinesHorizontal
         axis={axes.y}
         ticks={ticks.y}
-        scale={scale[1]}
+          scale={scale}
         mid={mid.y}
         min={min.x}
+          max={max}
       />
       {traces.map((trace, index) => (
         <Line
@@ -83,6 +85,7 @@ const LineChart = ({
           name={name}
           axes={axes}
           min={min}
+            max={max}
           mid={mid}
           scale={scale}
           step={step}
