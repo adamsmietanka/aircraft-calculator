@@ -64,15 +64,18 @@ const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
   let xTicks = getTicks(minX, xStep, width);
   let yTicks = getTicks(minY, yStep, height);
 
-  const scaleX = width / (maxX - minX);
+  const X_TEXTS = 3;
+
+  const scaleX = (width - X_TEXTS) / (maxX - minX);
   const scaleY = height / (maxY - minY);
 
   return {
     ticks: { x: xTicks, y: yTicks },
     scale: [scaleX, scaleY, 1],
     min: { x: minX * scaleX, y: minY * scaleY },
+    max: { x: maxX * scaleX, y: maxY * scaleY },
     mid: {
-      x: (scaleX * (minX + maxX) - 3) / 2,
+      x: (scaleX * (minX + maxX) - X_TEXTS) / 2,
       y: (scaleY * (minY + maxY) - 1) / 2,
     },
     step: { x: xStep, y: yStep },

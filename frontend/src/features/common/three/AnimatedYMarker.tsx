@@ -1,5 +1,5 @@
 import { useMemo, useRef } from "react";
-import { useSpring, animated, SpringValue } from "@react-spring/three";
+import { useSpring, animated, SpringValue, to } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import { NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
@@ -7,12 +7,14 @@ import { useFrame } from "@react-three/fiber";
 
 interface Props {
   y: number;
+  min: number;
+  max: Record<string, number>;
   type: string | undefined;
   scale: number[];
   opacity: SpringValue<number>;
 }
 
-const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
+const AnimatedYMarker = ({ y, min, max, type, opacity, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const { gridColor } = useCSSColors();
@@ -25,15 +27,15 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
   const [marker] = useSpring(
     () => ({
       position: y * valueMultiplier,
-      scale: scale[0],
+      scale: scale[1],
     }),
     [y, valueMultiplier, scale]
   );
 
   useFrame(() => {
     const interpolatedY = marker.position.get();
-    position.set([interpolatedY], 1);
-    position.set([interpolatedY], 4);
+    position.set([min, interpolatedY, 0], 0);
+    position.set([max.x, interpolatedY, 0], 3);
 
     if (positionRef.current) {
       positionRef.current.set(position);
@@ -45,10 +47,14 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
     <animated.mesh scale={marker.scale.to((scale) => [1, scale, 1])}>
       <AnimatedText
         fontSize={0.5}
-        position={marker.position.to((y) => [-1.5 * NUMBERS_PADDING, y, 0])}
+        position={marker.position.to((y) => [
+          min - 1.5 * NUMBERS_PADDING,
+          y,
+          0.25,
+        ])}
         scale={marker.scale.to((scale) => [1, 1 / scale, 1])}
         color={gridColor}
-        fillOpacity={opacity}
+        fillOpacity={opacity.to((o) => (y <= max.y / scale[1] ? o : 0))}
       >
         {y * displayMultiplier}
       </AnimatedText>
@@ -64,7 +70,9 @@ const AnimatedYMarker = ({ y, type, opacity, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={opacity.to((o) => (y === 0 ? o : o / 3))}
+          opacity={opacity.to((o) =>
+            y > max.y / scale[1] ? 0 : y === 0 ? o : o / 3
+          )}
           transparent
         />
       </animated.line>
