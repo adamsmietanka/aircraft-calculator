@@ -81,6 +81,7 @@ const Wing = () => {
         style={{ height: "100vh" }}
       >
         <Canvas camera={{ position: [0, 0, 25], fov: 40 }}>
+          {/* <gridHelper rotation-x={Math.PI / 2} /> */}
           <Wing3D size={[0.33, 1]} gridPositionX={-2} />
           <LineChart
             size={[0.33, 1]}
