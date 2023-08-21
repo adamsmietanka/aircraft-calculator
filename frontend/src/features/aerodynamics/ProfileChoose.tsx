@@ -1,10 +1,8 @@
 import { useMemo } from "react";
 import profiles from "./data/profiles";
 import { useWingStore } from "./stores/useWing";
-import ProfileTable from "./ProfileTable";
 
 const ProfileChoose = () => {
-  const wing = useWingStore();
   const profile = useWingStore((state) => state.profile);
   const setProfile = useWingStore((state) => state.setProfile);
 
@@ -47,19 +45,7 @@ const ProfileChoose = () => {
         >
           Catalog
         </button>
-        <dialog id="profile_modal" className="modal ">
-          <form method="dialog" className="modal-box max-w-3xl max-h-full">
-            <h3>Profile Catalog</h3>
-            <div className="">
-              <ProfileTable />
-            </div>
-          </form>
-          <form method="dialog" className="modal-backdrop">
-            <button>close</button>
-          </form>
-        </dialog>
       </div>
-      
     </div>
   );
 };

@@ -4,26 +4,29 @@ import ProfileVisualizer from "./three/ProfileVisualizer";
 import useProfileCharts from "./hooks/useProfileCharts";
 import ProfileChoose from "./ProfileChoose";
 import ProfileReynolds from "./ProfileReynolds";
+import ProfileModal from "./ProfileModal";
 import { OrbitControls } from "@react-three/drei";
+import Inputs3D from "../common/three/Inputs3D";
 
 const Profile = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   return (
     <div className="flex space-x-4 h-full p-6">
-      <div className="flex flex-col w-80 space-y-1">
-        <ProfileChoose />
-        <ProfileReynolds />
-      </div>
       <div className="flex w-full">
         <div className="fixed top-0 left-0 h-screen w-screen">
-          <Canvas camera={{ position: [0, 0, 15] }}>
+          <ProfileModal />
+          <Canvas camera={{ position: [0, 0, 30], fov: 40 }}>
             {/* <gridHelper rotation-x={Math.PI / 2} /> */}
+            <Inputs3D size={[0.33, 1]} gridPositionX={-3}>
+              <ProfileChoose />
+              <ProfileReynolds />
+            </Inputs3D>
             <OrbitControls />
-            <ProfileVisualizer size={[0.33, 1]} gridPositionX={-2} />
+            <ProfileVisualizer size={[0.33, 1]} gridPositionX={-1} />
             <LineChart
               size={[0.33, 1]}
-              gridPositionX={0}
+              gridPositionX={1}
               name="Coefficient of Lift"
               traces={[{ name: "Power", points: pointsCl }]}
               axes={{
@@ -38,7 +41,7 @@ const Profile = () => {
             />
             <LineChart
               size={[0.33, 1]}
-              gridPositionX={2}
+              gridPositionX={3}
               name="Coefficient of Drag"
               traces={[{ name: "Power", points: pointsCd }]}
               axes={{
