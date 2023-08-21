@@ -70,7 +70,7 @@ const Line = ({
         dashOffset={1}
         dashRatio={0.5}
         transparent
-        lineWidth={width * 0.015}
+        lineWidth={width * 0.1}
         color={colors[color] || color}
       />
     </animated.mesh>

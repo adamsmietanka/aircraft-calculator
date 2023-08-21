@@ -1,12 +1,12 @@
 import { useSpring } from "@react-spring/three";
-import { useThree } from "@react-three/fiber";
 import { Object3D, Event } from "three";
 import { useWingStore } from "../../stores/useWing";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../../common/three/config";
 
 const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
 
-const useWingSprings = (active: Object3D<Event>) => {
+const useWingSprings = (active: Object3D<Event>, size: number[]) => {
   const chord = useWingStore((state) => state.chord);
   const chordTip = useWingStore((state) => state.chordTip);
   const angle = useWingStore((state) => state.angle);
@@ -18,14 +18,16 @@ const useWingSprings = (active: Object3D<Event>) => {
     }),
     [active]
   );
-  const { height, width } = useThree((state) => state.viewport);
+
+  const localWidth = CANVAS_WIDTH * size[0];
+  const localHeight = CANVAS_HEIGHT * size[1];
 
   const [wingSpring] = useSpring(
     () => ({
       scale: Math.min(
-        (0.8 * height) / span,
-        (0.5 * width) / (getXTip(angle, span) + chordTip + 0.5),
-        (0.5 * width) / (chord + 0.5)
+        (0.6 * localHeight) / span,
+        (0.5 * localWidth) / (getXTip(angle, span) + chordTip + 0.5),
+        (0.5 * localWidth) / (chord + 0.5)
       ),
       rotationZ: ((90 - angle) * Math.PI) / 180,
       x: getXTip(angle, span),
@@ -33,7 +35,7 @@ const useWingSprings = (active: Object3D<Event>) => {
       chord,
       chordTip,
     }),
-    [span, angle, chord, chordTip, height]
+    [span, angle, chord, chordTip, localHeight, localWidth]
   );
   return { gizmoSpring, wingSpring };
 };

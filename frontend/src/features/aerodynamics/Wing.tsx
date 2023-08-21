@@ -77,29 +77,29 @@ const Wing = () => {
         />
       </div>
       <div
-        className="sticky flex top-1/4 h-3/5 w-3/4"
-        style={{ height: "65vh" }}
+        className="fixed flex top-0 left-96 w-3/4"
+        style={{ height: "100vh" }}
       >
-        <Canvas orthographic camera={{ zoom: 30 }}>
-          <Wing3D />
-        </Canvas>
-        <Canvas orthographic camera={{ zoom: 30 }}>
+        <Canvas camera={{ position: [0, 0, 25], fov: 40 }}>
+          <Wing3D size={[0.33, 1]} gridPositionX={-2} />
           <LineChart
+            size={[0.33, 1]}
+            gridPositionX={0}
             name="Coefficient of Lift"
             traces={[{ name: "Power", points: pointsCl }]}
             axes={{
-              x: { name: "Angle of Attack", min: -20, max: 25 },
+              x: { name: "Angle of Attack" },
               y: {
                 name: "Coefficient of Lift (Cl)",
-                min: -1.5,
-                max: 1.5,
+                min: -1.75,
+                max: 1.75,
               },
             }}
             // store={useProfileChartsStore}
           />
-        </Canvas>
-        <Canvas orthographic camera={{ zoom: 30 }}>
           <LineChart
+            size={[0.33, 1]}
+            gridPositionX={2}
             name="Coefficient of Drag"
             traces={[{ name: "Power", points: pointsCd }]}
             axes={{
@@ -109,8 +109,8 @@ const Wing = () => {
               },
               y: {
                 name: "Cl",
-                min: -1.5,
-                max: 1.5,
+                min: -1.75,
+                max: 1.75,
               },
             }}
             // store={useProfileChartsStore}

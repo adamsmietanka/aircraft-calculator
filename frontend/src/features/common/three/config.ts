@@ -11,6 +11,12 @@ export const NUMBERS_PADDING = 0.5;
 export const TITLE_PADDING = 1.5;
 export const POINT_SIZE = 0.5;
 
+export const FONT_SIZE = 0.6;
+
+// measured in Three.js world units
+export const CANVAS_WIDTH = 20;
+export const CANVAS_HEIGHT = 15;
+
 // Chart Animations
 export const POSITION_ANIMATION_DURATION = 0.5;
 export const POSITION_STAGGER = 0.0; // duration between the start of animation of the 1st and last point in a trace

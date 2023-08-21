@@ -6,11 +6,17 @@ import useWing3D from "./hooks/useWing3D";
 import useWingSprings from "./hooks/useWingSprings";
 import WingSpheres from "./WingSpheres";
 import WingInputs from "./WingInputs";
+import { CANVAS_WIDTH } from "../../common/three/config";
 
-const Wing3D = () => {
+interface Props {
+  size: number[];
+  gridPositionX: number;
+}
+
+const Wing3D = ({ size, gridPositionX }: Props) => {
   const { onTransform, trace, active, setActive, step } = useWing3D();
 
-  const { gizmoSpring, wingSpring } = useWingSprings(active);
+  const { gizmoSpring, wingSpring } = useWingSprings(active, size);
 
   const lineRef = useSpringRef();
   const scaleRef = useSpringRef();
@@ -20,10 +26,8 @@ const Wing3D = () => {
   const AnimatedTransform = animated(TransformControls);
 
   return (
-    <animated.mesh scale={wingSpring.scale}>
-      <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
+    <>
       <AnimatedTransform
-        scale={wingSpring.scale.to((scale) => 1 / scale)}
         size={gizmoSpring.size}
         showZ={false}
         showY={!active?.userData.isFuselage && active?.userData.isTrailing}
@@ -31,23 +35,29 @@ const Wing3D = () => {
         object={active}
         space="local"
       />
-      <WingSpheres
+      <animated.mesh
         scale={wingSpring.scale}
-        rotationZ={wingSpring.rotationZ}
-        onClick={(e) => setActive(e.object)}
-        chord={wingSpring.chord}
-        chordTip={wingSpring.chordTip}
-        x={wingSpring.x}
-        y={wingSpring.y}
-      />
+        position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
+      >
+        <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
+        <WingSpheres
+          scale={wingSpring.scale}
+          rotationZ={wingSpring.rotationZ}
+          onClick={(e) => setActive(e.object)}
+          chord={wingSpring.chord}
+          chordTip={wingSpring.chordTip}
+          x={wingSpring.x}
+          y={wingSpring.y}
+        />
         <WingInputs
           scale={wingSpring.scale}
           chordTip={wingSpring.chordTip}
           x={wingSpring.x}
           y={wingSpring.y}
         />
-      <Line trace={trace} scale={[1, 1, 1]} springRef={lineRef} />
-    </animated.mesh>
+        <Line trace={trace} scale={[1, 1, 1]} springRef={lineRef} />
+      </animated.mesh>
+    </>
   );
 };
 

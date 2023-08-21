@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useSpring, animated, SpringValue, to } from "@react-spring/three";
 import { Text } from "@react-three/drei";
-import { NUMBERS_PADDING, useCSSColors } from "./config";
+import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { useFrame } from "@react-three/fiber";
 
@@ -46,8 +46,8 @@ const AnimatedXMarker = ({ x, min, max, type, opacity, scale }: Props) => {
   return (
     <animated.mesh scale={marker.scale.to((scale) => [scale, 1, 1])}>
       <AnimatedText
-        fontSize={0.5}
-        position={marker.position.to((x) => [x, min - NUMBERS_PADDING, 0])}
+        fontSize={0.5 * FONT_SIZE}
+        position={marker.position.to((x) => [x, min - NUMBERS_PADDING, 0.25])}
         scale={marker.scale.to((scale) => [1 / scale, 1, 1])}
         color={gridColor}
         fillOpacity={opacity.to((o) => (x <= max.x / scale[0] ? o : 0))}
