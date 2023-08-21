@@ -1,5 +1,11 @@
 import { useRef } from "react";
-import { animated, useSpring, config, SpringRef } from "@react-spring/three";
+import {
+  animated,
+  useSpring,
+  config,
+  SpringRef,
+  SpringValue,
+} from "@react-spring/three";
 import { extend, useFrame } from "@react-three/fiber";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { Object3DNode, MaterialNode } from "@react-three/fiber";
@@ -21,6 +27,7 @@ interface TraceProps {
   width?: number;
   color?: string;
   springRef?: SpringRef;
+  opacity?: SpringValue<number>;
 }
 
 const Line = ({
@@ -29,6 +36,7 @@ const Line = ({
   width = 1,
   color = "primary",
   springRef,
+  opacity,
 }: TraceProps) => {
   const test = useSpring({
     ref: springRef,
@@ -53,10 +61,12 @@ const Line = ({
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
     const interpolatedOffset = test.offset.get();
+    const interpolatedOpacity = opacity ? opacity?.get() : 1;
 
     if (geometryRef.current && materialRef.current) {
       materialRef.current.dashOffset = interpolatedOffset;
       materialRef.current.dashRatio = interpolatedOffset;
+      materialRef.current.opacity = interpolatedOpacity;
       geometryRef.current.setPoints(interpolatedPoints);
     }
   });

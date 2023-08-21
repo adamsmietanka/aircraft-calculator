@@ -58,7 +58,9 @@ const LineChart = ({
   useChain(springRefs);
 
   return (
-    <mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
+    <mesh
+      position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
+    >
       <mesh position={[-mid.x, -mid.y, 0]}>
         <LinesVertical
           axis={axes.x}
