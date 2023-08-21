@@ -78,7 +78,11 @@ const Hover = ({
               }
             }
           } else {
-            const x = round((e.point.x + mid.x) / scale[0], step.x / 10);
+            const gridPositionFix = e.object.parent?.parent?.position.x || 0;
+            const x = round(
+              (e.point.x + mid.x - gridPositionFix) / scale[0],
+              step.x / 10
+            );
             const locked = store.getState().locked;
             const oldX = store.getState().x;
 
