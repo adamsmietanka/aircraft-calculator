@@ -40,7 +40,12 @@ const Wing3D = () => {
         x={wingSpring.x}
         y={wingSpring.y}
       />
-      <WingInputs scale={wingSpring.scale} x={wingSpring.x} y={wingSpring.y} />
+        <WingInputs
+          scale={wingSpring.scale}
+          chordTip={wingSpring.chordTip}
+          x={wingSpring.x}
+          y={wingSpring.y}
+        />
       <Line trace={trace} scale={[1, 1, 1]} springRef={lineRef} />
     </animated.mesh>
   );
