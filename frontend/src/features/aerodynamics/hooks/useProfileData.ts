@@ -6,7 +6,7 @@ const useProfileData = (reynoldsIndex: number) => {
   const profile = useWingStore((state) => state.profile);
 
   const pointsCl = useMemo(
-    () => profiles[profile].cz[reynoldsIndex].map(([x, y]) => [x, y, 0]),
+    () => profiles[profile].cz[reynoldsIndex].map(([x, y]) => [x, y, 0.1]),
     [profile, reynoldsIndex]
   );
 
@@ -24,7 +24,7 @@ const useProfileData = (reynoldsIndex: number) => {
   }, [pointsCl]);
 
   const pointsCd = useMemo(
-    () => profiles[profile].cd[reynoldsIndex].map(([x, y]) => [y, x, 0]),
+    () => profiles[profile].cd[reynoldsIndex].map(([x, y]) => [y, x, 0.1]),
     [profile, reynoldsIndex]
   );
 

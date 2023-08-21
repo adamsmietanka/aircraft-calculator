@@ -1,5 +1,5 @@
 import { Text } from "@react-three/drei";
-import { TITLE_PADDING, useCSSColors } from "./config";
+import { FONT_SIZE, TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import {
   useTrail,
@@ -63,7 +63,7 @@ const LinesVertical = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
       ))}
       <AnimatedText
         position={[mid + 1.5, min - TITLE_PADDING, 0]}
-        fontSize={0.6}
+        fontSize={0.6 * FONT_SIZE}
         color={gridColor}
         fillOpacity={title.opacity}
       >

@@ -1,5 +1,5 @@
 import { Axis, Trace } from "../LineChart";
-import useChartSize from "./useChartSize";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../config";
 
 const getNormalizedStep = (remainder: number) => {
   // examples for log(range) ~ 2
@@ -17,7 +17,11 @@ export const getStep = (range: number) => {
   return getNormalizedStep(remainder) * Math.pow(10, Math.floor(log));
 };
 
-const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
+const useAxisTicks = (
+  traces: Trace[],
+  axes: Record<string, Axis>,
+  size: number[] = [1, 1]
+) => {
   const getTicks = (min: number, step: number, size: number) => {
     if (size < 10) step *= 2;
     const lowerAxisLimit = Math.ceil((min * 1) / step);
@@ -29,8 +33,11 @@ const useAxisTicks = (traces: Trace[], axes: Record<string, Axis>) => {
     // fix floating point precision (TODO: maybe use decimal.js)
     return ticks.map((t) => parseFloat(t.toFixed(7)));
   };
-
-  const { width, height } = useChartSize();
+  
+  const { width, height } = {
+    width: size[0] * CANVAS_WIDTH,
+    height: size[1] * 0.8 * CANVAS_HEIGHT,
+  };
 
   const getMinX = () => {
     if (axes.x.min === 0) return 0;

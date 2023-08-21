@@ -4,42 +4,41 @@ import ProfileVisualizer from "./three/ProfileVisualizer";
 import useProfileCharts from "./hooks/useProfileCharts";
 import ProfileChoose from "./ProfileChoose";
 import ProfileReynolds from "./ProfileReynolds";
+import { OrbitControls } from "@react-three/drei";
 
 const Profile = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   return (
     <div className="flex space-x-4 h-full p-6">
-      <div className="flex flex-col space-y-1">
+      <div className="flex flex-col w-80 space-y-1">
         <ProfileChoose />
         <ProfileReynolds />
-        <div className="relative top-1/4 h-72">
-          <Canvas orthographic camera={{ zoom: 30 }}>
-            <ProfileVisualizer />
-          </Canvas>
-        </div>
       </div>
       <div className="flex w-full">
-        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "76vh" }}>
-          <Canvas orthographic camera={{ zoom: 30 }}>
+        <div className="fixed top-0 left-0 h-screen w-screen">
+          <Canvas camera={{ position: [0, 0, 15] }}>
+            {/* <gridHelper rotation-x={Math.PI / 2} /> */}
+            <OrbitControls />
+            <ProfileVisualizer size={[0.33, 1]} gridPositionX={-2} />
             <LineChart
+              size={[0.33, 1]}
+              gridPositionX={0}
               name="Coefficient of Lift"
               traces={[{ name: "Power", points: pointsCl }]}
               axes={{
                 x: { name: "Angle of Attack", min: -20, max: 20 },
                 y: {
                   name: "Coefficient of Lift (Cl)",
-                  min: -1.5,
-                  max: 1.5,
+                  min: -1.75,
+                  max: 1.75,
                 },
               }}
               store={useProfileChartsStore}
             />
-          </Canvas>
-        </div>
-        <div className="sticky top-1/4 h-3/5 w-2/5" style={{ height: "76vh" }}>
-          <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              size={[0.33, 1]}
+              gridPositionX={2}
               name="Coefficient of Drag"
               traces={[{ name: "Power", points: pointsCd }]}
               axes={{
@@ -50,8 +49,8 @@ const Profile = () => {
                 },
                 y: {
                   name: "Cl",
-                  min: -1.5,
-                  max: 1.5,
+                  min: -1.75,
+                  max: 1.75,
                 },
               }}
               store={useProfileChartsStore}

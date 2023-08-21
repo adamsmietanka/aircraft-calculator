@@ -1,7 +1,7 @@
 import { animated, to, useSpring } from "@react-spring/three";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { NUMBERS_PADDING, useCSSColors } from "./config";
+import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { MeshLineGeometry, Text } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
@@ -54,7 +54,7 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
     hoverApi.start({
       x,
       y,
-      points: [min.x / scale[0], y, 0, x, y, 0, x, min.y / scale[1], 0],
+      points: [min.x / scale[0], y, 0.1, x, y, 0.1, x, min.y / scale[1], 0.1],
     });
   };
 
@@ -102,7 +102,7 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
 
     if (geometryRef.current && materialRef.current) {
       materialRef.current.opacity = interpolatedOpacity;
-      materialRef.current.lineWidth = interpolatedWidth * 0.005;
+      materialRef.current.lineWidth = interpolatedWidth * 0.05;
       geometryRef.current.setPoints(interpolatedPoints);
     }
   });
@@ -125,11 +125,11 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
       scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [x, y, 1])}
     >
       <AnimatedText
-        fontSize={0.6}
+        fontSize={0.6 * FONT_SIZE}
         position={to([hoverSpring.x, scaleSpring.y], (x, scale) => [
           x,
           (min.y - NUMBERS_PADDING) / scale,
-          0,
+          0.375,
         ])}
         scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [1 / x, 1 / y, 1])}
         color={primaryColor}
@@ -141,11 +141,11 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
         {displayX}
       </AnimatedText>
       <AnimatedText
-        fontSize={0.6}
+        fontSize={0.6 * FONT_SIZE}
         position={to([hoverSpring.y, scaleSpring.x], (y, scale) => [
           (min.x - 1.5 * NUMBERS_PADDING) / scale,
           y,
-          0,
+          0.375,
         ])}
         scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [1 / x, 1 / y, 1])}
         color={primaryColor}
@@ -164,7 +164,7 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
         dashOffset={1}
         dashRatio={0.8}
         transparent
-        lineWidth={0.005}
+        lineWidth={0.05}
         color={gridColor}
       />
     </animated.mesh>

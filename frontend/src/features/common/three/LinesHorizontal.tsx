@@ -1,5 +1,5 @@
 import { Text } from "@react-three/drei";
-import { TITLE_PADDING, useCSSColors } from "./config";
+import { FONT_SIZE, TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import AnimatedYMarker from "./AnimatedYMarker";
 import {
@@ -63,7 +63,7 @@ const LinesHorizontal = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
       <AnimatedText
         position={[min - 1.2 * TITLE_PADDING, mid + 1, 0.5]}
         rotation-z={Math.PI / 2}
-        fontSize={0.6}
+        fontSize={0.6 * FONT_SIZE}
         color={gridColor}
         fillOpacity={title.opacity}
       >

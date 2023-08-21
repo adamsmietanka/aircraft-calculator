@@ -9,6 +9,7 @@ import Hover, {
   SimpleMarkerStore,
   SynchronizedXMarkersStore,
 } from "./Hover";
+import { CANVAS_WIDTH } from "./config";
 
 export interface Axis {
   name: string;
@@ -36,17 +37,20 @@ export type ChartProps = {
     StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
   >;
   yHover?: boolean;
+  size: number[];
+  gridPositionX?: number;
 };
 
 const LineChart = ({
   name,
   traces,
   axes,
-  point,
   store,
   yHover = false,
+  size = [1, 1],
+  gridPositionX = 0,
 }: ChartProps) => {
-  const { ticks, scale, min, max, mid, step } = useAxes(traces, axes);
+  const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, size);
 
   const colors = ["primary", "green", "orange"];
   const springRefs = traces.map(() => useSpringRef());
@@ -54,45 +58,47 @@ const LineChart = ({
   useChain(springRefs);
 
   return (
-    <mesh position={[-mid.x, -mid.y, 0]}>
-      <LinesVertical
-        axis={axes.x}
-        ticks={ticks.x}
+    <mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
+      <mesh position={[-mid.x, -mid.y, 0]}>
+        <LinesVertical
+          axis={axes.x}
+          ticks={ticks.x}
           scale={scale}
-        mid={mid.x}
-        min={min.y}
+          mid={mid.x}
+          min={min.y}
           max={max}
-      />
-      <LinesHorizontal
-        axis={axes.y}
-        ticks={ticks.y}
-          scale={scale}
-        mid={mid.y}
-        min={min.x}
-          max={max}
-      />
-      {traces.map((trace, index) => (
-        <Line
-          key={index}
-          trace={trace}
-          scale={scale}
-          color={colors[index]}
-          springRef={springRefs[index]}
         />
-      ))}
-      {store && (
-        <Hover
-          name={name}
-          axes={axes}
-          min={min}
+        <LinesHorizontal
+          axis={axes.y}
+          ticks={ticks.y}
+          scale={scale}
+          mid={mid.y}
+          min={min.x}
+          max={max}
+        />
+        {traces.map((trace, index) => (
+          <Line
+            key={index}
+            trace={trace}
+            scale={scale}
+            color={colors[index]}
+            springRef={springRefs[index]}
+          />
+        ))}
+        {store && (
+          <Hover
+            name={name}
+            axes={axes}
+            min={min}
             max={max}
-          mid={mid}
-          scale={scale}
-          step={step}
-          store={store}
-          yHover={yHover}
-        />
-      )}
+            mid={mid}
+            scale={scale}
+            step={step}
+            store={store}
+            yHover={yHover}
+          />
+        )}
+      </mesh>
     </mesh>
   );
 };

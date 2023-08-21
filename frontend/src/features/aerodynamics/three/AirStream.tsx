@@ -51,7 +51,7 @@ const AirStream = ({ points, positionY, show }: TraceProps) => {
         dashOffset={1}
         dashRatio={0.5}
         transparent
-        lineWidth={0.015}
+        lineWidth={0.05}
         color={gridColor}
         opacity={0.1}
       />
