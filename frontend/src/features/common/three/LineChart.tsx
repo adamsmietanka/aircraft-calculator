@@ -2,7 +2,7 @@ import useAxes from "./hooks/useAxes";
 import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
-import { useChain, useSpringRef } from "@react-spring/three";
+import { SpringValue, useChain, useSpringRef } from "@react-spring/three";
 import { StoreApi, UseBoundStore } from "zustand";
 import Hover, {
   MarkersStore,
@@ -39,6 +39,7 @@ export type ChartProps = {
   yHover?: boolean;
   size: number[];
   gridPositionX?: number;
+  opacity?: SpringValue<number>;
 };
 
 const LineChart = ({
@@ -49,6 +50,7 @@ const LineChart = ({
   yHover = false,
   size = [1, 1],
   gridPositionX = 0,
+  opacity = new SpringValue(1),
 }: ChartProps) => {
   const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, size);
 
@@ -58,9 +60,7 @@ const LineChart = ({
   useChain(springRefs);
 
   return (
-    <mesh
-      position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
-    >
+    <mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
       <mesh position={[-mid.x, -mid.y, 0]}>
         <LinesVertical
           axis={axes.x}
@@ -69,6 +69,7 @@ const LineChart = ({
           mid={mid.x}
           min={min.y}
           max={max}
+          stepOpacity={opacity}
         />
         <LinesHorizontal
           axis={axes.y}
@@ -77,6 +78,7 @@ const LineChart = ({
           mid={mid.y}
           min={min.x}
           max={max}
+          stepOpacity={opacity}
         />
         {traces.map((trace, index) => (
           <Line
@@ -85,6 +87,7 @@ const LineChart = ({
             scale={scale}
             color={colors[index]}
             springRef={springRefs[index]}
+            opacity={opacity}
           />
         ))}
         {store && (

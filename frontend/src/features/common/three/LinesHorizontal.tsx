@@ -3,8 +3,10 @@ import { FONT_SIZE, TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import AnimatedYMarker from "./AnimatedYMarker";
 import {
+  SpringValue,
   animated,
   config,
+  to,
   useChain,
   useSpring,
   useSpringRef,
@@ -19,9 +21,18 @@ interface AxisProps {
   min: number;
   max: Record<string, number>;
   mid: number;
+  stepOpacity?: SpringValue<number>;
 }
 
-const LinesHorizontal = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
+const LinesHorizontal = ({
+  ticks,
+  axis,
+  scale,
+  min,
+  max,
+  mid,
+  stepOpacity = new SpringValue(1),
+}: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
 
@@ -57,6 +68,7 @@ const LinesHorizontal = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
           max={max}
           type={axis.type}
           opacity={i.opacity}
+          stepOpacity={stepOpacity}
           scale={scale}
         />
       ))}
@@ -65,7 +77,10 @@ const LinesHorizontal = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
         rotation-z={Math.PI / 2}
         fontSize={0.6 * FONT_SIZE}
         color={gridColor}
-        fillOpacity={title.opacity}
+        fillOpacity={to(
+          [title.opacity, stepOpacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
       >
         {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>

@@ -56,7 +56,11 @@ const useCamera = () => {
         switch (key) {
           case "position":
           case "rotation":
-            return config.molasses;
+            return {
+              tension: 280,
+              // 90 -> between slow and molasses
+              friction: 70,
+            };
           default:
             return config.default;
         }

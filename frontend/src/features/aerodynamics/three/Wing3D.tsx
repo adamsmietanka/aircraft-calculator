@@ -4,6 +4,7 @@ import {
   useSpringRef,
   animated,
   SpringValue,
+  to,
 } from "@react-spring/three";
 import Line from "../../common/three/Line";
 import Scale from "./Scale";
@@ -16,7 +17,7 @@ import { CANVAS_WIDTH } from "../../common/three/config";
 interface Props {
   size: number[];
   gridPositionX: number;
-  opacity?: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
 const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
@@ -34,7 +35,10 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
   return (
     <>
       <AnimatedTransform
-        size={gizmoSpring.size}
+        size={to(
+          [gizmoSpring.size, opacity],
+          (size, stepActive) => size * stepActive
+        )}
         showZ={false}
         showY={!active?.userData.isFuselage && active?.userData.isTrailing}
         onChange={onTransform}
@@ -55,6 +59,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
           chordTip={wingSpring.chordTip}
           x={wingSpring.x}
           y={wingSpring.y}
+          stepOpacity={opacity}
         />
         <WingInputs
           scale={wingSpring.scale}

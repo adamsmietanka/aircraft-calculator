@@ -12,9 +12,18 @@ interface Props {
   type: string | undefined;
   scale: number[];
   opacity: SpringValue<number>;
+  stepOpacity: SpringValue<number>;
 }
 
-const AnimatedYMarker = ({ y, min, max, type, opacity, scale }: Props) => {
+const AnimatedYMarker = ({
+  y,
+  min,
+  max,
+  type,
+  opacity,
+  scale,
+  stepOpacity,
+}: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const { gridColor } = useCSSColors();
@@ -42,6 +51,7 @@ const AnimatedYMarker = ({ y, min, max, type, opacity, scale }: Props) => {
       positionRef.current.needsUpdate = true;
     }
   });
+  console.log(max.y / scale[1]);
 
   return (
     <animated.mesh scale={marker.scale.to((scale) => [1, scale, 1])}>
@@ -54,7 +64,10 @@ const AnimatedYMarker = ({ y, min, max, type, opacity, scale }: Props) => {
         ])}
         scale={marker.scale.to((scale) => [1, 1 / scale, 1])}
         color={gridColor}
-        fillOpacity={opacity.to((o) => (y <= max.y / scale[1] ? o : 0))}
+        fillOpacity={to(
+          [opacity, stepOpacity],
+          (o, stepOpacity) => (y > max.y / scale[1] ? 0 : o) * stepOpacity
+        )}
       >
         {y * displayMultiplier}
       </AnimatedText>
@@ -70,8 +83,10 @@ const AnimatedYMarker = ({ y, min, max, type, opacity, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={opacity.to((o) =>
-            y > max.y / scale[1] ? 0 : y === 0 ? o : o / 3
+          opacity={to(
+            [opacity, stepOpacity],
+            (o, stepOpacity) =>
+              (y > max.y / scale[1] ? 0 : y === 0 ? o : o / 3) * stepOpacity
           )}
           transparent
         />

@@ -8,6 +8,8 @@ import {
   useSpring,
   useChain,
   config,
+  SpringValue,
+  to,
 } from "@react-spring/three";
 import AnimatedXMarker from "./AnimatedXMarker";
 import { Axis } from "./LineChart";
@@ -19,9 +21,18 @@ interface AxisProps {
   min: number;
   max: Record<string, number>;
   mid: number;
+  stepOpacity: SpringValue<number>;
 }
 
-const LinesVertical = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
+const LinesVertical = ({
+  ticks,
+  axis,
+  scale,
+  min,
+  max,
+  mid,
+  stepOpacity,
+}: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
 
@@ -58,6 +69,7 @@ const LinesVertical = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
           max={max}
           type={axis.type}
           opacity={i.opacity}
+          stepOpacity={stepOpacity}
           scale={scale}
         />
       ))}
@@ -65,7 +77,10 @@ const LinesVertical = ({ ticks, axis, scale, min, max, mid }: AxisProps) => {
         position={[mid + 1.5, min - TITLE_PADDING, 0]}
         fontSize={0.6 * FONT_SIZE}
         color={gridColor}
-        fillOpacity={title.opacity}
+        fillOpacity={to(
+          [title.opacity, stepOpacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
       >
         {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>
