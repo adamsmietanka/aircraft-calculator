@@ -1,11 +1,14 @@
 import React, { useMemo, useRef } from "react";
-import { MEASUREMENT_DISTANCE, MEASUREMENT_SIDE, useCSSColors } from "../../common/three/config";
+import {
+  MEASUREMENT_DISTANCE,
+  MEASUREMENT_SIDE,
+  useCSSColors,
+} from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated, to } from "@react-spring/three";
 import { Cone, Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
-
 
 interface Props {
   scale: SpringValue<number>;
@@ -102,6 +105,7 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
           y + MEASUREMENT_DISTANCE / scale,
           0,
         ])}
+        scale={scale.to((s) => 1 / s)}
         rotation-z={Math.PI / 2}
         material-transparent
         material-color={gridColor}
@@ -114,6 +118,7 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
           y + MEASUREMENT_DISTANCE / scale,
           0,
         ])}
+        scale={scale.to((s) => 1 / s)}
         rotation-z={-Math.PI / 2}
         material-transparent
         material-color={gridColor}

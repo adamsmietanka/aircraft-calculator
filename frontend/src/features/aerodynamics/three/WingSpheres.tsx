@@ -18,6 +18,7 @@ interface Props {
   chordTip: SpringValue<number>;
   x: SpringValue<number>;
   y: SpringValue<number>;
+  stepOpacity: SpringValue<number>;
 }
 
 const WingSpheres = ({
@@ -28,6 +29,7 @@ const WingSpheres = ({
   chordTip,
   x,
   y,
+  stepOpacity,
 }: Props) => {
   const { primaryColor } = useCSSColors();
 
@@ -42,7 +44,7 @@ const WingSpheres = ({
         position-y={y}
         material-color={primaryColor}
         material-transparent
-        material-opacity={0.5}
+        material-opacity={stepOpacity}
       />
       <AnimatedSphere
         userData={{ isTip: true, isTrailing: true }}
@@ -52,7 +54,7 @@ const WingSpheres = ({
         position-y={y}
         material-color={primaryColor}
         material-transparent
-        material-opacity={0.5}
+        material-opacity={stepOpacity}
       />
       <AnimatedSphere
         userData={{ isFuselage: true, isTrailing: true }}
@@ -61,7 +63,7 @@ const WingSpheres = ({
         position-x={chord}
         material-color={primaryColor}
         material-transparent
-        material-opacity={0.5}
+        material-opacity={stepOpacity}
       />
     </>
   );

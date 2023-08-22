@@ -12,9 +12,18 @@ interface Props {
   type: string | undefined;
   scale: number[];
   opacity: SpringValue<number>;
+  stepOpacity: SpringValue<number>;
 }
 
-const AnimatedXMarker = ({ x, min, max, type, opacity, scale }: Props) => {
+const AnimatedXMarker = ({
+  x,
+  min,
+  max,
+  type,
+  opacity,
+  stepOpacity,
+  scale,
+}: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const { gridColor } = useCSSColors();
@@ -50,7 +59,10 @@ const AnimatedXMarker = ({ x, min, max, type, opacity, scale }: Props) => {
         position={marker.position.to((x) => [x, min - NUMBERS_PADDING, 0.25])}
         scale={marker.scale.to((scale) => [1 / scale, 1, 1])}
         color={gridColor}
-        fillOpacity={opacity.to((o) => (x <= max.x / scale[0] ? o : 0))}
+        fillOpacity={to(
+          [opacity, stepOpacity],
+          (o, stepOpacity) => (x > max.x / scale[0] ? 0 : o) * stepOpacity
+        )}
       >
         {x * displayMultiplier}
       </AnimatedText>
@@ -66,8 +78,10 @@ const AnimatedXMarker = ({ x, min, max, type, opacity, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={opacity.to((o) =>
-            x > max.x / scale[0] ? 0 : x === 0 ? o : o / 3
+          opacity={to(
+            [opacity, stepOpacity],
+            (o, stepOpacity) =>
+              (x > max.x / scale[0] ? 0 : x === 0 ? o : o / 3) * stepOpacity
           )}
           transparent
         />
