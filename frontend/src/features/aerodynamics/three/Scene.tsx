@@ -4,7 +4,7 @@ import ProfileChoose from "../ProfileChoose";
 import ProfileReynolds from "../ProfileReynolds";
 import ProfileVisualizer from "./ProfileVisualizer";
 import LineChart from "../../common/three/LineChart";
-import useCamera from "../../common/three/hooks/useCamera";
+import useCamera from "./hooks/useCamera";
 import useProfileCharts from "../hooks/useProfileCharts";
 import Wing3D from "./Wing3D";
 import { animated } from "@react-spring/three";
@@ -20,7 +20,7 @@ const Scene = () => {
   const { s } = useCamera();
   return (
     <>
-      <Wing3D size={[0.33, 1]} gridPositionX={-1} opacity={s.opacityWing} />
+      <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={s.opacityWing} />
       <mesh rotation-x={-Math.PI / 2} visible={true}>
         <LineChart
           size={[0.33, 1]}
@@ -59,13 +59,19 @@ const Scene = () => {
           // yHover
         />
       </mesh>
-      <animated.mesh position-z={5}>
+      <animated.mesh position-z={0}>
         <Inputs3D size={[0.33, 1]} gridPositionX={-3} visible={onProfileStep}>
           <ProfileChoose />
           <ProfileReynolds />
         </Inputs3D>
         {/* <OrbitControls /> */}
-        <ProfileVisualizer size={[0.33, 1]} gridPositionX={-1} />
+        <ProfileVisualizer
+          size={[0.33, 1]}
+          gridPositionX={-1.33}
+          scale={s.scale}
+          profileX={s.profileX}
+          opacity={s.opacityProfile}
+        />
         <LineChart
           size={[0.33, 1]}
           gridPositionX={1}
