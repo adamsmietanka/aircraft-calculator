@@ -8,7 +8,7 @@ const Profile = () => {
       <div className="flex w-full">
         <div className="fixed top-0 left-0 h-screen w-screen">
           <ProfileModal />
-          <Canvas camera={{ position: [0, 0, 30], fov: 40 }}>
+          <Canvas camera={{ position: [0, 0, 30], fov: 60 }}>
             {/* <gridHelper rotation-x={Math.PI / 2} /> */}
             <Scene />
           </Canvas>

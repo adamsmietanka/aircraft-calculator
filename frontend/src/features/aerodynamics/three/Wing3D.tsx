@@ -49,30 +49,33 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
         scale={wingSpring.scale}
         position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
         rotation-x={-Math.PI / 2}
+        visible={opacity.to((o) => o !== 0)}
       >
-        <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
-        <WingSpheres
-          scale={wingSpring.scale}
-          rotationZ={wingSpring.rotationZ}
-          onClick={(e) => setActive(e.object)}
-          chord={wingSpring.chord}
-          chordTip={wingSpring.chordTip}
-          x={wingSpring.x}
-          y={wingSpring.y}
-          stepOpacity={opacity}
-        />
-        <WingInputs
-          scale={wingSpring.scale}
-          chordTip={wingSpring.chordTip}
-          x={wingSpring.x}
-          y={wingSpring.y}
-        />
-        <Line
-          trace={trace}
-          scale={[1, 1, 1]}
-          springRef={lineRef}
-          opacity={opacity}
-        />
+        <animated.mesh position-x={wingSpring.chord.to((c) => 0)}>
+          <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
+          <WingSpheres
+            scale={wingSpring.scale}
+            rotationZ={wingSpring.rotationZ}
+            onClick={(e) => setActive(e.object)}
+            chord={wingSpring.chord}
+            chordTip={wingSpring.chordTip}
+            x={wingSpring.x}
+            y={wingSpring.y}
+            stepOpacity={opacity}
+          />
+          <WingInputs
+            scale={wingSpring.scale}
+            chordTip={wingSpring.chordTip}
+            x={wingSpring.x}
+            y={wingSpring.y}
+          />
+          <Line
+            trace={trace}
+            scale={[1, 1, 1]}
+            springRef={lineRef}
+            opacity={opacity}
+          />
+        </animated.mesh>
       </animated.mesh>
     </>
   );

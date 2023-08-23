@@ -5,8 +5,8 @@ import Formula from "../../common/Formula";
 import AnimatedHtml from "./AnimatedHtml";
 
 const VECTOR_MULTIPLIER = 0.2;
-const VECTOR_WIDTH = 0.005;
-const VECTOR_TIP_LENGTH = 0.04;
+const VECTOR_WIDTH = 0.05;
+const VECTOR_TIP_LENGTH = 0.4;
 
 interface VectorProps {
   tex: string;
@@ -31,7 +31,8 @@ const Vector = ({
   const [spring] = useSpring(
     () => ({
       value,
-      size: VECTOR_MULTIPLIER * value - Math.sign(value) * VECTOR_TIP_LENGTH,
+      size:
+        10 * VECTOR_MULTIPLIER * value - Math.sign(value) * VECTOR_TIP_LENGTH,
       direction: Math.sign(value),
       opacity: show && value !== 0 ? 1 : 0,
     }),
@@ -61,10 +62,10 @@ const Vector = ({
       />
       <animated.mesh
         position-y={to(
-          [spring.value, spring.direction],
-          (v, dir) => dir * 0.05 + VECTOR_MULTIPLIER * v
+          [spring.size, spring.direction],
+          (v, dir) => dir * 0.05 + v
         )}
-        position-x={0.02}
+        position-x={0.5}
       >
         <AnimatedHtml color={color} show={show && value !== 0}>
           <Formula tex={tex} />

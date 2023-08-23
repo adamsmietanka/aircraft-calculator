@@ -52,16 +52,16 @@ const useProfile = () => {
       const y = getCamberY(x);
 
       upper.push([
-        x - halfThickness * Math.sin(theta) - 0.25,
+        x - halfThickness * Math.sin(theta),
         y + halfThickness * Math.cos(theta),
         0,
       ]);
       lower.push([
-        x + halfThickness * Math.sin(theta) - 0.25,
+        x + halfThickness * Math.sin(theta),
         y - halfThickness * Math.cos(theta),
         0,
       ]);
-      chord.push([x - 0.25, y, 0]);
+      chord.push([x, y, 0]);
     }
 
     setProfilePoints([...upper, ...lower.reverse()]);

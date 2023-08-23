@@ -43,7 +43,7 @@ const AirStream = ({ points, positionY, show }: TraceProps) => {
   });
 
   return (
-    <animated.mesh scale={[1.2, 1.2, 1]} position-y={positionY}>
+    <animated.mesh scale={[1.2, 1.2, 1]} position-y={positionY} position-x={-0.05}>
       <meshLineGeometry ref={geometryRef} points={[0, 0, 0]} />
       <meshLineMaterial
         ref={materialRef}
