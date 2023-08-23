@@ -57,9 +57,9 @@ const useCamera = () => {
           case "position":
           case "rotation":
             return {
-              tension: 280,
-              // 90 -> between slow and molasses
-              friction: 70,
+              mass: 20,
+              tension: 500,
+              friction: 170
             };
           default:
             return config.default;
