@@ -1,5 +1,5 @@
 import { Cone } from "@react-three/drei";
-import { SpringValue, animated } from "@react-spring/three";
+import { Interpolation, SpringValue, animated } from "@react-spring/three";
 import {
   MEASUREMENT_DISTANCE,
   VECTOR_TIP_LENGTH,
@@ -11,11 +11,13 @@ interface Props {
   end?: boolean;
   scale: SpringValue<number>;
   value?: SpringValue<number>;
+  distance?: Interpolation<number>;
 }
 
 const AnimatedTip = ({
   end = false,
   scale,
+  distance,
   value = new SpringValue(0),
 }: Props) => {
   const AnimatedCone = animated(Cone);
@@ -25,10 +27,13 @@ const AnimatedTip = ({
     <animated.mesh
       rotation-z={end ? Math.PI : 0}
       position-x={value}
-      position-y={scale.to((scale) => MEASUREMENT_DISTANCE / scale)}
+      position-y={
+        distance ? distance : scale.to((scale) => MEASUREMENT_DISTANCE / scale)
+      }
     >
       <AnimatedCone
         args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        // its created perfectly centered around local [0,0,0]
         position-x={scale.to((scale) => VECTOR_TIP_LENGTH / (2 * scale))}
         scale={scale.to((s) => 1 / s)}
         material-transparent

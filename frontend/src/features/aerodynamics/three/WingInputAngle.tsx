@@ -1,14 +1,11 @@
 import { useMemo, useRef } from "react";
-import {
-  VECTOR_TIP_LENGTH,
-  VECTOR_TIP_WIDTH,
-  useCSSColors,
-} from "../../common/three/config";
+import { useCSSColors } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated, to } from "@react-spring/three";
-import { Cone, Html } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
+import AnimatedTip from "../../common/drawings/AnimatedTip";
 
 interface Props {
   scale: SpringValue<number>;
@@ -64,7 +61,6 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
       curveRef.current.needsUpdate = true;
     }
   });
-  const AnimatedCone = animated(Cone);
 
   return (
     <animated.mesh>
@@ -92,35 +88,11 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
         </bufferGeometry>
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.line>
-      <AnimatedCone
-        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={to([y, scale], (y, scale) => [
-          VECTOR_TIP_LENGTH / (2 * scale),
-          y / 2,
-          0,
-        ])}
-        scale={scale.to((s) => 1 / s)}
-        rotation-z={Math.PI / 2}
-        material-transparent
-        material-color={gridColor}
-        material-opacity={1}
-      />
-      <AnimatedCone
-        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={to([y, scale, angle], (y, scale, angle) => [
-          // move the tip half its length back
-          (y / 2) * Math.sin(angle) -
-            (VECTOR_TIP_LENGTH / (2 * scale)) * Math.cos(angle),
-          // the cone is transposed after the rotation - only X fix is needed
-          (y / 2) * Math.cos(angle),
-          0,
-        ])}
-        scale={scale.to((s) => 1 / s)}
-        rotation-z={angle.to((angle) => -(Math.PI / 2 + angle))}
-        material-transparent
-        material-color={gridColor}
-        material-opacity={1}
-      />
+
+      <AnimatedTip scale={scale} distance={y.to((y) => y / 2)} />
+      <animated.mesh rotation-z={angle.to((a) => -a)}>
+        <AnimatedTip scale={scale} distance={y.to((y) => y / 2)} end />
+      </animated.mesh>
 
       <animated.mesh
         position={to([y, scale, angle], (y, scale, angle) => [
