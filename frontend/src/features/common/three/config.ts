@@ -20,6 +20,9 @@ export const CANVAS_HEIGHT = 15;
 export const MEASUREMENT_DISTANCE = 0.5;
 export const MEASUREMENT_SIDE = MEASUREMENT_DISTANCE * 1.2;
 
+export const VECTOR_TIP_LENGTH = 0.15;
+export const VECTOR_TIP_WIDTH = VECTOR_TIP_LENGTH / 2.5;
+
 // Chart Animations
 export const POSITION_ANIMATION_DURATION = 0.5;
 export const POSITION_STAGGER = 0.0; // duration between the start of animation of the 1st and last point in a trace
