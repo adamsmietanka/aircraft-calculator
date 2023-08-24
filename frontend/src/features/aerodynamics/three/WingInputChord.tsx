@@ -1,7 +1,9 @@
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   MEASUREMENT_DISTANCE,
   MEASUREMENT_SIDE,
+  VECTOR_TIP_LENGTH,
+  VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
@@ -13,13 +15,9 @@ import { useWingStore } from "../stores/useWing";
 interface Props {
   scale: SpringValue<number>;
   chord: SpringValue<number>;
-  x: SpringValue<number>;
-  y: SpringValue<number>;
 }
 
-const VECTOR_TIP_LENGTH = 0.1;
-
-const WingInputChord = ({ chord, scale, x, y }: Props) => {
+const WingInputChord = ({ chord, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
 
   const wing = useWingStore();
@@ -32,12 +30,7 @@ const WingInputChord = ({ chord, scale, x, y }: Props) => {
 
   useFrame(() => {
     const interpolatedChord = chord.get();
-    const interpolatedTipX = x.get();
-    const interpolatedY = y.get();
     const interpolatedScale = scale.get();
-
-    const xLeft = interpolatedTipX;
-    const xRight = interpolatedTipX + interpolatedChord;
 
     position.set(
       [
@@ -89,9 +82,9 @@ const WingInputChord = ({ chord, scale, x, y }: Props) => {
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.lineSegments>
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position={to([chord, x, y, scale], (chord, x, y, scale) => [
-          VECTOR_TIP_LENGTH / 2,
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        position={scale.to((scale) => [
+          VECTOR_TIP_LENGTH / (2 * scale),
           MEASUREMENT_DISTANCE / scale,
           0,
         ])}
@@ -102,9 +95,9 @@ const WingInputChord = ({ chord, scale, x, y }: Props) => {
         material-opacity={1}
       />
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position={to([chord, x, y, scale], (chord, x, y, scale) => [
-          chord - VECTOR_TIP_LENGTH / 2,
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        position={to([chord, scale], (chord, scale) => [
+          chord - VECTOR_TIP_LENGTH / (2 * scale),
           MEASUREMENT_DISTANCE / scale,
           0,
         ])}
@@ -116,12 +109,12 @@ const WingInputChord = ({ chord, scale, x, y }: Props) => {
       />
 
       <animated.mesh
-        position={to([chord, x, y, scale], (chord, x, y, scale) => [
+        position={to([chord, scale], (chord, scale) => [
           chord / 2,
           (0.25 + MEASUREMENT_DISTANCE) / scale,
           0,
         ])}
-        scale={scale.to((scale) => [1 / scale, 1 / scale, 1 / scale])}
+        scale={scale.to((s) => 1 / s)}
       >
         <Html className="select-none" color="black" transform prepend>
           <InputDrawing value={wing.chord} setter={wing.setChord} />

@@ -1,7 +1,9 @@
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   MEASUREMENT_DISTANCE,
   MEASUREMENT_SIDE,
+  VECTOR_TIP_LENGTH,
+  VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
@@ -12,14 +14,11 @@ import { useWingStore } from "../stores/useWing";
 
 interface Props {
   scale: SpringValue<number>;
-  chordTip: SpringValue<number>;
   x: SpringValue<number>;
   y: SpringValue<number>;
 }
 
-const VECTOR_TIP_LENGTH = 0.15;
-
-const WingInputSpan = ({ chordTip, scale, x, y }: Props) => {
+const WingInputSpan = ({ scale, x, y }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
 
   const wing = useWingStore();
@@ -31,13 +30,9 @@ const WingInputSpan = ({ chordTip, scale, x, y }: Props) => {
   }, []);
 
   useFrame(() => {
-    const interpolatedChordTip = chordTip.get();
     const interpolatedTipX = x.get();
     const interpolatedY = y.get();
     const interpolatedScale = scale.get();
-
-    const xLeft = interpolatedTipX;
-    const xRight = interpolatedTipX + interpolatedChordTip;
 
     position.set(
       [
@@ -86,10 +81,10 @@ const WingInputSpan = ({ chordTip, scale, x, y }: Props) => {
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.lineSegments>
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 3, VECTOR_TIP_LENGTH, 32]}
-        position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        position={to([y, scale], (y, scale) => [
           -MEASUREMENT_DISTANCE / scale,
-          y - VECTOR_TIP_LENGTH / 2,
+          y - VECTOR_TIP_LENGTH / (2 * scale),
           0,
         ])}
         scale={scale.to((s) => 1 / s)}
@@ -99,12 +94,12 @@ const WingInputSpan = ({ chordTip, scale, x, y }: Props) => {
       />
 
       <animated.mesh
-        position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
+        position={scale.to((scale) => [
           -(0.25 + MEASUREMENT_DISTANCE) / scale,
           0,
           0,
         ])}
-        scale={scale.to((scale) => [1 / scale, 1 / scale, 1 / scale])}
+        scale={scale.to((s) => 1 / s)}
         rotation-z={Math.PI / 2}
       >
         <Html className="select-none" color="black" transform prepend>

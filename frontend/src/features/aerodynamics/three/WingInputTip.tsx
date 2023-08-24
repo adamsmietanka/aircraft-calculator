@@ -1,7 +1,9 @@
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
   MEASUREMENT_DISTANCE,
   MEASUREMENT_SIDE,
+  VECTOR_TIP_LENGTH,
+  VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
@@ -16,8 +18,6 @@ interface Props {
   x: SpringValue<number>;
   y: SpringValue<number>;
 }
-
-const VECTOR_TIP_LENGTH = 0.1;
 
 const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
@@ -99,9 +99,9 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.lineSegments>
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
-          x + VECTOR_TIP_LENGTH / 2,
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        position={to([x, y, scale], (x, y, scale) => [
+          x + VECTOR_TIP_LENGTH / (2 * scale),
           y + MEASUREMENT_DISTANCE / scale,
           0,
         ])}
@@ -112,9 +112,9 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
         material-opacity={1}
       />
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
         position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
-          x + chordTip - VECTOR_TIP_LENGTH / 2,
+          x + chordTip - VECTOR_TIP_LENGTH / (2 * scale),
           y + MEASUREMENT_DISTANCE / scale,
           0,
         ])}
@@ -131,7 +131,7 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
           y + (0.25 + MEASUREMENT_DISTANCE) / scale,
           0,
         ])}
-        scale={scale.to((scale) => [1 / scale, 1 / scale, 1 / scale])}
+        scale={scale.to((s) => 1 / s)}
       >
         <Html className="select-none" color="black" transform prepend>
           <InputDrawing value={wing.chordTip} setter={wing.setChordTip} />

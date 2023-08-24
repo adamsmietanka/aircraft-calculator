@@ -1,7 +1,7 @@
-import React, { useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import {
-  MEASUREMENT_DISTANCE,
-  MEASUREMENT_SIDE,
+  VECTOR_TIP_LENGTH,
+  VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
@@ -12,17 +12,13 @@ import { useWingStore } from "../stores/useWing";
 
 interface Props {
   scale: SpringValue<number>;
-  chordTip: SpringValue<number>;
-  x: SpringValue<number>;
   y: SpringValue<number>;
   angle: SpringValue<number>;
 }
 
-const VECTOR_TIP_LENGTH = 0.15;
-
 const ANGLE_MEAS_POINTS = 6;
 
-const WingInputAngle = ({ chordTip, scale, x, y, angle }: Props) => {
+const WingInputAngle = ({ scale, y, angle }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const curveRef = useRef<THREE.BufferAttribute>(null);
 
@@ -31,7 +27,7 @@ const WingInputAngle = ({ chordTip, scale, x, y, angle }: Props) => {
   const { gridColor } = useCSSColors();
 
   const position = useMemo(() => {
-    return new Float32Array(2 * 6);
+    return new Float32Array(2 * 3);
   }, []);
 
   const curve = useMemo(() => {
@@ -39,14 +35,9 @@ const WingInputAngle = ({ chordTip, scale, x, y, angle }: Props) => {
   }, []);
 
   useFrame(() => {
-    const interpolatedChordTip = chordTip.get();
-    const interpolatedTipX = x.get();
     const interpolatedY = y.get();
     const interpolatedScale = scale.get();
     const interpolatedAngle = angle.get();
-
-    const xLeft = interpolatedTipX;
-    const xRight = interpolatedTipX + interpolatedChordTip;
 
     position.set(
       [0, 0, 0, 0, interpolatedY / 2 + 0.2 / interpolatedScale, 0],
@@ -57,15 +48,9 @@ const WingInputAngle = ({ chordTip, scale, x, y, angle }: Props) => {
       curve.set(
         [
           (interpolatedY / 2) *
-            Math.sin(
-              (((i * interpolatedAngle) / (ANGLE_MEAS_POINTS - 1)) * Math.PI) /
-                180
-            ),
+            Math.sin((i * interpolatedAngle) / (ANGLE_MEAS_POINTS - 1)),
           (interpolatedY / 2) *
-            Math.cos(
-              (((i * interpolatedAngle) / (ANGLE_MEAS_POINTS - 1)) * Math.PI) /
-                180
-            ),
+            Math.cos((i * interpolatedAngle) / (ANGLE_MEAS_POINTS - 1)),
           0,
         ],
         i * 3
@@ -108,8 +93,8 @@ const WingInputAngle = ({ chordTip, scale, x, y, angle }: Props) => {
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.line>
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position={to([x, y, scale], (x, y, scale) => [
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        position={to([y, scale], (y, scale) => [
           VECTOR_TIP_LENGTH / (2 * scale),
           y / 2,
           0,
@@ -121,34 +106,30 @@ const WingInputAngle = ({ chordTip, scale, x, y, angle }: Props) => {
         material-opacity={1}
       />
       <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position={to([x, y, scale, angle], (x, y, scale, angle) => [
-          (y / 2) * Math.sin((angle * Math.PI) / 180) -
-            (VECTOR_TIP_LENGTH / (2 * scale)) *
-              Math.cos((angle * Math.PI) / 180),
-          (y / 2) * Math.cos((angle * Math.PI) / 180),
+        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
+        position={to([y, scale, angle], (y, scale, angle) => [
+          // move the tip half its length back
+          (y / 2) * Math.sin(angle) -
+            (VECTOR_TIP_LENGTH / (2 * scale)) * Math.cos(angle),
+          // the cone is transposed after the rotation - only X fix is needed
+          (y / 2) * Math.cos(angle),
           0,
         ])}
         scale={scale.to((s) => 1 / s)}
-        rotation-z={angle.to(
-          (angle) => -(Math.PI / 2 + (angle * Math.PI) / 180)
-        )}
+        rotation-z={angle.to((angle) => -(Math.PI / 2 + angle))}
         material-transparent
         material-color={gridColor}
         material-opacity={1}
       />
 
       <animated.mesh
-        position={to(
-          [y, scale, angle],
-          (y, scale, angle) => [
-            (y / 2 + 0.35 / scale) * Math.sin(((angle / 2) * Math.PI) / 180),
-            (y / 2 + 0.35 / scale) * Math.cos(((angle / 2) * Math.PI) / 180),
-            0,
-          ]
-        )}
-        rotation-z={angle.to((angle) => (-(angle / 2) * Math.PI) / 180)}
-        scale={scale.to((scale) => [1 / scale, 1 / scale, 1 / scale])}
+        position={to([y, scale, angle], (y, scale, angle) => [
+          (y / 2 + 0.35 / scale) * Math.sin(angle / 2),
+          (y / 2 + 0.35 / scale) * Math.cos(angle / 2),
+          0,
+        ])}
+        rotation-z={angle.to((angle) => -(angle / 2))}
+        scale={scale.to((s) => 1 / s)}
       >
         <Html className="select-none" color="black" transform prepend>
           <InputDrawing value={wing.angle} setter={wing.setAngle} />
