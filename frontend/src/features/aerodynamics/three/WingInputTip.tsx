@@ -31,51 +31,26 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
   }, []);
 
   useFrame(() => {
-    const interpolatedChordTip = chordTip.get();
-    const interpolatedTipX = x.get();
-    const interpolatedY = y.get();
+    const tip = chordTip.get();
     const interpolatedScale = scale.get();
-
-    const xLeft = interpolatedTipX;
-    const xRight = interpolatedTipX + interpolatedChordTip;
 
     position.set(
       [
-        xLeft,
-        interpolatedY + MEASUREMENT_DISTANCE / interpolatedScale,
         0,
-        xRight,
-        interpolatedY + MEASUREMENT_DISTANCE / interpolatedScale,
+        MEASUREMENT_DISTANCE / interpolatedScale,
+        0,
+        tip,
+        MEASUREMENT_DISTANCE / interpolatedScale,
         0,
       ],
       0
     );
 
     //left side
-    position.set(
-      [
-        xLeft,
-        interpolatedY,
-        0,
-        xLeft,
-        interpolatedY + MEASUREMENT_SIDE / interpolatedScale,
-        0,
-      ],
-      6
-    );
+    position.set([0, 0, 0, 0, MEASUREMENT_SIDE / interpolatedScale, 0], 6);
 
     //right side
-    position.set(
-      [
-        xRight,
-        interpolatedY,
-        0,
-        xRight,
-        interpolatedY + MEASUREMENT_SIDE / interpolatedScale,
-        0,
-      ],
-      12
-    );
+    position.set([tip, 0, 0, tip, MEASUREMENT_SIDE / interpolatedScale, 0], 12);
 
     if (positionRef.current) {
       positionRef.current.set(position);
@@ -85,7 +60,7 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
   const AnimatedCone = animated(Cone);
 
   return (
-    <animated.mesh>
+    <animated.mesh position={to([x, y], (x, y) => [x, y, 0])}>
       <animated.lineSegments>
         <bufferGeometry>
           <bufferAttribute
@@ -100,11 +75,8 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
       </animated.lineSegments>
       <AnimatedCone
         args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={to([x, y, scale], (x, y, scale) => [
-          x + VECTOR_TIP_LENGTH / (2 * scale),
-          y + MEASUREMENT_DISTANCE / scale,
-          0,
-        ])}
+        position-x={scale.to((scale) => VECTOR_TIP_LENGTH / (2 * scale))}
+        position-y={scale.to((scale) => MEASUREMENT_DISTANCE / scale)}
         scale={scale.to((s) => 1 / s)}
         rotation-z={Math.PI / 2}
         material-transparent
@@ -113,11 +85,11 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
       />
       <AnimatedCone
         args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
-          x + chordTip - VECTOR_TIP_LENGTH / (2 * scale),
-          y + MEASUREMENT_DISTANCE / scale,
-          0,
-        ])}
+        position-x={to(
+          [chordTip, scale],
+          (chordTip, scale) => chordTip - VECTOR_TIP_LENGTH / (2 * scale)
+        )}
+        position-y={scale.to((scale) => MEASUREMENT_DISTANCE / scale)}
         scale={scale.to((s) => 1 / s)}
         rotation-z={-Math.PI / 2}
         material-transparent
@@ -126,11 +98,8 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
       />
 
       <animated.mesh
-        position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
-          x + chordTip / 2,
-          y + (0.25 + MEASUREMENT_DISTANCE) / scale,
-          0,
-        ])}
+        position-x={chordTip.to((chordTip) => chordTip / 2)}
+        position-y={scale.to((scale) => (0.25 + MEASUREMENT_DISTANCE) / scale)}
         scale={scale.to((s) => 1 / s)}
       >
         <Html className="select-none" color="black" transform prepend>
