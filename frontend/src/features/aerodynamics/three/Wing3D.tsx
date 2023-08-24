@@ -67,6 +67,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
             scale={wingSpring.scale}
             chord={wingSpring.chord}
             chordTip={wingSpring.chordTip}
+            angle={wingSpring.angle}
             x={wingSpring.x}
             y={wingSpring.y}
           />

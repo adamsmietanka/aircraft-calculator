@@ -33,7 +33,7 @@ const useWing3D = () => {
 
   const trace = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
-    const z = -0.1
+    const z = -0.01
     return {
       name: "",
       points: [

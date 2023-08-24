@@ -34,6 +34,7 @@ const useWingSprings = (active: Object3D<Event>, size: number[]) => {
       y: span / 2,
       chord,
       chordTip,
+      angle,
     }),
     [span, angle, chord, chordTip, localHeight, localWidth]
   );
