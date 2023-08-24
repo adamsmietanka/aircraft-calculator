@@ -2,15 +2,14 @@ import { useMemo, useRef } from "react";
 import {
   MEASUREMENT_DISTANCE,
   MEASUREMENT_SIDE,
-  VECTOR_TIP_LENGTH,
-  VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
-import { SpringValue, animated, to } from "@react-spring/three";
-import { Cone, Html } from "@react-three/drei";
+import { SpringValue, animated } from "@react-spring/three";
+import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
+import AnimatedTip from "../../common/drawings/AnimatedTip";
 
 interface Props {
   scale: SpringValue<number>;
@@ -64,7 +63,6 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
       positionRef.current.needsUpdate = true;
     }
   });
-  const AnimatedCone = animated(Cone);
 
   return (
     <animated.mesh>
@@ -80,32 +78,22 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
         </bufferGeometry>
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.lineSegments>
-      <AnimatedCone
-        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={to([y, scale], (y, scale) => [
-          -MEASUREMENT_DISTANCE / scale,
-          y - VECTOR_TIP_LENGTH / (2 * scale),
-          0,
-        ])}
-        scale={scale.to((s) => 1 / s)}
-        material-transparent
-        material-color={gridColor}
-        material-opacity={1}
-      />
+      <mesh rotation-z={Math.PI / 2}>
+        <AnimatedTip scale={scale} value={y} end />
 
-      <animated.mesh
-        position={scale.to((scale) => [
-          -(0.25 + MEASUREMENT_DISTANCE) / scale,
-          0,
-          0,
-        ])}
-        scale={scale.to((s) => 1 / s)}
-        rotation-z={Math.PI / 2}
-      >
-        <Html className="select-none" color="black" transform prepend>
-          <InputDrawing value={wing.span} setter={wing.setSpan} />
-        </Html>
-      </animated.mesh>
+        <animated.mesh
+          position={scale.to((scale) => [
+            0,
+            (0.25 + MEASUREMENT_DISTANCE) / scale,
+            0,
+          ])}
+          scale={scale.to((s) => 1 / s)}
+        >
+          <Html className="select-none" color="black" transform prepend>
+            <InputDrawing value={wing.span} setter={wing.setSpan} />
+          </Html>
+        </animated.mesh>
+      </mesh>
     </animated.mesh>
   );
 };

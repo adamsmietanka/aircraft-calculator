@@ -2,15 +2,14 @@ import { useMemo, useRef } from "react";
 import {
   MEASUREMENT_DISTANCE,
   MEASUREMENT_SIDE,
-  VECTOR_TIP_LENGTH,
-  VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated, to } from "@react-spring/three";
-import { Cone, Html } from "@react-three/drei";
+import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
+import AnimatedTips from "../../common/drawings/AnimatedTips";
 
 interface Props {
   scale: SpringValue<number>;
@@ -65,7 +64,6 @@ const WingInputChord = ({ chord, scale }: Props) => {
       positionRef.current.needsUpdate = true;
     }
   });
-  const AnimatedCone = animated(Cone);
 
   return (
     <animated.mesh>
@@ -81,32 +79,8 @@ const WingInputChord = ({ chord, scale }: Props) => {
         </bufferGeometry>
         <lineBasicMaterial color={gridColor} opacity={1} transparent />
       </animated.lineSegments>
-      <AnimatedCone
-        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={scale.to((scale) => [
-          VECTOR_TIP_LENGTH / (2 * scale),
-          MEASUREMENT_DISTANCE / scale,
-          0,
-        ])}
-        scale={scale.to((s) => 1 / s)}
-        rotation-z={Math.PI / 2}
-        material-transparent
-        material-color={gridColor}
-        material-opacity={1}
-      />
-      <AnimatedCone
-        args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
-        position={to([chord, scale], (chord, scale) => [
-          chord - VECTOR_TIP_LENGTH / (2 * scale),
-          MEASUREMENT_DISTANCE / scale,
-          0,
-        ])}
-        scale={scale.to((s) => 1 / s)}
-        rotation-z={-Math.PI / 2}
-        material-transparent
-        material-color={gridColor}
-        material-opacity={1}
-      />
+
+      <AnimatedTips scale={scale} value={chord} />
 
       <animated.mesh
         position={to([chord, scale], (chord, scale) => [
