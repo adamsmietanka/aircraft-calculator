@@ -15,8 +15,8 @@ const Wing = () => {
     aspectRatio,
     meanAerodynamicChord,
     stallReynolds,
-    pointsCl,
-    pointsCd,
+    wingCl,
+    wingCd,
   } = useWingAerodynamics();
 
   return (
@@ -87,7 +87,7 @@ const Wing = () => {
             size={[0.33, 1]}
             gridPositionX={0}
             name="Coefficient of Lift"
-            traces={[{ name: "Power", points: pointsCl }]}
+            traces={[{ name: "Power", points: wingCl }]}
             axes={{
               x: { name: "Angle of Attack" },
               y: {
@@ -102,7 +102,7 @@ const Wing = () => {
             size={[0.33, 1]}
             gridPositionX={2}
             name="Coefficient of Drag"
-            traces={[{ name: "Power", points: pointsCd }]}
+            traces={[{ name: "Power", points: wingCd }]}
             axes={{
               x: {
                 name: "Coefficient of Drag (Cd)",

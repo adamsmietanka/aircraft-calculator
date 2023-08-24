@@ -9,27 +9,78 @@ import useProfileCharts from "../hooks/useProfileCharts";
 import Wing3D from "./Wing3D";
 import { animated } from "@react-spring/three";
 import { useLocation } from "react-router-dom";
+import InputUnits from "../../common/inputs/InputUnits";
+import WingMaterial from "../WingMaterial";
+import InputNumber from "../../common/inputs/InputNumber";
+import useWingAerodynamics from "../hooks/useWingAerodynamics";
+import { useWingStore } from "../stores/useWing";
 
 const Scene = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const wing = useWingStore();
+  const {
+    area,
+    aspectRatio,
+    meanAerodynamicChord,
+    stallReynolds,
+    wingCl,
+    wingCd,
+  } = useWingAerodynamics();
 
   const location = useLocation();
 
   const onProfileStep = location.pathname === "/aerodynamics/profile";
+  const onWingStep = location.pathname === "/aerodynamics/wing";
 
   const { s } = useCamera();
   return (
     <>
       <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={s.opacityWing} />
       <mesh rotation-x={-Math.PI / 2} visible={true}>
+        <Inputs3D size={[0.33, 1]} gridPositionX={-3.5} visible={onWingStep}>
+          <ProfileChoose />
+          <WingMaterial />
+          <InputUnits
+            label="Wing Surface Area"
+            type="area"
+            disabled
+            value={area}
+          />
+          <InputNumber
+            disabled
+            tooltip="Aspect ratio of a wing is the ratio of its span to its mean chord"
+            value={aspectRatio}
+            label="Wing Aspect Ratio"
+          />
+          <InputUnits
+            label="Mean Aerodynamic Chord"
+            type="length"
+            disabled
+            tooltip="MAC is the chord of a rectangular wing with the same area and span as those of the given wing"
+            value={meanAerodynamicChord}
+          />
+          <InputUnits
+            type="speed"
+            value={wing.stallVelocity}
+            setter={wing.setStallVelocity}
+            min={30}
+            label="Stall Velocity"
+          />
+          <InputNumber
+            disabled
+            value={stallReynolds / 1000000}
+            label="Stall Reynolds Number"
+            unit="10⁶"
+          />
+        </Inputs3D>
         <LineChart
           size={[0.33, 1]}
           gridPositionX={1}
           opacity={s.opacityWing}
           name="Coefficient of Lift"
-          traces={[{ name: "Power", points: pointsCl }]}
+          traces={[{ name: "Power", points: wingCl }]}
           axes={{
-            x: { name: "Angle of Attack" },
+            x: { name: "Angle of Attack", min: -20, max: 20 },
             y: {
               name: "Coefficient of Lift (Cl)",
               min: -1.75,
@@ -43,7 +94,7 @@ const Scene = () => {
           gridPositionX={3}
           opacity={s.opacityWing}
           name="Coefficient of Drag"
-          traces={[{ name: "Power", points: pointsCd }]}
+          traces={[{ name: "Power", points: wingCd }]}
           axes={{
             x: {
               name: "Coefficient of Drag (Cd)",
