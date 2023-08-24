@@ -69,8 +69,8 @@ const useCamera = () => {
               ? 0.96 * localWidth
               : Math.min(
                   localHeight / span,
-                  (0.5 * localWidth) / (getXTip(angle, span) + chordTip + 0.5),
-                  (0.5 * localWidth) / (chord + 0.5)
+                  (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
+                  (0.5 * localWidth) / (chord)
                 ) * chord,
         });
         await next({
@@ -110,8 +110,8 @@ const useCamera = () => {
       scale:
         Math.min(
           localHeight / span,
-          (0.5 * localWidth) / (getXTip(angle, span) + chordTip + 0.5),
-          (0.5 * localWidth) / (chord + 0.5)
+          (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
+          (0.5 * localWidth) / chord
         ) * chord,
     });
   }, [span, angle, chord, chordTip]);

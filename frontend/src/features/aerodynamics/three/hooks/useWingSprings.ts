@@ -26,8 +26,8 @@ const useWingSprings = (active: Object3D<Event>, size: number[]) => {
     () => ({
       scale: Math.min(
         localHeight / span,
-        (0.5 * localWidth) / (getXTip(angle, span) + chordTip + 0.5),
-        (0.5 * localWidth) / (chord + 0.5)
+        (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
+        (0.5 * localWidth) / (chord)
       ),
       rotationZ: ((90 - angle) * Math.PI) / 180,
       x: getXTip(angle, span),
