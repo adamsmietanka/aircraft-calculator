@@ -5,16 +5,18 @@ import { SpringValue, animated, to } from "@react-spring/three";
 import WingInputTip from "./WingInputTip";
 import WingInputSpan from "./WingInputSpan";
 import WingInputChord from "./WingInputChord";
+import WingInputAngle from "./WingInputAngle";
 
 interface Props {
   scale: SpringValue<number>;
   chord: SpringValue<number>;
   chordTip: SpringValue<number>;
+  angle: SpringValue<number>;
   x: SpringValue<number>;
   y: SpringValue<number>;
 }
 
-const WingInputs = ({ chordTip, chord, scale, x, y }: Props) => {
+const WingInputs = ({ chordTip, chord, scale, angle, x, y }: Props) => {
   const wing = useWingStore();
 
   return (
@@ -22,6 +24,13 @@ const WingInputs = ({ chordTip, chord, scale, x, y }: Props) => {
       <WingInputTip scale={scale} chordTip={chordTip} x={x} y={y} />
       <WingInputChord scale={scale} chord={chord} x={x} y={y} />
       <WingInputSpan scale={scale} chordTip={chordTip} x={x} y={y} />
+      <WingInputAngle
+        scale={scale}
+        chordTip={chordTip}
+        x={x}
+        y={y}
+        angle={angle}
+      />
       <animated.mesh
         position={to([chordTip, x, y, scale], (chordTip, x, y, scale) => [
           x + chordTip / 2,
