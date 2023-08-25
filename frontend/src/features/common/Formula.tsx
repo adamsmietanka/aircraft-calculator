@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 declare global {
   interface Window {
@@ -6,15 +6,27 @@ declare global {
   }
 }
 
-const Formula = ({ tex = "", className = "" }) => {
+const Formula = ({
+  tex = '',
+  className = '',
+  onPointerEnter = () => {},
+  onPointerLeave = () => {},
+}) => {
   useEffect(() => {
-    if (typeof window?.MathJax !== "undefined") {
+    if (typeof window?.MathJax !== 'undefined') {
       window.MathJax.typesetClear();
       window.MathJax.typeset();
+      
     }
   }, [tex]);
 
-  return <p className={className}>{`\\(${tex}\\)`}</p>;
+  return (
+    <p
+      className={className}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
+    >{`\\(${tex}\\)`}</p>
+  );
 };
 
 export default Formula;
