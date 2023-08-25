@@ -41,18 +41,6 @@ const Scene = () => {
           <ProfileChoose />
           <WingMaterial />
           <InputUnits
-            label="Wing Surface Area"
-            type="area"
-            disabled
-            value={area}
-          />
-          <InputNumber
-            disabled
-            tooltip="Aspect ratio of a wing is the ratio of its span to its mean chord"
-            value={aspectRatio}
-            label="Wing Aspect Ratio"
-          />
-          <InputUnits
             label="Mean Aerodynamic Chord"
             type="length"
             disabled

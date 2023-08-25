@@ -1,18 +1,19 @@
-import { TransformControls } from "@react-three/drei";
+import { TransformControls } from '@react-three/drei';
 import {
   useChain,
   useSpringRef,
   animated,
   SpringValue,
   to,
-} from "@react-spring/three";
-import Line from "../../common/three/Line";
-import Scale from "./Scale";
-import useWing3D from "./hooks/useWing3D";
-import useWingSprings from "./hooks/useWingSprings";
-import WingSpheres from "./WingSpheres";
-import WingInputs from "./WingInputs";
-import { CANVAS_WIDTH } from "../../common/three/config";
+} from '@react-spring/three';
+import Line from '../../common/three/Line';
+import Scale from './Scale';
+import useWing3D from './hooks/useWing3D';
+import useWingSprings from './hooks/useWingSprings';
+import WingSpheres from './WingSpheres';
+import WingInputs from './WingInputs';
+import { CANVAS_WIDTH } from '../../common/three/config';
+import WingSurface from '../WingSurface';
 
 interface Props {
   size: number[];
@@ -53,6 +54,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
       >
         <animated.mesh position-x={wingSpring.chord.to((c) => 0)}>
           <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
+          <WingSurface scale={wingSpring.scale} />
           <WingSpheres
             scale={wingSpring.scale}
             rotationZ={wingSpring.rotationZ}
