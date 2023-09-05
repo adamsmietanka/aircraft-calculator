@@ -10,6 +10,8 @@ import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTip from "../../common/drawings/AnimatedTip";
+import Formula from "../../common/Formula";
+import { useHoverWingStore } from "../WingSurface";
 
 interface Props {
   scale: SpringValue<number>;
@@ -64,6 +66,8 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
     }
   });
 
+  const hoverWing = useHoverWingStore();
+
   return (
     <animated.mesh>
       <animated.lineSegments>
@@ -90,7 +94,11 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
           scale={scale.to((s) => 1 / s)}
         >
           <Html className="select-none" color="black" transform prepend>
-            <InputDrawing value={wing.span} setter={wing.setSpan} />
+            {hoverWing.b ? (
+              <Formula className="text-xl mb-1" tex={`\\color{red}b`} />
+            ) : (
+              <InputDrawing value={wing.span} setter={wing.setSpan} />
+            )}
           </Html>
         </animated.mesh>
       </mesh>
