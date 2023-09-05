@@ -1,13 +1,14 @@
-import React, { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import useWing3D from './three/hooks/useWing3D';
-import { Shape } from 'three';
-import { useWingStore } from './stores/useWing';
-import AnimatedHtml from './three/AnimatedHtml';
-import Formula from '../common/Formula';
-import { animated, SpringValue, useSpring } from '@react-spring/three';
-import useWingAerodynamics from './hooks/useWingAerodynamics';
-import { create } from 'zustand';
+import React, { useMemo, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import useWing3D from "./three/hooks/useWing3D";
+import { Shape } from "three";
+import { useWingStore } from "./stores/useWing";
+import AnimatedHtml from "./three/AnimatedHtml";
+import Formula from "../common/Formula";
+import { animated, SpringValue, useSpring } from "@react-spring/three";
+import useWingAerodynamics from "./hooks/useWingAerodynamics";
+import { create } from "zustand";
+import { useLocation } from "react-router-dom";
 
 const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
@@ -23,7 +24,7 @@ export interface HoverStore {
   set: (value: Partial<HoverStore>) => void;
 }
 
-const useHoverWingStore = create<HoverStore>()((set) => ({
+export const useHoverWingStore = create<HoverStore>()((set) => ({
   surface: false,
   b: false,
   chords: false,
@@ -42,22 +43,12 @@ const WingSurface = ({ scale }: Props) => {
   const shapeRef = useRef<THREE.ShapeGeometry>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
 
-  const { trace } = useWing3D();
   const wing = useWingStore();
   const hoverStore = useHoverWingStore();
 
-  const { area, aspectRatio } = useWingAerodynamics();
+  const { area, aspectRatio, taperRatio } = useWingAerodynamics();
+  const location = useLocation();
 
-  useFrame(() => {
-    //   if (shapeRef.current) {
-    //     console.log(shapeRef.current);
-    //   }
-    // if (materialRef.current) {
-    //   const opac = hoverSpring.surface.get();
-    //   materialRef.current.opacity = opac;
-    // }
-    // console.log(hoverSpring.surface.get());
-  });
 
   const shape = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
@@ -68,18 +59,6 @@ const WingSurface = ({ scale }: Props) => {
     shape.lineTo(wing.chord, 0);
     shape.lineTo(xTip + wing.chordTip, -wing.span / 2);
     shape.lineTo(xTip, -wing.span / 2);
-    return shape;
-  }, [wing]);
-
-  const b = useMemo(() => {
-    const xEnd = getXTip(wing.angle, wing.span) + wing.chordTip;
-    const shape = new Shape();
-    const scal = scale.get();
-
-    shape.moveTo(xEnd + 1 / scal, -wing.span / 2);
-    shape.lineTo(xEnd + 1 / scal, wing.span / 2);
-    shape.lineTo(xEnd + 1.1 / scal, wing.span / 2);
-    shape.lineTo(xEnd + 1.1 / scal, -wing.span / 2);
     return shape;
   }, [wing]);
 
@@ -102,16 +81,11 @@ const WingSurface = ({ scale }: Props) => {
           opacity={hoverSpring.surface.to((o) => o)}
         />
       </mesh>
-      <mesh>
-        <shapeGeometry args={[b]} ref={shapeRef} />
-        <animated.meshBasicMaterial
-          color="red"
-          transparent
-          opacity={hoverSpring.b.to((o) => o)}
-        />
-      </mesh>
-      <animated.mesh position-y={scale.to((s) => -3 / s)} position-x={-0.5}>
-        <AnimatedHtml color={'green'} show={true}>
+      <animated.mesh position-y={scale.to((s) => -4 / s)} position-x={-0.5}>
+        <AnimatedHtml
+          color={"green"}
+          show={location.pathname === "/aerodynamics/wing"}
+        >
           <Formula
             className="text-2xl"
             tex={`S=${area.toFixed(2)}\\, m^2`}
@@ -122,11 +96,21 @@ const WingSurface = ({ scale }: Props) => {
             className="flex items-center h-10 text-3xl"
             tex={`\\Lambda=${
               hoverStore.b
-                ? ' \\frac{\\color{red}b^2}{\\color{green}S}'
+                ? " \\frac{\\color{red}b^2}{\\color{green}S}"
                 : aspectRatio.toFixed(2)
             }`}
             onPointerEnter={() => hoverStore.set({ surface: true, b: true })}
             onPointerLeave={() => hoverStore.set({ surface: false, b: false })}
+          />
+          <Formula
+            className="flex items-start h-10 text-3xl"
+            tex={`\\large\\lambda\\normalsize=${
+              hoverStore.chords
+                ? " \\frac{\\color{orange}c_t}{\\color{green}c}"
+                : taperRatio.toFixed(2)
+            }`}
+            onPointerEnter={() => hoverStore.set({ chords: true })}
+            onPointerLeave={() => hoverStore.set({ chords: false })}
           />
         </AnimatedHtml>
       </animated.mesh>
