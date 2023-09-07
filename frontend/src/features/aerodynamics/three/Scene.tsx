@@ -14,6 +14,7 @@ import WingMaterial from "../WingMaterial";
 import InputNumber from "../../common/inputs/InputNumber";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
+import SceneFuselage from "./SceneFuselage";
 
 const Scene = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
@@ -35,6 +36,7 @@ const Scene = () => {
   const { s } = useCamera();
   return (
     <>
+      <SceneFuselage opacity={s.opacityFuselage} />
       <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={s.opacityWing} />
       <mesh rotation-x={-Math.PI / 2} visible={true}>
         <Inputs3D size={[0.33, 1]} gridPositionX={-3.5} visible={onWingStep}>
