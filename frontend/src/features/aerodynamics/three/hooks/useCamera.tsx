@@ -21,7 +21,7 @@ const obj: Record<string, Record<string, number[]>> = {
     rotation: [-Math.PI / 2, 0, 0],
   },
   "/aerodynamics/fuselage": {
-    position: [-20, 10, 20],
+    position: [-5, 2, 5],
     rotation: [-0.323, -0.759, -0.226],
   },
 };
@@ -70,7 +70,7 @@ const useCamera = () => {
               : Math.min(
                   localHeight / span,
                   (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
-                  (0.5 * localWidth) / (chord)
+                  (0.5 * localWidth) / chord
                 ) * chord,
         });
         await next({
