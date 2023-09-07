@@ -32,13 +32,8 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route index element={<Home />} />
-          <Route path="aerodynamics/*" element={<Profile />}>
-          {/* <Route path="aerodynamics/" */}
-            <Route path="profile" element={<Profile />} />
-            <Route path="wing" element={<Wing />} />
-            <Route path="fuselage" element={<Fuselage />} />
-          </Route>
+          <Route index element={<Profile />} />
+          <Route path="aerodynamics/*" element={<Profile />} />
           <Route path="powerunit">
             <Route path="engine" element={<PowerUnitEngine />} />
             <Route path="propeller" element={<PowerUnitPropeller />} />
