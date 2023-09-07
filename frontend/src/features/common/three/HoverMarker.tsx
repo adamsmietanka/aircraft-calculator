@@ -23,9 +23,10 @@ interface Props {
   scale: number[];
   min: Record<string, number>;
   step: Record<string, number>;
+  enabled: boolean;
 }
 
-const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
+const HoverMarker = ({ name, store, axes, scale, min, step, enabled }: Props) => {
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
   const { gridColor, primaryColor, backgroundColor } = useCSSColors();
@@ -123,6 +124,7 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
   return (
     <animated.mesh
       scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [x, y, 1])}
+      visible={enabled}
     >
       <AnimatedText
         fontSize={0.6 * FONT_SIZE}

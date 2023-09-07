@@ -126,6 +126,7 @@ const Scene = () => {
             },
           }}
           store={useProfileChartsStore}
+          hoverEnabled={onProfileStep}
         />
         <LineChart
           size={[0.33, 1]}
@@ -147,6 +148,7 @@ const Scene = () => {
           }}
           store={useProfileChartsStore}
           yHover
+          hoverEnabled={onProfileStep}
         />
       </animated.mesh>
     </>

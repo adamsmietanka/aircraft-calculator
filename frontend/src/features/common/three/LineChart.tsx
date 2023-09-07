@@ -40,6 +40,7 @@ export type ChartProps = {
   size: number[];
   gridPositionX?: number;
   opacity?: SpringValue<number>;
+  hoverEnabled?: boolean;
 };
 
 const LineChart = ({
@@ -51,6 +52,7 @@ const LineChart = ({
   size = [1, 1],
   gridPositionX = 0,
   opacity = new SpringValue(1),
+  hoverEnabled = true,
 }: ChartProps) => {
   const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, size);
 
@@ -101,6 +103,7 @@ const LineChart = ({
             step={step}
             store={store}
             yHover={yHover}
+            enabled={hoverEnabled}
           />
         )}
       </mesh>
