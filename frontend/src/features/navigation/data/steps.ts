@@ -1,9 +1,13 @@
 export interface Step {
   name: string;
   feature: string;
-  path: string;
+  path?: string;
 }
 const steps: Step[] = [
+  {
+    name: "Home",
+    feature: "/",
+  },
   {
     name: "Profile",
     feature: "aerodynamics",

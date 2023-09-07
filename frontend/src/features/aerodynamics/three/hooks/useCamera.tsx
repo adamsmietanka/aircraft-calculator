@@ -12,6 +12,10 @@ import { useWingStore } from "../../stores/useWing";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../../common/three/config";
 
 const obj: Record<string, Record<string, number[]>> = {
+  "/": {
+    position: [0, 0, 70],
+    rotation: [0, 0, 0],
+  },
   "/aerodynamics/profile": {
     position: [0, 0, 20],
     rotation: [0, 0, 0],

@@ -15,18 +15,13 @@ import InputNumber from "../../common/inputs/InputNumber";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
 import SceneFuselage from "./SceneFuselage";
+import { Center, Cloud, Text3D } from "@react-three/drei";
 
 const Scene = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
   const wing = useWingStore();
-  const {
-    area,
-    aspectRatio,
-    meanAerodynamicChord,
-    stallReynolds,
-    wingCl,
-    wingCd,
-  } = useWingAerodynamics();
+  const { meanAerodynamicChord, stallReynolds, wingCl, wingCd } =
+    useWingAerodynamics();
 
   const location = useLocation();
 
@@ -38,6 +33,26 @@ const Scene = () => {
     <>
       <SceneFuselage opacity={s.opacityFuselage} />
       <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={s.opacityWing} />
+      <Cloud
+        position={[0, 0, 50]}
+        opacity={0.25}
+        speed={0.4} // Rotation speed
+        width={10} // Width of the full cloud
+        depth={1.5} // Z-dir depth
+        segments={20} // Number of particles
+      />
+      <Center position={[0.2, 0.05, 60]}>
+        <Text3D
+          font="/fonts/Roboto Medium_Regular.json"
+          lineHeight={0.75}
+          letterSpacing={-0.025}
+          size={1.75}
+          height={0.5}
+        >
+          {"Book \n   of\nFlight"}
+          <meshPhongMaterial></meshPhongMaterial>
+        </Text3D>
+      </Center>
       <mesh rotation-x={-Math.PI / 2} visible={true}>
         <Inputs3D size={[0.33, 1]} gridPositionX={-3.5} visible={onWingStep}>
           <ProfileChoose />
