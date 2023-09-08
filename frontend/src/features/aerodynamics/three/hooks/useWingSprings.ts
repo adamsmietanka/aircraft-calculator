@@ -3,7 +3,7 @@ import { Object3D, Event } from "three";
 import { useWingStore } from "../../stores/useWing";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../../common/three/config";
 
-const getXTip = (angle: number, span: number) =>
+export const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
 
 const useWingSprings = (active: Object3D<Event>, size: number[]) => {
