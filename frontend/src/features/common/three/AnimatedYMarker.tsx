@@ -51,7 +51,6 @@ const AnimatedYMarker = ({
       positionRef.current.needsUpdate = true;
     }
   });
-  console.log(max.y / scale[1]);
 
   return (
     <animated.mesh scale={marker.scale.to((scale) => [1, scale, 1])}>
