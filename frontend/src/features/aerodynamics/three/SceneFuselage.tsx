@@ -1,17 +1,18 @@
-import { SpringValue, animated } from "@react-spring/three";
+import { SpringValue, animated, config, useSpring } from "@react-spring/three";
 import React, { useMemo, useRef } from "react";
 import { DoubleSide } from "three";
 import useProfile from "../hooks/useProfile";
 import { useFrame } from "@react-three/fiber";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSprings";
+import { useLocation } from "react-router-dom";
 const PANELS = 101;
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
-const SceneFuselage = ({ opacity }: Props) => {
+const SceneFuselage = () => {
   const wing = useWingStore();
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const { profilePoints } = useProfile();
@@ -35,7 +36,23 @@ const SceneFuselage = ({ opacity }: Props) => {
     return new Float32Array(6 * 3 * PANELS);
   }, []);
 
+  const location = useLocation();
+
+  const [s] = useSpring(
+    () => ({
+      from: {
+        opacity: 0,
+      },
+      to: {
+        opacity: 1,
+      },
+      config: config.slow,
+    }),
+    []
+  );
+
   useFrame(() => {
+    console.log(s.opacity.get());
     if (positionRef.current) {
       let arr = [];
       for (let i = 0; i < PANELS; i++) {
@@ -47,7 +64,7 @@ const SceneFuselage = ({ opacity }: Props) => {
         arr.push(...pointsTip[i + 1]);
         arr.push(...pointsTip[i]);
       }
-    //   console.log(arr, pointsFuse);
+      //   console.log(arr, pointsFuse);
       positionRef.current.set(arr);
       positionRef.current.needsUpdate = true;
     }
@@ -75,7 +92,7 @@ const SceneFuselage = ({ opacity }: Props) => {
         color={"gray"}
         side={DoubleSide}
         metalness={0.5}
-        opacity={opacity}
+        opacity={s.opacity}
         transparent
       />
     </animated.mesh>
