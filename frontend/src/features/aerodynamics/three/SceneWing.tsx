@@ -12,6 +12,7 @@ import {
   config,
   useSpring,
 } from "@react-spring/three";
+import LineChart from "../../common/three/LineChart";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -68,7 +69,7 @@ const SceneWing = () => {
             unit="10⁶"
           />
         </Inputs3D>
-        {/* <LineChart
+        <LineChart
           size={[0.33, 1]}
           gridPositionX={1}
           opacity={ss.opacity}
@@ -103,7 +104,7 @@ const SceneWing = () => {
           }}
           // store={useProfileChartsStore}
           // yHover
-        /> */}
+        />
       </mesh>
     </>
   );
