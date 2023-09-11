@@ -40,7 +40,7 @@ const Vector = ({
   );
 
   return (
-    <mesh rotation-z={rotation} position-z={0.1}>
+    <mesh rotation-z={rotation} position-z={0.2}>
       <AnimatedCylinder
         args={[VECTOR_WIDTH, VECTOR_WIDTH, 1, 32]}
         scale-y={spring.size}
@@ -66,6 +66,7 @@ const Vector = ({
           (v, dir) => dir * 0.05 + v
         )}
         position-x={0.5}
+        rotation-z={-rotation}
       >
         <AnimatedHtml color={color} show={show && value !== 0}>
           <Formula tex={tex} />

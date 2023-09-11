@@ -39,10 +39,6 @@ const SceneWing = () => {
     []
   );
 
-  // useFrame(() => {
-  //   console.log(opac.);
-  // });
-
   return (
     <>
       <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={ss.opacity} />
