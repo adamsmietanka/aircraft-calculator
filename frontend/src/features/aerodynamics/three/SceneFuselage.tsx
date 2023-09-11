@@ -1,11 +1,10 @@
 import { SpringValue, animated, config, useSpring } from "@react-spring/three";
-import React, { useMemo, useRef } from "react";
-import { DoubleSide } from "three";
+import { useMemo } from "react";
+import { BufferAttribute, BufferGeometry, DoubleSide } from "three";
 import useProfile from "../hooks/useProfile";
-import { useFrame } from "@react-three/fiber";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSprings";
-import { useLocation } from "react-router-dom";
+import { PresentationControls } from "@react-three/drei";
 const PANELS = 101;
 
 interface Props {
@@ -14,9 +13,8 @@ interface Props {
 
 const SceneFuselage = () => {
   const wing = useWingStore();
-  const positionRef = useRef<THREE.BufferAttribute>(null);
+
   const { profilePoints } = useProfile();
-  const pointsEnd = profilePoints.map(([x, y, z]) => [x, y, 5]);
 
   const pointsFuse = profilePoints.map(([x, y, z]) => [
     wing.chord * x,
@@ -32,12 +30,6 @@ const SceneFuselage = () => {
     wing.span / 2,
   ]);
 
-  const position = useMemo(() => {
-    return new Float32Array(6 * 3 * PANELS);
-  }, []);
-
-  const location = useLocation();
-
   const [s] = useSpring(
     () => ({
       from: {
@@ -46,17 +38,16 @@ const SceneFuselage = () => {
       to: {
         opacity: 1,
       },
-      config: config.slow,
+      config: config.molasses,
     }),
     []
   );
 
-  useFrame(() => {
-    console.log(s.opacity.get());
-    if (positionRef.current) {
+  const geometry = useMemo(() => {
+    const geom = new BufferGeometry();
+    if (profilePoints.length) {
       let arr = [];
       for (let i = 0; i < PANELS; i++) {
-        // arr.push(...profilePoints[i]);
         arr.push(...pointsFuse[i]);
         arr.push(...pointsFuse[i + 1]);
         arr.push(...pointsTip[i]);
@@ -64,38 +55,46 @@ const SceneFuselage = () => {
         arr.push(...pointsTip[i + 1]);
         arr.push(...pointsTip[i]);
       }
-      //   console.log(arr, pointsFuse);
-      positionRef.current.set(arr);
-      positionRef.current.needsUpdate = true;
+      const attr = new BufferAttribute(new Float32Array(arr), 3);
+      geom.setAttribute("position", attr);
+      geom.computeVertexNormals();
+      return geom;
     }
-  });
+  }, [profilePoints]);
 
   return (
-    <animated.mesh position-x={0}>
-      <bufferGeometry
-        onUpdate={(self) => {
-          self.computeVertexNormals();
-        }}
-        onHover={(self) => {
-          self.computeVertexNormals();
-        }}
-      >
-        <bufferAttribute
-          ref={positionRef}
-          attach="attributes-position"
-          count={position.length / 3}
-          array={position}
-          itemSize={3}
+    <PresentationControls
+      enabled={true} // the controls can be disabled by setting this to false
+      global={true} // Spin globally or by dragging the model
+      cursor={true} // Whether to toggle cursor style on drag
+      snap={true} // Snap-back to center (can also be a spring config)
+      speed={1} // Speed factor
+      zoom={1.5} // Zoom factor when half the polar-max is reached
+      rotation={[0, 0, 0]} // Default rotation
+      polar={[-Math.PI / 16, Math.PI / 16]} // Vertical limits
+      azimuth={[-Math.PI / 2, Math.PI / 8]} // Horizontal limits
+      config={{ mass: 1, tension: 170, friction: 26 }} // Spring config
+      // domElement={events.connected} // The DOM element events for this controller will attach to
+    >
+      <mesh position-x={0} geometry={geometry}>
+        <animated.meshStandardMaterial
+          color={"gray"}
+          side={DoubleSide}
+          metalness={0.5}
+          opacity={s.opacity}
+          transparent
         />
-      </bufferGeometry>
-      <animated.meshStandardMaterial
-        color={"gray"}
-        side={DoubleSide}
-        metalness={0.5}
-        opacity={s.opacity}
-        transparent
-      />
-    </animated.mesh>
+      </mesh>
+      <mesh position-x={0} geometry={geometry} scale-z={-1}>
+        <animated.meshStandardMaterial
+          color={"gray"}
+          side={DoubleSide}
+          metalness={0.5}
+          opacity={s.opacity}
+          transparent
+        />
+      </mesh>
+    </PresentationControls>
   );
 };
 
