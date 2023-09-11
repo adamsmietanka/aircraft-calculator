@@ -5,6 +5,7 @@ import SceneProfile from "./SceneProfile";
 import SceneWing from "./SceneWing";
 import { Perf } from "r3f-perf";
 import useCamera from "./hooks/useCamera";
+import ProfileOutline from "./ProfileOutline";
 
 const Scene = () => {
   const location = useLocation();
@@ -17,7 +18,8 @@ const Scene = () => {
     <>
       <Perf />
       <SceneHome />
-      {(onProfileStep || onWingStep) && <SceneProfile />}
+      <ProfileOutline size={[0.33, 1]} gridPositionX={-1.33} />
+      {onProfileStep && <SceneProfile />}
       {onWingStep && <SceneWing />}
       {onFuselageStep && <SceneFuselage />}
     </>

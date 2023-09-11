@@ -1,12 +1,9 @@
 import {
-  a,
   config,
-  useChain,
   useSpring,
-  useSpringRef,
 } from "@react-spring/three";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useWingStore } from "../../stores/useWing";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../../common/three/config";
@@ -25,8 +22,8 @@ const obj: Record<string, Record<string, number[]>> = {
     rotation: [-Math.PI / 2, 0, 0],
   },
   "/aerodynamics/fuselage": {
-    position: [-5, 2, 5],
-    rotation: [-0.323, -0.759, -0.226],
+    position: [-10, 4, 10],
+    rotation: [-0.382, -0.748, -0.267],
   },
 };
 
@@ -60,24 +57,9 @@ const useCamera = () => {
         opacityFuselage: 0,
       },
       to: async (next, cancel) => {
-        await next({ opacityProfile: 0, opacityWing: 0, opacityFuselage: 0 });
         await next({
           position: obj[location.pathname].position,
           rotation: obj[location.pathname].rotation,
-          profileX:
-            location.pathname === "/aerodynamics/profile"
-              ? -0.25 * 0.96 * localWidth
-              : 0,
-          scale:
-            location.pathname === "/aerodynamics/profile"
-              ? 0.96 * localWidth
-              : Math.min(
-                  localHeight / span,
-                  (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
-                  (0.5 * localWidth) / chord
-                ) * chord,
-        });
-        await next({
           opacityProfile: location.pathname === "/aerodynamics/profile" ? 1 : 0,
           opacityWing: location.pathname === "/aerodynamics/wing" ? 1 : 0,
           opacityFuselage:
@@ -97,14 +79,6 @@ const useCamera = () => {
             return config.default;
         }
       },
-      //   onStart: () => {
-      //     if (!controls) return;
-      //     controls.enabled = false;
-      //   },
-      //   onRest: () => {
-      //     if (!controls) return;
-      //     controls.enabled = true;
-      //   },
     }),
     [location.pathname]
   );

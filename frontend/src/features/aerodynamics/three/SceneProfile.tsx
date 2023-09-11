@@ -1,4 +1,3 @@
-import React from "react";
 import ProfileReynolds from "../ProfileReynolds";
 import ProfileVisualizer from "./ProfileVisualizer";
 import { animated, config, useSpring } from "@react-spring/three";
@@ -7,7 +6,6 @@ import ProfileChoose from "../ProfileChoose";
 import LineChart from "../../common/three/LineChart";
 import useProfileCharts from "../hooks/useProfileCharts";
 import { useLocation } from "react-router-dom";
-import useCamera from "./hooks/useCamera";
 
 const SceneProfile = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
@@ -28,7 +26,6 @@ const SceneProfile = () => {
         <ProfileChoose />
         <ProfileReynolds />
       </Inputs3D>
-      {/* <OrbitControls /> */}
       <ProfileVisualizer
         size={[0.33, 1]}
         gridPositionX={-1.33}
