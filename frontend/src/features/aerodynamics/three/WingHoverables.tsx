@@ -1,12 +1,12 @@
 import React, { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
-import useWing3D from "./three/hooks/useWing3D";
+import useWing3D from "./hooks/useWing3D";
 import { Shape } from "three";
-import { useWingStore } from "./stores/useWing";
-import AnimatedHtml from "./three/AnimatedHtml";
-import Formula from "../common/Formula";
+import { useWingStore } from "../stores/useWing";
+import AnimatedHtml from "./AnimatedHtml";
+import Formula from "../../common/Formula";
 import { animated, SpringValue, useSpring } from "@react-spring/three";
-import useWingAerodynamics from "./hooks/useWingAerodynamics";
+import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { create } from "zustand";
 import { useLocation } from "react-router-dom";
 
@@ -49,7 +49,6 @@ const WingSurface = ({ scale }: Props) => {
   const { area, aspectRatio, taperRatio } = useWingAerodynamics();
   const location = useLocation();
 
-
   const shape = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
     const shape = new Shape();
@@ -81,17 +80,15 @@ const WingSurface = ({ scale }: Props) => {
           opacity={hoverSpring.surface.to((o) => o)}
         />
       </mesh>
-      <animated.mesh position-y={scale.to((s) => -4 / s)} position-x={-0.5}>
+      <animated.mesh
+        position-y={scale.to((s) => -4 / s)}
+        position-x={-0.5}
+        scale={scale.to((s) => 1 / s)}
+      >
         <AnimatedHtml
           color={"green"}
           show={location.pathname === "/aerodynamics/wing"}
         >
-          <Formula
-            className="text-2xl"
-            tex={`S=${area.toFixed(2)}\\, m^2`}
-            onPointerEnter={() => hoverStore.set({ surface: true })}
-            onPointerLeave={() => hoverStore.set({ surface: false })}
-          />
           <Formula
             className="flex items-center h-10 text-3xl"
             tex={`\\Lambda=${
@@ -111,6 +108,12 @@ const WingSurface = ({ scale }: Props) => {
             }`}
             onPointerEnter={() => hoverStore.set({ chords: true })}
             onPointerLeave={() => hoverStore.set({ chords: false })}
+          />
+          <Formula
+            className="text-2xl"
+            tex={`S=${area.toFixed(2)}\\, m^2`}
+            onPointerEnter={() => hoverStore.set({ surface: true })}
+            onPointerLeave={() => hoverStore.set({ surface: false })}
           />
         </AnimatedHtml>
       </animated.mesh>

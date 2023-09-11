@@ -11,7 +11,7 @@ import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTip from "../../common/drawings/AnimatedTip";
 import Formula from "../../common/Formula";
-import { useHoverWingStore } from "../WingSurface";
+import { useHoverWingStore } from "./WingHoverables";
 
 interface Props {
   scale: SpringValue<number>;
