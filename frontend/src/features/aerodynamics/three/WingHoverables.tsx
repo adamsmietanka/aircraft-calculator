@@ -39,7 +39,7 @@ interface Props {
   scale: SpringValue<number>;
 }
 
-const WingSurface = ({ scale }: Props) => {
+const WingHoverables = ({ scale }: Props) => {
   const shapeRef = useRef<THREE.ShapeGeometry>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
 
@@ -121,4 +121,4 @@ const WingSurface = ({ scale }: Props) => {
   );
 };
 
-export default WingSurface;
+export default WingHoverables;
