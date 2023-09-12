@@ -26,6 +26,7 @@ interface TraceProps {
   scale?: number[];
   width?: number;
   color?: string;
+  style: string;
   springRef?: SpringRef;
   opacity?: SpringValue<number>;
 }
@@ -35,6 +36,7 @@ const Line = ({
   scale,
   width = 1,
   color = "primary",
+  style,
   springRef,
   opacity,
 }: TraceProps) => {
@@ -60,27 +62,41 @@ const Line = ({
 
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
-    const interpolatedOffset = test.offset.get();
-    const interpolatedOpacity = opacity ? opacity?.get() : 1;
 
     if (geometryRef.current && materialRef.current) {
-      materialRef.current.dashOffset = interpolatedOffset;
-      materialRef.current.dashRatio = interpolatedOffset;
-      materialRef.current.opacity = interpolatedOpacity;
       geometryRef.current.setPoints(interpolatedPoints);
     }
+
+    if (!style) {
+      const interpolatedOffset = test.offset.get();
+      const interpolatedOpacity = opacity ? opacity?.get() : 1;
+
+      if (geometryRef.current && materialRef.current) {
+        materialRef.current.dashOffset = interpolatedOffset;
+        materialRef.current.dashRatio = interpolatedOffset;
+        materialRef.current.opacity = interpolatedOpacity;
+      }
+    }
   });
+
+  const styles: Record<string, Record<string, number>> = {
+    dotted: { array: 0.01, width: 0.5 },
+    thin: { array: 0.05, width: 0.2 },
+
+    array: { thin: 1, dotted: 0.05 },
+    width: { thin: 0.4, dotted: 0.75 },
+  };
 
   return (
     <animated.mesh scale={marker.scale}>
       <meshLineGeometry ref={geometryRef} points={[0, 0, 0]} />
       <meshLineMaterial
         ref={materialRef}
-        dashArray={1}
+        dashArray={styles[style]?.array || 1}
         dashOffset={1}
         dashRatio={0.5}
         transparent
-        lineWidth={width * 0.1}
+        lineWidth={(styles[style]?.width || width) * 0.1}
         color={colors[color] || color}
       />
     </animated.mesh>

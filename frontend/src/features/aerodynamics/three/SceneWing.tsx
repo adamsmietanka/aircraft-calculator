@@ -7,11 +7,7 @@ import ProfileChoose from "../ProfileChoose";
 import { useLocation } from "react-router-dom";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
-import {
-  SpringValue,
-  config,
-  useSpring,
-} from "@react-spring/three";
+import { SpringValue, config, useSpring } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
 
 interface Props {
@@ -20,8 +16,15 @@ interface Props {
 
 const SceneWing = () => {
   const wing = useWingStore();
-  const { meanAerodynamicChord, stallReynolds, wingCl, wingCd } =
-    useWingAerodynamics();
+  const {
+    meanAerodynamicChord,
+    stallReynolds,
+    cl,
+    cd,
+    inducedCd,
+    wingCl,
+    wingCd,
+  } = useWingAerodynamics();
 
   const location = useLocation();
 
@@ -74,7 +77,10 @@ const SceneWing = () => {
           gridPositionX={1}
           opacity={ss.opacity}
           name="Coefficient of Lift"
-          traces={[{ name: "Power", points: wingCl }]}
+          traces={[
+            { name: "Wing", points: wingCl },
+            { name: "Profile", points: cl, style: "dotted" },
+          ]}
           axes={{
             x: { name: "Angle of Attack", min: -20, max: 20 },
             y: {
@@ -86,11 +92,15 @@ const SceneWing = () => {
           // store={useProfileChartsStore}
         />
         <LineChart
-          size={[0.33, 1]}
-          gridPositionX={3}
+          size={[0.5, 1]}
+          gridPositionX={2.3}
           opacity={ss.opacity}
           name="Coefficient of Drag"
-          traces={[{ name: "Power", points: wingCd }]}
+          traces={[
+            { name: "Wing", points: wingCd },
+            { name: "Profile", points: cd, style: "dotted" },
+            { name: "Induced", points: inducedCd, style: "thin" },
+          ]}
           axes={{
             x: {
               name: "Coefficient of Drag (Cd)",
