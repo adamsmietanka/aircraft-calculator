@@ -53,7 +53,7 @@ const ProfileOutline = ({ size, gridPositionX }: Props) => {
               (0.5 * localWidth) / chord
             ) * chord,
     }),
-    [location.pathname]
+    [location.pathname, chord, span, angle, chordTip]
   );
 
   return (
