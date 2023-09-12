@@ -21,6 +21,7 @@ export interface Axis {
 export interface Trace {
   name: string;
   points: number[][];
+  style?: string;
 }
 
 export interface Point {
@@ -56,7 +57,7 @@ const LineChart = ({
 }: ChartProps) => {
   const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, size);
 
-  const colors = ["primary", "green", "orange"];
+  const colors = ["primary", "green", "orange", "secondary"];
   const springRefs = traces.map(() => useSpringRef());
 
   useChain(springRefs);
@@ -87,7 +88,8 @@ const LineChart = ({
             key={index}
             trace={trace}
             scale={scale}
-            color={colors[index]}
+            color={trace.style ? "primary" : colors[index]}
+            style={trace.style || ""}
             springRef={springRefs[index]}
             opacity={opacity}
           />

@@ -111,6 +111,9 @@ const useWingAerodynamics = () => {
     taperRatio,
     meanAerodynamicChord,
     stallReynolds,
+    cl: pointsCl,
+    cd: pointsCd,
+    inducedCd: pointsCd.map(([y, x, z]) => [getCdInduced(x), x, z]),
     wingCl: pointsCl.map(([x, y, z]) => [x + getAlphaInduced(y), y, z]),
     wingCd: pointsCd.map(([y, x, z]) => [getCdWing(x, y), x, z]),
   };
