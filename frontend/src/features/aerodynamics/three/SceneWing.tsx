@@ -9,6 +9,7 @@ import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
 import { SpringValue, config, useSpring } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
+import Legend from "../../common/three/Legend";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -74,7 +75,7 @@ const SceneWing = () => {
         </Inputs3D>
         <LineChart
           size={[0.33, 1]}
-          gridPositionX={1}
+          gridPositionX={0.8}
           opacity={ss.opacity}
           name="Coefficient of Lift"
           traces={[
@@ -93,7 +94,7 @@ const SceneWing = () => {
         />
         <LineChart
           size={[0.5, 1]}
-          gridPositionX={2.3}
+          gridPositionX={2.1}
           opacity={ss.opacity}
           name="Coefficient of Drag"
           traces={[
@@ -114,6 +115,15 @@ const SceneWing = () => {
           }}
           // store={useProfileChartsStore}
           // yHover
+        />
+        <Legend
+          size={[0.5, 1]}
+          gridPositionX={3.2}
+          items={[
+            { name: "Wing" },
+            { name: "Induced", style: "thin" },
+            { name: "Profile", style: "dotted" },
+          ]}
         />
       </mesh>
     </>

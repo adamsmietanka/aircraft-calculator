@@ -82,9 +82,6 @@ const Line = ({
   const styles: Record<string, Record<string, number>> = {
     dotted: { array: 0.01, width: 0.5 },
     thin: { array: 0.05, width: 0.2 },
-
-    array: { thin: 1, dotted: 0.05 },
-    width: { thin: 0.4, dotted: 0.75 },
   };
 
   return (
