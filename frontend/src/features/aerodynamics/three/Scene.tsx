@@ -18,7 +18,10 @@ const Scene = () => {
     <>
       <Perf />
       <SceneHome />
-      <ProfileOutline size={[0.33, 1]} gridPositionX={-1.33} />
+
+      {(onProfileStep || onWingStep) && (
+        <ProfileOutline size={[0.33, 1]} gridPositionX={-1.33} />
+      )}
       {onProfileStep && <SceneProfile />}
       {onWingStep && <SceneWing />}
       {onFuselageStep && <SceneFuselage />}
