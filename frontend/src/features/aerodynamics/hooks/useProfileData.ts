@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import profiles from "../data/profiles_interpolated";
 import { useWingStore } from "../stores/useWing";
+import useReversedData from "../../common/hooks/useReversedData";
 
 const useProfileData = (reynoldsIndex: number) => {
   const profile = useWingStore((state) => state.profile);
@@ -10,28 +11,14 @@ const useProfileData = (reynoldsIndex: number) => {
     [profile, reynoldsIndex]
   );
 
-  const pointsClMonotonic = useMemo(() => {
-    const lowest = pointsCl.reduce((previous, current) =>
-      current[1] < previous[1] ? current : previous
-    );
-    const highest = pointsCl.reduce((previous, current) =>
-      current[1] > previous[1] ? current : previous
-    );
-
-    return pointsCl
-      .filter((p) => lowest[0] < p[0] && p[0] < highest[0])
-      .map((p) => [p[1], p[0], p[2]]);
-  }, [pointsCl]);
-
   const pointsCd = useMemo(
     () => profiles[profile].cd[reynoldsIndex].map(([x, y]) => [y, x, 0.1]),
     [profile, reynoldsIndex]
   );
 
-  const pointsCdReversed = useMemo(
-    () => pointsCd.map(([y, x]) => [x, y, 0]),
-    [pointsCd]
-  );
+  const { clMonotonic: pointsClMonotonic, cdReversed: pointsCdReversed } =
+    useReversedData(pointsCl, pointsCd);
+
   return { pointsCl, pointsCd, pointsClMonotonic, pointsCdReversed };
 };
 
