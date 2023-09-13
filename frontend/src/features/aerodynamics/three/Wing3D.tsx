@@ -50,11 +50,12 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
           <WingSpheres
             scale={wingSpring.scale}
             onClick={(e) => setActive(e.object)}
+            active={active}
             chord={wingSpring.chord}
             chordTip={wingSpring.chordTip}
             x={wingSpring.x}
             y={wingSpring.y}
-            stepOpacity={opacity}
+            rotationZ={wingSpring.rotationZ}
           />
           <WingInputs
             scale={wingSpring.scale}

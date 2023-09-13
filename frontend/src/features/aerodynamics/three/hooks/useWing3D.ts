@@ -1,5 +1,5 @@
 import { useProfileCamber } from "./../../hooks/useProfile";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useWingStore } from "../../stores/useWing";
 import { getStep } from "../../../common/three/hooks/useAxes";
 
@@ -10,6 +10,12 @@ const useWing3D = () => {
   const wing = useWingStore();
 
   const [active, setActive] = useState<THREE.Object3D>(null!);
+
+  useEffect(() => {
+    if (wing.shape !== 1 && active?.userData.number === 2) {
+      setActive(null!);
+    }
+  }, [wing.shape]);
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
