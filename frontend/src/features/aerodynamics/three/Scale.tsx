@@ -1,11 +1,5 @@
 import { useMemo, useRef } from "react";
-import {
-  useSpring,
-  animated,
-  SpringValue,
-  SpringRef,
-  config,
-} from "@react-spring/three";
+import { useSpring, animated, SpringValue, config } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { useFrame } from "@react-three/fiber";
@@ -14,21 +8,20 @@ import { useCSSColors } from "../../common/three/config";
 interface Props {
   length: number;
   scale: SpringValue<number>;
-  springRef?: SpringRef;
 }
 
 const SCALE_CENTER = 2.5;
 const SCALE_SIDE_HEIGHT = 0.2;
 
-const Scale = ({ length, springRef, scale }: Props) => {
+const Scale = ({ length, scale }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
-  
+
   const { displayMultiplier, valueMultiplier, unit } = useChartUnits("length");
   const { gridColor } = useCSSColors();
   const AnimatedText = animated(Text);
 
   const object = useSpring({
-    ref: springRef,
+    delay: 1000,
     from: { opacity: 0 },
     to: { opacity: 1 },
     config: config.slow,

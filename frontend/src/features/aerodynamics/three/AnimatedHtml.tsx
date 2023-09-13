@@ -18,7 +18,7 @@ const AnimatedHtml = ({ color, show, children }: Props) => {
     [show]
   );
   return (
-    <Anim center className={`text-${color} space-y-4 h-20`} style={props} transform>
+    <Anim className={`text-${color} space-y-4 h-20`} style={props} transform>
       {children}
     </Anim>
   );
