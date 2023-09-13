@@ -1,7 +1,7 @@
 import { SpringValue, animated, to, useSpring } from "@react-spring/three";
 import { Sphere } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Mesh } from "three";
 import { useCSSColors } from "../../common/three/config";
 import { useWingStore } from "../stores/useWing";
@@ -15,82 +15,86 @@ const SPHERE_SIZE = 0.25;
 interface Props {
   scale: SpringValue<number>;
   onClick: (e: ThreeEvent<MouseEvent>) => void;
+  active: THREE.Object3D;
   chord: SpringValue<number>;
   chordTip: SpringValue<number>;
   x: SpringValue<number>;
   y: SpringValue<number>;
-  stepOpacity: SpringValue<number>;
+  rotationZ: SpringValue<number>;
 }
 
 const WingSpheres = ({
   scale,
   onClick,
+  active,
+  chord,
+  chordTip,
   x,
   y,
-  stepOpacity,
+  rotationZ,
 }: Props) => {
-  const { primaryColor } = useCSSColors();
-
-  const chordTip = useWingStore((state) => state.chordTip);
-  const chord = useWingStore((state) => state.chord);
-  const angle = useWingStore((state) => state.angle);
-  const span = useWingStore((state) => state.span);
+  const { primaryColor, infoColor } = useCSSColors();
 
   const shape = useWingStore((state) => state.shape);
 
-  const { F } = useProfileCamber();
+  const [hovered, setHovered] = useState(0);
 
-  const [sphereSpring] = useSpring(() => {
-    if (shape === 0)
-      return {
-        x: 0,
-        rotationZ: 0,
-      };
-    if (shape === 1)
-      return {
-        x: getXTip(angle, span),
-        rotationZ: (-angle * Math.PI) / 180,
-      };
-    return {
-      x: chord * F,
-      rotationZ: 0,
-    };
-  }, [span, angle, chord, chordTip, shape]);
+  useEffect(() => {
+    document.body.style.cursor = hovered > 0 ? "pointer" : "auto";
+  }, [hovered]);
 
   return (
     <>
       <AnimatedSphere
-        userData={{ isTip: true, isTrailing: false }}
+        userData={{ isTip: true, isTrailing: false, number: 1 }}
         onClick={onClick}
-        onPointerMove={() => console.log(1)}
+        onPointerEnter={(e) => setHovered(1)}
+        onPointerLeave={(e) => setHovered(0)}
         scale={scale.to((scale) => SPHERE_SIZE / scale)}
-        rotation-z={sphereSpring.rotationZ}
+        rotation-z={rotationZ}
         position-x={x}
         position-y={y}
-        material-color={primaryColor}
-        material-transparent
-        material-opacity={stepOpacity}
+        material-color={
+          active?.userData.number === 1 || hovered === 1
+            ? infoColor
+            : primaryColor
+        }
       />
       {shape === 1 && (
         <AnimatedSphere
-          userData={{ isTip: true, isTrailing: true }}
+          userData={{ isTip: true, isTrailing: true, number: 2 }}
           onClick={onClick}
+          onPointerEnter={(e) => setHovered(2)}
+          onPointerLeave={(e) => setHovered(0)}
           scale={scale.to((scale) => SPHERE_SIZE / scale)}
           position-x={to([x, chordTip], (x, chordTip) => x + chordTip)}
           position-y={y}
-          material-color={primaryColor}
+          material-color={
+            active?.userData.number === 2 || hovered === 2
+              ? infoColor
+              : primaryColor
+          }
           material-transparent
-          material-opacity={stepOpacity}
+          material-opacity={shape === 1 ? 1 : 0}
         />
       )}
       <AnimatedSphere
-        userData={{ isFuselage: true, isTrailing: true }}
+        userData={{
+          isFuselage: true,
+          isTip: false,
+          isTrailing: true,
+          number: 3,
+        }}
         onClick={onClick}
+        onPointerEnter={(e) => setHovered(3)}
+        onPointerLeave={(e) => setHovered(0)}
         scale={scale.to((scale) => SPHERE_SIZE / scale)}
         position-x={chord}
-        material-color={primaryColor}
-        material-transparent
-        material-opacity={stepOpacity}
+        material-color={
+          active?.userData.number === 3 || hovered === 3
+            ? infoColor
+            : primaryColor
+        }
       />
     </>
   );

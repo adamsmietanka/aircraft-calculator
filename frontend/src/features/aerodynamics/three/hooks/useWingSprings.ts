@@ -35,6 +35,7 @@ const useWingSprings = (active: Object3D<Event>, size: number[]) => {
       ),
       x: shape === 0 ? 0 : shape === 1 ? getXTip(angle, span) : F * chord,
       y: span / 2,
+      rotationZ: shape === 1 ? (-angle * Math.PI) / 180 : 0,
       chord,
       chordTip,
       angle: (angle * Math.PI) / 180,

@@ -39,6 +39,7 @@ const ProfileOutlines = () => {
       <animated.mesh
         position-x={profileSpring.positionX}
         position-y={profileSpring.positionY}
+        position-z={-0.01}
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
