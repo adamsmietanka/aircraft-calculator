@@ -71,7 +71,7 @@ const WingHoverables = ({ scale }: Props) => {
 
   return (
     <>
-      <mesh>
+      <mesh position-z={-0.1}>
         <shapeGeometry args={[shape]} ref={shapeRef} />
         <animated.meshBasicMaterial
           color="green"

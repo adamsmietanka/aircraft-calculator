@@ -1,3 +1,4 @@
+import { useProfileCamber } from "./../../hooks/useProfile";
 import { useMemo, useState } from "react";
 import { useWingStore } from "../../stores/useWing";
 import { getStep } from "../../../common/three/hooks/useAxes";
@@ -31,29 +32,83 @@ const useWing3D = () => {
     }
   };
 
+  const NUM_OF_SEGMENTS = 30;
+
+  const { F } = useProfileCamber();
+
   const leadingEdge = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
     const z = -0.01;
+
+    let points = [];
+    if (wing.shape === 0) {
+      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+        points.push([0, (i * wing.span) / NUM_OF_SEGMENTS, z]);
+      }
+    } else if (wing.shape === 1) {
+      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+        const normY = (2 * Math.abs(i)) / NUM_OF_SEGMENTS;
+        points.push([normY * xTip, (i * wing.span) / NUM_OF_SEGMENTS, z]);
+      }
+    } else {
+      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+        points.push([
+          wing.chord *
+            F *
+            (1 -
+              Math.cos((((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2)),
+          (wing.span / 2) *
+            Math.sign(i) *
+            Math.sin((((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2),
+          z,
+        ]);
+      }
+    }
+
     return {
       name: "",
-      points: [
-        [xTip, wing.span / 2, z],
-        [0, 0, z],
-        [xTip, -wing.span / 2, z],
-      ],
+      points,
     };
   }, [wing]);
 
   const trailingEdge = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
     const z = -0.01;
+
+    let points = [];
+    if (wing.shape === 0) {
+      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+        points.push([wing.chord, (i * wing.span) / NUM_OF_SEGMENTS, z]);
+      }
+    } else if (wing.shape === 1) {
+      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+        const normY = (2 * Math.abs(i)) / NUM_OF_SEGMENTS;
+        points.push([
+          normY * (xTip + wing.chordTip) + (1 - normY) * wing.chord,
+          (i * wing.span) / NUM_OF_SEGMENTS,
+          z,
+        ]);
+      }
+    } else {
+      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+        points.push([
+          wing.chord *
+            (F +
+              (1 - F) *
+                Math.cos(
+                  (((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2
+                )),
+          (wing.span / 2) *
+            Math.sign(i) *
+            Math.sin((((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2),
+          z,
+        ]);
+      }
+    }
+
     return {
       name: "",
-      points: [
-        [xTip + wing.chordTip, wing.span / 2, z],
-        [wing.chord, 0, z],
-        [xTip + wing.chordTip, -wing.span / 2, z],
-      ],
+      points,
     };
   }, [wing]);
 
