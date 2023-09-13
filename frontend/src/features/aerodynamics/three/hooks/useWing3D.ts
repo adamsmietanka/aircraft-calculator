@@ -31,26 +31,36 @@ const useWing3D = () => {
     }
   };
 
-  const trace = useMemo(() => {
+  const leadingEdge = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
-    const z = -0.01
+    const z = -0.01;
     return {
       name: "",
       points: [
-        [0, 0, z],
         [xTip, wing.span / 2, z],
+        [0, 0, z],
+        [xTip, -wing.span / 2, z],
+      ],
+    };
+  }, [wing]);
+
+  const trailingEdge = useMemo(() => {
+    const xTip = getXTip(wing.angle, wing.span);
+    const z = -0.01;
+    return {
+      name: "",
+      points: [
         [xTip + wing.chordTip, wing.span / 2, z],
         [wing.chord, 0, z],
         [xTip + wing.chordTip, -wing.span / 2, z],
-        [xTip, -wing.span / 2, z],
-        [0, 0, z],
       ],
     };
   }, [wing]);
 
   return {
     onTransform,
-    trace,
+    leadingEdge,
+    trailingEdge,
     active,
     setActive,
     step: getStep(wing.span / 1.5),

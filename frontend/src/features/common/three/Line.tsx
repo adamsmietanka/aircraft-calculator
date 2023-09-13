@@ -33,7 +33,7 @@ interface TraceProps {
 
 const Line = ({
   trace,
-  scale,
+  scale = [1, 1, 1],
   width = 1,
   color = "primary",
   style = "",
@@ -82,6 +82,7 @@ const Line = ({
   const styles: Record<string, Record<string, number>> = {
     dotted: { array: 0.01, width: 0.5 },
     thin: { array: 0.05, width: 0.2 },
+    normal: { array: 1, width: 1 },
   };
 
   return (

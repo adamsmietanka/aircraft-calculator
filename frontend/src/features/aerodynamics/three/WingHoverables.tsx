@@ -41,7 +41,6 @@ interface Props {
 
 const WingHoverables = ({ scale }: Props) => {
   const shapeRef = useRef<THREE.ShapeGeometry>(null);
-  const materialRef = useRef<THREE.MeshBasicMaterial>(null);
 
   const wing = useWingStore();
   const hoverStore = useHoverWingStore();
@@ -82,7 +81,7 @@ const WingHoverables = ({ scale }: Props) => {
       </mesh>
       <animated.mesh
         position-y={scale.to((s) => -4 / s)}
-        position-x={-0.5}
+        position-x={scale.to((s) => -2 / s)}
         scale={scale.to((s) => 1 / s)}
       >
         <AnimatedHtml

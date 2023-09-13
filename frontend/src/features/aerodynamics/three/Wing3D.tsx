@@ -1,11 +1,5 @@
 import { TransformControls } from "@react-three/drei";
-import {
-  useChain,
-  useSpringRef,
-  animated,
-  SpringValue,
-  to,
-} from "@react-spring/three";
+import { animated, SpringValue, to } from "@react-spring/three";
 import Line from "../../common/three/Line";
 import Scale from "./Scale";
 import useWing3D from "./hooks/useWing3D";
@@ -23,14 +17,10 @@ interface Props {
 }
 
 const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
-  const { onTransform, trace, active, setActive, step } = useWing3D();
+  const { onTransform, leadingEdge, trailingEdge, active, setActive, step } =
+    useWing3D();
 
   const { gizmoSpring, wingSpring } = useWingSprings(active, size);
-
-  const lineRef = useSpringRef();
-  const scaleRef = useSpringRef();
-
-  useChain([lineRef, scaleRef]);
 
   const AnimatedTransform = animated(TransformControls);
 
@@ -54,7 +44,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
         visible={opacity.to((o) => o !== 0)}
       >
         <animated.mesh position-x={wingSpring.chord.to((c) => 0)}>
-          <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
+          <Scale length={step} scale={wingSpring.scale} />
           <WingHoverables scale={wingSpring.scale} />
           <WingSpheres
             scale={wingSpring.scale}
@@ -75,12 +65,8 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
             y={wingSpring.y}
           />
           <ProfileOutlines />
-          <Line
-            trace={trace}
-            scale={[1, 1, 1]}
-            springRef={lineRef}
-            opacity={opacity}
-          />
+          <Line trace={leadingEdge} opacity={opacity} />
+          <Line trace={trailingEdge} opacity={opacity} />
         </animated.mesh>
       </animated.mesh>
     </>

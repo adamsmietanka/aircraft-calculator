@@ -50,7 +50,7 @@ const SceneWing = () => {
       <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={ss.opacity} />
 
       <mesh rotation-x={-Math.PI / 2} visible={true}>
-        <Inputs3D size={[0.33, 1]} gridPositionX={-3.5} visible={onWingStep}>
+        <Inputs3D size={[0.33, 1]} gridPositionX={-3.9} visible={onWingStep}>
           <ProfileChoose />
           <WingShape />
           <WingMaterial />
