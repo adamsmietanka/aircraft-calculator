@@ -10,6 +10,7 @@ import { useWingStore } from "../stores/useWing";
 import { SpringValue, config, useSpring } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
 import Legend from "../../common/three/Legend";
+import WingShape from "../WingShape";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -51,6 +52,7 @@ const SceneWing = () => {
       <mesh rotation-x={-Math.PI / 2} visible={true}>
         <Inputs3D size={[0.33, 1]} gridPositionX={-3.5} visible={onWingStep}>
           <ProfileChoose />
+          <WingShape />
           <WingMaterial />
           <InputUnits
             label="Mean Aerodynamic Chord"
