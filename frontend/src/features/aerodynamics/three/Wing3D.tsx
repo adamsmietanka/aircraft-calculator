@@ -13,7 +13,8 @@ import useWingSprings from "./hooks/useWingSprings";
 import WingSpheres from "./WingSpheres";
 import WingInputs from "./WingInputs";
 import { CANVAS_WIDTH } from "../../common/three/config";
-import WingSurface from "./WingHoverables";
+import WingHoverables from "./WingHoverables";
+import ProfileOutlines from "./ProfileOutlines";
 
 interface Props {
   size: number[];
@@ -54,7 +55,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
       >
         <animated.mesh position-x={wingSpring.chord.to((c) => 0)}>
           <Scale length={step} scale={wingSpring.scale} springRef={scaleRef} />
-          <WingSurface scale={wingSpring.scale} />
+          <WingHoverables scale={wingSpring.scale} />
           <WingSpheres
             scale={wingSpring.scale}
             rotationZ={wingSpring.rotationZ}
@@ -73,6 +74,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
             x={wingSpring.x}
             y={wingSpring.y}
           />
+          <ProfileOutlines />
           <Line
             trace={trace}
             scale={[1, 1, 1]}
