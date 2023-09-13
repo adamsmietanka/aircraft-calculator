@@ -1,5 +1,6 @@
 import { reynolds } from "../data/profiles";
 import { useWingStore } from "../stores/useWing";
+import { useProfileCamber } from "./useProfile";
 import useProfileData from "./useProfileData";
 import useProfileTable, { Row } from "./useProfileTable";
 
@@ -21,18 +22,43 @@ const useWingAerodynamics = () => {
   const chord = useWingStore((state) => state.chord);
   const chordTip = useWingStore((state) => state.chordTip);
   const angle = useWingStore((state) => state.angle);
+
   const stallVelocity = useWingStore((state) => state.stallVelocity);
   const material = useWingStore((state) => state.material);
 
+  const shape = useWingStore((state) => state.shape);
+
   const KINEMATIC_VISCOSITY = 1.4207e-5;
 
-  const area = ((chord + chordTip) * span) / 2;
-  const aspectRatio = (span * span) / area;
-  const taperRatio = chordTip / chord;
+  const { F } = useProfileCamber();
 
-  const meanAerodynamicChord =
-    (2 * chord * (1 + taperRatio + taperRatio * taperRatio)) /
-    (3 * (1 + taperRatio));
+  const getArea = () => {
+    if (shape === 0) return chord * span;
+    if (shape === 1) return ((chord + chordTip) * span) / 2;
+    return (Math.PI * chord * span) / 4;
+  };
+
+  const getTaper = () => {
+    if (shape === 0) return 1;
+    if (shape === 1) return chordTip / chord;
+    return 0;
+  };
+
+  const area = getArea();
+  const aspectRatio = (span * span) / area;
+  const taperRatio = getTaper();
+
+  const getMAC = () => {
+    if (shape === 0) return chord;
+    if (shape === 1)
+      return (
+        (2 * chord * (1 + taperRatio + taperRatio * taperRatio)) /
+        (3 * (1 + taperRatio))
+      );
+    return (8 * chord) / (3 * Math.PI);
+  };
+
+  const meanAerodynamicChord = getMAC();
 
   const stallReynolds =
     (stallVelocity * meanAerodynamicChord) / KINEMATIC_VISCOSITY;
@@ -52,6 +78,7 @@ const useWingAerodynamics = () => {
   const CdMaterial = CdOfZeroCl * (material ? 0.15 : 0.5);
 
   const getFirstGlauertCoefficient = () => {
+    if (shape === 2) return 0;
     const tau1 =
       0.023 * Math.pow(aspectRatio / slope, 3) -
       0.103 * Math.pow(aspectRatio / slope, 2) +
@@ -79,6 +106,7 @@ const useWingAerodynamics = () => {
   };
 
   const getSecondGlauertCoefficient = () => {
+    if (shape === 2) return 0;
     const beta25 = getBeta25();
     const delta1 = (0.0537 * aspectRatio) / slope - 0.005;
     const delta2 =
@@ -94,7 +122,8 @@ const useWingAerodynamics = () => {
         1.6e-5) *
         Math.pow(beta25, 3) +
       1;
-    return (delta1 * delta2 * delta3) / 0.048;
+    const coeff = (delta1 * delta2 * delta3) / 0.048;
+    return coeff >= 0 ? coeff : 0;
   };
   const secondGlauertCoefficient = getSecondGlauertCoefficient();
 
