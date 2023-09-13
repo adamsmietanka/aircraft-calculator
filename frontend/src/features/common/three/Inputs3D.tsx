@@ -13,7 +13,7 @@ const Inputs3D = ({ size, gridPositionX, visible, children }: Props) => {
   return (
     <mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
       <Html
-        className={`select-none ${visible || "hidden"}`}
+        className={`select-none ${visible || "hidden"} space-y-1`}
         transform
         prepend
         visible={visible}

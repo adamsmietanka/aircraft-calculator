@@ -3,8 +3,6 @@ import {
   CANVAS_WIDTH,
   useCSSColors,
 } from "../../common/three/config";
-import { useRef } from "react";
-import { MeshLineGeometry, MeshLineMaterial } from "meshline";
 import { Text } from "@react-three/drei";
 
 interface Props {
