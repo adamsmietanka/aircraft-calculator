@@ -26,7 +26,7 @@ interface TraceProps {
   scale?: number[];
   width?: number;
   color?: string;
-  style: string;
+  style?: string;
   springRef?: SpringRef;
   opacity?: SpringValue<number>;
 }
@@ -36,7 +36,7 @@ const Line = ({
   scale,
   width = 1,
   color = "primary",
-  style,
+  style = "",
   springRef,
   opacity,
 }: TraceProps) => {
