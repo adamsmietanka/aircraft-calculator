@@ -32,7 +32,8 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
           (size, stepActive) => size * stepActive
         )}
         showZ={false}
-        showY={!active?.userData.isFuselage && active?.userData.isTrailing}
+        showX={active?.userData.isTrailing}
+        showY={active?.userData.isTip}
         onChange={onTransform}
         object={active}
         space="local"
@@ -48,7 +49,6 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
           <WingHoverables scale={wingSpring.scale} />
           <WingSpheres
             scale={wingSpring.scale}
-            rotationZ={wingSpring.rotationZ}
             onClick={(e) => setActive(e.object)}
             chord={wingSpring.chord}
             chordTip={wingSpring.chordTip}
