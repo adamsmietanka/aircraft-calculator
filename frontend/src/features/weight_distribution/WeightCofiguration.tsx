@@ -2,12 +2,9 @@ import WeightComponet from "./WeightComponet";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import WeightComponent from "./interfaces/weightComponent";
 
-
-const WeightCofiguration = ({setToggleModal}:any) => {
+const WeightCofiguration = ({ setToggleModal }: any) => {
   const setUseType = useWeightStore((state) => state.setUseType);
-  const setEditedComponet = useWeightStore(
-    (state) => state.setEditedComponent
-  );
+  const setEditedComponet = useWeightStore((state) => state.setEditedComponent);
 
   const activeWeightConfiguration = useWeightStore(
     (state) => state.activeWeightConfiguration
@@ -17,9 +14,9 @@ const WeightCofiguration = ({setToggleModal}:any) => {
   );
 
   const handleEdit = (component: WeightComponent) => {
-    setUseType("edit")
-    setEditedComponet(component)
-    setToggleModal(true)
+    setUseType("edit");
+    setEditedComponet(component);
+    setToggleModal(true);
   };
 
   const handleDelete = (component: WeightComponent) => {
@@ -30,24 +27,37 @@ const WeightCofiguration = ({setToggleModal}:any) => {
       ),
     });
   };
-  
+
   return (
-    <div className="flex flex-col overflow-auto">
-      <div className="flex flex-col ">
-        {activeWeightConfiguration?.components &&
-          activeWeightConfiguration?.components.map(
-            (component: WeightComponent) => (
-              <WeightComponet
-                key={component?.componentName}
-                name={component?.componentName}
-                mass={component?.mass}
-                cords={component?.cords}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-              />
-            )
-          )}
-      </div>
+    <div className="flex flex-col overflow-x-auto">
+      <table className="table table-xs ">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>{"Mass [kg]"}</th>
+            <th>X</th>
+            <th>Y</th>
+            <th>Z</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {activeWeightConfiguration?.components &&
+            activeWeightConfiguration?.components.map(
+              (component: WeightComponent) => (
+                <WeightComponet
+                  key={component?.componentName}
+                  name={component?.componentName}
+                  mass={component?.mass}
+                  cords={component?.cords}
+                  handleDelete={handleDelete}
+                  handleEdit={handleEdit}
+                />
+              )
+            )}
+        </tbody>
+      </table>
     </div>
   );
 };

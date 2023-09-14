@@ -105,7 +105,7 @@ const Weight = () => {
 
         <div className=" flex flex-row ">
           {/* Left Row */}
-          <div className="flex flex-col w-64 mr-8 space-y-2">
+          <div className="flex flex-col mr-8 space-y-2">
             {activeWeightConfiguration && (
               <button
                 className="btn  justify-center"
@@ -119,9 +119,8 @@ const Weight = () => {
             <WeightCofiguration setToggleModal={setToggleModal_2} />
           </div>
           {/*right row */}
-          <div className="flex flex-col">
+          <div className="flex flex-col w-full h-1/4">
             <WeightDistribution3D />
-            <WeightDistributionCharts />
           </div>
         </div>
       </div>

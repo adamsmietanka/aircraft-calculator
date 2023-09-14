@@ -24,7 +24,7 @@ const WeightDistribution3D = () => {
   const wingSpan = 10;
 
   return (
-    <div className="h-1/4 w-full">
+    <div>
       <Canvas orthographic camera={{ zoom: 30, position: [-10, 10, 15] }}>
         <Lights />
         <gridHelper />
