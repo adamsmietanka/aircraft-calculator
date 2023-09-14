@@ -43,6 +43,7 @@ interface HoverProps {
     StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
   >;
   yHover: boolean;
+  zHover: boolean;
   enabled?: boolean;
 }
 
@@ -56,6 +57,7 @@ const Hover = ({
   step,
   store,
   yHover,
+  zHover,
   enabled = true,
 }: HoverProps) => {
   return (
@@ -68,8 +70,11 @@ const Hover = ({
         material-opacity={0}
         onPointerMove={(e) => {
           if (enabled) {
-            if (yHover) {
-              const y = round((e.point.y + mid.y) / scale[1], step.y / 10);
+            if (yHover || zHover) {
+              const y = round(
+                (yHover ? e.point.y : -e.point.z + mid.y) / scale[1],
+                step.y / 10
+              );
               const locked = store.getState().locked;
               const oldY = store.getState().y;
 

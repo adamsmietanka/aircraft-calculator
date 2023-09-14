@@ -11,6 +11,7 @@ import { SpringValue, config, useSpring } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
 import Legend from "../../common/three/Legend";
 import WingShape from "../WingShape";
+import useWingCharts from "../hooks/useWingCharts";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -27,6 +28,8 @@ const SceneWing = () => {
     wingCl,
     wingCd,
   } = useWingAerodynamics();
+
+  const { useWingChartsStore } = useWingCharts();
 
   const location = useLocation();
 
@@ -92,7 +95,7 @@ const SceneWing = () => {
               max: 1.75,
             },
           }}
-          // store={useProfileChartsStore}
+          store={useWingChartsStore}
         />
         <LineChart
           size={[0.5, 1]}
@@ -115,8 +118,8 @@ const SceneWing = () => {
               max: 1.75,
             },
           }}
-          // store={useProfileChartsStore}
-          // yHover
+          zHover
+          store={useWingChartsStore}
         />
         <Legend
           size={[0.5, 1]}
