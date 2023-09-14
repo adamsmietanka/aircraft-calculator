@@ -58,13 +58,6 @@ const SceneWing = () => {
           <WingShape />
           <WingMaterial />
           <InputUnits
-            label="Mean Aerodynamic Chord"
-            type="length"
-            disabled
-            tooltip="MAC is the chord of a rectangular wing with the same area and span as those of the given wing"
-            value={meanAerodynamicChord}
-          />
-          <InputUnits
             type="speed"
             value={wing.stallVelocity}
             setter={wing.setStallVelocity}

@@ -58,7 +58,20 @@ const useWingAerodynamics = () => {
     return (8 * chord) / (3 * Math.PI);
   };
 
+  const getMACposition = () => {
+    if (shape === 0) return [0, -span / 4];
+    if (shape === 1) {
+      const tangent = Math.tan((angle * Math.PI) / 180);
+      const xMAC =
+        (tangent * span * (1 + 2 * taperRatio)) / (6 * (1 + taperRatio));
+      const yMAC = -xMAC / tangent;
+      return [xMAC, yMAC];
+    }
+    return [(chord / 2) * (1 - 8 / (3 * Math.PI)), -span / 4];
+  };
+
   const meanAerodynamicChord = getMAC();
+  const MACposition = getMACposition();
 
   const stallReynolds =
     (stallVelocity * meanAerodynamicChord) / KINEMATIC_VISCOSITY;
@@ -139,6 +152,7 @@ const useWingAerodynamics = () => {
     aspectRatio,
     taperRatio,
     meanAerodynamicChord,
+    MACposition,
     stallReynolds,
     cl: pointsCl,
     cd: pointsCd,
