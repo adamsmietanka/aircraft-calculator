@@ -1,9 +1,5 @@
-import { SpringValue, animated, config, useSpring } from "@react-spring/three";
-import { useMemo } from "react";
-import { BufferAttribute, BufferGeometry, DoubleSide } from "three";
-import useProfile from "../hooks/useProfile";
-import { useWingStore } from "../stores/useWing";
-import { getXTip } from "./hooks/useWingSprings";
+import { animated, config, useSpring } from "@react-spring/three";
+import { DoubleSide } from "three";
 import {
   Gltf,
   MeshTransmissionMaterial,
@@ -11,32 +7,9 @@ import {
 } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-
-const PANELS = 101;
-
-interface Props {
-  opacity: SpringValue<number>;
-}
+import useWingModel from "./hooks/useWingModel";
 
 const SceneFuselage = () => {
-  const wing = useWingStore();
-
-  const { profilePoints } = useProfile();
-
-  const pointsFuse = profilePoints.map(([x, y, z]) => [
-    wing.chord * x,
-    wing.chord * y,
-    0,
-  ]);
-
-  const xTip = getXTip(wing.angle, wing.span);
-
-  const pointsTip = profilePoints.map(([x, y, z]) => [
-    xTip + wing.chordTip * x,
-    wing.chordTip * y,
-    wing.span / 2,
-  ]);
-
   const [s] = useSpring(
     () => ({
       from: {
@@ -50,24 +23,7 @@ const SceneFuselage = () => {
     []
   );
 
-  const geometry = useMemo(() => {
-    const geom = new BufferGeometry();
-    if (profilePoints.length) {
-      let arr = [];
-      for (let i = 0; i < PANELS; i++) {
-        arr.push(...pointsFuse[i]);
-        arr.push(...pointsFuse[i + 1]);
-        arr.push(...pointsTip[i]);
-        arr.push(...pointsFuse[i + 1]);
-        arr.push(...pointsTip[i + 1]);
-        arr.push(...pointsTip[i]);
-      }
-      const attr = new BufferAttribute(new Float32Array(arr), 3);
-      geom.setAttribute("position", attr);
-      geom.computeVertexNormals();
-      return geom;
-    }
-  }, [profilePoints]);
+  const { geometry } = useWingModel();
 
   const { nodes } = useLoader(GLTFLoader, "/models/2303.glb");
 

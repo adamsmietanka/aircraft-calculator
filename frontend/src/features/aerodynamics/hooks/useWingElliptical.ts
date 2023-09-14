@@ -14,25 +14,21 @@ const useWingElliptical = () => {
     const z = -0.01;
 
     let points = [];
-    if (wing.shape === 0) {
-      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
-        points.push([0, (i * wing.span) / NUM_OF_SEGMENTS, z]);
-      }
-    } else if (wing.shape === 1) {
-      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
-        const normY = (2 * Math.abs(i)) / NUM_OF_SEGMENTS;
-        points.push([normY * xTip, (i * wing.span) / NUM_OF_SEGMENTS, z]);
-      }
-    } else {
-      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+    for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+      const norm = (2 * i) / NUM_OF_SEGMENTS;
+      const j =
+        Math.sign(norm) * (1 - (Math.abs(norm) - 1) * (Math.abs(norm) - 1));
+      console.log(norm, j);
+      if (wing.shape === 0) {
+        points.push([0, (j * wing.span) / 2, z]);
+      } else if (wing.shape === 1) {
+        points.push([Math.abs(j) * xTip, (j * wing.span) / 2, z]);
+      } else {
         points.push([
-          wing.chord *
-            F *
-            (1 -
-              Math.cos((((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2)),
+          wing.chord * F * (1 - Math.cos((Math.abs(j) * Math.PI) / 2)),
           (wing.span / 2) *
-            Math.sign(i) *
-            Math.sin((((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2),
+            Math.sign(j) *
+            Math.sin((Math.abs(j) * Math.PI) / 2),
           z,
         ]);
       }
@@ -45,31 +41,25 @@ const useWingElliptical = () => {
     const z = -0.01;
 
     let points = [];
-    if (wing.shape === 0) {
-      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
-        points.push([wing.chord, (i * wing.span) / NUM_OF_SEGMENTS, z]);
-      }
-    } else if (wing.shape === 1) {
-      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
-        const normY = (2 * Math.abs(i)) / NUM_OF_SEGMENTS;
+    for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+      const norm = (2 * i) / NUM_OF_SEGMENTS;
+      const j =
+        Math.sign(norm) * (1 - (Math.abs(norm) - 1) * (Math.abs(norm) - 1));
+      console.log(norm, j);
+      if (wing.shape === 0) {
+        points.push([wing.chord, (j * wing.span) / 2, z]);
+      } else if (wing.shape === 1) {
         points.push([
-          normY * (xTip + wing.chordTip) + (1 - normY) * wing.chord,
-          (i * wing.span) / NUM_OF_SEGMENTS,
+          Math.abs(j) * (xTip + wing.chordTip) + (1 - Math.abs(j)) * wing.chord,
+          (j * wing.span) / 2,
           z,
         ]);
-      }
-    } else {
-      for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
+      } else {
         points.push([
-          wing.chord *
-            (F +
-              (1 - F) *
-                Math.cos(
-                  (((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2
-                )),
+          wing.chord * (F + (1 - F) * Math.cos((Math.abs(j) * Math.PI) / 2)),
           (wing.span / 2) *
-            Math.sign(i) *
-            Math.sin((((2 * Math.abs(i)) / NUM_OF_SEGMENTS) * Math.PI) / 2),
+            Math.sign(j) *
+            Math.sin((Math.abs(j) * Math.PI) / 2),
           z,
         ]);
       }
@@ -83,7 +73,12 @@ const useWingElliptical = () => {
     ...trailingPoints.map(([x, y, z]) => [x, y]).reverse(),
   ];
 
-  return { leadingPoints, trailingPoints, surfacePoints };
+  const modelPoints = {
+    xOutline: leadingPoints.map(([x], index) => [x, trailingPoints[index][0]]),
+    yOutline: leadingPoints.map(([x, y, z]) => y),
+  };
+
+  return { leadingPoints, trailingPoints, surfacePoints, modelPoints };
 };
 
 export default useWingElliptical;
