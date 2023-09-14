@@ -62,19 +62,19 @@ const Line = ({
 
   useFrame(() => {
     const interpolatedPoints = marker.points.get();
+    const interpolatedOpacity = opacity ? opacity?.get() : 1;
 
     if (geometryRef.current && materialRef.current) {
       geometryRef.current.setPoints(interpolatedPoints);
+      materialRef.current.opacity = interpolatedOpacity;
     }
 
     if (!style) {
       const interpolatedOffset = test.offset.get();
-      const interpolatedOpacity = opacity ? opacity?.get() : 1;
 
       if (geometryRef.current && materialRef.current) {
         materialRef.current.dashOffset = interpolatedOffset;
         materialRef.current.dashRatio = interpolatedOffset;
-        materialRef.current.opacity = interpolatedOpacity;
       }
     }
   });
