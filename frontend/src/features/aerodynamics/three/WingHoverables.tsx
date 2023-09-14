@@ -10,6 +10,7 @@ import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { create } from "zustand";
 import { useLocation } from "react-router-dom";
 import Line from "../../common/three/Line";
+import useHoverables from "../hooks/useHoverables";
 
 const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
@@ -44,17 +45,7 @@ const WingHoverables = ({ scale }: Props) => {
     useWingAerodynamics();
   const location = useLocation();
 
-  const shape = useMemo(() => {
-    const xTip = getXTip(wing.angle, wing.span);
-    const shape = new Shape();
-
-    shape.lineTo(xTip, wing.span / 2);
-    shape.lineTo(xTip + wing.chordTip, wing.span / 2);
-    shape.lineTo(wing.chord, 0);
-    shape.lineTo(xTip + wing.chordTip, -wing.span / 2);
-    shape.lineTo(xTip, -wing.span / 2);
-    return shape;
-  }, [wing]);
+  const { shape } = useHoverables();
 
   const [hoverSpring] = useSpring(
     () => ({
