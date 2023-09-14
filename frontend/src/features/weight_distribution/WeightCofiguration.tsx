@@ -1,5 +1,5 @@
 import WeightComponet from "./WeightComponet";
-import { useWeightStore } from "../../data/stores/useWeightConfiguration";
+import { useWeightStore } from "./stores/useWeightConfiguration";
 import WeightComponent from "./interfaces/weightComponent";
 
 const WeightCofiguration = ({ setToggleModal }: any) => {
@@ -50,7 +50,9 @@ const WeightCofiguration = ({ setToggleModal }: any) => {
                   key={component?.componentName}
                   name={component?.componentName}
                   mass={component?.mass}
-                  cords={component?.cords}
+                  x={component?.x}
+                  y={component?.y}
+                  z={component?.z}
                   handleDelete={handleDelete}
                   handleEdit={handleEdit}
                 />

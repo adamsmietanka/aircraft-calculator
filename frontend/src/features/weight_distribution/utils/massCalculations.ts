@@ -1,16 +1,10 @@
-import WeightComponent from "../features/weight_distribution/interfaces/weightComponent";
+import WeightComponent from "../interfaces/weightComponent";
 
 export const CoG = (configuration: WeightComponent[]) => {
   const masses = configuration.map((component) => component.mass);
-  const mx = configuration.map(
-    (component) => component.mass * component.cords.x
-  );
-  const my = configuration.map(
-    (component) => component.mass * component.cords.y
-  );
-  const mz = configuration.map(
-    (component) => component.mass * component.cords.z
-  );
+  const mx = configuration.map((component) => component.mass * component.x);
+  const my = configuration.map((component) => component.mass * component.y);
+  const mz = configuration.map((component) => component.mass * component.z);
   const massSum = masses.reduce((a, b) => a + b);
   const mxSum = mx.reduce((a, b) => a + b);
   const mySum = my.reduce((a, b) => a + b);
@@ -19,17 +13,17 @@ export const CoG = (configuration: WeightComponent[]) => {
 };
 
 export const getXarray = (configuration: WeightComponent[]) => {
-  const xArray = configuration.map((component) => component.cords.x);
+  const xArray = configuration.map((component) => component.x);
   return xArray;
 };
 
 export const getYarray = (configuration: WeightComponent[]) => {
-  const yArray = configuration.map((component) => component.cords.y);
+  const yArray = configuration.map((component) => component.y);
   return yArray;
 };
 
 export const getZarray = (configuration: WeightComponent[]) => {
-  const zArray = configuration.map((component) => component.cords.z);
+  const zArray = configuration.map((component) => component.z);
   return zArray;
 };
 

@@ -3,7 +3,9 @@ import WeightComponent from "./interfaces/weightComponent";
 interface Component {
   name: string;
   mass: number;
-  cords: { x: number; y: number; z: number };
+  x: number;
+  y: number;
+  z: number;
   handleDelete: (component: WeightComponent) => void;
   handleEdit: (component: WeightComponent) => void;
 }
@@ -11,7 +13,9 @@ interface Component {
 const WeightComponet = ({
   name,
   mass,
-  cords,
+  x,
+  y,
+  z,
   handleDelete,
   handleEdit,
 }: Component) => {
@@ -19,15 +23,15 @@ const WeightComponet = ({
     <tr className="hover">
       <th> {name} </th>
       <th> {mass} </th>
-      <th> {cords.x} </th>
-      <th> {cords.y} </th>
-      <th> {cords.z} </th>
+      <th> {x} </th>
+      <th> {y} </th>
+      <th> {z} </th>
       <th>
         <label
           className="btn bg-yellow-600"
           htmlFor="my-modal"
           onClick={() =>
-            handleEdit({ componentName: name, mass: mass, cords: cords })
+            handleEdit({ componentName: name, mass: mass, x: x, y: y, z: z })
           }
         >
           Edit
@@ -37,7 +41,7 @@ const WeightComponet = ({
         <button
           className="btn bg-red-600 "
           onClick={() =>
-            handleDelete({ componentName: name, mass: mass, cords: cords })
+            handleDelete({ componentName: name, mass: mass, x: x, y: y, z: z })
           }
         >
           Delete

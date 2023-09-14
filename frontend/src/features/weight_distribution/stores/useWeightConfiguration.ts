@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { CoG } from "../../utils/massCalculations";
-import WeightComponent from "../../features/weight_distribution/interfaces/weightComponent";
-import WeightConfiguration from "../../features/weight_distribution/interfaces/weightConfiguration";
+import { CoG } from "../utils/massCalculations";
+import WeightComponent from "../interfaces/weightComponent";
+import WeightConfiguration from "../interfaces/weightConfiguration";
 
 interface WeightConfigurationsState {
   useType: string;
@@ -20,79 +20,118 @@ const defaultComponents1 = [
   {
     componentName: "Froward Fuselage",
     mass: 59,
-    cords: { x: 2, y: 0, z: 1.5 },
+    x: 2,
+    y: 0,
+    z: 1.5,
   },
   {
     componentName: "Center Fuselage",
     mass: 140,
-    cords: { x: 5, y: 0, z: 1.7 },
+    x: 5,
+    y: 0,
+    z: 1.7,
   },
-  { componentName: "Aft Fuselage", mass: 47, cords: { x: 7.5, y: 0, z: 1.8 } },
+
+  { componentName: "Aft Fuselage", mass: 47, x: 7.5, y: 0, z: 1.8 },
   {
     componentName: "Left Horizontal Stabilizer",
     mass: 16,
-    cords: { x: 8.7, y: 1.1, z: 2 },
+    x: 8.7,
+    y: 1.1,
+    z: 2,
   },
+
   {
     componentName: "Right Horizontal Stabilizer",
     mass: 16,
-    cords: { x: 8.7, y: -1.1, z: 2 },
+    x: 8.7,
+    y: -1.1,
+    z: 2,
   },
+
   {
     componentName: "Vertical Stabilizer",
     mass: 16,
-    cords: { x: 8, y: 0, z: 3 },
+    x: 8,
+    y: 0,
+    z: 3,
   },
-  { componentName: "Left Wing", mass: 121, cords: { x: 3.8, y: 2.6, z: 1.1 } },
+
+  { componentName: "Left Wing", mass: 121, x: 3.8, y: 2.6, z: 1.1 },
   {
     componentName: "Right Wing",
     mass: 121,
-    cords: { x: 3.8, y: -2.6, z: 1.1 },
+    x: 3.8,
+    y: -2.6,
+    z: 1.1,
   },
+
   {
     componentName: "Froward Landing Gear",
     mass: 32,
-    cords: { x: 1.5, y: 0, z: 0.7 },
+    x: 1.5,
+    y: 0,
+    z: 0.7,
   },
+
   {
     componentName: "Left Landing Gear",
     mass: 53,
-    cords: { x: 4.5, y: 0, z: 0.7 },
+    x: 4.5,
+    y: 0,
+    z: 0.7,
   },
+
   {
     componentName: "Right Landing Gear",
     mass: 53,
-    cords: { x: 4.5, y: 0, z: 0.7 },
+    x: 4.5,
+    y: 0,
+    z: 0.7,
   },
+
   {
     componentName: "Left Engine",
     mass: 216,
-    cords: { x: 3.8, y: 1.9, z: 1.4 },
+    x: 3.8,
+    y: 1.9,
+    z: 1.4,
   },
+
   {
     componentName: "Right Engine",
     mass: 216,
-    cords: { x: 3.8, y: -1.9, z: 1.4 },
+    x: 3.8,
+    y: -1.9,
+    z: 1.4,
   },
-  { componentName: "Fuel System", mass: 28, cords: { x: 4.5, y: 0, z: 1.1 } },
-  { componentName: "Steering System", mass: 19, cords: { x: 4.5, y: 0, z: 1 } },
+
+  { componentName: "Fuel System", mass: 28, x: 4.5, y: 0, z: 1.1 },
+  { componentName: "Steering System", mass: 19, x: 4.5, y: 0, z: 1 },
   {
     componentName: "Hydraulic System",
     mass: 65,
-    cords: { x: 3.4, y: 0, z: 1.2 },
+    x: 3.4,
+    y: 0,
+    z: 1.2,
   },
+
   {
     componentName: "Electrical System",
     mass: 60,
-    cords: { x: 3.2, y: 0, z: 1.2 },
+    x: 3.2,
+    y: 0,
+    z: 1.2,
   },
-  { componentName: "Avionics", mass: 50, cords: { x: 2, y: 0, z: 1.4 } },
-  { componentName: "Left Seats", mass: 45, cords: { x: 4, y: 0.3, z: 1.4 } },
-  { componentName: "Right Seats", mass: 45, cords: { x: 4, y: -0.3, z: 1.4 } },
+  { componentName: "Avionics", mass: 50, x: 2, y: 0, z: 1.4 },
+  { componentName: "Left Seats", mass: 45, x: 4, y: 0.3, z: 1.4 },
+  { componentName: "Right Seats", mass: 45, x: 4, y: -0.3, z: 1.4 },
   {
     componentName: "Anti Ice and Oxygen System",
     mass: 60,
-    cords: { x: 5, y: 0, z: 1.45 },
+    x: 5,
+    y: 0,
+    z: 1.45,
   },
 ];
 
@@ -100,95 +139,132 @@ const defaultComponents2 = [
   {
     componentName: "Froward Fuselage",
     mass: 59,
-    cords: { x: 2, y: 0, z: 1.5 },
+    x: 2,
+    y: 0,
+    z: 1.5,
   },
   {
     componentName: "Center Fuselage",
     mass: 140,
-    cords: { x: 5, y: 0, z: 1.7 },
+    x: 5,
+    y: 0,
+    z: 1.7,
   },
-  { componentName: "Aft Fuselage", mass: 47, cords: { x: 7.5, y: 0, z: 1.8 } },
+
+  { componentName: "Aft Fuselage", mass: 47, x: 7.5, y: 0, z: 1.8 },
   {
     componentName: "Left Horizontal Stabilizer",
     mass: 16,
-    cords: { x: 8.7, y: 1.1, z: 2 },
+    x: 8.7,
+    y: 1.1,
+    z: 2,
   },
+
   {
     componentName: "Right Horizontal Stabilizer",
     mass: 16,
-    cords: { x: 8.7, y: -1.1, z: 2 },
+    x: 8.7,
+    y: -1.1,
+    z: 2,
   },
+
   {
     componentName: "Vertical Stabilizer",
     mass: 16,
-    cords: { x: 8, y: 0, z: 3 },
+    x: 8,
+    y: 0,
+    z: 3,
   },
-  { componentName: "Left Wing", mass: 121, cords: { x: 3.8, y: 2.6, z: 1.1 } },
+
+  { componentName: "Left Wing", mass: 121, x: 3.8, y: 2.6, z: 1.1 },
   {
     componentName: "Right Wing",
     mass: 121,
-    cords: { x: 3.8, y: -2.6, z: 1.1 },
+    x: 3.8,
+    y: -2.6,
+    z: 1.1,
   },
+
   {
     componentName: "Froward Landing Gear",
     mass: 32,
-    cords: { x: 1.5, y: 0, z: 0.7 },
+    x: 1.5,
+    y: 0,
+    z: 0.7,
   },
+
   {
     componentName: "Left Landing Gear",
     mass: 53,
-    cords: { x: 4.5, y: 0, z: 0.7 },
+    x: 4.5,
+    y: 0,
+    z: 0.7,
   },
+
   {
     componentName: "Right Landing Gear",
     mass: 53,
-    cords: { x: 4.5, y: 0, z: 0.7 },
+    x: 4.5,
+    y: 0,
+    z: 0.7,
   },
+
   {
     componentName: "Left Engine",
     mass: 216,
-    cords: { x: 3.8, y: 1.9, z: 1.4 },
+    x: 3.8,
+    y: 1.9,
+    z: 1.4,
   },
+
   {
     componentName: "Right Engine",
     mass: 216,
-    cords: { x: 3.8, y: -1.9, z: 1.4 },
+    x: 3.8,
+    y: -1.9,
+    z: 1.4,
   },
-  { componentName: "Fuel System", mass: 28, cords: { x: 4.5, y: 0, z: 1.1 } },
-  { componentName: "Steering System", mass: 19, cords: { x: 4.5, y: 0, z: 1 } },
+
+  { componentName: "Fuel System", mass: 28, x: 4.5, y: 0, z: 1.1 },
+  { componentName: "Steering System", mass: 19, x: 4.5, y: 0, z: 1 },
   {
     componentName: "Hydraulic System",
     mass: 65,
-    cords: { x: 3.4, y: 0, z: 1.2 },
+    x: 3.4,
+    y: 0,
+    z: 1.2,
   },
+
   {
     componentName: "Electrical System",
     mass: 60,
-    cords: { x: 3.2, y: 0, z: 1.2 },
+    x: 3.2,
+    y: 0,
+    z: 1.2,
   },
-  { componentName: "Avionics", mass: 50, cords: { x: 2, y: 0, z: 1.4 } },
-  { componentName: "Left Seats", mass: 45, cords: { x: 4, y: 0.3, z: 1.4 } },
-  { componentName: "Right Seats", mass: 45, cords: { x: 4, y: -0.3, z: 1.4 } },
+  { componentName: "Avionics", mass: 50, x: 2, y: 0, z: 1.4 },
+  { componentName: "Left Seats", mass: 45, x: 4, y: 0.3, z: 1.4 },
+  { componentName: "Right Seats", mass: 45, x: 4, y: -0.3, z: 1.4 },
   {
     componentName: "Anti Ice and Oxygen System",
     mass: 60,
-    cords: { x: 5, y: 0, z: 1.45 },
+    x: 5,
+    y: 0,
+    z: 1.45,
   },
-  { componentName: "Fuel", mass: 60, cords: { x: 4.4, y: 0, z: 1.1 } },
 ];
-
-const defaultConfigurations = [
+const defaultConfigurations: WeightConfiguration[] = [
   {
-    name: "Default Configuration 1",
+    name: "Default Config 1",
     components: defaultComponents1,
     MAC: 1.9,
-    MACPosition: 3.2,
+    MACPosition: 3.6,
   },
   {
-    name: "Default Configuration 2",
+    name: "Default Config 2",
     components: defaultComponents2,
     MAC: 1.9,
-    MACPosition: 3.2,
+    MACPosition: 3.6,
   },
 ];
 
@@ -197,7 +273,9 @@ export const useWeightStore = create<WeightConfigurationsState>()((set) => ({
   editedComponent: {
     componentName: "Fuselage",
     mass: 900,
-    cords: { x: 0, y: 0, z: 0 },
+    x: 0,
+    y: 0,
+    z: 0,
   },
   weightConfigurations: defaultConfigurations,
   activeWeightConfiguration: defaultConfigurations[0],

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useWeightStore } from "../../data/stores/useWeightConfiguration";
+import { useWeightStore } from "./stores/useWeightConfiguration";
 import RadioOptions from "../../components/atoms/RadioOptions";
 import WeightComponent from "./interfaces/weightComponent";
 import OverwritableInputNumber from "../../components/atoms/OverwritableInputNumber";

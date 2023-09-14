@@ -1,5 +1,5 @@
 import Plotly from "plotly.js-dist-min";
-import { useWeightStore } from "../../data/stores/useWeightConfiguration";
+import { useWeightStore } from "./stores/useWeightConfiguration";
 import { useEffect } from "react";
 import {
   CoG,
@@ -7,7 +7,7 @@ import {
   getXarray,
   getYarray,
   getZarray,
-} from "../../utils/massCalculations";
+} from "./utils/massCalculations";
 import WeightComponent from "./interfaces/weightComponent";
 
 const layouts = (axis: string) => {
@@ -66,7 +66,7 @@ const layouts = (axis: string) => {
 };
 
 const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
-  let emptyNmberArray:number[] = []
+  let emptyNmberArray: number[] = [];
   let trace = {
     x: emptyNmberArray,
     y: emptyNmberArray,
@@ -92,8 +92,8 @@ const getTrace = (configuration: Array<WeightComponent>, axis: string) => {
     textposition: "bottom center",
     marker: { size: 12 },
   };
-  if (configuration.length === 0){
-    return  [trace, CoGtrace]
+  if (configuration.length === 0) {
+    return [trace, CoGtrace];
   }
   let CoGvalue = CoG(configuration);
   switch (axis) {
@@ -193,9 +193,21 @@ const WeightDistributionCharts = () => {
       plot_yz: getTrace(activeWeightConfiguration.components, "plot_yz"),
       plot_xz: getTrace(activeWeightConfiguration.components, "plot_xz"),
     };
-    Plotly.newPlot("plot_xy", getTrace(activeWeightConfiguration.components,"plot_xy"), layouts("plot_xy"));
-    Plotly.newPlot("plot_yz", getTrace(activeWeightConfiguration.components,"plot_yz"), layouts("plot_yz"));
-    Plotly.newPlot("plot_xz", getTrace(activeWeightConfiguration.components,"plot_xz"), layouts("plot_xz"));
+    Plotly.newPlot(
+      "plot_xy",
+      getTrace(activeWeightConfiguration.components, "plot_xy"),
+      layouts("plot_xy")
+    );
+    Plotly.newPlot(
+      "plot_yz",
+      getTrace(activeWeightConfiguration.components, "plot_yz"),
+      layouts("plot_yz")
+    );
+    Plotly.newPlot(
+      "plot_xz",
+      getTrace(activeWeightConfiguration.components, "plot_xz"),
+      layouts("plot_xz")
+    );
   });
 
   return (

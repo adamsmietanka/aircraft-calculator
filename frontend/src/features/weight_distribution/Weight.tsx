@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import WeightCofiguration from "./WeightCofiguration";
-import { useWeightStore } from "../../data/stores/useWeightConfiguration";
+import { useWeightStore } from "./stores/useWeightConfiguration";
 import WeightDistributionCharts from "./WeightDistributionCharts";
 import AddConfiguration from "./AddConfiguration";
 import { ReactComponent as Edit } from "../../assets/edit.svg";
 
-import { CoG } from "../../utils/massCalculations";
+import { CoG } from "./utils/massCalculations";
 import AddComponent from "./AddComponent";
 import WeightDistribution3D from "./three/WeightDistribution3D";
 
@@ -119,7 +119,7 @@ const Weight = () => {
             <WeightCofiguration setToggleModal={setToggleModal_2} />
           </div>
           {/*right row */}
-          <div className="flex flex-col w-full h-1/4">
+          <div className="flex flex-col  h-1/4">
             <WeightDistribution3D />
           </div>
         </div>

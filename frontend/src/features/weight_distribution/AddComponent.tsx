@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CloseButton from "../../components/atoms/CloseButton";
-import { useWeightStore } from "../../data/stores/useWeightConfiguration";
+import { useWeightStore } from "./stores/useWeightConfiguration";
 import WeightComponent from "./interfaces/weightComponent";
 import InputNumber from "../common/inputs/InputNumber";
 
@@ -28,9 +28,9 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
     if (component && useType === "edit") {
       setName(component?.componentName);
       setMass(component.mass);
-      setX(component.cords.x);
-      setY(component.cords.y);
-      setZ(component.cords.z);
+      setX(component.x);
+      setY(component.y);
+      setZ(component.z);
     }
   }, [component]);
 
@@ -112,7 +112,9 @@ const AddComponent = ({ useType, component, isVisible, onClose }: props) => {
                   handleChange({
                     componentName: componentName,
                     mass: mass,
-                    cords: { x: x, y: y, z: z },
+                    x: x,
+                    y: y,
+                    z: z,
                   });
                 }}
               >
