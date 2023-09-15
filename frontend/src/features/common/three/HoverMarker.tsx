@@ -1,11 +1,9 @@
 import { animated, to, useSpring } from "@react-spring/three";
-import { useFrame } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import { MeshLineGeometry, Text } from "@react-three/drei";
+import { Text } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
-import { MeshLineMaterial } from "meshline";
 import { Axis } from "./LineChart";
 import round from "../../../utils/interpolation/round";
 import {
@@ -13,6 +11,8 @@ import {
   SimpleMarkerStore,
   SynchronizedXMarkersStore,
 } from "./Hover";
+
+import AnimatedLine from "./AnimatedLine";
 
 interface Props {
   name: string;
@@ -26,17 +26,25 @@ interface Props {
   enabled: boolean;
 }
 
-const HoverMarker = ({ name, store, axes, scale, min, step, enabled }: Props) => {
+const HoverMarker = ({
+  name,
+  store,
+  axes,
+  scale,
+  min,
+  step,
+  enabled,
+}: Props) => {
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
-  const { gridColor, primaryColor, backgroundColor } = useCSSColors();
+  const { primaryColor, backgroundColor } = useCSSColors();
   const AnimatedText = animated(Text);
 
   const [hoverSpring, hoverApi] = useSpring(
     () => ({
       x: 0,
       y: 0,
-      points: [],
+      points: [0, 0, 0],
       opacity: 0,
       width: 2,
     }),
@@ -55,7 +63,17 @@ const HoverMarker = ({ name, store, axes, scale, min, step, enabled }: Props) =>
     hoverApi.start({
       x,
       y,
-      points: [min.x / scale[0], y, 0.1, x, y, 0.1, x, min.y / scale[1], 0.1],
+      points: [
+        min.x,
+        y * scale[1],
+        0.1,
+        x * scale[0],
+        y * scale[1],
+        0.1,
+        x * scale[0],
+        min.y,
+        0.1,
+      ],
     });
   };
 
@@ -93,20 +111,6 @@ const HoverMarker = ({ name, store, axes, scale, min, step, enabled }: Props) =>
     return () => clearTimeout(timer);
   }, []);
 
-  const geometryRef = useRef<MeshLineGeometry>(null);
-  const materialRef = useRef<MeshLineMaterial>(null);
-
-  useFrame(() => {
-    const interpolatedPoints = hoverSpring.points.get();
-    const interpolatedOpacity = hoverSpring.opacity.get();
-    const interpolatedWidth = hoverSpring.width.get();
-
-    if (geometryRef.current && materialRef.current) {
-      materialRef.current.opacity = interpolatedOpacity;
-      materialRef.current.lineWidth = interpolatedWidth * 0.05;
-      geometryRef.current.setPoints(interpolatedPoints);
-    }
-  });
   const x = store.getState().x;
 
   const displayX = round(
@@ -122,54 +126,58 @@ const HoverMarker = ({ name, store, axes, scale, min, step, enabled }: Props) =>
   );
 
   return (
-    <animated.mesh
-      scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [x, y, 1])}
-      visible={enabled}
-    >
-      <AnimatedText
-        fontSize={0.6 * FONT_SIZE}
-        position={to([hoverSpring.x, scaleSpring.y], (x, scale) => [
-          x,
-          (min.y - NUMBERS_PADDING) / scale,
-          0.375,
-        ])}
-        scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [1 / x, 1 / y, 1])}
-        color={primaryColor}
-        fillOpacity={hoverSpring.opacity}
-        outlineWidth={0.2}
-        outlineColor={backgroundColor}
-        outlineOpacity={hoverSpring.opacity}
-      >
-        {displayX}
-      </AnimatedText>
-      <AnimatedText
-        fontSize={0.6 * FONT_SIZE}
-        position={to([hoverSpring.y, scaleSpring.x], (y, scale) => [
-          (min.x - 1.5 * NUMBERS_PADDING) / scale,
-          y,
-          0.375,
-        ])}
-        scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [1 / x, 1 / y, 1])}
-        color={primaryColor}
-        fillOpacity={hoverSpring.opacity}
-        outlineWidth={0.2}
-        outlineColor={backgroundColor}
-        outlineOpacity={hoverSpring.opacity}
-      >
-        {displayY}
-      </AnimatedText>
-
-      <meshLineGeometry ref={geometryRef} points={[0, 0, 0, 1000, 1000, 0]} />
-      <meshLineMaterial
-        ref={materialRef}
-        dashArray={0.01}
-        dashOffset={1}
-        dashRatio={0.8}
-        transparent
-        lineWidth={0.05}
-        color={gridColor}
+    <>
+      <AnimatedLine
+        points={hoverSpring.points}
+        opacity={hoverSpring.opacity}
+        width={hoverSpring.width}
       />
-    </animated.mesh>
+      <animated.mesh
+        scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [x, y, 1])}
+        visible={enabled}
+      >
+        <AnimatedText
+          fontSize={0.6 * FONT_SIZE}
+          position={to([hoverSpring.x, scaleSpring.y], (x, scale) => [
+            x,
+            (min.y - NUMBERS_PADDING) / scale,
+            0.375,
+          ])}
+          scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [
+            1 / x,
+            1 / y,
+            1,
+          ])}
+          color={primaryColor}
+          fillOpacity={hoverSpring.opacity}
+          outlineWidth={0.2}
+          outlineColor={backgroundColor}
+          outlineOpacity={hoverSpring.opacity}
+        >
+          {displayX}
+        </AnimatedText>
+        <AnimatedText
+          fontSize={0.6 * FONT_SIZE}
+          position={to([hoverSpring.y, scaleSpring.x], (y, scale) => [
+            (min.x - 1.5 * NUMBERS_PADDING) / scale,
+            y,
+            0.375,
+          ])}
+          scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [
+            1 / x,
+            1 / y,
+            1,
+          ])}
+          color={primaryColor}
+          fillOpacity={hoverSpring.opacity}
+          outlineWidth={0.2}
+          outlineColor={backgroundColor}
+          outlineOpacity={hoverSpring.opacity}
+        >
+          {displayY}
+        </AnimatedText>
+      </animated.mesh>
+    </>
   );
 };
 
