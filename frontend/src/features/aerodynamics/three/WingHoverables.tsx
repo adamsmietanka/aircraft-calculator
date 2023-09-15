@@ -1,19 +1,12 @@
-import React, { useMemo, useRef } from "react";
-import { useFrame } from "@react-three/fiber";
-import useWing3D from "./hooks/useWing3D";
-import { Shape } from "three";
 import { useWingStore } from "../stores/useWing";
 import AnimatedHtml from "./AnimatedHtml";
 import Formula from "../../common/Formula";
-import { animated, SpringValue, useSpring } from "@react-spring/three";
+import { animated, SpringValue } from "@react-spring/three";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { create } from "zustand";
 import { useLocation } from "react-router-dom";
 import Line from "../../common/three/Line";
 import useHoverables from "../hooks/useHoverables";
-
-const getXTip = (angle: number, span: number) =>
-  (Math.tan((angle * Math.PI) / 180) * span) / 2;
 
 export interface HoverStore {
   surface: boolean;
@@ -36,8 +29,6 @@ interface Props {
 }
 
 const WingHoverables = ({ scale }: Props) => {
-  const shapeRef = useRef<THREE.ShapeGeometry>(null);
-
   const wing = useWingStore();
   const hoverStore = useHoverWingStore();
 
@@ -47,58 +38,48 @@ const WingHoverables = ({ scale }: Props) => {
 
   const { shape } = useHoverables();
 
-  const [hoverSpring] = useSpring(
-    () => ({
-      surface: hoverStore.surface ? 0.5 : 0,
-      b: hoverStore.b ? 0.75 : 0,
-      chords: hoverStore.chords ? 0.75 : 0,
-      MAC: hoverStore.MAC ? 0.75 : 0,
-    }),
-    [hoverStore]
-  );
-
   return (
     <>
-      <mesh position-z={-0.1}>
-        <shapeGeometry args={[shape]} ref={shapeRef} />
-        <animated.meshBasicMaterial
-          color="green"
-          transparent
-          opacity={hoverSpring.surface.to((o) => o)}
-        />
-      </mesh>
-      <animated.mesh position-x={MACposition[0]}>
-        <mesh position-y={MACposition[1]}>
+      {hoverStore.surface && (
+        <mesh>
+          <shapeGeometry args={[shape]} />
+          <meshStandardMaterial color="green" transparent opacity={0.5} />
+        </mesh>
+      )}
+      {hoverStore.MAC && (
+        <mesh
+          position-x={MACposition[0]}
+        >
+          <mesh position-y={MACposition[1]}>
+            <Line
+              trace={{
+                name: "Outline",
+                points: [
+                  [0, 0, 0],
+                  [1, 0, 0],
+                ],
+              }}
+              scale={[meanAerodynamicChord, 1, 1]}
+              color="gray"
+            />
+          </mesh>
           <Line
             trace={{
               name: "Outline",
               points: [
-                [0, 0, 0],
-                [1, 0, 0],
+                [0, wing.span / 2, 0],
+                [1, wing.span / 2, 0],
+                [1, -wing.span / 2, 0],
+                [0, -wing.span / 2, 0],
+                [0, wing.span / 2, 0],
               ],
             }}
             scale={[meanAerodynamicChord, 1, 1]}
             color="gray"
-            opacity={hoverSpring.MAC}
+            style="dotted"
           />
         </mesh>
-        <Line
-          trace={{
-            name: "Outline",
-            points: [
-              [0, wing.span / 2, 0],
-              [1, wing.span / 2, 0],
-              [1, -wing.span / 2, 0],
-              [0, -wing.span / 2, 0],
-              [0, wing.span / 2, 0],
-            ],
-          }}
-          scale={[meanAerodynamicChord, 1, 1]}
-          color="gray"
-          style="dotted"
-          opacity={hoverSpring.MAC}
-        />
-      </animated.mesh>
+      )}
       <animated.mesh
         position-y={scale.to((s) => -4 / s)}
         position-x={scale.to((s) => -2 / s)}
