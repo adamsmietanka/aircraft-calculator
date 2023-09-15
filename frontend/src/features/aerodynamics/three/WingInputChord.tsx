@@ -95,11 +95,13 @@ const WingInputChord = ({ chord, scale }: Props) => {
         scale={scale.to((s) => 1 / s)}
       >
         <Html className="select-none" color="black" transform prepend>
-          {hoverWing.chords ? (
-            <Formula className="text-xl" tex={`\\color{green}c`} />
-          ) : (
-            <InputDrawing value={wing.chord} setter={wing.setChord} />
-          )}
+          <div className={`${hoverWing.chords && "hidden"}`}>
+            <InputDrawing value={wing.chordTip} setter={wing.setChord} />
+          </div>
+          <Formula
+            className={`text-xl ${hoverWing.chords || "hidden"}`}
+            tex={`\\color{green}c`}
+          />
         </Html>
       </animated.mesh>
     </animated.mesh>

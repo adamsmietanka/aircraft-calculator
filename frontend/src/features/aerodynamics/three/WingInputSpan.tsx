@@ -94,11 +94,13 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
           scale={scale.to((s) => 1 / s)}
         >
           <Html className="select-none" color="black" transform prepend>
-            {hoverWing.b ? (
-              <Formula className="text-xl mb-1" tex={`\\color{red}b`} />
-            ) : (
+            <div className={`${hoverWing.b && "hidden"}`}>
               <InputDrawing value={wing.span} setter={wing.setSpan} />
-            )}
+            </div>
+            <Formula
+              className={`text-xl ${hoverWing.b || "hidden"}`}
+              tex={`\\color{red}b`}
+            />
           </Html>
         </animated.mesh>
       </mesh>
