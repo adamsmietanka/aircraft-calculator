@@ -1,4 +1,4 @@
-import { animated, to, useSpring } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import { useEffect } from "react";
 import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
@@ -51,18 +51,10 @@ const HoverMarker = ({
     []
   );
 
-  const [scaleSpring] = useSpring(
-    () => ({
-      x: scale[0],
-      y: scale[1],
-    }),
-    [scale]
-  );
-
   const updatePosition = (x: number, y: number) => {
     hoverApi.start({
-      x,
-      y,
+      x: x * scale[0],
+      y: y * scale[1],
       points: [
         min.x,
         y * scale[1],
@@ -132,51 +124,32 @@ const HoverMarker = ({
         opacity={hoverSpring.opacity}
         width={hoverSpring.width}
       />
-      <animated.mesh
-        scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [x, y, 1])}
-        visible={enabled}
+      <AnimatedText
+        fontSize={0.6 * FONT_SIZE}
+        position={hoverSpring.x.to((x) => [x, min.y - NUMBERS_PADDING, 0.375])}
+        color={primaryColor}
+        fillOpacity={hoverSpring.opacity}
+        outlineWidth={0.2}
+        outlineColor={backgroundColor}
+        outlineOpacity={hoverSpring.opacity}
       >
-        <AnimatedText
-          fontSize={0.6 * FONT_SIZE}
-          position={to([hoverSpring.x, scaleSpring.y], (x, scale) => [
-            x,
-            (min.y - NUMBERS_PADDING) / scale,
-            0.375,
-          ])}
-          scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [
-            1 / x,
-            1 / y,
-            1,
-          ])}
-          color={primaryColor}
-          fillOpacity={hoverSpring.opacity}
-          outlineWidth={0.2}
-          outlineColor={backgroundColor}
-          outlineOpacity={hoverSpring.opacity}
-        >
-          {displayX}
-        </AnimatedText>
-        <AnimatedText
-          fontSize={0.6 * FONT_SIZE}
-          position={to([hoverSpring.y, scaleSpring.x], (y, scale) => [
-            (min.x - 1.5 * NUMBERS_PADDING) / scale,
-            y,
-            0.375,
-          ])}
-          scale={to([scaleSpring.x, scaleSpring.y], (x, y) => [
-            1 / x,
-            1 / y,
-            1,
-          ])}
-          color={primaryColor}
-          fillOpacity={hoverSpring.opacity}
-          outlineWidth={0.2}
-          outlineColor={backgroundColor}
-          outlineOpacity={hoverSpring.opacity}
-        >
-          {displayY}
-        </AnimatedText>
-      </animated.mesh>
+        {displayX}
+      </AnimatedText>
+      <AnimatedText
+        fontSize={0.6 * FONT_SIZE}
+        position={hoverSpring.y.to((y) => [
+          min.x - 1.5 * NUMBERS_PADDING,
+          y,
+          0.375,
+        ])}
+        color={primaryColor}
+        fillOpacity={hoverSpring.opacity}
+        outlineWidth={0.2}
+        outlineColor={backgroundColor}
+        outlineOpacity={hoverSpring.opacity}
+      >
+        {displayY}
+      </AnimatedText>
     </>
   );
 };

@@ -133,11 +133,14 @@ const Hover = ({
         onClick={(e) => {
           if (enabled) {
             const oldLocked = store.getState().locked;
+            // for charts that have individual locks
             if (typeof oldLocked === "string") {
               store.setState((state) => ({
                 locked: state.locked === "" ? name : "",
               }));
-            } else {
+            }
+            // for charts sharing a lock
+            else {
               store.setState((state) => ({ locked: !state.locked }));
             }
           }

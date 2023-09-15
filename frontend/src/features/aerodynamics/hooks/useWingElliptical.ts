@@ -18,7 +18,6 @@ const useWingElliptical = () => {
       const norm = (2 * i) / NUM_OF_SEGMENTS;
       const j =
         Math.sign(norm) * (1 - (Math.abs(norm) - 1) * (Math.abs(norm) - 1));
-      console.log(norm, j);
       if (wing.shape === 0) {
         points.push([0, (j * wing.span) / 2, z]);
       } else if (wing.shape === 1) {
@@ -45,7 +44,6 @@ const useWingElliptical = () => {
       const norm = (2 * i) / NUM_OF_SEGMENTS;
       const j =
         Math.sign(norm) * (1 - (Math.abs(norm) - 1) * (Math.abs(norm) - 1));
-      console.log(norm, j);
       if (wing.shape === 0) {
         points.push([wing.chord, (j * wing.span) / 2, z]);
       } else if (wing.shape === 1) {

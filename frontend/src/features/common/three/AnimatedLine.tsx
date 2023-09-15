@@ -1,9 +1,10 @@
 import { Line } from "@react-three/drei";
-import { useRef } from "react";
-import { Line2 } from "three-stdlib";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Line2, LineGeometry } from "three-stdlib";
 import { useCSSColors } from "./config";
 import { SpringValue } from "@react-spring/three";
-import { useFrame } from "@react-three/fiber";
+import { invalidate, useFrame } from "@react-three/fiber";
+import { ALine } from "./ALine";
 
 interface Props {
   points: SpringValue<number[]>;
@@ -12,15 +13,20 @@ interface Props {
 }
 
 const AnimatedLine = ({ points, opacity, width }: Props) => {
-  const { gridColor, primaryColor, backgroundColor } = useCSSColors();
+  const { gridColor } = useCSSColors();
 
   const lineRef = useRef<Line2>(null);
+
+  const [_, force] = useState([]);
 
   useFrame(() => {
     const interpolatedPoints = points.get();
     const interpolatedOpacity = opacity.get();
     const interpolatedWidth = width.get();
-    console.log(lineRef.current, interpolatedPoints);
+
+    if (points.animation.changed) {
+        force([]);
+    }
 
     if (lineRef.current) {
       lineRef.current.geometry.setPositions(interpolatedPoints);
@@ -30,15 +36,20 @@ const AnimatedLine = ({ points, opacity, width }: Props) => {
     }
   });
 
+//   useEffect(() => {
+//     force([]);
+//     console.log(1);
+//     const timer = setTimeout(() => {
+//       force([]);
+//       console.log(1234);
+//     }, 500);
+//     return () => clearTimeout(timer);
+//   }, [lineRef.current]);
+
   return (
     <Line
       ref={lineRef}
-      points={[
-        [0, 0, -1],
-        [0.1, 1, -1],
-        [0.2, 0, -1],
-      ]}
-      lineWidth={0.5} // In pixels (default)
+      points={[0, 0, -1, 0.1, 1, -1, 0.2, 0, -1]}
       dashed
       dashSize={0.25}
       gapSize={0.75}
