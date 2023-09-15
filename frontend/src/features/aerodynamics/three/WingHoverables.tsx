@@ -7,6 +7,7 @@ import { create } from "zustand";
 import { useLocation } from "react-router-dom";
 import Line from "../../common/three/Line";
 import useHoverables from "../hooks/useHoverables";
+import HoverableFormula from "../../common/HoverableFormula";
 
 export interface HoverStore {
   surface: boolean;
@@ -83,54 +84,40 @@ const WingHoverables = ({ scale }: Props) => {
           color={"green"}
           show={location.pathname === "/aerodynamics/wing"}
         >
+          <HoverableFormula
+            name="Aspect Ratio"
+            tex={`\\Lambda=${aspectRatio.toFixed(2)}`}
+            texHover={`\\Lambda=\\frac{\\color{red}b^2}{\\color{green}S}`}
+            hover={hoverStore.b}
+            onEnter={() => hoverStore.set({ surface: true, b: true })}
+            onLeave={() => hoverStore.set({ surface: false, b: false })}
+            center
+          />
+          <HoverableFormula
+            name="Taper Ratio"
+            tex={`\\large\\lambda\\normalsize=${taperRatio.toFixed(2)}`}
+            texHover={`\\large\\lambda\\normalsize= \\frac{\\color{orange}c_t}{\\color{green}c}`}
+            hover={hoverStore.chords}
+            onEnter={() => hoverStore.set({ chords: true })}
+            onLeave={() => hoverStore.set({ chords: false })}
+          />
           <div
-            className="tooltip tooltip-top flex items-start h-10 text-3xl"
-            data-tip="Aspect Ratio"
+            className="tooltip tooltip-top flex"
+            data-tip="Wing Surface"
+            onPointerEnter={() => hoverStore.set({ surface: true })}
+            onPointerLeave={() => hoverStore.set({ surface: false })}
           >
-            <Formula
-              className="flex items-center h-10 text-3xl"
-              tex={`\\Lambda=${
-                hoverStore.b
-                  ? " \\frac{\\color{red}b^2}{\\color{green}S}"
-                  : aspectRatio.toFixed(2)
-              }`}
-              onPointerEnter={() => hoverStore.set({ surface: true, b: true })}
-              onPointerLeave={() =>
-                hoverStore.set({ surface: false, b: false })
-              }
-            />
-          </div>
-          <div
-            className="tooltip tooltip-top flex items-start h-10 text-3xl"
-            data-tip="Taper Ratio"
-          >
-            <Formula
-              tex={`\\large\\lambda\\normalsize=${
-                hoverStore.chords
-                  ? " \\frac{\\color{orange}c_t}{\\color{green}c}"
-                  : taperRatio.toFixed(2)
-              }`}
-              onPointerEnter={() => hoverStore.set({ chords: true })}
-              onPointerLeave={() => hoverStore.set({ chords: false })}
-            />
-          </div>
-          <div className="tooltip tooltip-top flex" data-tip="Wing Surface">
-            <Formula
-              className="text-2xl"
-              tex={`S=${area.toFixed(2)}\\, m^2`}
-              onPointerEnter={() => hoverStore.set({ surface: true })}
-              onPointerLeave={() => hoverStore.set({ surface: false })}
-            />
+            <Formula className="text-2xl" tex={`S=${area.toFixed(2)}\\, m^2`} />
           </div>
           <div
             className="tooltip tooltip-bottom"
             data-tip="Mean aerodynamic chord"
+            onPointerEnter={() => hoverStore.set({ MAC: true })}
+            onPointerLeave={() => hoverStore.set({ MAC: false })}
           >
             <Formula
               className="text-2xl mt-1"
               tex={`MAC=${meanAerodynamicChord.toFixed(2)}\\, m`}
-              onPointerEnter={() => hoverStore.set({ MAC: true })}
-              onPointerLeave={() => hoverStore.set({ MAC: false })}
             />
           </div>
         </AnimatedHtml>
