@@ -40,46 +40,40 @@ const WingHoverables = ({ scale }: Props) => {
 
   return (
     <>
-      {hoverStore.surface && (
-        <mesh>
-          <shapeGeometry args={[shape]} />
-          <meshStandardMaterial color="green" transparent opacity={0.5} />
-        </mesh>
-      )}
-      {hoverStore.MAC && (
-        <mesh
-          position-x={MACposition[0]}
-        >
-          <mesh position-y={MACposition[1]}>
-            <Line
-              trace={{
-                name: "Outline",
-                points: [
-                  [0, 0, 0],
-                  [1, 0, 0],
-                ],
-              }}
-              scale={[meanAerodynamicChord, 1, 1]}
-              color="gray"
-            />
-          </mesh>
+      <mesh visible={hoverStore.surface}>
+        <shapeGeometry args={[shape]} />
+        <meshStandardMaterial color="green" transparent opacity={0.5} />
+      </mesh>
+      <mesh position-x={MACposition[0]} visible={hoverStore.MAC}>
+        <mesh position-y={MACposition[1]}>
           <Line
             trace={{
               name: "Outline",
               points: [
-                [0, wing.span / 2, 0],
-                [1, wing.span / 2, 0],
-                [1, -wing.span / 2, 0],
-                [0, -wing.span / 2, 0],
-                [0, wing.span / 2, 0],
+                [0, 0, 0],
+                [1, 0, 0],
               ],
             }}
             scale={[meanAerodynamicChord, 1, 1]}
             color="gray"
-            style="dotted"
           />
         </mesh>
-      )}
+        <Line
+          trace={{
+            name: "Outline",
+            points: [
+              [0, wing.span / 2, 0],
+              [1, wing.span / 2, 0],
+              [1, -wing.span / 2, 0],
+              [0, -wing.span / 2, 0],
+              [0, wing.span / 2, 0],
+            ],
+          }}
+          scale={[meanAerodynamicChord, 1, 1]}
+          color="gray"
+          style="dotted"
+        />
+      </mesh>
       <animated.mesh
         position-y={scale.to((s) => -4 / s)}
         position-x={scale.to((s) => -2 / s)}
