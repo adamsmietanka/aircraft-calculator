@@ -35,7 +35,7 @@ const HoverableFormula = ({
 
   return (
     <div
-      className={`tooltip tooltip-top h-8 text-3xl flex ${
+      className={`tooltip tooltip-left h-8 flex ${
         center && "items-center"
       }`}
       data-tip={name}

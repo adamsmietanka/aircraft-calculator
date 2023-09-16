@@ -10,8 +10,8 @@ import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTips from "../../common/drawings/AnimatedTips";
-import { useHoverWingStore } from "./WingHoverables";
 import Formula from "../../common/Formula";
+import { useHoverWingStore } from "../hooks/useHoverables";
 
 interface Props {
   scale: SpringValue<number>;
@@ -96,7 +96,7 @@ const WingInputChord = ({ chord, scale }: Props) => {
       >
         <Html className="select-none" color="black" transform prepend>
           <div className={`${hoverWing.chords && "hidden"}`}>
-            <InputDrawing value={wing.chordTip} setter={wing.setChord} />
+            <InputDrawing value={wing.chord} setter={wing.setChord} />
           </div>
           <Formula
             className={`text-xl ${hoverWing.chords || "hidden"}`}

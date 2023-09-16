@@ -1,29 +1,10 @@
-import { useWingStore } from "../stores/useWing";
-import AnimatedHtml from "./AnimatedHtml";
-import Formula from "../../common/Formula";
+import { Html } from "@react-three/drei";
 import { animated, SpringValue } from "@react-spring/three";
+import { useWingStore } from "../stores/useWing";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
-import { create } from "zustand";
-import { useLocation } from "react-router-dom";
+import { useHoverables, useHoverWingStore } from "../hooks/useHoverables";
 import Line from "../../common/three/Line";
-import useHoverables from "../hooks/useHoverables";
 import HoverableFormula from "../../common/HoverableFormula";
-
-export interface HoverStore {
-  surface: boolean;
-  b: boolean;
-  chords: boolean;
-  MAC: boolean;
-  set: (value: Partial<HoverStore>) => void;
-}
-
-export const useHoverWingStore = create<HoverStore>()((set) => ({
-  surface: false,
-  b: false,
-  chords: false,
-  MAC: false,
-  set: (value) => set(value),
-}));
 
 interface Props {
   scale: SpringValue<number>;
@@ -35,7 +16,6 @@ const WingHoverables = ({ scale }: Props) => {
 
   const { area, aspectRatio, taperRatio, meanAerodynamicChord, MACposition } =
     useWingAerodynamics();
-  const location = useLocation();
 
   const { shape } = useHoverables();
 
@@ -76,14 +56,11 @@ const WingHoverables = ({ scale }: Props) => {
         />
       </mesh>
       <animated.mesh
-        position-y={scale.to((s) => -4 / s)}
+        position-y={scale.to((s) => -5 / s)}
         position-x={scale.to((s) => -2 / s)}
         scale={scale.to((s) => 1 / s)}
       >
-        <AnimatedHtml
-          color={"green"}
-          show={location.pathname === "/aerodynamics/wing"}
-        >
+        <Html className="text-2xl space-y-3" transform>
           <HoverableFormula
             name="Aspect Ratio"
             tex={`\\Lambda=${aspectRatio.toFixed(2)}`}
@@ -101,26 +78,25 @@ const WingHoverables = ({ scale }: Props) => {
             onEnter={() => hoverStore.set({ chords: true })}
             onLeave={() => hoverStore.set({ chords: false })}
           />
-          <div
-            className="tooltip tooltip-top flex"
-            data-tip="Wing Surface"
-            onPointerEnter={() => hoverStore.set({ surface: true })}
-            onPointerLeave={() => hoverStore.set({ surface: false })}
-          >
-            <Formula className="text-2xl" tex={`S=${area.toFixed(2)}\\, m^2`} />
-          </div>
-          <div
-            className="tooltip tooltip-bottom"
-            data-tip="Mean aerodynamic chord"
-            onPointerEnter={() => hoverStore.set({ MAC: true })}
-            onPointerLeave={() => hoverStore.set({ MAC: false })}
-          >
-            <Formula
-              className="text-2xl mt-1"
-              tex={`MAC=${meanAerodynamicChord.toFixed(2)}\\, m`}
-            />
-          </div>
-        </AnimatedHtml>
+          <HoverableFormula
+            name="Wing Surface"
+            tex={`S=${area.toFixed(2)}\\, m^2`}
+            texHover={` \\textcolor{green}{S}=${area.toFixed(2)}\\, m^2`}
+            hover={hoverStore.surface}
+            onEnter={() => hoverStore.set({ surface: true })}
+            onLeave={() => hoverStore.set({ surface: false })}
+          />
+          <HoverableFormula
+            name="Mean Aerodynamic Chord"
+            tex={`MAC=${meanAerodynamicChord.toFixed(2)}\\, m`}
+            texHover={` \\textcolor{gray}{MAC}=${meanAerodynamicChord.toFixed(
+              2
+            )}\\, m`}
+            hover={hoverStore.MAC}
+            onEnter={() => hoverStore.set({ MAC: true })}
+            onLeave={() => hoverStore.set({ MAC: false })}
+          />
+        </Html>
       </animated.mesh>
     </>
   );
