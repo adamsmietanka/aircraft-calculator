@@ -1,11 +1,27 @@
 import { useMemo } from "react";
 import { getXTip } from "../three/hooks/useWingSprings";
 import { useWingStore } from "../stores/useWing";
-import { useHoverWingStore } from "../three/WingHoverables";
 import { Shape } from "three";
 import useWingElliptical from "./useWingElliptical";
+import { create } from "zustand";
 
-const useHoverables = () => {
+interface HoverStore {
+  surface: boolean;
+  b: boolean;
+  chords: boolean;
+  MAC: boolean;
+  set: (value: Partial<HoverStore>) => void;
+}
+
+export const useHoverWingStore = create<HoverStore>()((set) => ({
+  surface: false,
+  b: false,
+  chords: false,
+  MAC: false,
+  set: (value) => set(value),
+}));
+
+export const useHoverables = () => {
   const wing = useWingStore();
   const hoverStore = useHoverWingStore();
 
@@ -35,4 +51,3 @@ const useHoverables = () => {
   }, [hoverStore.surface, wing.shape]);
   return { shape };
 };
-export default useHoverables;

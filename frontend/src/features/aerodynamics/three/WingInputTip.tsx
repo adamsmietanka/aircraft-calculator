@@ -10,8 +10,8 @@ import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTips from "../../common/drawings/AnimatedTips";
-import { useHoverWingStore } from "./WingHoverables";
 import Formula from "../../common/Formula";
+import { useHoverWingStore } from "../hooks/useHoverables";
 
 interface Props {
   scale: SpringValue<number>;
