@@ -7,7 +7,7 @@ import LineChart from "../../common/three/LineChart";
 import useProfileCharts from "../hooks/useProfileCharts";
 import { useLocation } from "react-router-dom";
 
-const SceneProfile = () => {
+const Profile = () => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
   const location = useLocation();
 
@@ -46,11 +46,10 @@ const SceneProfile = () => {
           },
         }}
         store={useProfileChartsStore}
-        hoverEnabled={onProfileStep}
       />
       <LineChart
-        size={[0.33, 1]}
-        gridPositionX={3}
+        size={[0.5, 1]}
+        gridPositionX={2.2}
         opacity={s.opacity}
         name="Coefficient of Drag"
         traces={[{ name: "Power", points: pointsCd }]}
@@ -68,10 +67,9 @@ const SceneProfile = () => {
         }}
         store={useProfileChartsStore}
         yHover
-        hoverEnabled={onProfileStep}
       />
     </animated.mesh>
   );
 };
 
-export default SceneProfile;
+export default Profile;

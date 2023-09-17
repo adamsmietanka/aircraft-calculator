@@ -1,7 +1,7 @@
 import React from "react";
 import { Center, Cloud, Float, Text3D } from "@react-three/drei";
 
-const SceneHome = () => {
+const Home = () => {
   return (
     <mesh receiveShadow>
       <Cloud
@@ -34,4 +34,4 @@ const SceneHome = () => {
   );
 };
 
-export default SceneHome;
+export default Home;

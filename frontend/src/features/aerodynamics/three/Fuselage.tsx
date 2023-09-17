@@ -9,7 +9,7 @@ import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import useWingModel from "./hooks/useWingModel";
 
-const SceneFuselage = () => {
+const Fuselage = () => {
   const [s] = useSpring(
     () => ({
       from: {
@@ -91,4 +91,4 @@ const SceneFuselage = () => {
   );
 };
 
-export default SceneFuselage;
+export default Fuselage;

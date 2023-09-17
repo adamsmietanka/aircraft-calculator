@@ -7,27 +7,16 @@ import ProfileChoose from "../ProfileChoose";
 import { useLocation } from "react-router-dom";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
-import { SpringValue, config, useSpring } from "@react-spring/three";
+import { config, useSpring } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
 import Legend from "../../common/three/Legend";
 import WingShape from "../WingShape";
 import useWingCharts from "../hooks/useWingCharts";
 
-interface Props {
-  opacity: SpringValue<number>;
-}
-
-const SceneWing = () => {
+const Wing = () => {
   const wing = useWingStore();
-  const {
-    meanAerodynamicChord,
-    stallReynolds,
-    cl,
-    cd,
-    inducedCd,
-    wingCl,
-    wingCd,
-  } = useWingAerodynamics();
+  const { stallReynolds, cl, cd, inducedCd, wingCl, wingCd } =
+    useWingAerodynamics();
 
   const { useWingChartsStore } = useWingCharts();
 
@@ -128,4 +117,4 @@ const SceneWing = () => {
   );
 };
 
-export default SceneWing;
+export default Wing;

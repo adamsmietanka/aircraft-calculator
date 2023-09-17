@@ -1,12 +1,6 @@
-import {
-  config,
-  useSpring,
-} from "@react-spring/three";
+import { config, useSpring } from "@react-spring/three";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useWingStore } from "../../stores/useWing";
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../../common/three/config";
 
 const obj: Record<string, Record<string, number[]>> = {
   "/": {
@@ -27,43 +21,21 @@ const obj: Record<string, Record<string, number[]>> = {
   },
 };
 
-const getXTip = (angle: number, span: number) =>
-  (Math.tan((angle * Math.PI) / 180) * span) / 2;
-
-const useCamera = () => {
+const Camera = () => {
   const { camera, controls } = useThree();
 
   const location = useLocation();
-
-  const chord = useWingStore((state) => state.chord);
-  const chordTip = useWingStore((state) => state.chordTip);
-  const angle = useWingStore((state) => state.angle);
-  const span = useWingStore((state) => state.span);
-
-  const size = [0.33, 1];
-  const localWidth = CANVAS_WIDTH * size[0];
-  const localHeight = CANVAS_HEIGHT * size[1];
 
   const [s, api] = useSpring(
     () => ({
       from: {
         position: camera.position.toArray(),
         rotation: [0, 0, 0],
-        target: [0, 0, 0],
-        scale: 1,
-        profileX: 0,
-        opacityProfile: 0,
-        opacityWing: 0,
-        opacityFuselage: 0,
       },
       to: async (next, cancel) => {
         await next({
           position: obj[location.pathname].position,
           rotation: obj[location.pathname].rotation,
-          opacityProfile: location.pathname === "/aerodynamics/profile" ? 1 : 0,
-          opacityWing: location.pathname === "/aerodynamics/wing" ? 1 : 0,
-          opacityFuselage:
-            location.pathname === "/aerodynamics/fuselage" ? 1 : 0,
         });
       },
       config: (key) => {
@@ -83,17 +55,6 @@ const useCamera = () => {
     [location.pathname]
   );
 
-  useEffect(() => {
-    api.start({
-      scale:
-        Math.min(
-          localHeight / span,
-          (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
-          (0.5 * localWidth) / chord
-        ) * chord,
-    });
-  }, [span, angle, chord, chordTip]);
-
   useFrame(() => {
     if (s.position.animation.changed) {
       camera.position.set(...s.position.get());
@@ -101,7 +62,7 @@ const useCamera = () => {
     }
   });
 
-  return { s };
+  return null;
 };
 
-export default useCamera;
+export default Camera;
