@@ -1,10 +1,10 @@
-import { Html } from "@react-three/drei";
-import { animated, SpringValue } from "@react-spring/three";
+import { SpringValue } from "@react-spring/three";
 import { useWingStore } from "../stores/useWing";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useHoverables, useHoverWingStore } from "../hooks/useHoverables";
 import Line from "../../common/three/Line";
 import HoverableFormula from "../../common/HoverableFormula";
+import AnimatedHtml from "../../common/three/AnimatedHtml";
 
 interface Props {
   scale: SpringValue<number>;
@@ -55,12 +55,12 @@ const WingHoverables = ({ scale }: Props) => {
           style="dotted"
         />
       </mesh>
-      <animated.mesh
+      <AnimatedHtml
         position-y={scale.to((s) => -5 / s)}
         position-x={scale.to((s) => -2 / s)}
         scale={scale.to((s) => 1 / s)}
       >
-        <Html className="text-2xl space-y-3" transform>
+        <div className="text-2xl space-y-3">
           <HoverableFormula
             name="Aspect Ratio"
             tex={`\\Lambda=${aspectRatio.toFixed(2)}`}
@@ -96,8 +96,8 @@ const WingHoverables = ({ scale }: Props) => {
             onEnter={() => hoverStore.set({ MAC: true })}
             onLeave={() => hoverStore.set({ MAC: false })}
           />
-        </Html>
-      </animated.mesh>
+        </div>
+      </AnimatedHtml>
     </>
   );
 };

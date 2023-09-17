@@ -6,12 +6,12 @@ import {
 } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated } from "@react-spring/three";
-import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTip from "../../common/drawings/AnimatedTip";
 import Formula from "../../common/Formula";
 import { useHoverWingStore } from "../hooks/useHoverables";
+import AnimatedHtml from "../../common/three/AnimatedHtml";
 
 interface Props {
   scale: SpringValue<number>;
@@ -85,24 +85,20 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
       <mesh rotation-z={Math.PI / 2}>
         <AnimatedTip scale={scale} value={y} end />
 
-        <animated.mesh
-          position={scale.to((scale) => [
-            0,
-            (0.25 + MEASUREMENT_DISTANCE) / scale,
-            0,
-          ])}
+        <AnimatedHtml
+          position-y={scale.to(
+            (scale) => (0.25 + MEASUREMENT_DISTANCE) / scale
+          )}
           scale={scale.to((s) => 1 / s)}
         >
-          <Html className="select-none" color="black" transform prepend>
-            <div className={`${hoverWing.b && "hidden"}`}>
-              <InputDrawing value={wing.span} setter={wing.setSpan} />
-            </div>
-            <Formula
-              className={`text-xl ${hoverWing.b || "hidden"}`}
-              tex={`\\color{red}b`}
-            />
-          </Html>
-        </animated.mesh>
+          <div className={`${hoverWing.b && "hidden"}`}>
+            <InputDrawing value={wing.span} setter={wing.setSpan} />
+          </div>
+          <Formula
+            className={`text-xl ${hoverWing.b || "hidden"}`}
+            tex={`\\color{red}b`}
+          />
+        </AnimatedHtml>
       </mesh>
     </animated.mesh>
   );
