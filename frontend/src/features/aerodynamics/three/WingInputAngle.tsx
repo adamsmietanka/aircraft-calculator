@@ -2,10 +2,10 @@ import { useMemo, useRef } from "react";
 import { useCSSColors } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated, to } from "@react-spring/three";
-import { Html } from "@react-three/drei";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTip from "../../common/drawings/AnimatedTip";
+import AnimatedHtml from "../../common/three/AnimatedHtml";
 
 interface Props {
   scale: SpringValue<number>;
@@ -94,7 +94,7 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
         <AnimatedTip scale={scale} distance={y.to((y) => y / 2)} end />
       </animated.mesh>
 
-      <animated.mesh
+      <AnimatedHtml
         position={to([y, scale, angle], (y, scale, angle) => [
           (y / 2 + 0.35 / scale) * Math.sin(angle / 2),
           (y / 2 + 0.35 / scale) * Math.cos(angle / 2),
@@ -103,10 +103,8 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
         rotation-z={angle.to((angle) => -(angle / 2))}
         scale={scale.to((s) => 1 / s)}
       >
-        <Html className="select-none" color="black" transform prepend>
-          <InputDrawing value={wing.angle} setter={wing.setAngle} />
-        </Html>
-      </animated.mesh>
+        <InputDrawing value={wing.angle} setter={wing.setAngle} />
+      </AnimatedHtml>
     </animated.mesh>
   );
 };
