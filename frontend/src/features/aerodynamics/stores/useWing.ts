@@ -27,9 +27,9 @@ export interface WingState {
 
 export const useWingStore = create<WingState>()((set) => ({
   chord: 2,
-  chordTip: 1,
+  chordTip: 1.14,
   tipX: 0.5,
-  span: 8,
+  span: 12,
   angle: 15,
   isRectangular: true,
   profile: "2412",

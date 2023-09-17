@@ -1,4 +1,3 @@
-import Line from "../../common/three/Line";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
@@ -61,12 +60,6 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
             points={profilePoints.slice(50, 99).reverse()}
             show={show}
             positionY={-0.03}
-          />
-          <Line
-            trace={{ name: "Chord", points: chordPoints }}
-            scale={[1, 1, 1]}
-            width={0.5}
-            color="secondary"
           />
         </mesh>
       </animated.mesh>

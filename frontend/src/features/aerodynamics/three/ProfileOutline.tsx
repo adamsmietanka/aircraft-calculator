@@ -5,6 +5,7 @@ import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSprings";
 import Line from "../../common/three/Line";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   size: number[];
@@ -22,7 +23,12 @@ const ProfileOutline = ({ size, gridPositionX }: Props) => {
   const angle = useWingStore((state) => state.angle);
   const span = useWingStore((state) => state.span);
 
-  const { profilePoints } = useProfile();
+  const { profilePoints, chordPoints } = useProfile();
+
+  const location = useLocation();
+
+  const outlineNormal =
+    location.pathname === "/aerodynamics/profile" || location.pathname === "/";
 
   const rotateProfile =
     location.pathname === "/aerodynamics/profile" &&
@@ -40,36 +46,37 @@ const ProfileOutline = ({ size, gridPositionX }: Props) => {
 
   const [stepSpring] = useSpring(
     () => ({
-      profileX:
-        location.pathname === "/aerodynamics/profile"
-          ? -0.25 * 0.96 * localWidth
-          : 0,
-      scale:
-        location.pathname === "/aerodynamics/profile"
-          ? 0.96 * localWidth
-          : Math.min(
-              localHeight / span,
-              (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
-              (0.5 * localWidth) / chord
-            ) * chord,
+      profileX: outlineNormal ? -0.25 * 0.96 * localWidth : 0,
+      scale: outlineNormal
+        ? 0.96 * localWidth
+        : Math.min(
+            localHeight / span,
+            (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
+            (0.5 * localWidth) / chord
+          ) * chord,
     }),
-    [location.pathname, chord, span, angle, chordTip]
+    [outlineNormal, chord, span, angle, chordTip]
   );
 
   return (
-    <animated.mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
+    <animated.mesh
+      position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
+      rotation-z={rotationSpring.x.to((x) => (-x * Math.PI) / 180)}
+    >
       <animated.mesh
-        rotation-z={rotationSpring.x.to((x) => (-x * Math.PI) / 180)}
+        position-x={stepSpring.profileX.to((x) => x)}
+        scale={stepSpring.scale}
       >
-        <animated.mesh
-          position-x={stepSpring.profileX.to((x) => x)}
-          scale={stepSpring.scale}
-        >
-          <Line
-            trace={{ name: "Outline", points: profilePoints }}
-            scale={[1, 1, 1]}
-          />
-        </animated.mesh>
+        <Line
+          trace={{ name: "Outline", points: profilePoints }}
+          scale={[1, 1, 1]}
+        />
+        <Line
+          trace={{ name: "Chord", points: chordPoints }}
+          scale={[1, 1, 1]}
+          width={1.5}
+          color="secondary"
+        />
       </animated.mesh>
     </animated.mesh>
   );
