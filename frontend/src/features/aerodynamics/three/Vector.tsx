@@ -5,7 +5,7 @@ import Formula from "../../common/Formula";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
 
 const VECTOR_WIDTH = 0.05;
-const VECTOR_TIP_LENGTH = 0.4;
+const VECTOR_TIP_LENGTH = 0.5;
 const VECTOR_SIZE = 2.5 - VECTOR_TIP_LENGTH;
 
 interface VectorProps {
@@ -44,21 +44,22 @@ const Vector = ({
 
   return (
     <mesh rotation-z={rotation} position-z={0.2}>
-      <animated.mesh
-        scale-x={spring.value.to((v) => Math.sqrt(Math.abs(v)))}
-        scale-y={spring.value}
-      >
+      <animated.mesh>
         <AnimatedCylinder
           args={[VECTOR_WIDTH, VECTOR_WIDTH, 1, 32]}
-          scale-y={VECTOR_SIZE}
-          position-y={VECTOR_SIZE / 2}
+          scale-x={spring.value.to((v) => Math.sqrt(Math.abs(v)))}
+          scale-y={spring.value.to((v) => v * VECTOR_SIZE * 1.05)}
+          position-y={spring.value.to((v) => (v * VECTOR_SIZE * 1.05) / 2)}
           material-transparent
           material-color={colors[color]}
           material-opacity={spring.opacity}
         />
         <AnimatedCone
-          args={[VECTOR_TIP_LENGTH / 2, VECTOR_TIP_LENGTH, 32]}
-          position-y={VECTOR_SIZE + VECTOR_TIP_LENGTH / 2}
+          args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
+          position-y={spring.value.to(
+            (v) => v * (VECTOR_SIZE + VECTOR_TIP_LENGTH / 2)
+          )}
+          scale={spring.value.to((v) => Math.sign(v) * Math.sqrt(Math.abs(v)))}
           material-transparent
           material-color={colors[color]}
           material-opacity={spring.opacity}
