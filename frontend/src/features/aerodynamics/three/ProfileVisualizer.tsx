@@ -27,8 +27,9 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
   const [profileSpring] = useSpring(
     () => ({
       aoa: show ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
+      yCamber: -yCamber,
     }),
-    [x, y, hover, locked, show]
+    [x, hover, locked, show, yCamber]
   );
 
   return (
@@ -37,7 +38,7 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
         tex="F_L"
         value={y["Coefficient of Lift"]}
         rotation={0}
-        show={show}
+        show={y["Coefficient of Lift"] !== 0 && show}
         color="primary"
       />
       <Vector
