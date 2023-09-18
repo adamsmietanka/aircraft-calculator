@@ -1,5 +1,4 @@
 import { animated, useSpring } from "@react-spring/three";
-import { useEffect } from "react";
 import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Text } from "@react-three/drei";
@@ -32,89 +31,48 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
 
   const AnimatedText = animated(Text);
 
-  const [hoverSpring, hoverApi] = useSpring(
-    () => ({
-      x: 0,
-      y: 0,
-      points: [0, 0, 0],
-      opacity: 0,
-      width: 2,
-    }),
-    []
-  );
+  const locked = store((state) => state.locked);
+  const show = store((state) => state.show);
 
-  const updatePosition = (x: number, y: number) => {
-    hoverApi.start({
+  const xObj = store((state) => state.x);
+  const yObj = store((state) => state.y);
+
+  // get the values from the proper objects in store
+  const x = typeof xObj !== "number" ? xObj[name] : xObj;
+  const y = typeof yObj !== "number" ? yObj[name] : yObj;
+
+  const points = [
+    [min.x / scale[0], y, 0.1],
+    [x, y, 0.1],
+    [x, min.y / scale[1], 0.1],
+  ];
+
+  const [hoverSpring] = useSpring(
+    () => ({
       x: x * scale[0],
       y: y * scale[1],
-      points: [
-        min.x,
-        y * scale[1],
-        0.1,
-        x * scale[0],
-        y * scale[1],
-        0.1,
-        x * scale[0],
-        min.y,
-        0.1,
-      ],
-    });
-  };
-
-  const updateMarker = ({
-    x,
-    y,
-    show,
-    locked,
-  }: SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore) => {
-    // get the values from the proper objects in store
-    if (typeof x !== "number") {
-      x = x[name];
-    }
-    if (typeof y !== "number") {
-      y = y[name];
-    }
-
-    updatePosition(x, y);
-    if (!!locked) {
-      hoverApi.start({ opacity: 1, width: 2 });
-    } else if (show) {
-      hoverApi.start({ opacity: 1, width: 1 });
-    } else {
-      hoverApi.start({ opacity: 0 });
-    }
-  };
-
-  useEffect(() => {
-    store.subscribe(updateMarker);
-
-    const timer = setTimeout(() => {
-      const state = store.getState();
-      updateMarker(state);
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const x = store.getState().x;
-
-  const displayX = round(
-    (typeof x === "number" ? x : x[name]) / xMultiplier,
-    step.x / 100
+      opacity: !!locked || show ? 1 : 0,
+    }),
+    [x, y, scale, locked, show]
   );
 
-  const y = store.getState().y;
+  const opacity = !!locked || show ? 1 : 0;
+  const width = !!locked ? 2 : 1;
 
-  const displayY = round(
-    (typeof y === "number" ? y : y[name]) / yMultiplier,
-    step.y / 100
-  );
+  const displayX = round(x / xMultiplier, step.x / 100);
+  const displayY = round(y / yMultiplier, step.y / 100);
 
   return (
     <>
       <AnimatedLine
-        points={hoverSpring.points}
-        opacity={hoverSpring.opacity}
-        width={hoverSpring.width}
+        points={points}
+        scale={scale}
+        opacity={opacity}
+        width={width}
+        dashSize={0.25}
+        gapSize={0.75}
+        dashScale={3}
+        color="grid"
       />
       <AnimatedText
         fontSize={0.6 * FONT_SIZE}

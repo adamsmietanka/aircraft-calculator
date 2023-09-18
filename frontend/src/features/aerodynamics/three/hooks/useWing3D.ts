@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useWingStore } from "../../stores/useWing";
 import { getStep } from "../../../common/three/hooks/useAxes";
-import useWingElliptical from "../../hooks/useWingElliptical";
 
 const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
@@ -38,28 +37,8 @@ const useWing3D = () => {
     }
   };
 
-  const { leadingPoints, trailingPoints } = useWingElliptical();
-
-  const leadingEdge = useMemo(
-    () => ({
-      name: "",
-      points: leadingPoints,
-    }),
-    [wing]
-  );
-
-  const trailingEdge = useMemo(
-    () => ({
-      name: "",
-      points: trailingPoints,
-    }),
-    [wing]
-  );
-
   return {
     onTransform,
-    leadingEdge,
-    trailingEdge,
     active,
     setActive,
     step: getStep(wing.span / 1.5),

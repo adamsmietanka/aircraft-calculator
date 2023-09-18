@@ -1,6 +1,5 @@
 import { TransformControls } from "@react-three/drei";
 import { animated, SpringValue, to } from "@react-spring/three";
-import Line from "../../common/three/Line";
 import Scale from "./Scale";
 import useWing3D from "./hooks/useWing3D";
 import useWingSprings from "./hooks/useWingSprings";
@@ -9,6 +8,8 @@ import WingInputs from "./WingInputs";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import WingHoverables from "./WingHoverables";
 import ProfileOutlines from "./ProfileOutlines";
+import AnimatedLine from "../../common/three/AnimatedLine";
+import useWingOutline from "../hooks/useWingOutline";
 
 interface Props {
   size: number[];
@@ -17,8 +18,8 @@ interface Props {
 }
 
 const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
-  const { onTransform, leadingEdge, trailingEdge, active, setActive, step } =
-    useWing3D();
+  const { onTransform, active, setActive, step } = useWing3D();
+  const { leadingPoints, trailingPoints } = useWingOutline();
 
   const { gizmoSpring, wingSpring } = useWingSprings(active, size);
 
@@ -66,8 +67,8 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
             y={wingSpring.y}
           />
           <ProfileOutlines />
-          <Line trace={leadingEdge} opacity={opacity} />
-          <Line trace={trailingEdge} opacity={opacity} />
+          <AnimatedLine points={leadingPoints} />
+          <AnimatedLine points={trailingPoints} />
         </animated.mesh>
       </animated.mesh>
     </>

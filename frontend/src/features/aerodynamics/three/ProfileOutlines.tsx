@@ -2,7 +2,7 @@ import { animated, useSpring } from "@react-spring/three";
 import useProfile, { useProfileCamber } from "../hooks/useProfile";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSprings";
-import Line from "../../common/three/Line";
+import AnimatedLine from "../../common/three/AnimatedLine";
 
 const ProfileOutlines = () => {
   const chordTip = useWingStore((state) => state.chordTip);
@@ -43,10 +43,7 @@ const ProfileOutlines = () => {
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
-        <Line
-          trace={{ name: "Outline", points: profilePoints }}
-          scale={[1, 1, 1]}
-        />
+        <AnimatedLine points={profilePoints} />
       </animated.mesh>
       <animated.mesh
         position-x={profileSpring.positionX}
@@ -54,10 +51,7 @@ const ProfileOutlines = () => {
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
-        <Line
-          trace={{ name: "Outline", points: profilePoints }}
-          scale={[1, 1, 1]}
-        />
+        <AnimatedLine points={profilePoints} />
       </animated.mesh>
     </>
   );

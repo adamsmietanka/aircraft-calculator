@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { getXTip } from "../three/hooks/useWingSprings";
 import { useWingStore } from "../stores/useWing";
 import { Shape } from "three";
-import useWingElliptical from "./useWingElliptical";
+import useWingOutline from "./useWingOutline";
 import { create } from "zustand";
 
 interface HoverStore {
@@ -25,7 +25,7 @@ export const useHoverables = () => {
   const wing = useWingStore();
   const hoverStore = useHoverWingStore();
 
-  const { surfacePoints } = useWingElliptical();
+  const { surfacePoints } = useWingOutline();
 
   const shape = useMemo(() => {
     const xTip = getXTip(wing.angle, wing.span);
