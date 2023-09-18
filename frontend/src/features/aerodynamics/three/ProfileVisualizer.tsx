@@ -1,5 +1,5 @@
 import { CANVAS_WIDTH } from "../../common/three/config";
-import { SpringValue, animated, useSpring } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import Vector from "./Vector";
@@ -8,11 +8,11 @@ import { useWingStore } from "../stores/useWing";
 import { reynolds } from "../data/profiles";
 
 interface Props {
-  size: number[];
+  width: number;
   gridPositionX: number;
 }
 
-const ProfileVisualizer = ({ size, gridPositionX }: Props) => {
+const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
   const hover = useProfileChartsStore((state) => state.hover);
@@ -23,7 +23,7 @@ const ProfileVisualizer = ({ size, gridPositionX }: Props) => {
   const show =
     !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
 
-  const localWidth = CANVAS_WIDTH * size[0];
+  const localWidth = CANVAS_WIDTH * width;
 
   const [profileSpring] = useSpring(
     () => ({
@@ -39,7 +39,7 @@ const ProfileVisualizer = ({ size, gridPositionX }: Props) => {
   const speed = 0.03 * reynolds[profile][reynoldsIndex];
 
   return (
-    <animated.mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
+    <animated.mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
       <Vector
         tex="F_L"
         value={y["Coefficient of Lift"]}

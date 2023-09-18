@@ -4,15 +4,14 @@ import { Text } from "@react-three/drei";
 import AnimatedLine from "./AnimatedLine";
 
 interface Props {
-  size: number[];
   gridPositionX: number;
   items: Array<Record<string, string>>;
 }
 
-const Legend = ({ size, gridPositionX, items }: Props) => {
+const Legend = ({ gridPositionX, items }: Props) => {
   return (
     <animated.mesh
-      position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
+      position-x={(gridPositionX * CANVAS_WIDTH) / 2}
       position-y={items.length / 2}
     >
       {items.map((i, index) => (
