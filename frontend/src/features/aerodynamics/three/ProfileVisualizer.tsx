@@ -10,10 +10,9 @@ import { reynolds } from "../data/profiles";
 interface Props {
   size: number[];
   gridPositionX: number;
-  opacity: SpringValue<number>;
 }
 
-const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
+const ProfileVisualizer = ({ size, gridPositionX }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
   const hover = useProfileChartsStore((state) => state.hover);

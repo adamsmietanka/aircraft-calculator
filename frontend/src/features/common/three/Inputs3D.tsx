@@ -1,25 +1,18 @@
-import { Html } from "@react-three/drei";
 import React from "react";
 import { CANVAS_WIDTH } from "./config";
+import AnimatedHtml from "./AnimatedHtml";
 
 interface Props {
-  size: number[];
   gridPositionX: number;
-  visible: boolean;
   children: React.ReactNode;
 }
 
-const Inputs3D = ({ size, gridPositionX, visible, children }: Props) => {
+const Inputs3D = ({ gridPositionX, children }: Props) => {
   return (
-    <mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
-      <Html
-        className={`select-none ${visible || "hidden"} space-y-1`}
-        transform
-        prepend
-        visible={visible}
-      >
-        {children}
-      </Html>
+    <mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
+      <AnimatedHtml>
+        <div className="space-y-2">{children}</div>
+      </AnimatedHtml>
     </mesh>
   );
 };
