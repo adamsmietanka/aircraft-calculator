@@ -22,9 +22,14 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
 
   const [visible, setVisible] = useState(false);
 
-  const [props] = useSpring(
+  const [props, propsApi] = useSpring(
     () => ({
-      opacity: visible && show ? 1 : 0,
+      from: { opacity: 0, display: "none" },
+      to: async (next) => {
+        visible && (await next({ display: "block" }));
+        await next({ opacity: visible && show ? 1 : 0 });
+        visible || (await next({ display: "none" }));
+      },
     }),
     [show, visible]
   );
@@ -32,6 +37,7 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
   useEffect(() => {
     if (htmlRef.current) {
       setVisible(checkVisible(htmlRef.current));
+      propsApi.start({});
     }
   }, [location.pathname]);
 

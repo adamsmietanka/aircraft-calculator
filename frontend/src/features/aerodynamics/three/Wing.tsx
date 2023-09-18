@@ -4,7 +4,6 @@ import InputNumber from "../../common/inputs/InputNumber";
 import Wing3D from "./Wing3D";
 import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
-import { useLocation } from "react-router-dom";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
 import { config, useSpring } from "@react-spring/three";
@@ -19,10 +18,6 @@ const Wing = () => {
     useWingAerodynamics();
 
   const { useWingChartsStore } = useWingCharts();
-
-  const location = useLocation();
-
-  const onWingStep = location.pathname === "/aerodynamics/wing";
 
   const [ss] = useSpring(
     () => ({
@@ -41,8 +36,8 @@ const Wing = () => {
     <>
       <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={ss.opacity} />
 
-      <mesh rotation-x={-Math.PI / 2} visible={true}>
-        <Inputs3D size={[0.33, 1]} gridPositionX={-3.9} visible={onWingStep}>
+      <mesh rotation-x={-Math.PI / 2}>
+        <Inputs3D gridPositionX={-1.3}>
           <ProfileChoose />
           <WingShape />
           <WingMaterial />
