@@ -86,8 +86,8 @@ const Wing = () => {
           name="Coefficient of Drag"
           traces={[
             { name: "Wing", points: wingCd },
+            { name: "Induced", points: inducedCd, style: "thinDashed" },
             { name: "Profile", points: cd, style: "dotted" },
-            { name: "Induced", points: inducedCd, style: "thin" },
           ]}
           axes={{
             x: {
@@ -108,8 +108,8 @@ const Wing = () => {
           gridPositionX={3.2}
           items={[
             { name: "Wing" },
-            { name: "Induced", style: "thin" },
-            { name: "Profile", style: "dotted" },
+            { name: "Induced", style: "thinDashed" },
+            { name: "Profile", style: "dotted", },
           ]}
         />
       </mesh>

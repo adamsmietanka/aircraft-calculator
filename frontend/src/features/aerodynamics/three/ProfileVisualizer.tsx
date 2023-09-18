@@ -3,7 +3,9 @@ import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import Vector from "./Vector";
-import AirStream from "./AirStream";
+import AnimatedLine from "../../common/three/AnimatedLine";
+import { useWingStore } from "../stores/useWing";
+import { reynolds } from "../data/profiles";
 
 interface Props {
   size: number[];
@@ -29,8 +31,13 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
       aoa: show ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
       yCamber: -yCamber,
     }),
-    [x, hover, locked, show, yCamber]
+    [x, show, yCamber]
   );
+
+  const profile = useWingStore((state) => state.profile);
+  const reynoldsIndex = useWingStore((state) => state.reynolds);
+
+  const speed = 0.03 * reynolds[profile][reynoldsIndex];
 
   return (
     <animated.mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
@@ -50,17 +57,27 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
         color="error"
       />
       <animated.mesh rotation-z={profileSpring.aoa} scale={0.96 * localWidth}>
-        <animated.mesh position-x={-0.25} position-y={-yCamber}>
-          <AirStream
-            points={profilePoints.slice(2, 50)}
-            show={show}
-            positionY={0.03}
-          />
-          <AirStream
-            points={profilePoints.slice(50, 99).reverse()}
-            show={show}
-            positionY={-0.03}
-          />
+        <animated.mesh position-x={-0.3} position-y={-yCamber}>
+          <mesh position-y={0.02}>
+            <AnimatedLine
+              points={profilePoints.slice(2, 42)}
+              scale={[1.2, 1.2, 1]}
+              style="airstream"
+              color="grid"
+              offset={speed}
+              opacity={show ? 0.33 : 0}
+            />
+          </mesh>
+          <mesh position-y={-0.02}>
+            <AnimatedLine
+              points={profilePoints.slice(60, 99).reverse()}
+              scale={[1.2, 1.2, 1]}
+              style="airstream"
+              color="grid"
+              offset={0.8 * speed}
+              opacity={show ? 0.33 : 0}
+            />
+          </mesh>
         </animated.mesh>
       </animated.mesh>
     </animated.mesh>

@@ -3,7 +3,7 @@ import useProfile from "../../hooks/useProfile";
 import { useWingStore } from "../../stores/useWing";
 import { getXTip } from "./useWingSprings";
 import { BufferAttribute, BufferGeometry } from "three";
-import useWingElliptical from "../../hooks/useWingElliptical";
+import useWingOutline from "../../hooks/useWingOutline";
 
 const PANELS = 101;
 
@@ -11,7 +11,7 @@ const useWingModel = () => {
   const wing = useWingStore();
 
   const { profilePoints } = useProfile();
-  const { modelPoints } = useWingElliptical();
+  const { modelPoints } = useWingOutline();
 
   const xTip = getXTip(wing.angle, wing.span);
 

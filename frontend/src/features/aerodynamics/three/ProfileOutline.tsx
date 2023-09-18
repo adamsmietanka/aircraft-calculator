@@ -4,8 +4,8 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../common/three/config";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSprings";
-import Line from "../../common/three/Line";
 import { useLocation } from "react-router-dom";
+import AnimatedLine from "../../common/three/AnimatedLine";
 
 interface Props {
   size: number[];
@@ -33,7 +33,6 @@ const ProfileOutline = ({ size, gridPositionX }: Props) => {
     location.pathname === "/aerodynamics/profile" &&
     (!!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"]);
 
-
   const localWidth = CANVAS_WIDTH * size[0];
   const localHeight = CANVAS_HEIGHT * size[1];
 
@@ -60,16 +59,8 @@ const ProfileOutline = ({ size, gridPositionX }: Props) => {
       scale={profileSpring.scale}
     >
       <animated.mesh position-x={profileSpring.x} position-y={profileSpring.y}>
-        <Line
-          trace={{ name: "Outline", points: profilePoints }}
-          scale={[1, 1, 1]}
-        />
-        <Line
-          trace={{ name: "Chord", points: chordPoints }}
-          scale={[1, 1, 1]}
-          width={1.5}
-          color="secondary"
-        />
+        <AnimatedLine points={profilePoints} />
+        <AnimatedLine points={chordPoints} width={1.5} color="secondary" />
       </animated.mesh>
     </animated.mesh>
   );

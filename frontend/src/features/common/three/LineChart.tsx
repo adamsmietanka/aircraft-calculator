@@ -1,5 +1,4 @@
 import useAxes from "./hooks/useAxes";
-import Line from "./Line";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
 import { SpringValue, useChain, useSpringRef } from "@react-spring/three";
@@ -10,6 +9,7 @@ import Hover, {
   SynchronizedXMarkersStore,
 } from "./Hover";
 import { CANVAS_WIDTH } from "./config";
+import AnimatedLine from "./AnimatedLine";
 
 export interface Axis {
   name: string;
@@ -84,14 +84,12 @@ const LineChart = ({
           stepOpacity={opacity}
         />
         {traces.map((trace, index) => (
-          <Line
+          <AnimatedLine
             key={index}
-            trace={trace}
+            points={trace.points}
             scale={scale}
             color={trace.style ? "primary" : colors[index]}
-            style={trace.style || ""}
-            springRef={springRefs[index]}
-            opacity={opacity}
+            style={trace.style}
           />
         ))}
         {store && (

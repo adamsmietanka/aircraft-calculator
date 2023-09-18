@@ -2,9 +2,9 @@ import { SpringValue } from "@react-spring/three";
 import { useWingStore } from "../stores/useWing";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useHoverables, useHoverWingStore } from "../hooks/useHoverables";
-import Line from "../../common/three/Line";
 import HoverableFormula from "../../common/HoverableFormula";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
+import AnimatedLine from "../../common/three/AnimatedLine";
 
 interface Props {
   scale: SpringValue<number>;
@@ -27,29 +27,23 @@ const WingHoverables = ({ scale }: Props) => {
       </mesh>
       <mesh position-x={MACposition[0]} visible={hoverStore.MAC}>
         <mesh position-y={MACposition[1]}>
-          <Line
-            trace={{
-              name: "Outline",
-              points: [
-                [0, 0, 0],
-                [1, 0, 0],
-              ],
-            }}
+          <AnimatedLine
+            points={[
+              [0, 0, 0],
+              [1, 0, 0],
+            ]}
             scale={[meanAerodynamicChord, 1, 1]}
             color="gray"
           />
         </mesh>
-        <Line
-          trace={{
-            name: "Outline",
-            points: [
-              [0, wing.span / 2, 0],
-              [1, wing.span / 2, 0],
-              [1, -wing.span / 2, 0],
-              [0, -wing.span / 2, 0],
-              [0, wing.span / 2, 0],
-            ],
-          }}
+        <AnimatedLine
+          points={[
+            [0, wing.span / 2, 0],
+            [1, wing.span / 2, 0],
+            [1, -wing.span / 2, 0],
+            [0, -wing.span / 2, 0],
+            [0, wing.span / 2, 0],
+          ]}
           scale={[meanAerodynamicChord, 1, 1]}
           color="gray"
           style="dotted"

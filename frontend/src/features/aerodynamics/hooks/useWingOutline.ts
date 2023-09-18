@@ -5,7 +5,7 @@ import { useProfileCamber } from "./useProfile";
 
 const NUM_OF_SEGMENTS = 30;
 
-const useWingElliptical = () => {
+const useWingOutline = () => {
   const wing = useWingStore();
   const { F } = useProfileCamber();
 
@@ -79,4 +79,4 @@ const useWingElliptical = () => {
   return { leadingPoints, trailingPoints, surfacePoints, modelPoints };
 };
 
-export default useWingElliptical;
+export default useWingOutline;

@@ -1,62 +1,68 @@
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { Line2, LineGeometry } from "three-stdlib";
+import { SpringValue, useSpring } from "@react-spring/three";
+import { Line2, LineMaterialParameters } from "three-stdlib";
+
 import { useCSSColors } from "./config";
-import { SpringValue } from "@react-spring/three";
-import { invalidate, useFrame } from "@react-three/fiber";
-import { ALine } from "./ALine";
+import { styles } from "./utils/lineStyles";
 
-interface Props {
-  points: SpringValue<number[]>;
-  opacity: SpringValue<number>;
-  width: SpringValue<number>;
-}
+type Props = {
+  points: number[][];
+  scale?: number[];
+  opacity?: number;
+  offset?: number;
+  width?: SpringValue<number> | number;
+  color?: string;
+  style?: string;
+} & Omit<LineMaterialParameters, "opacity" | "color" | "vertexColors">;
 
-const AnimatedLine = ({ points, opacity, width }: Props) => {
-  const { gridColor } = useCSSColors();
+const AnimatedLine = ({
+  points,
+  scale = [1, 1, 1],
+  opacity = 1,
+  offset = 0,
+  width = 3,
+  color = "primary",
+  style = "normal",
+  ...rest
+}: Props) => {
+  const { colors } = useCSSColors();
 
   const lineRef = useRef<Line2>(null);
 
-  const [_, force] = useState([]);
+  const [lineSpring] = useSpring(
+    () => ({
+      points: points
+        .map(([x, y, z]) => [x * scale[0], y * scale[1], z * scale[2]])
+        .flat(),
+      opacity,
+      width: styles[style]?.width || width,
+      offset: styles[style]?.offset || 0,
+    }),
+    [points, scale, opacity, width]
+  );
 
   useFrame(() => {
-    const interpolatedPoints = points.get();
-    const interpolatedOpacity = opacity.get();
-    const interpolatedWidth = width.get();
-
-    if (points.animation.changed) {
-        force([]);
-    }
-
     if (lineRef.current) {
-      lineRef.current.geometry.setPositions(interpolatedPoints);
+      lineRef.current.geometry.setPositions(lineSpring.points.get());
       lineRef.current.computeLineDistances();
-      lineRef.current.material.opacity = interpolatedOpacity;
-      lineRef.current.material.linewidth = interpolatedWidth;
+
+      lineRef.current.material.opacity = lineSpring.opacity.get();
+      lineRef.current.material.linewidth = lineSpring.width.get();
+      lineRef.current.material.dashOffset -= offset;
     }
   });
-
-//   useEffect(() => {
-//     force([]);
-//     console.log(1);
-//     const timer = setTimeout(() => {
-//       force([]);
-//       console.log(1234);
-//     }, 500);
-//     return () => clearTimeout(timer);
-//   }, [lineRef.current]);
 
   return (
     <Line
       ref={lineRef}
-      points={[0, 0, -1, 0.1, 1, -1, 0.2, 0, -1]}
       dashed
-      dashSize={0.25}
-      gapSize={0.75}
-      dashScale={3}
-      opacity={0.5}
-      color={gridColor}
+      points={[0, 0, -1, 0.1, 1, -1, 0.2, 0, -1]}
+      color={colors[color] || color}
       transparent
+      {...styles[style]}
+      {...rest}
     />
   );
 };
