@@ -23,21 +23,13 @@ interface Props {
   scale: number[];
   min: Record<string, number>;
   step: Record<string, number>;
-  enabled: boolean;
 }
 
-const HoverMarker = ({
-  name,
-  store,
-  axes,
-  scale,
-  min,
-  step,
-  enabled,
-}: Props) => {
+const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
   const { primaryColor, backgroundColor } = useCSSColors();
+
   const AnimatedText = animated(Text);
 
   const [hoverSpring, hoverApi] = useSpring(

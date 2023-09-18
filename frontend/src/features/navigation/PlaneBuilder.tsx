@@ -8,12 +8,21 @@ import Home from "./Home";
 import Camera from "../common/three/Camera";
 import { Perf } from "r3f-perf";
 import ProfileOutline from "../aerodynamics/three/ProfileOutline";
+import { checkVisible } from "../common/three/checkVisible";
 
 const PlaneBuilder = () => {
   return (
     <div className="fixed top-0 left-0 h-screen w-screen">
       <ProfileModal />
-      <Canvas camera={{ position: [0, -100, 200], fov: 60 }}>
+      <Canvas
+        camera={{ position: [0, -100, 200], fov: 60 }}
+        onCreated={(state) => {
+          state.setEvents({
+            filter: (intersections) =>
+              intersections.filter((i) => checkVisible(i.object)),
+          });
+        }}
+      >
         <Perf />
         <ambientLight intensity={0.5} />
         <pointLight position={[0, 10, 0]} intensity={0.5} />
