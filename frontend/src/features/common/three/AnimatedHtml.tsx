@@ -1,32 +1,33 @@
 import { Interpolation, animated } from "@react-spring/three";
+import { useSpring, animated as animatedWeb } from "@react-spring/web";
 import { Html } from "@react-three/drei";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { checkVisible } from "./checkVisible";
 
 type Props = {
   position?: Interpolation<number[]>;
-  "position-x"?: Interpolation<number>;
-  "position-y"?: Interpolation<number>;
-  "rotation-z"?: Interpolation<number>;
-  scale: Interpolation<number>;
+  "position-x"?: Interpolation<number> | number;
+  "position-y"?: Interpolation<number> | number;
+  "rotation-z"?: Interpolation<number> | number;
+  scale?: Interpolation<number>;
+  show?: boolean;
   children: React.ReactNode;
 };
 
-const checkVisible = (
-  mesh: THREE.Mesh | THREE.Object3D<THREE.Event>
-): boolean => {
-  if (!mesh.visible) return false;
-  if (mesh.parent) {
-    return checkVisible(mesh.parent);
-  }
-  return true;
-};
-
-const AnimatedHtml = ({ children, ...rest }: Props) => {
+const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
   const htmlRef = useRef(null);
   const location = useLocation();
+  const Anim = animatedWeb(Html);
 
   const [visible, setVisible] = useState(false);
+
+  const [props] = useSpring(
+    () => ({
+      opacity: visible && show ? 1 : 0,
+    }),
+    [show, visible]
+  );
 
   useEffect(() => {
     if (htmlRef.current) {
@@ -36,9 +37,14 @@ const AnimatedHtml = ({ children, ...rest }: Props) => {
 
   return (
     <animated.mesh {...rest} ref={htmlRef}>
-      <Html className={`select-none ${!visible && "hidden"}`} transform prepend>
+      <Anim
+        className={`select-none `}
+        style={props}
+        transform
+        prepend
+      >
         <div>{children}</div>
-      </Html>
+      </Anim>
     </animated.mesh>
   );
 };

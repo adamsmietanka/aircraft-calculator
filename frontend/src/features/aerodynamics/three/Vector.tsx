@@ -60,18 +60,19 @@ const Vector = ({
         material-color={colors[color]}
         material-opacity={spring.opacity}
       />
-      <animated.mesh
+      <AnimatedHtml
         position-y={to(
           [spring.size, spring.direction],
           (v, dir) => dir * 0.05 + v
         )}
         position-x={0.5}
         rotation-z={-rotation}
+        show={show}
       >
-        <AnimatedHtml color={color} show={show && value !== 0}>
+        <div className={`text-${color} text-xl`}>
           <Formula tex={tex} />
+        </div>
         </AnimatedHtml>
-      </animated.mesh>
     </mesh>
   );
 };
