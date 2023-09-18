@@ -1,16 +1,17 @@
-import { animated, to, useSpring } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import { Cone, Cylinder } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
 import Formula from "../../common/Formula";
-import AnimatedHtml from "./AnimatedHtml";
+import AnimatedHtml from "../../common/three/AnimatedHtml";
 
-const VECTOR_MULTIPLIER = 0.2;
 const VECTOR_WIDTH = 0.05;
 const VECTOR_TIP_LENGTH = 0.4;
+const VECTOR_SIZE = 2.5 - VECTOR_TIP_LENGTH;
 
 interface VectorProps {
   tex: string;
   value: number;
+  otherValue?: number;
   rotation: number;
   show: boolean;
   color?: string;
@@ -19,6 +20,7 @@ interface VectorProps {
 const Vector = ({
   tex,
   value,
+  otherValue = 0,
   rotation,
   show,
   color = "primary",
@@ -31,48 +33,47 @@ const Vector = ({
   const [spring] = useSpring(
     () => ({
       value,
-      size:
-        10 * VECTOR_MULTIPLIER * value - Math.sign(value) * VECTOR_TIP_LENGTH,
-      direction: Math.sign(value),
+      textY:
+        value * (VECTOR_SIZE + VECTOR_TIP_LENGTH) +
+        (otherValue ? 0.1 : 0.5) * Math.sign(value),
+      otherDirection: otherValue ? Math.sign(otherValue) : 0,
       opacity: show && value !== 0 ? 1 : 0,
     }),
-    [value, show]
+    [value, otherValue, show]
   );
 
   return (
     <mesh rotation-z={rotation} position-z={0.2}>
-      <AnimatedCylinder
-        args={[VECTOR_WIDTH, VECTOR_WIDTH, 1, 32]}
-        scale-y={spring.size}
-        position-y={spring.size.to((v) => v / 2)}
-        material-transparent
-        material-color={colors[color]}
-        material-opacity={spring.opacity}
-      />
-      <AnimatedCone
-        args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
-        position-y={to(
-          [spring.size, spring.direction],
-          (v, dir) => v + (dir * VECTOR_TIP_LENGTH) / 2
-        )}
-        rotation-z={spring.direction.to((dir) => ((1 - dir) * Math.PI) / 2)}
-        material-transparent
-        material-color={colors[color]}
-        material-opacity={spring.opacity}
-      />
+      <animated.mesh
+        scale-x={spring.value.to((v) => Math.sqrt(Math.abs(v)))}
+        scale-y={spring.value}
+      >
+        <AnimatedCylinder
+          args={[VECTOR_WIDTH, VECTOR_WIDTH, 1, 32]}
+          scale-y={VECTOR_SIZE}
+          position-y={VECTOR_SIZE / 2}
+          material-transparent
+          material-color={colors[color]}
+          material-opacity={spring.opacity}
+        />
+        <AnimatedCone
+          args={[VECTOR_TIP_LENGTH / 2, VECTOR_TIP_LENGTH, 32]}
+          position-y={VECTOR_SIZE + VECTOR_TIP_LENGTH / 2}
+          material-transparent
+          material-color={colors[color]}
+          material-opacity={spring.opacity}
+        />
+      </animated.mesh>
       <AnimatedHtml
-        position-y={to(
-          [spring.size, spring.direction],
-          (v, dir) => dir * 0.05 + v
-        )}
-        position-x={0.5}
+        position-x={spring.otherDirection.to((dir) => -0.8 * dir)}
+        position-y={spring.textY}
         rotation-z={-rotation}
         show={show}
       >
         <div className={`text-${color} text-xl`}>
           <Formula tex={tex} />
         </div>
-        </AnimatedHtml>
+      </AnimatedHtml>
     </mesh>
   );
 };
