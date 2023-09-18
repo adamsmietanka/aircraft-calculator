@@ -2,13 +2,15 @@ import { useMemo } from "react";
 import useProfile from "../../hooks/useProfile";
 import { useWingStore } from "../../stores/useWing";
 import { getXTip } from "./useWingSprings";
-import { BufferAttribute, BufferGeometry } from "three";
+import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import useWingOutline from "../../hooks/useWingOutline";
+import { useLocation } from "react-router-dom";
 
 const PANELS = 101;
 
 const useWingModel = () => {
   const wing = useWingStore();
+  const location = useLocation();
 
   const { profilePoints } = useProfile();
   const { modelPoints } = useWingOutline();
@@ -34,6 +36,28 @@ const useWingModel = () => {
       };
     return modelPoints;
   };
+
+  const tipGeometry = useMemo(() => {
+    const shape = new Shape();
+
+    const { xOutline, yOutline } = getOutline();
+    if (profilePoints.length) {
+      const tip = profilePoints.map(([x, y, z]) => [
+        xOutline[1][0] + (xOutline[1][1] - xOutline[1][0]) * x,
+        (xOutline[1][1] - xOutline[1][0]) * y,
+        yOutline[1],
+      ]);
+      console.log(tip);
+      shape.moveTo(tip[0][0], tip[0][1]);
+
+      for (let i = 1; i < PANELS; i++) {
+        shape.lineTo(tip[i][0], tip[i][1]);
+      }
+      const geometry = new ShapeGeometry(shape);
+      geometry.translate(0, 0, tip[0][2]);
+      return geometry;
+    }
+  }, [profilePoints, location.pathname]);
 
   const geometry = useMemo(() => {
     const geom = new BufferGeometry();
@@ -69,7 +93,7 @@ const useWingModel = () => {
       geom.computeVertexNormals();
       return geom;
     }
-  }, [profilePoints]);
-  return { geometry };
+  }, [profilePoints, location.pathname]);
+  return { geometry, tipGeometry };
 };
 export default useWingModel;
