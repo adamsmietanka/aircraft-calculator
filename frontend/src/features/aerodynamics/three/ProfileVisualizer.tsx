@@ -17,16 +17,16 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
-  const { profilePoints, chordPoints } = useProfile();
+  const { profilePoints, yCamber } = useProfile();
 
   const show =
     !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
 
   const localWidth = CANVAS_WIDTH * size[0];
 
-  const [rotationSpring] = useSpring(
+  const [profileSpring] = useSpring(
     () => ({
-      x: show ? x["Coefficient of Lift"] : 0,
+      aoa: show ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
     }),
     [x, y, hover, locked, show]
   );
@@ -34,23 +34,22 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
   return (
     <animated.mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
       <Vector
-        tex="\bf F_L"
+        tex="F_L"
         value={y["Coefficient of Lift"]}
         rotation={0}
         show={show}
         color="primary"
       />
       <Vector
-        tex="\bf F_D"
+        tex="F_D"
         value={50 * x["Coefficient of Drag"]}
+        otherValue={y["Coefficient of Lift"]}
         rotation={-Math.PI / 2}
         show={show}
         color="error"
       />
-      <animated.mesh
-        rotation-z={rotationSpring.x.to((x) => (-x * Math.PI) / 180)}
-      >
-        <mesh position-x={-0.25 * 0.96 * localWidth} scale={0.96 * localWidth}>
+      <animated.mesh rotation-z={profileSpring.aoa} scale={0.96 * localWidth}>
+        <animated.mesh position-x={-0.25} position-y={-yCamber}>
           <AirStream
             points={profilePoints.slice(2, 50)}
             show={show}
@@ -61,7 +60,7 @@ const ProfileVisualizer = ({ size, gridPositionX, opacity }: Props) => {
             show={show}
             positionY={-0.03}
           />
-        </mesh>
+        </animated.mesh>
       </animated.mesh>
     </animated.mesh>
   );

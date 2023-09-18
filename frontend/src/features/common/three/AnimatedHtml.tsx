@@ -1,4 +1,4 @@
-import { Interpolation, animated } from "@react-spring/three";
+import { Interpolation, SpringValue, animated } from "@react-spring/three";
 import { useSpring, animated as animatedWeb } from "@react-spring/web";
 import { Html } from "@react-three/drei";
 import React, { useEffect, useRef, useState } from "react";
@@ -8,7 +8,7 @@ import { checkVisible } from "./checkVisible";
 type Props = {
   position?: Interpolation<number[]>;
   "position-x"?: Interpolation<number> | number;
-  "position-y"?: Interpolation<number> | number;
+  "position-y"?: Interpolation<number> | SpringValue<number> | number;
   "rotation-z"?: Interpolation<number> | number;
   scale?: Interpolation<number>;
   show?: boolean;
@@ -37,12 +37,7 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
 
   return (
     <animated.mesh {...rest} ref={htmlRef}>
-      <Anim
-        className={`select-none `}
-        style={props}
-        transform
-        prepend
-      >
+      <Anim className={`select-none `} style={props} transform>
         <div>{children}</div>
       </Anim>
     </animated.mesh>

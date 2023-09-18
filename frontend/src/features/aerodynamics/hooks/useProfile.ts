@@ -78,7 +78,7 @@ const useProfile = () => {
     setChordPoints(chord);
   }, [profile]);
 
-  return { profilePoints, chordPoints };
+  return { profilePoints, chordPoints, yCamber: getCamberY(0.25) };
 };
 
 export default useProfile;
