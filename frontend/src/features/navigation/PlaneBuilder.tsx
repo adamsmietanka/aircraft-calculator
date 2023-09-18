@@ -33,7 +33,7 @@ const PlaneBuilder = () => {
         <Route path="/aerodynamics/profile" element={<Profile />} />
         <Route
           paths={["/", "/aerodynamics/profile", "/aerodynamics/wing"]}
-          element={<ProfileOutline size={[0.33, 1]} gridPositionX={-1.33} />}
+          element={<ProfileOutline width={0.33} gridPositionX={-0.5} />}
         />
         <Route path="/aerodynamics/wing" element={<Wing />} />
         <Route path="/aerodynamics/fuselage" element={<Fuselage />} />

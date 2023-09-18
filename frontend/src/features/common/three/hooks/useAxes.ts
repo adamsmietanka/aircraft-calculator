@@ -20,25 +20,8 @@ export const getStep = (range: number) => {
 const useAxisTicks = (
   traces: Trace[],
   axes: Record<string, Axis>,
-  size: number[] = [1, 1]
+  width: number = 1
 ) => {
-  const getTicks = (min: number, step: number, size: number) => {
-    if (size < 10) step *= 2;
-    const lowerAxisLimit = Math.ceil((min * 1) / step);
-
-    const ticks = Array.from(Array(15).keys()).map(
-      (i) => (i + lowerAxisLimit) * step
-    );
-
-    // fix floating point precision (TODO: maybe use decimal.js)
-    return ticks.map((t) => parseFloat(t.toFixed(7)));
-  };
-  
-  const { width, height } = {
-    width: size[0] * CANVAS_WIDTH,
-    height: size[1] * 0.8 * CANVAS_HEIGHT,
-  };
-
   const getMinX = () => {
     if (axes.x.min === 0) return 0;
     return axes.x.min || Math.min(...traces.map(({ points }) => points[0][0]));
@@ -68,13 +51,29 @@ const useAxisTicks = (
 
   let xStep = getStep(maxX - minX);
   let yStep = getStep(maxY - minY);
-  let xTicks = getTicks(minX, xStep, width);
-  let yTicks = getTicks(minY, yStep, height);
+
+  const getTicks = (min: number, step: number, localWidth: number) => {
+    if (localWidth < 10) step *= 2;
+    const lowerAxisLimit = Math.ceil((min * 1) / step);
+
+    const ticks = Array.from(Array(15).keys()).map(
+      (i) => (i + lowerAxisLimit) * step
+    );
+
+    // fix floating point precision (TODO: maybe use decimal.js)
+    return ticks.map((t) => parseFloat(t.toFixed(7)));
+  };
+
+  const localWidth = width * CANVAS_WIDTH;
+  const localHeight = 0.8 * CANVAS_HEIGHT;
+
+  let xTicks = getTicks(minX, xStep, localWidth);
+  let yTicks = getTicks(minY, yStep, localHeight);
 
   const X_TEXTS = 3;
 
-  const scaleX = (width - X_TEXTS) / (maxX - minX);
-  const scaleY = height / (maxY - minY);
+  const scaleX = (localWidth - X_TEXTS) / (maxX - minX);
+  const scaleY = localHeight / (maxY - minY);
 
   return {
     ticks: { x: xTicks, y: yTicks },

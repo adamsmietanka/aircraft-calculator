@@ -39,7 +39,7 @@ export type ChartProps = {
   >;
   yHover?: boolean;
   zHover?: boolean;
-  size: number[];
+  width: number;
   gridPositionX?: number;
   opacity?: SpringValue<number>;
 };
@@ -51,11 +51,11 @@ const LineChart = ({
   store,
   yHover = false,
   zHover = false,
-  size = [1, 1],
+  width = 1,
   gridPositionX = 0,
   opacity = new SpringValue(1),
 }: ChartProps) => {
-  const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, size);
+  const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, width);
 
   const colors = ["primary", "green", "orange", "secondary"];
   const springRefs = traces.map(() => useSpringRef());
@@ -63,7 +63,7 @@ const LineChart = ({
   useChain(springRefs);
 
   return (
-    <mesh position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}>
+    <mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
       <mesh position={[-mid.x, -mid.y, 0]}>
         <LinesVertical
           axis={axes.x}

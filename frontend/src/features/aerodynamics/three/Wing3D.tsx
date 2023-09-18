@@ -12,16 +12,16 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import useWingOutline from "../hooks/useWingOutline";
 
 interface Props {
-  size: number[];
+  width: number;
   gridPositionX: number;
   opacity: SpringValue<number>;
 }
 
-const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
+const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
   const { onTransform, active, setActive, step } = useWing3D();
   const { leadingPoints, trailingPoints } = useWingOutline();
 
-  const { gizmoSpring, wingSpring } = useWingSprings(active, size);
+  const { gizmoSpring, wingSpring } = useWingSprings(active, width);
 
   const AnimatedTransform = animated(TransformControls);
 
@@ -41,7 +41,7 @@ const Wing3D = ({ size, gridPositionX, opacity }: Props) => {
       />
       <animated.mesh
         scale={wingSpring.scale}
-        position-x={(gridPositionX * size[0] * CANVAS_WIDTH) / 2}
+        position-x={(gridPositionX * CANVAS_WIDTH) / 2}
         rotation-x={-Math.PI / 2}
         visible={opacity.to((o) => o !== 0)}
       >

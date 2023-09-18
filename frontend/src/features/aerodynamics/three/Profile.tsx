@@ -11,17 +11,14 @@ const Profile = () => {
 
   return (
     <animated.mesh position-z={0}>
-      <Inputs3D gridPositionX={-1}>
+      <Inputs3D gridPositionX={-1.1}>
         <ProfileChoose />
         <ProfileReynolds />
       </Inputs3D>
-      <ProfileVisualizer
-        size={[0.33, 1]}
-        gridPositionX={-1.33}
-      />
+      <ProfileVisualizer width={0.33} gridPositionX={-0.5} />
       <LineChart
-        size={[0.33, 1]}
-        gridPositionX={1}
+        width={0.33}
+        gridPositionX={0.25}
         name="Coefficient of Lift"
         traces={[{ name: "Power", points: pointsCl }]}
         axes={{
@@ -35,8 +32,8 @@ const Profile = () => {
         store={useProfileChartsStore}
       />
       <LineChart
-        size={[0.5, 1]}
-        gridPositionX={2.2}
+        width={0.5}
+        gridPositionX={1.1}
         name="Coefficient of Drag"
         traces={[{ name: "Power", points: pointsCd }]}
         axes={{

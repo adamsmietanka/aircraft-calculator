@@ -34,7 +34,7 @@ const Wing = () => {
 
   return (
     <>
-      <Wing3D size={[0.33, 1]} gridPositionX={-1.33} opacity={ss.opacity} />
+      <Wing3D width={0.33} gridPositionX={-0.5} opacity={ss.opacity} />
 
       <mesh rotation-x={-Math.PI / 2}>
         <Inputs3D gridPositionX={-1.3}>
@@ -56,8 +56,8 @@ const Wing = () => {
           />
         </Inputs3D>
         <LineChart
-          size={[0.33, 1]}
-          gridPositionX={0.8}
+          width={0.33}
+          gridPositionX={0.15}
           opacity={ss.opacity}
           name="Coefficient of Lift"
           traces={[
@@ -75,8 +75,8 @@ const Wing = () => {
           store={useWingChartsStore}
         />
         <LineChart
-          size={[0.5, 1]}
-          gridPositionX={2.1}
+          width={0.5}
+          gridPositionX={1}
           opacity={ss.opacity}
           name="Coefficient of Drag"
           traces={[
@@ -99,12 +99,11 @@ const Wing = () => {
           store={useWingChartsStore}
         />
         <Legend
-          size={[0.5, 1]}
-          gridPositionX={3.2}
+          gridPositionX={1.6}
           items={[
             { name: "Wing" },
             { name: "Induced", style: "thinDashed" },
-            { name: "Profile", style: "dotted", },
+            { name: "Profile", style: "dotted" },
           ]}
         />
       </mesh>

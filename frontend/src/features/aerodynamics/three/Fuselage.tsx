@@ -10,7 +10,7 @@ const Fuselage = () => {
   const { nodes } = useLoader(GLTFLoader, "/models/2303.glb");
 
   return (
-    <mesh position-x={-4}>
+    <mesh position-x={-5}>
       <PresentationControls
         enabled={true} // the controls can be disabled by setting this to false
         global={false} // Spin globally or by dragging the model
