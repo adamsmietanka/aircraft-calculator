@@ -44,7 +44,6 @@ interface HoverProps {
   >;
   yHover: boolean;
   zHover: boolean;
-  enabled?: boolean;
 }
 
 const Hover = ({
@@ -58,7 +57,6 @@ const Hover = ({
   store,
   yHover,
   zHover,
-  enabled = true,
 }: HoverProps) => {
   return (
     <>
@@ -69,80 +67,72 @@ const Hover = ({
         material-transparent
         material-opacity={0}
         onPointerMove={(e) => {
-          if (enabled) {
-            if (yHover || zHover) {
-              const y = round(
-                (yHover ? e.point.y : -e.point.z + mid.y) / scale[1],
-                step.y / 10
-              );
-              const locked = store.getState().locked;
-              const oldY = store.getState().y;
+          if (yHover || zHover) {
+            const y = round(
+              (yHover ? e.point.y : -e.point.z + mid.y) / scale[1],
+              step.y / 10
+            );
+            const locked = store.getState().locked;
+            const oldY = store.getState().y;
 
-              if (!locked) {
-                if (typeof oldY === "number") {
-                  store.setState({ y });
-                } else {
-                  store.setState({ y: { ...oldY, [name]: y } });
-                }
+            if (!locked) {
+              if (typeof oldY === "number") {
+                store.setState({ y });
+              } else {
+                store.setState({ y: { ...oldY, [name]: y } });
               }
-            } else {
-              const gridPositionFix = e.object.parent?.parent?.position.x || 0;
-              const x = round(
-                (e.point.x + mid.x - gridPositionFix) / scale[0],
-                step.x / 10
-              );
-              const locked = store.getState().locked;
-              const oldX = store.getState().x;
+            }
+          } else {
+            const gridPositionFix = e.object.parent?.parent?.position.x || 0;
+            const x = round(
+              (e.point.x + mid.x - gridPositionFix) / scale[0],
+              step.x / 10
+            );
+            const locked = store.getState().locked;
+            const oldX = store.getState().x;
 
-              if (!locked) {
-                if (typeof oldX === "number") {
-                  store.setState({ x });
-                } else {
-                  store.setState({ x: { ...oldX, [name]: x } });
-                }
+            if (!locked) {
+              if (typeof oldX === "number") {
+                store.setState({ x });
+              } else {
+                store.setState({ x: { ...oldX, [name]: x } });
               }
             }
           }
         }}
         onPointerEnter={(e) => {
-          if (enabled) {
-            const oldHover = store.getState().hover;
-            if (typeof oldHover === "boolean") {
-              store.setState({ hover: true, show: true });
-            } else {
-              store.setState({
-                hover: { ...oldHover, [name]: true },
-                show: true,
-              });
-            }
+          const oldHover = store.getState().hover;
+          if (typeof oldHover === "boolean") {
+            store.setState({ hover: true, show: true });
+          } else {
+            store.setState({
+              hover: { ...oldHover, [name]: true },
+              show: true,
+            });
           }
         }}
         onPointerLeave={(e) => {
-          if (enabled) {
-            const oldHover = store.getState().hover;
-            if (typeof oldHover === "boolean") {
-              store.setState({ hover: false, show: false });
-            } else {
-              store.setState({
-                hover: { ...oldHover, [name]: false },
-                show: false,
-              });
-            }
+          const oldHover = store.getState().hover;
+          if (typeof oldHover === "boolean") {
+            store.setState({ hover: false, show: false });
+          } else {
+            store.setState({
+              hover: { ...oldHover, [name]: false },
+              show: false,
+            });
           }
         }}
         onClick={(e) => {
-          if (enabled) {
-            const oldLocked = store.getState().locked;
-            // for charts that have individual locks
-            if (typeof oldLocked === "string") {
-              store.setState((state) => ({
-                locked: state.locked === "" ? name : "",
-              }));
-            }
-            // for charts sharing a lock
-            else {
-              store.setState((state) => ({ locked: !state.locked }));
-            }
+          const oldLocked = store.getState().locked;
+          // for charts that have individual locks
+          if (typeof oldLocked === "string") {
+            store.setState((state) => ({
+              locked: state.locked === "" ? name : "",
+            }));
+          }
+          // for charts sharing a lock
+          else {
+            store.setState((state) => ({ locked: !state.locked }));
           }
         }}
       />
@@ -153,7 +143,6 @@ const Hover = ({
         step={step}
         axes={axes}
         min={min}
-        enabled={enabled}
       />
     </>
   );
