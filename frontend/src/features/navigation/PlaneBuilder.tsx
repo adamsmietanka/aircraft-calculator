@@ -15,6 +15,7 @@ const PlaneBuilder = () => {
     <div className="fixed top-0 left-0 h-screen w-screen">
       <ProfileModal />
       <Canvas
+        flat
         camera={{ position: [0, -100, 200], fov: 60 }}
         onCreated={(state) => {
           state.setEvents({
