@@ -1,9 +1,8 @@
-import { useMemo, useRef } from "react";
 import { useSpring, animated, SpringValue, to } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import { useFrame } from "@react-three/fiber";
+import AnimatedLine from "./AnimatedLine";
 
 interface Props {
   y: number;
@@ -15,7 +14,7 @@ interface Props {
   stepOpacity: SpringValue<number>;
 }
 
-const AnimatedYMarker = ({
+const AnimatedHorizontalMarker = ({
   y,
   min,
   max,
@@ -24,14 +23,9 @@ const AnimatedYMarker = ({
   scale,
   stepOpacity,
 }: Props) => {
-  const positionRef = useRef<THREE.BufferAttribute>(null);
   const { displayMultiplier, valueMultiplier } = useChartUnits(type);
   const { gridColor } = useCSSColors();
   const AnimatedText = animated(Text);
-
-  const position = useMemo(() => {
-    return new Float32Array([0, 0, 0, 200, 0, 0]);
-  }, []);
 
   const [marker] = useSpring(
     () => ({
@@ -40,17 +34,6 @@ const AnimatedYMarker = ({
     }),
     [y, valueMultiplier, scale]
   );
-
-  useFrame(() => {
-    const interpolatedY = marker.position.get();
-    position.set([min, interpolatedY, 0], 0);
-    position.set([max.x, interpolatedY, 0], 3);
-
-    if (positionRef.current) {
-      positionRef.current.set(position);
-      positionRef.current.needsUpdate = true;
-    }
-  });
 
   return (
     <animated.mesh scale={marker.scale.to((scale) => [1, scale, 1])}>
@@ -70,28 +53,20 @@ const AnimatedYMarker = ({
       >
         {y * displayMultiplier}
       </AnimatedText>
-      <animated.line>
-        <bufferGeometry>
-          <bufferAttribute
-            ref={positionRef}
-            attach="attributes-position"
-            count={position.length / 3}
-            array={position}
-            itemSize={3}
-          />
-        </bufferGeometry>
-        <animated.lineBasicMaterial
-          color={gridColor}
-          opacity={to(
-            [opacity, stepOpacity],
-            (o, stepOpacity) =>
-              (y > max.y / scale[1] ? 0 : y === 0 ? o : o / 3) * stepOpacity
-          )}
-          transparent
-        />
-      </animated.line>
+      <AnimatedLine
+        points={[
+          [min, y * valueMultiplier, 0.09],
+          [max.x, y * valueMultiplier, 0.09],
+        ]}
+        width={y === 0 ? 2 : 1}
+        color="grid"
+        opacity={to(
+          [opacity, stepOpacity],
+          (o, stepOpacity) => (y > max.y / scale[1] ? 0 : 0.25 * o) * stepOpacity
+        )}
+      />
     </animated.mesh>
   );
 };
 
-export default AnimatedYMarker;
+export default AnimatedHorizontalMarker;

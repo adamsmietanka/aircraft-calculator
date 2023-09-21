@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
-import { SpringValue, useSpring } from "@react-spring/three";
+import { Interpolation, SpringValue, useSpring } from "@react-spring/three";
 import { Line2, LineMaterialParameters } from "three-stdlib";
 
 import { useCSSColors } from "./config";
@@ -10,7 +10,7 @@ import { styles } from "./utils/lineStyles";
 type Props = {
   points: number[][];
   scale?: number[];
-  opacity?: number;
+  opacity?: number | SpringValue<number> | Interpolation<number>;
   offset?: number;
   width?: SpringValue<number> | number;
   color?: string;
