@@ -5,8 +5,9 @@ import { getXTip } from "./useWingSprings";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import useWingOutline from "../../hooks/useWingOutline";
 import { useLocation } from "react-router-dom";
+import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
 
-const PANELS = 101;
+const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
 const useWingModel = () => {
   const wing = useWingStore();
@@ -23,16 +24,18 @@ const useWingModel = () => {
         xOutline: [
           [0, wing.chord],
           [0, wing.chord],
+          [0, wing.chord],
         ],
-        yOutline: [0, wing.span / 2],
+        yOutline: [-wing.span / 2, 0, wing.span / 2],
       };
     if (wing.shape === 1)
       return {
         xOutline: [
+          [xTip, xTip + wing.chordTip],
           [0, wing.chord],
           [xTip, xTip + wing.chordTip],
         ],
-        yOutline: [0, wing.span / 2],
+        yOutline: [-wing.span / 2, 0, wing.span / 2],
       };
     return modelPoints;
   };
@@ -43,11 +46,10 @@ const useWingModel = () => {
     const { xOutline, yOutline } = getOutline();
     if (profilePoints.length) {
       const tip = profilePoints.map(([x, y, z]) => [
-        xOutline[1][0] + (xOutline[1][1] - xOutline[1][0]) * x,
-        (xOutline[1][1] - xOutline[1][0]) * y,
-        yOutline[1],
+        xOutline[2][0] + (xOutline[2][1] - xOutline[2][0]) * x,
+        (xOutline[2][1] - xOutline[2][0]) * y,
+        yOutline[2],
       ]);
-      console.log(tip);
       shape.moveTo(tip[0][0], tip[0][1]);
 
       for (let i = 1; i < PANELS; i++) {
