@@ -1,7 +1,7 @@
 import { Text } from "@react-three/drei";
 import { FONT_SIZE, TITLE_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import AnimatedYMarker from "./AnimatedYMarker";
+import AnimatedHorizontalMarker from "./AnimatedHorizontalMarker";
 import {
   SpringValue,
   animated,
@@ -61,7 +61,7 @@ const LinesHorizontal = ({
   return (
     <>
       {opacityTrail.map((i, index) => (
-        <AnimatedYMarker
+        <AnimatedHorizontalMarker
           key={index}
           y={ticks[index]}
           min={min}

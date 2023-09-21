@@ -11,7 +11,7 @@ import {
   SpringValue,
   to,
 } from "@react-spring/three";
-import AnimatedXMarker from "./AnimatedXMarker";
+import AnimatedVerticalMarker from "./AnimatedVerticalMarker";
 import { Axis } from "./LineChart";
 
 interface AxisProps {
@@ -61,14 +61,14 @@ const LinesVertical = ({
 
   return (
     <>
-      {opacityTrail.map((i, index) => (
-        <AnimatedXMarker
+      {opacityTrail.map(({opacity}, index) => (
+        <AnimatedVerticalMarker
           key={index}
           x={ticks[index]}
           min={min}
           max={max}
           type={axis.type}
-          opacity={i.opacity}
+          opacity={opacity}
           stepOpacity={stepOpacity}
           scale={scale}
         />
