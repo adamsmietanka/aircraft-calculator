@@ -45,13 +45,6 @@ const Fuselage = () => {
             metalness={1}
           />
         </mesh>
-        <mesh geometry={geometry} scale-z={-1}>
-          <meshStandardMaterial
-            color={"lightgray"}
-            side={DoubleSide}
-            metalness={1}
-          />
-        </mesh>
         <mesh geometry={tipGeometry}>
           <meshStandardMaterial
             color={"lightgray"}
