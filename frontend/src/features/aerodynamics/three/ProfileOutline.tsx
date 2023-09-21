@@ -1,11 +1,11 @@
-import { animated, useSpring } from "@react-spring/three";
+import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
-import { useWingStore } from "../stores/useWing";
-import { getXTip } from "./hooks/useWingSprings";
 import { useLocation } from "react-router-dom";
 import AnimatedLine from "../../common/three/AnimatedLine";
+import useWingScale from "../hooks/useWingScale";
+import { useWingStore } from "../stores/useWing";
 
 interface Props {
   width: number;
@@ -33,28 +33,24 @@ const ProfileOutline = ({ width, gridPositionX }: Props) => {
     location.pathname === "/aerodynamics/profile" &&
     (!!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"]);
 
-  const localWidth = CANVAS_WIDTH * width;
-  const localHeight = 12;
+  const { scale, scaleProfile } = useWingScale(width);
 
   const [profileSpring] = useSpring(
     () => ({
       aoa: rotateProfile ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
+      scale: outlineNormal ? scaleProfile : scale * chord,
       x: outlineNormal ? -0.25 : 0,
       y: outlineNormal ? -yCamber : 0,
-      scale: outlineNormal
-        ? 0.96 * localWidth
-        : Math.min(
-            localHeight / span,
-            (0.5 * localWidth) / (getXTip(angle, span) + chordTip),
-            (0.5 * localWidth) / chord
-          ) * chord,
+      gridX: outlineNormal ? 0 : 0.5,
     }),
-    [outlineNormal, chord, span, angle, chordTip, yCamber, x, rotateProfile]
+    [outlineNormal, yCamber, x, scale, chord, rotateProfile]
   );
 
   return (
     <animated.mesh
-      position-x={(gridPositionX * CANVAS_WIDTH) / 2}
+      position-x={profileSpring.gridX.to(
+        (x) => x + (gridPositionX * CANVAS_WIDTH) / 2
+      )}
       rotation-z={profileSpring.aoa}
       scale={profileSpring.scale}
     >
