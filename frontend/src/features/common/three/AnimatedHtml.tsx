@@ -28,7 +28,7 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
         const vis = htmlRef.current && checkVisible(htmlRef.current);
         vis && show && (await next({ display: "block", delay: ROUTE_DELAY }));
         await next({ opacity: vis && show ? 1 : 0 });
-        vis || (await next({ display: "none" }));
+        (vis && show) || (await next({ display: "none" }));
       },
     }),
     [location.pathname]
