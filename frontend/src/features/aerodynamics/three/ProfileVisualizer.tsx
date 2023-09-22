@@ -18,7 +18,7 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
-  const { profilePoints, yCamber } = useProfile();
+  const { upperPoints, lowerPoints, yCamber } = useProfile();
 
   const show =
     !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
@@ -37,6 +37,8 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
   const reynoldsIndex = useWingStore((state) => state.reynolds);
 
   const speed = 0.03 * reynolds[profile][reynoldsIndex];
+
+  const omittedPoints = Math.floor(NUMBER_OF_AIRFOIL_POINTS * 0.1);
 
   return (
     <animated.mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
@@ -59,7 +61,10 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
         <animated.mesh position-x={-0.3} position-y={-yCamber}>
           <mesh position-y={0.02}>
             <AnimatedLine
-              points={profilePoints.slice(2, 42)}
+              points={upperPoints.slice(
+                omittedPoints,
+                NUMBER_OF_AIRFOIL_POINTS - omittedPoints
+              )}
               scale={[1.2, 1.2, 1]}
               style="airstream"
               color="grid"
@@ -69,7 +74,10 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
           </mesh>
           <mesh position-y={-0.02}>
             <AnimatedLine
-              points={profilePoints.slice(60, 99).reverse()}
+              points={lowerPoints.slice(
+                omittedPoints,
+                NUMBER_OF_AIRFOIL_POINTS - omittedPoints
+              )}
               scale={[1.2, 1.2, 1]}
               style="airstream"
               color="grid"
