@@ -63,7 +63,7 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
           />
         </div>
       </AnimatedHtml>
-      <mesh scale={1 / scale} position-z={0.02}>
+      <mesh scale={1 / scale} position-z={0.002}>
         <AnimatedInputTechnical
           scale={scale}
           distance={-2}
@@ -122,7 +122,7 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
               [0, maxThickness, 0],
             ]}
             scale={[scale, scale, scale]}
-            opacity={hoverC ? 1 : 0}
+            opacity={hoverC ? 0.5 : 0}
             width={1.5}
             color="secondary"
             segments

@@ -101,7 +101,6 @@ const useProfile = () => {
     upperPoints,
     lowerPoints,
     chordPoints,
-    yCamber: getCamberY(0.25),
     maxThickness,
     lowestPoint,
   };

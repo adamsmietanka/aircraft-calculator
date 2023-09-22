@@ -24,7 +24,7 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
-  const { upperPoints, lowerPoints, yCamber } = useProfile();
+  const { upperPoints, lowerPoints } = useProfile();
 
   const show =
     !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
@@ -34,9 +34,8 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
   const [profileSpring] = useSpring(
     () => ({
       aoa: show ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
-      yCamber: -yCamber,
     }),
-    [x, show, yCamber]
+    [x, show]
   );
 
   const profile = useWingStore((state) => state.profile);
@@ -76,37 +75,35 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
         />
       </Vector>
       <animated.mesh rotation-z={profileSpring.aoa} scale={0.96 * localWidth}>
-        <animated.mesh position-y={-yCamber}>
-          <ProfileNACAExplanation scale={0.96 * localWidth} />
-          <mesh position-x={-0.3}>
-            <mesh position-y={0.02}>
-              <AnimatedLine
-                points={upperPoints.slice(
-                  omittedPoints,
-                  NUMBER_OF_AIRFOIL_POINTS - omittedPoints
-                )}
-                scale={[1.2, 1.2, 1]}
-                style="airstream"
-                color="grid"
-                offset={speed}
-                opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
-              />
-            </mesh>
-            <mesh position-y={-0.02}>
-              <AnimatedLine
-                points={lowerPoints.slice(
-                  omittedPoints,
-                  NUMBER_OF_AIRFOIL_POINTS - omittedPoints
-                )}
-                scale={[1.2, 1.2, 1]}
-                style="airstream"
-                color="grid"
-                offset={0.8 * speed}
-                opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
-              />
-            </mesh>
+        <ProfileNACAExplanation scale={0.96 * localWidth} />
+        <mesh position-x={-0.3}>
+          <mesh position-y={0.02}>
+            <AnimatedLine
+              points={upperPoints.slice(
+                omittedPoints,
+                NUMBER_OF_AIRFOIL_POINTS - omittedPoints
+              )}
+              scale={[1.2, 1.2, 1]}
+              style="airstream"
+              color="grid"
+              offset={speed}
+              opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
+            />
           </mesh>
-        </animated.mesh>
+          <mesh position-y={-0.02}>
+            <AnimatedLine
+              points={lowerPoints.slice(
+                omittedPoints,
+                NUMBER_OF_AIRFOIL_POINTS - omittedPoints
+              )}
+              scale={[1.2, 1.2, 1]}
+              style="airstream"
+              color="grid"
+              offset={0.8 * speed}
+              opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
+            />
+          </mesh>
+        </mesh>
       </animated.mesh>
     </animated.mesh>
   );
