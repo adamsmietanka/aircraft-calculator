@@ -1,31 +1,31 @@
 import { SpringValue, animated, to, useSpring } from "@react-spring/three";
 import { Cone, Cylinder } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
-import Formula from "../../common/Formula";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
+import { ReactNode } from "react";
 
 const VECTOR_WIDTH = 0.05;
 const VECTOR_TIP_LENGTH = 0.5;
 const VECTOR_SIZE = 2.5 - VECTOR_TIP_LENGTH;
 
 interface VectorProps {
-  tex: string;
   value: number;
   otherValue?: number;
   rotation: number;
   show: boolean;
   color?: string;
   opacity: SpringValue<number>;
+  children: ReactNode;
 }
 
 const Vector = ({
-  tex,
   value,
   otherValue = 0,
   rotation,
   show,
   color = "primary",
   opacity,
+  children,
 }: VectorProps) => {
   const AnimatedCylinder = animated(Cylinder);
   const AnimatedCone = animated(Cone);
@@ -79,9 +79,7 @@ const Vector = ({
         rotation-z={-rotation}
         show={show}
       >
-        <div className={`text-${color} text-xl`}>
-          <Formula tex={tex} />
-        </div>
+        <div className={`text-${color} text-xl`}>{children}</div>
       </AnimatedHtml>
     </mesh>
   );

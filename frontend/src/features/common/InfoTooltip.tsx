@@ -7,7 +7,7 @@ interface Props {
 
 const InfoTooltip = ({ text }: Props) => {
   return (
-    <div className="tooltip tooltip-right" data-tip={text}>
+    <div className="tooltip" data-tip={text}>
       <Info className="w-4 ml-1.5 relative bottom-0.5 text-color" />
     </div>
   );
