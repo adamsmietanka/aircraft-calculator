@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import { Interpolation, SpringValue, useSpring } from "@react-spring/three";
-import { Line2, LineMaterialParameters } from "three-stdlib";
+import { Line2, LineSegments2, LineMaterialParameters } from "three-stdlib";
 
 import { useCSSColors } from "./config";
 import { styles } from "./utils/lineStyles";
@@ -15,6 +15,7 @@ type Props = {
   width?: SpringValue<number> | number;
   color?: string;
   style?: string;
+  segments?: boolean;
 } & Omit<LineMaterialParameters, "opacity" | "color" | "vertexColors">;
 
 const AnimatedLine = ({
@@ -25,11 +26,12 @@ const AnimatedLine = ({
   width = 3,
   color = "primary",
   style = "normal",
+  segments = false,
   ...rest
 }: Props) => {
   const { colors } = useCSSColors();
 
-  const lineRef = useRef<Line2>(null);
+  const lineRef = useRef<Line2 | LineSegments2>(null);
 
   const [lineSpring] = useSpring(
     () => ({
@@ -58,8 +60,9 @@ const AnimatedLine = ({
     <Line
       ref={lineRef}
       dashed
-      points={[0, 0, -1, 0.1, 1, -1, 0.2, 0, -1]}
+      points={[0, 0, 0, 1, 0, 0]}
       color={colors[color] || color}
+      segments={segments}
       transparent
       {...styles[style]}
       {...rest}
