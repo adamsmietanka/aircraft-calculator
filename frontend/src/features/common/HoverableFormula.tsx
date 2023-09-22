@@ -13,6 +13,7 @@ interface Props {
   tex: string;
   texHover: string;
   center?: boolean;
+  tooltipTop?: boolean;
   onEnter: () => void;
   onLeave: () => void;
 }
@@ -22,6 +23,7 @@ const HoverableFormula = ({
   tex,
   texHover,
   center = false,
+  tooltipTop = false,
   onEnter,
   onLeave,
   hover,
@@ -35,7 +37,7 @@ const HoverableFormula = ({
 
   return (
     <div
-      className={`tooltip tooltip-left h-8 flex ${
+      className={`tooltip ${!tooltipTop && "tooltip-left"} h-8 flex ${
         center && "items-center"
       }`}
       data-tip={name}
