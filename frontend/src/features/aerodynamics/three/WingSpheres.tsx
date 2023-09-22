@@ -1,12 +1,9 @@
-import { SpringValue, animated, to, useSpring } from "@react-spring/three";
+import { SpringValue, animated, to } from "@react-spring/three";
 import { Sphere } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
-import React, { useEffect, useState } from "react";
-import { Mesh } from "three";
+import { useEffect, useState } from "react";
 import { useCSSColors } from "../../common/three/config";
 import { useWingStore } from "../stores/useWing";
-import { getXTip } from "./hooks/useWingSprings";
-import { useProfileCamber } from "../hooks/useProfile";
 
 const AnimatedSphere = animated(Sphere);
 
@@ -21,6 +18,7 @@ interface Props {
   x: SpringValue<number>;
   y: SpringValue<number>;
   rotationZ: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
 const WingSpheres = ({
@@ -32,6 +30,7 @@ const WingSpheres = ({
   x,
   y,
   rotationZ,
+  opacity,
 }: Props) => {
   const { primaryColor, infoColor } = useCSSColors();
 
@@ -50,7 +49,10 @@ const WingSpheres = ({
         onClick={onClick}
         onPointerEnter={(e) => setHovered(1)}
         onPointerLeave={(e) => setHovered(0)}
-        scale={scale.to((scale) => SPHERE_SIZE / scale)}
+        scale={to(
+          [scale, opacity],
+          (scale, opacity) => (opacity * SPHERE_SIZE) / scale
+        )}
         rotation-z={rotationZ}
         position-x={x}
         position-y={y}
@@ -59,6 +61,8 @@ const WingSpheres = ({
             ? infoColor
             : primaryColor
         }
+        material-transparent
+        material-opacity={opacity}
       />
       {shape === 1 && (
         <AnimatedSphere
@@ -66,7 +70,10 @@ const WingSpheres = ({
           onClick={onClick}
           onPointerEnter={(e) => setHovered(2)}
           onPointerLeave={(e) => setHovered(0)}
-          scale={scale.to((scale) => SPHERE_SIZE / scale)}
+          scale={to(
+            [scale, opacity],
+            (scale, opacity) => (opacity * SPHERE_SIZE) / scale
+          )}
           position-x={to([x, chordTip], (x, chordTip) => x + chordTip)}
           position-y={y}
           material-color={
@@ -75,7 +82,7 @@ const WingSpheres = ({
               : primaryColor
           }
           material-transparent
-          material-opacity={shape === 1 ? 1 : 0}
+          material-opacity={opacity}
         />
       )}
       <AnimatedSphere
@@ -88,13 +95,18 @@ const WingSpheres = ({
         onClick={onClick}
         onPointerEnter={(e) => setHovered(3)}
         onPointerLeave={(e) => setHovered(0)}
-        scale={scale.to((scale) => SPHERE_SIZE / scale)}
+        scale={to(
+          [scale, opacity],
+          (scale, opacity) => (opacity * SPHERE_SIZE) / scale
+        )}
         position-x={chord}
         material-color={
           active?.userData.number === 3 || hovered === 3
             ? infoColor
             : primaryColor
         }
+        material-transparent
+        material-opacity={opacity}
       />
     </>
   );

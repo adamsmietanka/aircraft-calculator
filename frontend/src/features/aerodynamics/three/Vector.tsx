@@ -1,4 +1,4 @@
-import { animated, useSpring } from "@react-spring/three";
+import { SpringValue, animated, to, useSpring } from "@react-spring/three";
 import { Cone, Cylinder } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
 import Formula from "../../common/Formula";
@@ -15,6 +15,7 @@ interface VectorProps {
   rotation: number;
   show: boolean;
   color?: string;
+  opacity: SpringValue<number>;
 }
 
 const Vector = ({
@@ -24,6 +25,7 @@ const Vector = ({
   rotation,
   show,
   color = "primary",
+  opacity,
 }: VectorProps) => {
   const AnimatedCylinder = animated(Cylinder);
   const AnimatedCone = animated(Cone);
@@ -52,7 +54,10 @@ const Vector = ({
           position-y={spring.value.to((v) => (v * VECTOR_SIZE * 1.05) / 2)}
           material-transparent
           material-color={colors[color]}
-          material-opacity={spring.opacity}
+          material-opacity={to(
+            [spring.opacity, opacity],
+            (opacity, stepOpacity) => opacity * stepOpacity
+          )}
         />
         <AnimatedCone
           args={[VECTOR_TIP_LENGTH / 2.5, VECTOR_TIP_LENGTH, 32]}
@@ -62,7 +67,10 @@ const Vector = ({
           scale={spring.value.to((v) => Math.sign(v) * Math.sqrt(Math.abs(v)))}
           material-transparent
           material-color={colors[color]}
-          material-opacity={spring.opacity}
+          material-opacity={to(
+            [spring.opacity, opacity],
+            (opacity, stepOpacity) => opacity * stepOpacity
+          )}
         />
       </animated.mesh>
       <AnimatedHtml

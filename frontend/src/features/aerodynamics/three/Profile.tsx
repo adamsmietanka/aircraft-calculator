@@ -1,12 +1,16 @@
 import ProfileReynolds from "../ProfileReynolds";
 import ProfileVisualizer from "./ProfileVisualizer";
-import { animated } from "@react-spring/three";
+import { SpringValue, animated } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
 import LineChart from "../../common/three/LineChart";
 import useProfileCharts from "../hooks/useProfileCharts";
 
-const Profile = () => {
+interface Props {
+  opacity: SpringValue<number>;
+}
+
+const Profile = ({ opacity }: Props) => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
 
   return (
@@ -15,10 +19,11 @@ const Profile = () => {
         <ProfileChoose />
         <ProfileReynolds />
       </Inputs3D>
-      <ProfileVisualizer width={0.33} gridPositionX={-0.5} />
+      <ProfileVisualizer width={0.33} gridPositionX={-0.5} opacity={opacity} />
       <LineChart
         width={0.33}
         gridPositionX={0.25}
+        opacity={opacity}
         name="Coefficient of Lift"
         traces={[{ name: "Power", points: pointsCl }]}
         axes={{
@@ -34,6 +39,7 @@ const Profile = () => {
       <LineChart
         width={0.5}
         gridPositionX={1.1}
+        opacity={opacity}
         name="Coefficient of Drag"
         traces={[{ name: "Power", points: pointsCd }]}
         axes={{

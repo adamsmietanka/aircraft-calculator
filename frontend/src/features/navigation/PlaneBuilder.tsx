@@ -30,14 +30,14 @@ const PlaneBuilder = () => {
 
         <Camera />
 
-        <Route paths={["/", "/aerodynamics/profile"]} element={<Home />} />
-        <Route path="/aerodynamics/profile" element={<Profile />} />
+        <Route paths={["/", "/aerodynamics/profile"]} Element={Home} />
+        <Route path="/aerodynamics/profile" Element={Profile} />
         <Route
-          paths={["/", "/aerodynamics/profile", "/aerodynamics/wing"]}
-          element={<ProfileOutline width={0.33} gridPositionX={-0.5} />}
+          paths={["/aerodynamics/profile", "/aerodynamics/wing"]}
+          Element={ProfileOutline}
         />
-        <Route path="/aerodynamics/wing" element={<Wing />} />
-        <Route path="/aerodynamics/fuselage" element={<Fuselage />} />
+        <Route path="/aerodynamics/wing" Element={Wing} />
+        <Route path="/aerodynamics/fuselage" Element={Fuselage} />
       </Canvas>
     </div>
   );

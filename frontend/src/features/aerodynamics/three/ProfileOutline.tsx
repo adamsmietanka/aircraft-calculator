@@ -8,19 +8,17 @@ import useWingScale from "../hooks/useWingScale";
 import { useWingStore } from "../stores/useWing";
 
 interface Props {
-  width: number;
-  gridPositionX: number;
+  opacity: SpringValue<number>;
 }
+const width = 0.33,
+  gridPositionX = -0.5;
 
-const ProfileOutline = ({ width, gridPositionX }: Props) => {
+const ProfileOutline = ({ opacity }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
   const chord = useWingStore((state) => state.chord);
-  const chordTip = useWingStore((state) => state.chordTip);
-  const angle = useWingStore((state) => state.angle);
-  const span = useWingStore((state) => state.span);
 
   const { profilePoints, chordPoints, yCamber } = useProfile();
 
@@ -55,8 +53,13 @@ const ProfileOutline = ({ width, gridPositionX }: Props) => {
       scale={profileSpring.scale}
     >
       <animated.mesh position-x={profileSpring.x} position-y={profileSpring.y}>
-        <AnimatedLine points={profilePoints} />
-        <AnimatedLine points={chordPoints} width={1.5} color="secondary" />
+        <AnimatedLine points={profilePoints} opacity={opacity} />
+        <AnimatedLine
+          points={chordPoints}
+          width={1.5}
+          color="secondary"
+          opacity={opacity}
+        />
       </animated.mesh>
     </animated.mesh>
   );

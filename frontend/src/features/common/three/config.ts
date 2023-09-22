@@ -3,7 +3,7 @@ import { useThemeStore } from "../../settings/stores/useTheme";
 import { useMemo } from "react";
 
 //Profile
-export const NUMBER_OF_AIRFOIL_POINTS = 50;
+export const NUMBER_OF_AIRFOIL_POINTS = 25;
 
 export const GRID_WIDTH = 1.0;
 export const GRID_OPACITY = 0.1;
@@ -22,6 +22,10 @@ export const MEASUREMENT_SIDE = MEASUREMENT_DISTANCE * 1.2;
 
 export const VECTOR_TIP_LENGTH = 0.15;
 export const VECTOR_TIP_WIDTH = VECTOR_TIP_LENGTH / 2.5;
+
+//Camera and route animation
+export const ROUTE_DELAY = 600;
+export const CAMERA_DELAY = 100;
 
 // Chart Animations
 export const POSITION_ANIMATION_DURATION = 0.5;

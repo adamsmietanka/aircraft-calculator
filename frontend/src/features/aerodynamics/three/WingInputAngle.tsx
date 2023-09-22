@@ -11,13 +11,16 @@ interface Props {
   scale: SpringValue<number>;
   y: SpringValue<number>;
   angle: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
 const ANGLE_MEAS_POINTS = 6;
 
-const WingInputAngle = ({ scale, y, angle }: Props) => {
+const WingInputAngle = ({ scale, y, angle, opacity }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const curveRef = useRef<THREE.BufferAttribute>(null);
+  const materialRef = useRef<THREE.LineBasicMaterial>(null);
+  const material2Ref = useRef<THREE.LineBasicMaterial>(null);
 
   const wing = useWingStore();
 
@@ -60,6 +63,12 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
       curveRef.current.set(curve);
       curveRef.current.needsUpdate = true;
     }
+    if (materialRef.current) {
+      materialRef.current.opacity = opacity.get();
+    }
+    if (material2Ref.current) {
+      material2Ref.current.opacity = opacity.get();
+    }
   });
 
   return (
@@ -74,7 +83,11 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color={gridColor} opacity={1} transparent />
+        <lineBasicMaterial
+          ref={materialRef}
+          color={gridColor}
+          transparent
+        />
       </animated.lineSegments>
       <animated.line>
         <bufferGeometry>
@@ -86,12 +99,26 @@ const WingInputAngle = ({ scale, y, angle }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color={gridColor} opacity={1} transparent />
+        <lineBasicMaterial
+          ref={material2Ref}
+          color={gridColor}
+          opacity={1}
+          transparent
+        />
       </animated.line>
 
-      <AnimatedTip scale={scale} distance={y.to((y) => y / 2)} />
+      <AnimatedTip
+        opacity={opacity}
+        scale={scale}
+        distance={y.to((y) => y / 2)}
+      />
       <animated.mesh rotation-z={angle.to((a) => -a)}>
-        <AnimatedTip scale={scale} distance={y.to((y) => y / 2)} end />
+        <AnimatedTip
+          opacity={opacity}
+          scale={scale}
+          distance={y.to((y) => y / 2)}
+          end
+        />
       </animated.mesh>
 
       <AnimatedHtml

@@ -11,7 +11,6 @@ import { useWingStore } from "../stores/useWing";
 import AnimatedTips from "../../common/drawings/AnimatedTips";
 import Formula from "../../common/Formula";
 import { useHoverWingStore } from "../hooks/useHoverables";
-import { Mesh, Object3D } from "three";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
 
 interface Props {
@@ -19,10 +18,12 @@ interface Props {
   chordTip: SpringValue<number>;
   x: SpringValue<number>;
   y: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
-const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
+const WingInputTip = ({ chordTip, scale, x, y, opacity }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
+  const materialRef = useRef<THREE.LineBasicMaterial>(null);
 
   const wing = useWingStore();
 
@@ -58,6 +59,9 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
       positionRef.current.set(position);
       positionRef.current.needsUpdate = true;
     }
+    if (materialRef.current) {
+      materialRef.current.opacity = opacity.get();
+    }
   });
 
   const hoverWing = useHoverWingStore();
@@ -74,10 +78,15 @@ const WingInputTip = ({ chordTip, scale, x, y }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color={gridColor} opacity={1} transparent />
+        <lineBasicMaterial
+          ref={materialRef}
+          color={gridColor}
+          opacity={1}
+          transparent
+        />
       </animated.lineSegments>
 
-      <AnimatedTips scale={scale} value={chordTip} />
+      <AnimatedTips opacity={opacity} scale={scale} value={chordTip} />
 
       <AnimatedHtml
         position-x={chordTip.to((chordTip) => chordTip / 2)}

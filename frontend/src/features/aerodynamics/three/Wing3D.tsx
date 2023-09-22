@@ -1,5 +1,5 @@
 import { TransformControls } from "@react-three/drei";
-import { animated, SpringValue, to } from "@react-spring/three";
+import { animated, SpringValue, to, useSpring } from "@react-spring/three";
 import Scale from "./Scale";
 import useWing3D from "./hooks/useWing3D";
 import useWingSprings from "./hooks/useWingSprings";
@@ -21,7 +21,14 @@ const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
   const { onTransform, active, setActive, step } = useWing3D();
   const { leadingPoints, trailingPoints } = useWingOutline();
 
-  const { gizmoSpring, wingSpring } = useWingSprings(active, width);
+  const { wingSpring } = useWingSprings(width);
+
+  const [gizmoSpring] = useSpring(
+    () => ({
+      size: !!active ? 0.6 : 0,
+    }),
+    [active]
+  );
 
   const AnimatedTransform = animated(TransformControls);
 
@@ -43,10 +50,9 @@ const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
         scale={wingSpring.scale}
         position-x={(gridPositionX * CANVAS_WIDTH) / 2}
         rotation-x={-Math.PI / 2}
-        visible={opacity.to((o) => o !== 0)}
       >
-        <animated.mesh position-x={wingSpring.chord.to((c) => 0)}>
-          <Scale length={step} scale={wingSpring.scale} />
+        <animated.mesh>
+          <Scale opacity={opacity} length={step} scale={wingSpring.scale} />
           <WingHoverables scale={wingSpring.scale} />
           <WingSpheres
             scale={wingSpring.scale}
@@ -57,18 +63,20 @@ const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
             x={wingSpring.x}
             y={wingSpring.y}
             rotationZ={wingSpring.rotationZ}
+            opacity={opacity}
           />
           <WingInputs
             scale={wingSpring.scale}
+            opacity={opacity}
             chord={wingSpring.chord}
             chordTip={wingSpring.chordTip}
             angle={wingSpring.angle}
             x={wingSpring.x}
             y={wingSpring.y}
           />
-          <ProfileOutlines />
-          <AnimatedLine points={leadingPoints} />
-          <AnimatedLine points={trailingPoints} />
+          <ProfileOutlines opacity={opacity} />
+          <AnimatedLine points={leadingPoints} opacity={opacity} />
+          <AnimatedLine points={trailingPoints} opacity={opacity} />
         </animated.mesh>
       </animated.mesh>
     </>

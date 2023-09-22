@@ -90,6 +90,7 @@ const LineChart = ({
             scale={scale}
             color={trace.style ? "primary" : colors[index]}
             style={trace.style}
+            opacity={opacity}
           />
         ))}
         {store && (
@@ -104,6 +105,7 @@ const LineChart = ({
             store={store}
             yHover={yHover}
             zHover={zHover}
+            opacity={opacity}
           />
         )}
       </mesh>

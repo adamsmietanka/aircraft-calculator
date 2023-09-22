@@ -1,9 +1,10 @@
 import { Interpolation, SpringValue, animated } from "@react-spring/three";
 import { useSpring, animated as animatedWeb } from "@react-spring/web";
 import { Html } from "@react-three/drei";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { checkVisible } from "./checkVisible";
+import { ROUTE_DELAY } from "./config";
 
 type Props = {
   position?: Interpolation<number[]>;
@@ -20,26 +21,22 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
   const location = useLocation();
   const Anim = animatedWeb(Html);
 
-  const [visible, setVisible] = useState(false);
-
   const [props, propsApi] = useSpring(
     () => ({
       from: { opacity: 0, display: "none" },
       to: async (next) => {
-        visible && (await next({ display: "block" }));
-        await next({ opacity: visible && show ? 1 : 0 });
-        visible || (await next({ display: "none" }));
+        const vis = htmlRef.current && checkVisible(htmlRef.current);
+        vis && (await next({ display: "block", delay: ROUTE_DELAY }));
+        await next({ opacity: vis && show ? 1 : 0 });
+        vis || (await next({ display: "none" }));
       },
     }),
-    [show, visible]
+    [location.pathname]
   );
 
   useEffect(() => {
-    if (htmlRef.current) {
-      setVisible(checkVisible(htmlRef.current));
-      propsApi.start({});
-    }
-  }, [location.pathname]);
+    propsApi.start({ opacity: show ? 1 : 0, });
+  }, [show]);
 
   return (
     <animated.mesh {...rest} ref={htmlRef}>

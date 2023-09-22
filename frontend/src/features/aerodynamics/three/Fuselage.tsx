@@ -3,19 +3,24 @@ import { PresentationControls } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import useWingModel from "./hooks/useWingModel";
+import { SpringValue, animated } from "@react-spring/three";
 
-const Fuselage = () => {
+interface Props {
+  opacity: SpringValue<number>;
+}
+
+const Fuselage = ({ opacity }: Props) => {
   const { geometry, tipGeometry } = useWingModel();
 
   const { nodes } = useLoader(GLTFLoader, "/models/2303.glb");
 
   return (
-    <mesh position-x={-5}>
+    <mesh position-x={-4.5}>
       <PresentationControls
         enabled={true} // the controls can be disabled by setting this to false
         global={false} // Spin globally or by dragging the model
         cursor={true} // Whether to toggle cursor style on drag
-        snap={false} // Snap-back to center (can also be a spring config)
+        snap={true} // Snap-back to center (can also be a spring config)
         speed={1} // Speed factor
         zoom={2} // Zoom factor when half the polar-max is reached
         rotation={[0, 0, 0]} // Default rotation
@@ -32,24 +37,31 @@ const Fuselage = () => {
           scale={0.1 * 6}
           position-x={-1}
         >
-          <meshStandardMaterial
+          <animated.meshStandardMaterial
             color={"lightgray"}
             side={DoubleSide}
             metalness={1}
+            transparent
+            opacity={opacity}
+            wireframe
           />
         </mesh>
         <mesh geometry={geometry}>
-          <meshStandardMaterial
+          <animated.meshStandardMaterial
             color={"lightgray"}
             side={DoubleSide}
             metalness={1}
+            transparent
+            opacity={opacity}
           />
         </mesh>
         <mesh geometry={tipGeometry}>
-          <meshStandardMaterial
+          <animated.meshStandardMaterial
             color={"lightgray"}
             side={DoubleSide}
             metalness={1}
+            transparent
+            opacity={opacity}
           />
         </mesh>
       </PresentationControls>

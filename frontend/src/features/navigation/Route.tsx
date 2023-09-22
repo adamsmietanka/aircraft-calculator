@@ -1,19 +1,45 @@
-import React from "react";
+import { SpringValue, animated, useSpring } from "@react-spring/three";
+import { useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { ROUTE_DELAY } from "../common/three/config";
+
+interface ElementProps {
+  opacity: SpringValue<number>;
+}
 
 interface Props {
   path?: string;
   paths?: string[];
-  element: JSX.Element;
+  Element: ({ opacity }: ElementProps) => JSX.Element;
 }
 
-const Route = ({ path, paths, element }: Props) => {
+const Route = ({ path, paths, Element }: Props) => {
+  const meshRef = useRef<THREE.Mesh>(null!);
   const location = useLocation();
   const pathsArray = paths ? paths : [path];
+
+  const isVisible = pathsArray.some((p) => location.pathname === p);
+
+  const [props, propsApi] = useSpring(
+    () => ({
+      from: { opacity: 0, visible: false },
+      to: async (next) => {
+        isVisible && (await next({ visible: true, delay: ROUTE_DELAY }));
+        await next({ opacity: isVisible ? 1 : 0 });
+        isVisible || (await next({ visible: false }));
+      },
+    }),
+    [isVisible]
+  );
+
   return (
-    <mesh visible={pathsArray.some((p) => location.pathname === p)}>
-      {element}
-    </mesh>
+    <animated.mesh
+      visible={props.visible}
+      ref={meshRef}
+      userData={{ hide: !isVisible, pathsArray }}
+    >
+      <Element opacity={props.opacity} />
+    </animated.mesh>
   );
 };
 

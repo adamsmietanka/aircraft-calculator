@@ -1,4 +1,4 @@
-import { animated, useSpring } from "@react-spring/three";
+import { SpringValue, animated, to, useSpring } from "@react-spring/three";
 import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { Text } from "@react-three/drei";
@@ -22,9 +22,18 @@ interface Props {
   scale: number[];
   min: Record<string, number>;
   step: Record<string, number>;
+  opacity: SpringValue<number>;
 }
 
-const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
+const HoverMarker = ({
+  name,
+  store,
+  axes,
+  scale,
+  min,
+  step,
+  opacity,
+}: Props) => {
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
   const { primaryColor, backgroundColor } = useCSSColors();
@@ -56,7 +65,6 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
     [x, y, scale, locked, show]
   );
 
-  const opacity = !!locked || show ? 1 : 0;
   const width = !!locked ? 2 : 1;
 
   const displayX = round(x / xMultiplier, step.x / 100);
@@ -67,7 +75,10 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
       <AnimatedLine
         points={points}
         scale={scale}
-        opacity={opacity}
+        opacity={to(
+          [hoverSpring.opacity, opacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
         width={width}
         dashSize={0.25}
         gapSize={0.75}
@@ -78,10 +89,16 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
         fontSize={0.6 * FONT_SIZE}
         position={hoverSpring.x.to((x) => [x, min.y - NUMBERS_PADDING, 0.375])}
         color={primaryColor}
-        fillOpacity={hoverSpring.opacity}
+        fillOpacity={to(
+          [hoverSpring.opacity, opacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
         outlineWidth={0.2}
         outlineColor={backgroundColor}
-        outlineOpacity={hoverSpring.opacity}
+        outlineOpacity={to(
+          [hoverSpring.opacity, opacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
       >
         {displayX}
       </AnimatedText>
@@ -93,10 +110,16 @@ const HoverMarker = ({ name, store, axes, scale, min, step }: Props) => {
           0.375,
         ])}
         color={primaryColor}
-        fillOpacity={hoverSpring.opacity}
+        fillOpacity={to(
+          [hoverSpring.opacity, opacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
         outlineWidth={0.2}
         outlineColor={backgroundColor}
-        outlineOpacity={hoverSpring.opacity}
+        outlineOpacity={to(
+          [hoverSpring.opacity, opacity],
+          (opacity, stepOpacity) => opacity * stepOpacity
+        )}
       >
         {displayY}
       </AnimatedText>
