@@ -11,7 +11,7 @@ interface Props {
   opacity: SpringValue<number>;
 }
 const width = 0.33,
-  gridPositionX = -0.5;
+  gridPositionX = -0.55;
 
 const ProfileOutline = ({ opacity }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
@@ -39,7 +39,7 @@ const ProfileOutline = ({ opacity }: Props) => {
       scale: outlineNormal ? scaleProfile : scale * chord,
       x: outlineNormal ? -0.25 : 0,
       y: outlineNormal ? -yCamber : 0,
-      gridX: outlineNormal ? 0 : 0.5,
+      gridX: outlineNormal ? 0 : 1,
     }),
     [outlineNormal, yCamber, x, scale, chord, rotateProfile]
   );
