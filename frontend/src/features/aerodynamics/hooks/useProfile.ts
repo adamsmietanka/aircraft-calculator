@@ -21,8 +21,10 @@ const useProfile = () => {
   const [upperPoints, setUpperPoints] = useState<number[][]>([]);
   const [lowerPoints, setLowerPoints] = useState<number[][]>([]);
   const [chordPoints, setChordPoints] = useState<number[][]>([]);
+  const [maxThickness, setMaxThickness] = useState(0);
+  const [lowestPoint, setLowestPoint] = useState(0);
 
-  const { M, P, T } = useProfileCamber();
+  const { M, P, T, F } = useProfileCamber();
 
   const getCamberY = (x: number) => {
     if (x < P) {
@@ -50,6 +52,24 @@ const useProfile = () => {
     );
   };
 
+  const getLowerUpper = (x: number) => {
+    const theta = Math.atan(getCamberGradient(x));
+    const halfThickness = getThickness(x);
+    const y = getCamberY(x);
+    return [
+      [
+        x + halfThickness * Math.sin(theta),
+        y - halfThickness * Math.cos(theta),
+        0,
+      ],
+      [
+        x - halfThickness * Math.sin(theta),
+        y + halfThickness * Math.cos(theta),
+        0,
+      ],
+    ];
+  };
+
   const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
 
   useEffect(() => {
@@ -59,27 +79,21 @@ const useProfile = () => {
 
     for (let i = 0; i <= NUMBER_OF_AIRFOIL_POINTS; i++) {
       const x = cosineSpacing(i / NUMBER_OF_AIRFOIL_POINTS);
-      const theta = Math.atan(getCamberGradient(x));
-      const halfThickness = getThickness(x);
       const y = getCamberY(x);
+      const points = getLowerUpper(x);
 
-      upper.push([
-        x - halfThickness * Math.sin(theta),
-        y + halfThickness * Math.cos(theta),
-        0,
-      ]);
-      lower.push([
-        x + halfThickness * Math.sin(theta),
-        y - halfThickness * Math.cos(theta),
-        0,
-      ]);
+      lower.push(points[0]);
+      upper.push(points[1]);
       chord.push([x, y, 0]);
     }
+    const max = getLowerUpper(F);
 
     setUpperPoints(upper);
     setLowerPoints(lower);
     setProfilePoints([...upper, ...lower.toReversed()]);
     setChordPoints(chord);
+    setMaxThickness(max[1][1] - max[0][1]);
+    setLowestPoint(max[0][1]);
   }, [profile]);
 
   return {
@@ -88,6 +102,8 @@ const useProfile = () => {
     lowerPoints,
     chordPoints,
     yCamber: getCamberY(0.25),
+    maxThickness,
+    lowestPoint,
   };
 };
 

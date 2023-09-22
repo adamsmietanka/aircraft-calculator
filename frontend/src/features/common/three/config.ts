@@ -53,6 +53,7 @@ export const useCSSColors = () => {
       primary: primaryColor,
       secondary: secondaryColor,
       error: errorColor,
+      info: infoColor,
       grid: gridColor,
     }),
     [theme]
