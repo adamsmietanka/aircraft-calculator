@@ -3,6 +3,7 @@ import { Plane } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
 import HoverMarker from "./HoverMarker";
 import round from "../../../utils/interpolation/round";
+import { SpringValue } from "@react-spring/three";
 
 export interface SimpleMarkerStore {
   x: number;
@@ -44,6 +45,7 @@ interface HoverProps {
   >;
   yHover: boolean;
   zHover: boolean;
+  opacity: SpringValue<number>;
 }
 
 const Hover = ({
@@ -57,6 +59,7 @@ const Hover = ({
   store,
   yHover,
   zHover,
+  opacity,
 }: HoverProps) => {
   return (
     <>
@@ -143,6 +146,7 @@ const Hover = ({
         step={step}
         axes={axes}
         min={min}
+        opacity={opacity}
       />
     </>
   );

@@ -4,13 +4,14 @@ import AnimatedTip from "./AnimatedTip";
 interface Props {
   scale: SpringValue<number>;
   value?: SpringValue<number>;
+  opacity?: SpringValue<number>;
 }
 
-const AnimatedTips = ({ scale, value = new SpringValue(0) }: Props) => {
+const AnimatedTips = ({ scale, value = new SpringValue(0), opacity }: Props) => {
   return (
     <>
-      <AnimatedTip scale={scale} />
-      <AnimatedTip scale={scale} value={value} end />
+      <AnimatedTip opacity={opacity} scale={scale} />
+      <AnimatedTip opacity={opacity} scale={scale} value={value} end />
     </>
   );
 };

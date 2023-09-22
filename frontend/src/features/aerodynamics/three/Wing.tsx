@@ -6,35 +6,26 @@ import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
 import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useWingStore } from "../stores/useWing";
-import { config, useSpring } from "@react-spring/three";
+import { SpringValue } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
 import Legend from "../../common/three/Legend";
 import WingShape from "../WingShape";
 import useWingCharts from "../hooks/useWingCharts";
 
-const Wing = () => {
+interface Props {
+  opacity: SpringValue<number>;
+}
+
+const Wing = ({ opacity }: Props) => {
   const wing = useWingStore();
   const { stallReynolds, cl, cd, inducedCd, wingCl, wingCd } =
     useWingAerodynamics();
 
   const { useWingChartsStore } = useWingCharts();
 
-  const [ss] = useSpring(
-    () => ({
-      from: {
-        opacity: 0,
-      },
-      to: {
-        opacity: 1,
-      },
-      config: config.slow,
-    }),
-    []
-  );
-
   return (
     <>
-      <Wing3D width={0.33} gridPositionX={-0.5} opacity={ss.opacity} />
+      <Wing3D width={0.33} gridPositionX={-0.45} opacity={opacity} />
 
       <mesh rotation-x={-Math.PI / 2}>
         <Inputs3D gridPositionX={-1.3}>
@@ -58,7 +49,7 @@ const Wing = () => {
         <LineChart
           width={0.33}
           gridPositionX={0.15}
-          opacity={ss.opacity}
+          opacity={opacity}
           name="Coefficient of Lift"
           traces={[
             { name: "Wing", points: wingCl },
@@ -77,7 +68,7 @@ const Wing = () => {
         <LineChart
           width={0.5}
           gridPositionX={1}
-          opacity={ss.opacity}
+          opacity={opacity}
           name="Coefficient of Drag"
           traces={[
             { name: "Wing", points: wingCd },
@@ -105,6 +96,7 @@ const Wing = () => {
             { name: "Induced", style: "thinDashed" },
             { name: "Profile", style: "dotted" },
           ]}
+          opacity={opacity}
         />
       </mesh>
     </>

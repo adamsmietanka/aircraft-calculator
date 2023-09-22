@@ -1,10 +1,14 @@
-import { animated, useSpring } from "@react-spring/three";
+import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile, { useProfileCamber } from "../hooks/useProfile";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSprings";
 import AnimatedLine from "../../common/three/AnimatedLine";
 
-const ProfileOutlines = () => {
+interface Props {
+  opacity: SpringValue<number>;
+}
+
+const ProfileOutlines = ({ opacity }: Props) => {
   const chordTip = useWingStore((state) => state.chordTip);
   const chord = useWingStore((state) => state.chord);
   const angle = useWingStore((state) => state.angle);
@@ -43,7 +47,7 @@ const ProfileOutlines = () => {
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
-        <AnimatedLine points={profilePoints} />
+        <AnimatedLine points={profilePoints} opacity={opacity} />
       </animated.mesh>
       <animated.mesh
         position-x={profileSpring.positionX}
@@ -51,7 +55,7 @@ const ProfileOutlines = () => {
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
-        <AnimatedLine points={profilePoints} />
+        <AnimatedLine points={profilePoints} opacity={opacity} />
       </animated.mesh>
     </>
   );

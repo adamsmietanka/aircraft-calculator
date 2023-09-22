@@ -11,6 +11,7 @@ interface Props {
   end?: boolean;
   scale: SpringValue<number>;
   value?: SpringValue<number>;
+  opacity?: SpringValue<number>;
   distance?: Interpolation<number>;
 }
 
@@ -19,6 +20,7 @@ const AnimatedTip = ({
   scale,
   distance,
   value = new SpringValue(0),
+  opacity = new SpringValue(0),
 }: Props) => {
   const AnimatedCone = animated(Cone);
   const { gridColor } = useCSSColors();
@@ -39,7 +41,7 @@ const AnimatedTip = ({
         material-transparent
         rotation-z={Math.PI / 2}
         material-color={gridColor}
-        material-opacity={1}
+        material-opacity={opacity}
       />
     </animated.mesh>
   );

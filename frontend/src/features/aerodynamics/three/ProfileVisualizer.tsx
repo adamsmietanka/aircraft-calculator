@@ -1,5 +1,8 @@
-import { CANVAS_WIDTH } from "../../common/three/config";
-import { animated, useSpring } from "@react-spring/three";
+import {
+  CANVAS_WIDTH,
+  NUMBER_OF_AIRFOIL_POINTS,
+} from "../../common/three/config";
+import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import Vector from "./Vector";
@@ -10,9 +13,10 @@ import { reynolds } from "../data/profiles";
 interface Props {
   width: number;
   gridPositionX: number;
+  opacity: SpringValue<number>;
 }
 
-const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
+const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
   const hover = useProfileChartsStore((state) => state.hover);
@@ -47,6 +51,7 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
         value={y["Coefficient of Lift"]}
         rotation={0}
         show={y["Coefficient of Lift"] !== 0 && show}
+        opacity={opacity}
         color="primary"
       />
       <Vector
@@ -55,6 +60,7 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
         otherValue={y["Coefficient of Lift"]}
         rotation={-Math.PI / 2}
         show={show}
+        opacity={opacity}
         color="error"
       />
       <animated.mesh rotation-z={profileSpring.aoa} scale={0.96 * localWidth}>
@@ -69,7 +75,7 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
               style="airstream"
               color="grid"
               offset={speed}
-              opacity={show ? 0.33 : 0}
+              opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
             />
           </mesh>
           <mesh position-y={-0.02}>
@@ -82,7 +88,7 @@ const ProfileVisualizer = ({ width, gridPositionX }: Props) => {
               style="airstream"
               color="grid"
               offset={0.8 * speed}
-              opacity={show ? 0.33 : 0}
+              opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
             />
           </mesh>
         </animated.mesh>

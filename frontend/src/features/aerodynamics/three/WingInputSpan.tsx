@@ -17,10 +17,12 @@ interface Props {
   scale: SpringValue<number>;
   x: SpringValue<number>;
   y: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
-const WingInputSpan = ({ scale, x, y }: Props) => {
+const WingInputSpan = ({ scale, x, y, opacity }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
+  const materialRef = useRef<THREE.LineBasicMaterial>(null);
 
   const wing = useWingStore();
 
@@ -64,6 +66,9 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
       positionRef.current.set(position);
       positionRef.current.needsUpdate = true;
     }
+    if (materialRef.current) {
+      materialRef.current.opacity = opacity.get();
+    }
   });
 
   const hoverWing = useHoverWingStore();
@@ -80,10 +85,15 @@ const WingInputSpan = ({ scale, x, y }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color={gridColor} opacity={1} transparent />
+        <lineBasicMaterial
+          ref={materialRef}
+          color={gridColor}
+          opacity={1}
+          transparent
+        />
       </animated.lineSegments>
       <mesh rotation-z={Math.PI / 2}>
-        <AnimatedTip scale={scale} value={y} end />
+        <AnimatedTip opacity={opacity} scale={scale} value={y} end />
 
         <AnimatedHtml
           position-y={scale.to(

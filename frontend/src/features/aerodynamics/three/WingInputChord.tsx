@@ -16,10 +16,12 @@ import AnimatedHtml from "../../common/three/AnimatedHtml";
 interface Props {
   scale: SpringValue<number>;
   chord: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
-const WingInputChord = ({ chord, scale }: Props) => {
+const WingInputChord = ({ chord, scale, opacity }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
+  const materialRef = useRef<THREE.LineBasicMaterial>(null);
 
   const wing = useWingStore();
 
@@ -65,6 +67,9 @@ const WingInputChord = ({ chord, scale }: Props) => {
       positionRef.current.set(position);
       positionRef.current.needsUpdate = true;
     }
+    if (materialRef.current) {
+      materialRef.current.opacity = opacity.get();
+    }
   });
 
   const hoverWing = useHoverWingStore();
@@ -81,10 +86,15 @@ const WingInputChord = ({ chord, scale }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color={gridColor} opacity={1} transparent />
+        <lineBasicMaterial
+          ref={materialRef}
+          color={gridColor}
+          opacity={1}
+          transparent
+        />
       </animated.lineSegments>
 
-      <AnimatedTips scale={scale} value={chord} />
+      <AnimatedTips opacity={opacity} scale={scale} value={chord} />
 
       <AnimatedHtml
         position={to([chord, scale], (chord, scale) => [

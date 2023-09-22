@@ -4,15 +4,16 @@ import useChartUnits from "../../settings/hooks/useChartUnits";
 import {
   useTrail,
   animated,
-  useSpringRef,
   useSpring,
-  useChain,
   config,
   SpringValue,
   to,
 } from "@react-spring/three";
 import AnimatedVerticalMarker from "./AnimatedVerticalMarker";
 import { Axis } from "./LineChart";
+import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { checkVisible } from "./checkVisible";
 
 interface AxisProps {
   ticks: number[];
@@ -36,32 +37,41 @@ const LinesVertical = ({
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
 
-  const markersRef = useSpringRef();
-  const titleRef = useSpringRef();
+  const meshRef = useRef<THREE.Mesh>(null);
+  const location = useLocation();
 
-  const opacityTrail = useTrail(ticks.length, {
-    ref: markersRef,
-    delay: 500,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-    opacity: 0,
-  });
+  const [opacityTrail, trailApi] = useTrail(
+    ticks.length,
+    () => ({
+      opacity: 0,
+    }),
+    []
+  );
 
-  const title = useSpring({
-    ref: titleRef,
-    delay: 500,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-    config: config.molasses,
-  });
+  const [title, titleApi] = useSpring(
+    () => ({
+      opacity: 0,
+      config: config.molasses,
+    }),
+    []
+  );
 
-  useChain([markersRef, titleRef]);
+  useEffect(() => {
+    const vis = meshRef.current && checkVisible(meshRef.current);
+    if (vis) {
+      trailApi.start({ opacity: 1, delay: 800 });
+      titleApi.start({ opacity: 1, delay: 1600, config: config.molasses });
+    } else {
+      trailApi.start({ opacity: 0, delay: 0 });
+      titleApi.start({ opacity: 0, delay: 0 });
+    }
+  }, [location.pathname]);
 
   const { unit } = useChartUnits(axis.type as string);
 
   return (
-    <>
-      {opacityTrail.map(({opacity}, index) => (
+    <mesh ref={meshRef}>
+      {opacityTrail.map(({ opacity }, index) => (
         <AnimatedVerticalMarker
           key={index}
           x={ticks[index]}
@@ -84,7 +94,7 @@ const LinesVertical = ({
       >
         {`${axis.name} ${unit && `[${unit}]`}`}
       </AnimatedText>
-    </>
+    </mesh>
   );
 };
 

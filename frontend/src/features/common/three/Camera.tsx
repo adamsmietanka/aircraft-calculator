@@ -1,6 +1,7 @@
 import { config, useSpring } from "@react-spring/three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useLocation } from "react-router-dom";
+import { CAMERA_DELAY } from "./config";
 
 const obj: Record<string, Record<string, number[]>> = {
   "/": {
@@ -36,6 +37,7 @@ const Camera = () => {
         await next({
           position: obj[location.pathname].position,
           rotation: obj[location.pathname].rotation,
+          delay: CAMERA_DELAY,
         });
       },
       config: (key) => {

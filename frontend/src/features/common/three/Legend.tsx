@@ -1,14 +1,17 @@
-import { animated } from "@react-spring/three";
-import { CANVAS_WIDTH } from "../../common/three/config";
+import { SpringValue, animated } from "@react-spring/three";
+import { CANVAS_WIDTH, useCSSColors } from "../../common/three/config";
 import { Text } from "@react-three/drei";
 import AnimatedLine from "./AnimatedLine";
 
 interface Props {
   gridPositionX: number;
   items: Array<Record<string, string>>;
+  opacity: SpringValue<number>;
 }
 
-const Legend = ({ gridPositionX, items }: Props) => {
+const Legend = ({ gridPositionX, items, opacity }: Props) => {
+  const { gridColor } = useCSSColors();
+  const AnimatedText = animated(Text);
   return (
     <animated.mesh
       position-x={(gridPositionX * CANVAS_WIDTH) / 2}
@@ -23,10 +26,17 @@ const Legend = ({ gridPositionX, items }: Props) => {
             ]}
             style={i.style}
             color={i.color}
+            opacity={opacity}
           />
-          <Text fontSize={0.4} position={[1, -index, 0]} anchorX="left">
+          <AnimatedText
+            fontSize={0.4}
+            position={[1, -index, 0]}
+            anchorX="left"
+            color={gridColor}
+            fillOpacity={opacity}
+          >
             {i.name}
-          </Text>
+          </AnimatedText>
         </>
       ))}
     </animated.mesh>

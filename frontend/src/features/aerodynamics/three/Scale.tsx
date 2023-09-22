@@ -8,24 +8,18 @@ import { useCSSColors } from "../../common/three/config";
 interface Props {
   length: number;
   scale: SpringValue<number>;
+  opacity: SpringValue<number>;
 }
 
 const SCALE_CENTER = 2.5;
 const SCALE_SIDE_HEIGHT = 0.2;
 
-const Scale = ({ length, scale }: Props) => {
+const Scale = ({ length, scale, opacity }: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
 
   const { displayMultiplier, valueMultiplier, unit } = useChartUnits("length");
   const { gridColor } = useCSSColors();
   const AnimatedText = animated(Text);
-
-  const object = useSpring({
-    delay: 1000,
-    from: { opacity: 0 },
-    to: { opacity: 1 },
-    config: config.slow,
-  });
 
   const [marker] = useSpring(
     () => ({
@@ -71,7 +65,7 @@ const Scale = ({ length, scale }: Props) => {
         ])}
         scale={scale.to((scale) => 1 / scale)}
         color={gridColor}
-        fillOpacity={object.opacity}
+        fillOpacity={opacity}
       >
         {length * displayMultiplier} {unit}
       </AnimatedText>
@@ -87,7 +81,7 @@ const Scale = ({ length, scale }: Props) => {
         </bufferGeometry>
         <animated.lineBasicMaterial
           color={gridColor}
-          opacity={object.opacity.to((o) => o)}
+          opacity={opacity.to((o) => o)}
           transparent
         />
       </animated.lineSegments>
