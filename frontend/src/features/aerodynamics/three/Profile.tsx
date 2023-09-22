@@ -19,7 +19,7 @@ const Profile = ({ opacity }: Props) => {
         <ProfileChoose />
         <ProfileReynolds />
       </Inputs3D>
-      <ProfileVisualizer width={0.33} gridPositionX={-0.5} opacity={opacity} />
+      <ProfileVisualizer width={0.33} gridPositionX={-0.55} opacity={opacity} />
       <LineChart
         width={0.33}
         gridPositionX={0.25}
