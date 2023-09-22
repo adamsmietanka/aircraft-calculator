@@ -9,6 +9,7 @@ import Vector from "./Vector";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { useWingStore } from "../stores/useWing";
 import { reynolds } from "../data/profiles";
+import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 
 interface Props {
   width: number;
@@ -47,22 +48,32 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
   return (
     <animated.mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
       <Vector
-        tex="F_L"
         value={y["Coefficient of Lift"]}
         rotation={0}
         show={y["Coefficient of Lift"] !== 0 && show}
         opacity={opacity}
         color="primary"
-      />
+      >
+        <HoverableFormulaSimple
+          name="Lift"
+          tex={`F_L`}
+          texHover={`F_L=\\frac{1}{2} \\rho V^2 S C_L`}
+        />
+      </Vector>
       <Vector
-        tex="F_D"
         value={50 * x["Coefficient of Drag"]}
         otherValue={y["Coefficient of Lift"]}
         rotation={-Math.PI / 2}
         show={show}
         opacity={opacity}
         color="error"
-      />
+      >
+        <HoverableFormulaSimple
+          name="Drag"
+          tex={`F_D`}
+          texHover={` F_D=\\frac{1}{2} \\rho V^2 SC_D`}
+        />
+      </Vector>
       <animated.mesh rotation-z={profileSpring.aoa} scale={0.96 * localWidth}>
         <animated.mesh position-x={-0.3} position-y={-yCamber}>
           <mesh position-y={0.02}>
