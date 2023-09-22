@@ -18,6 +18,8 @@ const useProfile = () => {
   const profile = useWingStore((state) => state.profile);
 
   const [profilePoints, setProfilePoints] = useState<number[][]>([]);
+  const [upperPoints, setUpperPoints] = useState<number[][]>([]);
+  const [lowerPoints, setLowerPoints] = useState<number[][]>([]);
   const [chordPoints, setChordPoints] = useState<number[][]>([]);
 
   const { M, P, T } = useProfileCamber();
@@ -74,11 +76,19 @@ const useProfile = () => {
       chord.push([x, y, 0]);
     }
 
-    setProfilePoints([...upper, ...lower.reverse()]);
+    setUpperPoints(upper);
+    setLowerPoints(lower);
+    setProfilePoints([...upper, ...lower.toReversed()]);
     setChordPoints(chord);
   }, [profile]);
 
-  return { profilePoints, chordPoints, yCamber: getCamberY(0.25) };
+  return {
+    profilePoints,
+    upperPoints,
+    lowerPoints,
+    chordPoints,
+    yCamber: getCamberY(0.25),
+  };
 };
 
 export default useProfile;
