@@ -26,7 +26,7 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
       from: { opacity: 0, display: "none" },
       to: async (next) => {
         const vis = htmlRef.current && checkVisible(htmlRef.current);
-        vis && (await next({ display: "block", delay: ROUTE_DELAY }));
+        vis && show && (await next({ display: "block", delay: ROUTE_DELAY }));
         await next({ opacity: vis && show ? 1 : 0 });
         vis || (await next({ display: "none" }));
       },
@@ -35,7 +35,14 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
   );
 
   useEffect(() => {
-    propsApi.start({ opacity: show ? 1 : 0, });
+    propsApi.start({
+      to: async (next) => {
+        const vis = htmlRef.current && checkVisible(htmlRef.current);
+        vis && show && (await next({ display: "block" }));
+        await next({ opacity: vis && show ? 1 : 0 });
+        (vis && show) || (await next({ display: "none" }));
+      },
+    });
   }, [show]);
 
   return (
