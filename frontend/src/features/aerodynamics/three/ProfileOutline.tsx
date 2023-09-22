@@ -20,7 +20,7 @@ const ProfileOutline = ({ opacity }: Props) => {
 
   const chord = useWingStore((state) => state.chord);
 
-  const { profilePoints, chordPoints, yCamber } = useProfile();
+  const { profilePoints, chordPoints } = useProfile();
 
   const location = useLocation();
 
@@ -38,10 +38,9 @@ const ProfileOutline = ({ opacity }: Props) => {
       aoa: rotateProfile ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
       scale: outlineNormal ? scaleProfile : scale * chord,
       x: outlineNormal ? -0.25 : 0,
-      y: outlineNormal ? -yCamber : 0,
       gridX: outlineNormal ? 0 : 1,
     }),
-    [outlineNormal, yCamber, x, scale, chord, rotateProfile]
+    [outlineNormal, x, scale, chord, rotateProfile]
   );
 
   return (
@@ -52,13 +51,23 @@ const ProfileOutline = ({ opacity }: Props) => {
       rotation-z={profileSpring.aoa}
       scale={profileSpring.scale}
     >
-      <animated.mesh position-x={profileSpring.x} position-y={profileSpring.y}>
-        <AnimatedLine points={profilePoints} opacity={opacity} />
+      <animated.mesh position-x={profileSpring.x}>
+        <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
         <AnimatedLine
           points={chordPoints}
           width={1.5}
           color="secondary"
-          opacity={opacity}
+          opacity={opacity.to((o) => o / 2)}
+        />
+        <AnimatedLine
+          points={[
+            [0, 0, 0],
+            [1, 0, 0],
+          ]}
+          scale={[1, 1, 1]}
+          style="thin"
+          color="grid"
+          opacity={opacity.to((o) => o / 3)}
         />
       </animated.mesh>
     </animated.mesh>
