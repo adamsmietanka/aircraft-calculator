@@ -11,6 +11,7 @@ import LineChart from "../../common/three/LineChart";
 import Legend from "../../common/three/Legend";
 import WingShape from "../WingShape";
 import useWingCharts from "../hooks/useWingCharts";
+import { WING_POSITION } from "../../common/three/config";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -25,7 +26,7 @@ const Wing = ({ opacity }: Props) => {
 
   return (
     <>
-      <Wing3D width={0.33} gridPositionX={-0.45} opacity={opacity} />
+      <Wing3D width={0.33} gridPositionX={WING_POSITION} opacity={opacity} />
 
       <mesh rotation-x={-Math.PI / 2}>
         <Inputs3D gridPositionX={-1.3}>

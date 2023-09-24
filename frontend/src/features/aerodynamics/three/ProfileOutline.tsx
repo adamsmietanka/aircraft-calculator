@@ -1,6 +1,10 @@
 import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
-import { CANVAS_WIDTH } from "../../common/three/config";
+import {
+  CANVAS_WIDTH,
+  PROFILE_POSITION,
+  WING_POSITION,
+} from "../../common/three/config";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import { useLocation } from "react-router-dom";
 import AnimatedLine from "../../common/three/AnimatedLine";
@@ -10,8 +14,8 @@ import { useWingStore } from "../stores/useWing";
 interface Props {
   opacity: SpringValue<number>;
 }
-const width = 0.33,
-  gridPositionX = -0.55;
+const width = 0.4,
+  gridPositionX = PROFILE_POSITION;
 
 const ProfileOutline = ({ opacity }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
@@ -38,7 +42,9 @@ const ProfileOutline = ({ opacity }: Props) => {
       aoa: rotateProfile ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
       scale: outlineNormal ? scaleProfile : scale * chord,
       x: outlineNormal ? -0.25 : 0,
-      gridX: outlineNormal ? 0 : 1,
+      gridX: outlineNormal
+        ? 0
+        : ((WING_POSITION - PROFILE_POSITION) * CANVAS_WIDTH) / 2,
     }),
     [outlineNormal, x, scale, chord, rotateProfile]
   );
@@ -57,7 +63,7 @@ const ProfileOutline = ({ opacity }: Props) => {
           points={chordPoints}
           width={1.5}
           color="secondary"
-          opacity={opacity.to((o) => o / 2)}
+          opacity={opacity.to((o) => o / 1.5)}
         />
         <AnimatedLine
           points={[
@@ -67,7 +73,7 @@ const ProfileOutline = ({ opacity }: Props) => {
           scale={[1, 1, 1]}
           style="thin"
           color="grid"
-          opacity={opacity.to((o) => o / 3)}
+          opacity={opacity.to((o) => o / 5)}
         />
       </animated.mesh>
     </animated.mesh>
