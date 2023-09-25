@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import { useWingStore } from "../stores/useWing";
-import { getXTip } from "../three/hooks/useWingSprings";
+import { getXTip } from "../three/hooks/useWingSpring";
 
 const useWingScale = (width: number) => {
   const chord = useWingStore((state) => state.chord);
@@ -22,6 +22,7 @@ const useWingScale = (width: number) => {
     [angle, span, chord, chordTip]
   );
   const scaleProfile = 0.96 * localWidth;
+
   return { scale, scaleProfile };
 };
 

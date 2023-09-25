@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { getXTip } from "../three/hooks/useWingSprings";
+import { getXTip } from "../three/hooks/useWingSpring";
 import { useWingStore } from "../stores/useWing";
 import { Shape } from "three";
 import useWingOutline from "./useWingOutline";

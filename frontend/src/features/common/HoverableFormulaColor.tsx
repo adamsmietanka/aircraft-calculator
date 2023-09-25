@@ -19,8 +19,7 @@ const HoverableFormulaColor = ({
 }: Props) => {
   return (
     <div
-      className={`tooltip ${tooltipLeft && "tooltip-left"} h-8 flex ${
-        center && "items-center"
+      className={`tooltip ${tooltipLeft && "tooltip-left"} 
       } ${hover && "text-info"}`}
       data-tip={name}
       onPointerEnter={onEnter}

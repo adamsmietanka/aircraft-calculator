@@ -63,7 +63,11 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
           />
         </div>
       </AnimatedHtml>
-      <mesh scale={1 / scale} position-z={0.002}>
+      <mesh
+        visible={hoverPlane || hoverA || hoverB || hoverC}
+        scale={1 / scale}
+        position-z={0.005}
+      >
         <AnimatedInputTechnical
           scale={scale}
           distance={-2}
@@ -100,7 +104,11 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
             <Formula className="text-info" tex={`${P * 10}`} />
           </div>
         </AnimatedInputTechnical>
-        <mesh position-x={F * scale} position-y={lowestPoint * scale}>
+        <mesh
+          position-x={F * scale}
+          position-y={lowestPoint * scale}
+          position-z={-0.001}
+        >
           <AnimatedInputTechnical
             scale={scale}
             distance={-0.7 * scale - 0.5}
@@ -128,6 +136,9 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
             segments
           />
         </mesh>
+        <mesh
+          position-z={-0.01}
+        >
         <AnimatedInputTechnical
           scale={scale}
           distance={-1.25}
@@ -139,6 +150,7 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
             <Formula tex={`${F}`} />
           </div>
         </AnimatedInputTechnical>
+        </mesh>
       </mesh>
     </mesh>
   );

@@ -1,7 +1,7 @@
 import { SpringValue, animated, useSpring } from "@react-spring/three";
 import useProfile, { useProfileCamber } from "../hooks/useProfile";
 import { useWingStore } from "../stores/useWing";
-import { getXTip } from "./hooks/useWingSprings";
+import { getXTip } from "./hooks/useWingSpring";
 import AnimatedLine from "../../common/three/AnimatedLine";
 
 interface Props {

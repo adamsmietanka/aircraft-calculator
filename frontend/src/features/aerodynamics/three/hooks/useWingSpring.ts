@@ -6,7 +6,7 @@ import useWingScale from "../../hooks/useWingScale";
 export const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
 
-const useWingSprings = (width: number) => {
+const useWingSpring = (width: number) => {
   const chord = useWingStore((state) => state.chord);
   const chordTip = useWingStore((state) => state.chordTip);
   const angle = useWingStore((state) => state.angle);
@@ -31,4 +31,4 @@ const useWingSprings = (width: number) => {
   );
   return { wingSpring };
 };
-export default useWingSprings;
+export default useWingSpring;

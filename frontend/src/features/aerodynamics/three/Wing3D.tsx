@@ -2,7 +2,7 @@ import { TransformControls } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
 import Scale from "./Scale";
 import useWing3D from "./hooks/useWing3D";
-import useWingSprings from "./hooks/useWingSprings";
+import useWingSpring from "./hooks/useWingSpring";
 import WingSpheres from "./WingSpheres";
 import WingInputs from "./WingInputs";
 import { CANVAS_WIDTH } from "../../common/three/config";
@@ -21,7 +21,7 @@ const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
   const { onTransform, active, setActive, step } = useWing3D();
   const { leadingPoints, trailingPoints } = useWingOutline();
 
-  const { wingSpring } = useWingSprings(width);
+  const { wingSpring } = useWingSpring(width);
 
   const [gizmoSpring] = useSpring(
     () => ({
