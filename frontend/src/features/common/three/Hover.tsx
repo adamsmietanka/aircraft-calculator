@@ -64,6 +64,7 @@ const Hover = ({
   return (
     <>
       <Plane
+        visible={false}
         args={[max.x - min.x, max.y - min.y]}
         position-x={(min.x + max.x) / 2}
         position-y={(min.y + max.y) / 2}

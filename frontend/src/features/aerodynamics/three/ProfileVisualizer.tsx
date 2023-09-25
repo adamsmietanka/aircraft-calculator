@@ -57,7 +57,7 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
         />
       </Vector>
       <animated.mesh rotation-z={profileSpring.angle} scale={scaleProfile}>
-        <ProfileNACAExplanation scale={scaleProfile} />
+        <ProfileNACAExplanation scale={scaleProfile} show={!show} />
         <ProfileAirstreams opacity={opacity} show={show} />
       </animated.mesh>
     </animated.mesh>

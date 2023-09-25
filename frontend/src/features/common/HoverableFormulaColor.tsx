@@ -20,7 +20,7 @@ const HoverableFormulaColor = ({
   return (
     <div
       className={`tooltip ${tooltipLeft && "tooltip-left"} 
-      } ${hover && "text-info"}`}
+      } ${hover && "text-error"}`}
       data-tip={name}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
