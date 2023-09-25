@@ -10,8 +10,8 @@ type Props = {
   position?: Interpolation<number[]>;
   "position-x"?: Interpolation<number> | number;
   "position-y"?: Interpolation<number> | SpringValue<number> | number;
-  "rotation-z"?: Interpolation<number> | number;
-  scale?: Interpolation<number>;
+  "rotation-z"?: Interpolation<number> | SpringValue<number> | number;
+  scale?: Interpolation<number> | number;
   show?: boolean;
   children: React.ReactNode;
 };

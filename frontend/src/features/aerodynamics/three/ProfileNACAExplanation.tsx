@@ -6,12 +6,14 @@ import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical
 import Formula from "../../common/Formula";
 import HoverableFormulaColor from "../../common/HoverableFormulaColor";
 import AnimatedLine from "../../common/three/AnimatedLine";
+import { SpringValue } from "@react-spring/three";
 
 interface Props {
   scale: number;
+  show: boolean;
 }
 
-const ProfileNACAExplanation = ({ scale }: Props) => {
+const ProfileNACAExplanation = ({ scale, show }: Props) => {
   const [hoverPlane, setHoverPlane] = useState(false);
   const [hoverA, setHoverA] = useState(false);
   const [hoverB, setHoverB] = useState(false);
@@ -32,11 +34,12 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
         onPointerEnter={(e) => setHoverPlane(true)}
         onPointerLeave={(e) => setHoverPlane(false)}
         onClick={(e) => {}}
+        visible={false}
       />
       <AnimatedHtml
         position-x={0.5}
         position-y={0.25}
-        show={hoverPlane || hoverA || hoverB || hoverC}
+        show={show && (hoverPlane || hoverA || hoverB || hoverC)}
         scale={1 / scale}
       >
         <div className="flex text-3xl">
@@ -68,88 +71,88 @@ const ProfileNACAExplanation = ({ scale }: Props) => {
         scale={1 / scale}
         position-z={0.005}
       >
-        <AnimatedInputTechnical
-          scale={scale}
-          distance={-2}
-          value={1}
-          opacity={hoverA || hoverB ? 1 : 0}
-        >
-          <Formula
-            className={`text-xl ${hoverA || hoverB || "hidden"}`}
-            tex={`1`}
-          />
-        </AnimatedInputTechnical>
-        <AnimatedInputTechnical
-          scale={scale}
-          distance={0.25}
-          value={M}
-          valueY={-P}
-          opacity={hoverA ? 1 : 0}
-          vertical
-        >
-          <div className={`flex text-xl ${hoverA || "hidden"}`}>
-            <Formula className={`${M === 0 && "hidden"}`} tex={`0.0`} />
-            <Formula className="text-info" tex={`${M * 100}`} />
-          </div>
-        </AnimatedInputTechnical>
-        <AnimatedInputTechnical
-          scale={scale}
-          distance={-1.25}
-          value={P}
-          valueY={M}
-          opacity={hoverB ? 1 : 0}
-        >
-          <div className={`flex text-xl ${hoverB || "hidden"}`}>
-            <Formula className={`${P === 0 && "hidden"}`} tex={`0.`} />
-            <Formula className="text-info" tex={`${P * 10}`} />
-          </div>
-        </AnimatedInputTechnical>
-        <mesh
-          position-x={F * scale}
-          position-y={lowestPoint * scale}
-          position-z={-0.001}
-        >
+        <mesh visible={hoverA || hoverB}>
           <AnimatedInputTechnical
             scale={scale}
-            distance={-0.7 * scale - 0.5}
-            value={maxThickness}
-            opacity={hoverC ? 1 : 0}
+            distance={-2}
+            value={1}
+            opacity={0.75}
+          >
+            <Formula
+              className={`text-xl ${hoverA || hoverB || "hidden"}`}
+              tex={`1`}
+            />
+          </AnimatedInputTechnical>
+        </mesh>
+        <mesh visible={hoverA}>
+          <AnimatedInputTechnical
+            scale={scale}
+            distance={0.25}
+            value={M}
+            valueY={-P}
+            opacity={0.75}
             vertical
           >
-            <div className={`flex text-xl ${hoverC || "hidden"}`}>
-              <Formula tex={`0.`} />
-              <Formula
-                className="text-info"
-                tex={`${String(T * 100).padStart(2, "0")}`}
-              />
+            <div className={`flex text-xl ${hoverA || "hidden"}`}>
+              <Formula className={`${M === 0 && "hidden"}`} tex={`0.0`} />
+              <Formula className="text-error" tex={`${M * 100}`} />
             </div>
           </AnimatedInputTechnical>
-          <AnimatedLine
-            points={[
-              [0, 0, 0],
-              [0, maxThickness, 0],
-            ]}
-            scale={[scale, scale, scale]}
-            opacity={hoverC ? 0.5 : 0}
-            width={1.5}
-            color="secondary"
-            segments
-          />
         </mesh>
-        <mesh
-          position-z={-0.01}
-        >
-        <AnimatedInputTechnical
-          scale={scale}
-          distance={-1.25}
-          value={F}
-          valueY={lowestPoint}
-          opacity={hoverC ? 1 : 0}
-        >
-          <div className={`flex text-xl ${hoverC || "hidden"}`}>
-            <Formula tex={`${F}`} />
-          </div>
-        </AnimatedInputTechnical>
+        <mesh visible={hoverB}>
+          <AnimatedInputTechnical
+            scale={scale}
+            distance={-1.25}
+            value={P}
+            valueY={M}
+            opacity={0.75}
+          >
+            <div className={`flex text-xl ${hoverB || "hidden"}`}>
+              <Formula className={`${P === 0 && "hidden"}`} tex={`0.`} />
+              <Formula className="text-error" tex={`${P * 10}`} />
+            </div>
+          </AnimatedInputTechnical>
+        </mesh>
+        <mesh visible={hoverC}>
+          <mesh position-x={F * scale} position-y={lowestPoint * scale}>
+            <AnimatedInputTechnical
+              scale={scale}
+              distance={-0.7 * scale - 0.5}
+              value={maxThickness}
+              opacity={0.75}
+              vertical
+            >
+              <div className={`flex text-xl ${hoverC || "hidden"}`}>
+                <Formula tex={`0.`} />
+                <Formula
+                  className="text-error"
+                  tex={`${String(T * 100).padStart(2, "0")}`}
+                />
+              </div>
+            </AnimatedInputTechnical>
+            <AnimatedLine
+              points={[
+                [0, 0, 0],
+                [0, maxThickness, 0],
+              ]}
+              scale={[scale, scale, scale]}
+              opacity={0.75}
+              width={1.5}
+              color="secondary"
+              segments
+            />
+          </mesh>
+          <AnimatedInputTechnical
+            scale={scale}
+            distance={-1.25}
+            value={F}
+            valueY={lowestPoint}
+            opacity={0.75}
+          >
+            <div className={`flex text-xl ${hoverC || "hidden"}`}>
+              <Formula tex={`${F}`} />
+            </div>
+          </AnimatedInputTechnical>
         </mesh>
       </mesh>
     </mesh>
