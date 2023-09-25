@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import useProfile from "../../hooks/useProfile";
 import { useWingStore } from "../../stores/useWing";
-import { getXTip } from "./useWingSprings";
+import { getXTip } from "./useWingSpring";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import useWingOutline from "../../hooks/useWingOutline";
 import { useLocation } from "react-router-dom";
