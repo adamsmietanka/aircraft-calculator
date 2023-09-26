@@ -73,7 +73,7 @@ const Hover = ({
         onPointerMove={(e) => {
           if (yHover || zHover) {
             const y = round(
-              (yHover ? e.point.y : -e.point.z + mid.y) / scale[1],
+              ((yHover ? e.point.y : -e.point.z) + mid.y) / scale[1],
               step.y / 10
             );
             const locked = store.getState().locked;
