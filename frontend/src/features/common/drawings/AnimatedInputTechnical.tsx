@@ -41,7 +41,6 @@ const AnimatedInputTechnical = ({
     }),
     [opacity, scale, value]
   );
-  console.log(scale);
   const autoOutside = outside || value * scale < 1;
 
   const outsideStickOut = useMemo(() => (value === 0 ? 0.75 : 1.5), [value]);

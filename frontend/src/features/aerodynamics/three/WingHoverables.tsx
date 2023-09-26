@@ -57,8 +57,8 @@ const WingHoverables = ({ scale }: Props) => {
         <div className="text-2xl space-y-3">
           <HoverableFormula
             name="Aspect Ratio"
-            tex={`\\Lambda=${aspectRatio.toFixed(2)}`}
-            texHover={`\\Lambda=\\frac{\\color{red}b^2}{\\color{green}S}`}
+            tex={`AR=${aspectRatio.toFixed(2)}`}
+            texHover={`AR=\\frac{\\color{red}b^2}{\\color{green}S}`}
             hover={hoverStore.b}
             onEnter={() => hoverStore.set({ surface: true, b: true })}
             onLeave={() => hoverStore.set({ surface: false, b: false })}

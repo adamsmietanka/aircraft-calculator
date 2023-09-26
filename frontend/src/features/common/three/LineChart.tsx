@@ -55,7 +55,11 @@ const LineChart = ({
   gridPositionX = 0,
   opacity = new SpringValue(1),
 }: ChartProps) => {
-  const { ticks, scale, min, max, mid, step } = useAxes(traces, axes, width);
+  const { ticks, scale, data, min, max, mid, step } = useAxes(
+    traces,
+    axes,
+    width
+  );
 
   const colors = ["primary", "green", "orange", "secondary"];
   const springRefs = traces.map(() => useSpringRef());
@@ -97,6 +101,7 @@ const LineChart = ({
           <Hover
             name={name}
             axes={axes}
+            data={data}
             min={min}
             max={max}
             mid={mid}
