@@ -22,32 +22,25 @@ const useAxisTicks = (
   axes: Record<string, Axis>,
   width: number = 1
 ) => {
-  const getMinX = () => {
-    if (axes.x.min === 0) return 0;
-    return axes.x.min || Math.min(...traces.map(({ points }) => points[0][0]));
-  };
+  const dataMinX = Math.min(...traces.map(({ points }) => points[0][0]));
 
-  const getMinY = () => {
-    if (axes.y.min === 0) return 0;
-    return (
-      axes.y.min ||
-      Math.min(
-        ...traces.map(({ points }) => points.map(([x, y, z]) => y)).flat()
-      )
-    );
-  };
+  const dataMaxX = Math.max(
+    ...traces.map(({ points }) => points[points.length - 1][0])
+  );
 
-  const minX = getMinX();
-  const maxX = axes.x.max
-    ? axes.x.max
-    : Math.max(...traces.map(({ points }) => points[points.length - 1][0]));
+  const dataMinY = Math.min(
+    ...traces.map(({ points }) => points.map(([x, y, z]) => y)).flat()
+  );
 
-  const minY = getMinY();
-  const maxY = axes.y.max
-    ? axes.y.max
-    : Math.max(
-        ...traces.map(({ points }) => points.map(([x, y, z]) => y)).flat()
-      );
+  const dataMaxY = Math.max(
+    ...traces.map(({ points }) => points.map(([x, y, z]) => y)).flat()
+  );
+
+  const minX = axes.x.min !== undefined ? axes.x.min : dataMinX;
+  const maxX = axes.x.max ? axes.x.max : dataMaxX;
+
+  const minY = axes.y.min !== undefined ? axes.y.min : dataMinY;
+  const maxY = axes.y.max ? axes.y.max : dataMaxY;
 
   let xStep = getStep(maxX - minX);
   let yStep = getStep(maxY - minY);
@@ -65,24 +58,29 @@ const useAxisTicks = (
   };
 
   const localWidth = width * CANVAS_WIDTH;
-  const localHeight = 0.8 * CANVAS_HEIGHT;
+  const localHeight = 0.85 * CANVAS_HEIGHT;
 
   let xTicks = getTicks(minX, xStep, localWidth);
   let yTicks = getTicks(minY, yStep, localHeight);
 
   const X_TEXTS = 3;
+  const Y_TEXTS = 0.5;
 
   const scaleX = (localWidth - X_TEXTS) / (maxX - minX);
-  const scaleY = localHeight / (maxY - minY);
+  const scaleY = (localHeight - Y_TEXTS) / (maxY - minY);
 
   return {
     ticks: { x: xTicks, y: yTicks },
     scale: [scaleX, scaleY, 1],
     min: { x: minX * scaleX, y: minY * scaleY },
     max: { x: maxX * scaleX, y: maxY * scaleY },
+    data: {
+      min: { x: dataMinX, y: dataMinY },
+      max: { x: dataMaxX, y: dataMaxY },
+    },
     mid: {
       x: (scaleX * (minX + maxX) - X_TEXTS) / 2,
-      y: (scaleY * (minY + maxY) - 1) / 2,
+      y: (scaleY * (minY + maxY) - Y_TEXTS) / 2,
     },
     step: { x: xStep, y: yStep },
   };

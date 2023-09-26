@@ -35,6 +35,7 @@ export interface MarkersStore {
 interface HoverProps {
   name: string;
   axes: Record<string, Axis>;
+  data: Record<string, Record<string, number>>;
   min: Record<string, number>;
   max: Record<string, number>;
   mid: Record<string, number>;
@@ -47,10 +48,13 @@ interface HoverProps {
   zHover: boolean;
   opacity: SpringValue<number>;
 }
+const clamp = (num: number, min: number, max: number) =>
+  Math.min(Math.max(num, min), max);
 
 const Hover = ({
   name,
   axes,
+  data,
   min,
   max,
   mid,
@@ -76,14 +80,15 @@ const Hover = ({
               ((yHover ? e.point.y : -e.point.z) + mid.y) / scale[1],
               step.y / 10
             );
+            const clampedY = clamp(y, data.min.y, data.max.y);
             const locked = store.getState().locked;
             const oldY = store.getState().y;
 
             if (!locked) {
               if (typeof oldY === "number") {
-                store.setState({ y });
+                store.setState({ y: clampedY });
               } else {
-                store.setState({ y: { ...oldY, [name]: y } });
+                store.setState({ y: { ...oldY, [name]: clampedY } });
               }
             }
           } else {
@@ -92,14 +97,15 @@ const Hover = ({
               (e.point.x + mid.x - gridPositionFix) / scale[0],
               step.x / 10
             );
+            const clampedX = clamp(x, data.min.x, data.max.x);
             const locked = store.getState().locked;
             const oldX = store.getState().x;
 
             if (!locked) {
               if (typeof oldX === "number") {
-                store.setState({ x });
+                store.setState({ x: clampedX });
               } else {
-                store.setState({ x: { ...oldX, [name]: x } });
+                store.setState({ x: { ...oldX, [name]: clampedX } });
               }
             }
           }
