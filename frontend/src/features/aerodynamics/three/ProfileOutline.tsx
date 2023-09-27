@@ -32,8 +32,8 @@ const ProfileOutline = ({ opacity }: Props) => {
         />
         <AnimatedLine
           points={[
-            [0, 0, 0],
-            [1, 0, 0],
+            [0, 0, -0.01],
+            [1, 0, -0.01],
           ]}
           scale={[1, 1, 1]}
           style="thin"
