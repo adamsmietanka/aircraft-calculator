@@ -24,7 +24,7 @@ const PlaneBuilder = () => {
           });
         }}
       >
-        <Perf />
+        {/* <Perf /> */}
         <ambientLight intensity={0.5} />
         <pointLight position={[0, 10, 0]} intensity={0.5} />
 

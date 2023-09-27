@@ -43,7 +43,6 @@ const Fuselage = ({ opacity }: Props) => {
             metalness={1}
             transparent
             opacity={opacity}
-            wireframe
           />
         </mesh>
         <mesh geometry={geometry}>

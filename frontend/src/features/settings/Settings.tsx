@@ -45,8 +45,7 @@ const Settings = () => {
           <InputRadio
             label="Power"
             value={units.types.power}
-            values={["kW", "hp"]
-            }
+            values={["kW", "hp"]}
             setter={units.setPower}
           />
           <InputRadio
