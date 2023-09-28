@@ -8,6 +8,7 @@ const obj: Record<string, number[]> = {
   "/": [70, 90, 0],
   "/aerodynamics/profile": [20, 90, 0],
   "/aerodynamics/wing": [20, 0, 0],
+  "/aerodynamics/wing/inducedDrag": [20, 60, 45],
   "/aerodynamics/fuselage": [15, 70, -45],
 };
 

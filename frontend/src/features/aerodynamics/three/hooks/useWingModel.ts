@@ -9,7 +9,7 @@ import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
-const useWingModel = () => {
+const useWingModel = (customShape?: number) => {
   const wing = useWingStore();
   const location = useLocation();
 
@@ -17,9 +17,11 @@ const useWingModel = () => {
   const { modelPoints } = useWingOutline();
 
   const xTip = getXTip(wing.angle, wing.span);
+  const wingShape =
+    !!customShape || customShape === 0 ? customShape : wing.shape;
 
   const getOutline = () => {
-    if (wing.shape === 0)
+    if (wingShape === 0)
       return {
         xOutline: [
           [0, wing.chord],
@@ -28,7 +30,7 @@ const useWingModel = () => {
         ],
         yOutline: [-wing.span / 2, 0, wing.span / 2],
       };
-    if (wing.shape === 1)
+    if (wingShape === 1)
       return {
         xOutline: [
           [xTip, xTip + wing.chordTip],
