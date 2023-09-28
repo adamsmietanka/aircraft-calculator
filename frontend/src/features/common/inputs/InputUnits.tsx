@@ -28,6 +28,11 @@ const InputUnits = ({
     type
   );
 
+  const handleClick = (u: string) => {
+    (document.activeElement as HTMLElement).blur();
+    setUnit(u);
+  };
+
   return (
     <div className="form-control">
       <label className="label">
@@ -61,18 +66,17 @@ const InputUnits = ({
             tabIndex={0}
             className="dropdown-content menu shadow bg-base-200 rounded-box p-0 w-16 [&_li>*]:rounded-2xl"
           >
-            {Object.keys(units).map(
-              (u) =>
-                u !== unit && (
-                  <li key={u} onClick={() => setUnit(u)}>
-                    <button
-                      className={`flex justify-center ${!small && "h-12"}`}
-                    >
-                      <Formula tex={`${units[u]}`} />
-                    </button>
-                  </li>
-                )
-            )}
+            {Object.keys(units).map((u) => (
+              <li key={u} onClick={() => setUnit(u)}>
+                <button
+                  className={`flex justify-center ${u === unit && "active"} ${
+                    !small && "h-12"
+                  }`}
+                >
+                  <Formula tex={`${units[u]}`} />
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
