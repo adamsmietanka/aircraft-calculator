@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import { MarkersStore } from "../../common/three/Hover";
 import useProfileData from "./useProfileData";
+import { useProfileCamber } from "./useProfile";
 
 export const useProfileChartsStore = create<MarkersStore>()((set) => ({
   x: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
@@ -26,11 +27,18 @@ const useProfileCharts = () => {
   const { pointsCl, pointsCd, pointsClMonotonic, pointsCdReversed } =
     useProfileData(wing.reynolds);
 
+  const { M } = useProfileCamber();
+
+  const getCl = (aoa: number) => {
+    if (M === 0 && aoa === 0) return 0;
+    return linearInterpolationArray(pointsCl, aoa);
+  };
+
   useEffect(() => {
     let aoa, Cd, Cl;
     if (locked === "Coefficient of Lift" || hover["Coefficient of Lift"]) {
       aoa = x["Coefficient of Lift"];
-      Cl = linearInterpolationArray(pointsCl, aoa);
+      Cl = getCl(aoa);
       Cd = linearInterpolationArray(pointsCdReversed, Cl);
     } else {
       Cl = y["Coefficient of Drag"];
