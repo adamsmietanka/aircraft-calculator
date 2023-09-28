@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useNavigationStore } from "../features/navigation/useNavigation";
 import steps, { Step } from "../features/navigation/data/steps";
+import { a, useSpring } from "@react-spring/web";
 
 const Steps = () => {
   let location = useLocation();
@@ -23,17 +24,37 @@ const Steps = () => {
 
   const getStepIndex = (feature: string, subRoute?: string): number => {
     if (!feature) return 0;
-    return steps.findIndex((r) => r.path === subRoute && r.feature === feature);
+    return steps.findIndex((r) =>
+      subRoute
+        ? r.path === subRoute && r.feature === feature
+        : r.feature === feature
+    );
   };
 
   const currentStepIndex = getStepIndex(feature, pathSubRoute);
 
-  const previousStep = steps[currentStepIndex - 1];
-  const nextStep = steps[currentStepIndex + 1];
+  const previousStep = steps[currentStepIndex - 1] || steps[0];
+  const nextStep = steps[currentStepIndex + 1] || steps[steps.length - 1];
 
   const navigateTo = (step: Step) => {
-    step.path ? navigate(`${step.feature}/${step.path}`) : navigate(`/`);
+    step.path
+      ? navigate(`${step.feature}/${step.path}`)
+      : navigate(`${step.feature}`);
   };
+
+  const [props, propsApi] = useSpring(
+    () => ({
+      from: { opacity: 0 },
+      to: { opacity: 1 },
+      delay: 2000,
+      config: {
+        tension: 280,
+        friction: 120,
+        precision: 0.0001,
+      },
+    }),
+    []
+  );
 
   return (
     <>
@@ -56,25 +77,26 @@ const Steps = () => {
       <div className="h-full">
         <Outlet />
       </div>
-      <div className="sticky bottom-0 p-4 z-50 h-20">
-        {previousStep && (
-          <button
-            className="btn btn-error absolute left-4 bottom-4 normal-case"
-            onClick={() => navigateTo(previousStep)}
-          >
-            Previous: {previousStep.name}
-          </button>
-        )}
-        {nextStep && (
-          <button
-            className="btn btn-info absolute right-4 bottom-4 normal-case"
-            onClick={() => navigateTo(nextStep)}
-          >
-            Next: {nextStep.name}
-          </button>
-        )}
+      <div className="sticky flex justify-between bottom-0 p-4 z-50 h-20">
+        <a.button
+          className={`btn btn-error normal-case ${
+            currentStepIndex === 0 && "invisible"
+          }`}
+          style={props}
+          onClick={() => navigateTo(previousStep)}
+        >
+          Previous: {previousStep.name}
+        </a.button>
+        <a.button
+          className={`btn btn-info normal-case ${
+            currentStepIndex === steps.length - 1 && "invisible"
+          }`}
+          style={props}
+          onClick={() => navigateTo(nextStep)}
+        >
+          Next: {nextStep.name}
+        </a.button>
       </div>
-      <div className="fixed bottom-0 bg-base w-full"></div>
     </>
   );
 };
