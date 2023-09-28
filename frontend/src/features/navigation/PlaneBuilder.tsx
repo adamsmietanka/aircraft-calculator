@@ -9,6 +9,8 @@ import Camera from "../common/three/Camera";
 import { Perf } from "r3f-perf";
 import ProfileOutline from "../aerodynamics/three/ProfileOutline";
 import { checkVisible } from "../common/three/checkVisible";
+import InducedDrag from "../aerodynamics/three/tutorials/InducedDrag";
+import { OrbitControls } from "@react-three/drei";
 
 const PlaneBuilder = () => {
   return (
@@ -25,6 +27,7 @@ const PlaneBuilder = () => {
         }}
       >
         {/* <Perf /> */}
+        <OrbitControls enabled={false} />
         <ambientLight intensity={0.5} />
         <pointLight position={[0, 10, 0]} intensity={0.5} />
 
@@ -37,6 +40,7 @@ const PlaneBuilder = () => {
           Element={ProfileOutline}
         />
         <Route path="/aerodynamics/wing" Element={Wing} />
+        <Route path="/aerodynamics/wing/inducedDrag" Element={InducedDrag} />
         <Route path="/aerodynamics/fuselage" Element={Fuselage} />
       </Canvas>
     </div>
