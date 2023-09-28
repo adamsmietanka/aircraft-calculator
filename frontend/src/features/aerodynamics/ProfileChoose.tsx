@@ -11,6 +11,11 @@ const ProfileChoose = () => {
     [profiles]
   );
 
+  const handleClick = (p: string) => {
+    (document.activeElement as HTMLElement).blur();
+    setProfile(p);
+  };
+
   return (
     <div className="form-control">
       <label className="label">
@@ -28,14 +33,16 @@ const ProfileChoose = () => {
             tabIndex={0}
             className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32"
           >
-            {profileList.map(
-              (p) =>
-                p !== profile && (
-                  <li key={p}>
-                    <button onClick={() => setProfile(p)}>NACA {p}</button>
-                  </li>
-                )
-            )}
+            {profileList.map((p) => (
+              <li key={p}>
+                <button
+                  className={`${p === profile && "active"}`}
+                  onClick={() => handleClick(p)}
+                >
+                  NACA {p}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
 
