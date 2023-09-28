@@ -46,7 +46,11 @@ const Navigation = () => {
   const location = useLocation();
   return (
     <div className="sticky flex flex-col justify-between h-screen top-0 p-2 z-50">
-      <div className={`${location.pathname === "/" && "hidden"}`}>
+      <div
+        className={`flex flex-col justify-between h-full ${
+          location.pathname === "/" && "hidden"
+        }`}
+      >
         <div className="flex flex-col">
           {links.map((l) => (
             <NavLink to={l.to}>
