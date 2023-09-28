@@ -18,7 +18,7 @@ const PlaneBuilder = () => {
       <ProfileModal />
       <Canvas
         flat
-        camera={{ position: [0, -100, 200], fov: 60 }}
+        camera={{ position: [0, -200, 200], fov: 60 }}
         onCreated={(state) => {
           state.setEvents({
             filter: (intersections) =>
