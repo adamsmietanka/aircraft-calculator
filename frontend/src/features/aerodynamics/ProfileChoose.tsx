@@ -31,18 +31,47 @@ const ProfileChoose = () => {
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32"
+            className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-40"
           >
-            {profileList.map((p) => (
-              <li key={p}>
-                <button
-                  className={`${p === profile && "active"}`}
-                  onClick={() => handleClick(p)}
-                >
-                  NACA {p}
-                </button>
-              </li>
-            ))}
+            <li>
+              <details
+                open
+                onClick={() => (document.activeElement as HTMLElement).blur()}
+              >
+                <summary>NACA 4-series</summary>
+                <ul>
+                  {profileList.map((p) => (
+                    <li key={p}>
+                      <button
+                        className={`${p === profile && "active"}`}
+                        onClick={() => handleClick(p)}
+                      >
+                        {p}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+            <li>
+              <details
+                onClick={() => (document.activeElement as HTMLElement).blur()}
+              >
+                <summary>NACA 5-series</summary>
+                <ul>
+                  {/* {profileList.map((p) => (
+                    <li key={p}>
+                      <button
+                        className={`${p === profile && "active"}`}
+                        onClick={() => handleClick(p)}
+                      >
+                        {p}
+                      </button>
+                    </li>
+                  ))} */}
+                </ul>
+              </details>
+            </li>
           </ul>
         </div>
 
