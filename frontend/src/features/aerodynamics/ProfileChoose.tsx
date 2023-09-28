@@ -31,7 +31,7 @@ const ProfileChoose = () => {
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-40"
+            className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-48"
           >
             <li>
               <details

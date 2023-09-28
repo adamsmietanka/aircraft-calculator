@@ -17,10 +17,16 @@ const Profile = ({ opacity }: Props) => {
   return (
     <animated.mesh position-z={0}>
       <Inputs3D gridPositionX={-1.25}>
-        <ProfileChoose />
-        <ProfileReynolds />
+        <div className="w-72 space-y-2 -mt-8">
+          <ProfileChoose />
+          <ProfileReynolds />
+        </div>
       </Inputs3D>
-      <ProfileVisualizer width={0.4} gridPositionX={PROFILE_POSITION} opacity={opacity} />
+      <ProfileVisualizer
+        width={0.4}
+        gridPositionX={PROFILE_POSITION}
+        opacity={opacity}
+      />
       <LineChart
         width={0.33}
         gridPositionX={0.25}
