@@ -1,27 +1,27 @@
-import { config, useSpring } from "@react-spring/three";
+import { useSpring } from "@react-spring/three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useLocation } from "react-router-dom";
 import { CAMERA_DELAY } from "./config";
 
-const obj: Record<string, Record<string, number[]>> = {
-  "/": {
-    position: [0, 0, 70],
-    rotation: [0, 0, 0],
-  },
-  "/aerodynamics/profile": {
-    position: [0, 0, 20],
-    rotation: [0, 0, 0],
-  },
-  "/aerodynamics/wing": {
-    position: [0, 20, 0],
-    rotation: [-Math.PI / 2, 0, 0],
-  },
-  "/aerodynamics/fuselage": {
-    position: [-10, 4, 10],
-    rotation: [-0.382, -0.748, -0.267],
-  },
+// spherical coords
+const obj: Record<string, number[]> = {
+  "/": [70, 90, 0],
+  "/aerodynamics/profile": [20, 90, 0],
+  "/aerodynamics/wing": [20, 0, 0],
+  "/aerodynamics/fuselage": [15, 70, -45],
 };
 
+const getPosition = ([r, theta, phi]: number[]) => [
+  r * Math.sin((theta * Math.PI) / 180) * Math.sin((phi * Math.PI) / 180),
+  r * Math.cos((theta * Math.PI) / 180),
+  r * Math.sin((theta * Math.PI) / 180) * Math.cos((phi * Math.PI) / 180),
+];
+
+const getRotationPolar = ([r, theta, phi]: number[]) => [
+  ((theta - 90) * Math.PI) / 180,
+  (phi * Math.PI) / 180,
+  0,
+];
 const Camera = () => {
   const { camera, controls } = useThree();
 
@@ -33,34 +33,25 @@ const Camera = () => {
         position: camera.position.toArray(),
         rotation: [0, 0, 0],
       },
-      to: async (next, cancel) => {
-        await next({
-          position: obj[location.pathname].position,
-          rotation: obj[location.pathname].rotation,
-          delay: CAMERA_DELAY,
-        });
+      to: {
+        position: getPosition(obj[location.pathname]),
+        rotation: getRotationPolar(obj[location.pathname]),
+        delay: CAMERA_DELAY,
       },
-      config: (key) => {
-        switch (key) {
-          case "position":
-          case "rotation":
-            return {
-              mass: 20,
-              tension: 400,
-              friction: 170,
-            };
-          default:
-            return config.default;
-        }
+      config: {
+        mass: 20,
+        tension: 400,
+        friction: 170,
       },
     }),
     [location.pathname]
   );
 
   useFrame(() => {
+    const [x, y, z] = s.rotation.get();
     if (s.position.animation.changed) {
       camera.position.set(...s.position.get());
-      camera.rotation.set(...s.rotation.get());
+      camera.rotation.set(x, y, z, "YXZ");
     }
   });
 
