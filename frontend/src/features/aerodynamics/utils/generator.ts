@@ -2,7 +2,10 @@ import {
   findUpperBound,
   linearInterpolation,
 } from "../../../utils/interpolation/binarySearch";
+import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
+import round from "../../../utils/interpolation/round";
 import profiles from "../data/profiles";
+import { default as profilesInterpolated } from "../data/profiles_interpolated";
 
 // 0 - this is the alpha/Cz or the x in the exported arrays
 // 1 - is the trace for the lowest Re ~ 3 * 10^6
@@ -83,6 +86,37 @@ const generate_coefficients = () => {
     newProfiles[profile] = getCoefficients(profile);
   });
   console.log(newProfiles);
+};
+
+export const symmetrical_fixer = () => {
+  // const zeroAngle = profiles["0009"].cz.find(
+  //   ([x]) => parseFloat(x?.toFixed(1) || "1") === 0
+  // ) as number[];
+  // const fixed = profiles["0009"].cz.map(([x, y1, y2, y3]) => [
+  //   x,
+  //   y1 !== null ? y1 - zeroAngle[1] : null,
+  //   y2 !== null ? y2 - zeroAngle[2] : null,
+  //   y3 !== null ? y3 - zeroAngle[3] : null,
+  // ]);
+  // console.log(zeroAngle, fixed);
+  // unused idea with changing interpolated points
+  const deltas = [0];
+  for (let i = 1; i <= 3; i++) {
+    const points = profilesInterpolated["0009"].cz[i - 1].map(([x, y]) => [
+      x,
+      y,
+      0,
+    ]);
+    deltas.push(linearInterpolationArray(points, 0));
+  }
+  console.log(deltas);
+  const fixed = profiles["0009"].cz.map(([x, y1, y2, y3]) => [
+    x,
+    y1 ? round(y1 - deltas[1], 1e-5) : null,
+    y2 ? round(y2 - deltas[2], 1e-5) : null,
+    y3 ? round(y3 - deltas[3], 1e-5) : null,
+  ]);
+  console.log(fixed);
 };
 
 export default generate_coefficients;
