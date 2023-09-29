@@ -20,23 +20,44 @@ const useProfileSpring = (width: number) => {
 
   const location = useLocation();
 
-  const outlineNormal = location.pathname === "/aerodynamics/profile";
-
   const rotateProfile =
-    outlineNormal &&
+    location.pathname === "/aerodynamics/profile" &&
     (!!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"]);
+
+  const getScale = () => {
+    switch (location.pathname) {
+      case "/":
+      case "/aerodynamics/introduction":
+      case "/aerodynamics/profile":
+        return scaleProfile;
+      default:
+        return scale * chord;
+    }
+  };
+
+  // Returns [gridPosition, localPosition]
+  const getPosition = () => {
+    switch (location.pathname) {
+      case "/":
+      case "/aerodynamics/introduction":
+        return [0, -0.5];
+      case "/aerodynamics/profile":
+        return [PROFILE_POSITION, -0.25];
+      default:
+        return [WING_POSITION, 0];
+    }
+  };
 
   const [profileSpring] = useSpring(
     () => ({
       angle: rotateProfile ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
-      scale: outlineNormal ? scaleProfile : scale * chord,
-      x: outlineNormal ? -0.25 : 0,
-      gridX: outlineNormal
-        ? 0
-        : ((WING_POSITION - PROFILE_POSITION) * CANVAS_WIDTH) / 2,
+      scale: getScale(),
+      gridX: getPosition()[0],
+      x: getPosition()[1],
     }),
-    [x, scale, chord, outlineNormal, rotateProfile]
+    [x, scale, chord, rotateProfile, location.pathname]
   );
+  
   return { profileSpring };
 };
 export default useProfileSpring;

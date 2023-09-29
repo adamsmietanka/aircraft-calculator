@@ -7,8 +7,7 @@ import useProfileSpring from "./hooks/useProfileSpring";
 interface Props {
   opacity: SpringValue<number>;
 }
-const width = 0.4,
-  gridPositionX = PROFILE_POSITION;
+const width = 0.4;
 
 const ProfileOutline = ({ opacity }: Props) => {
   const { profilePoints, chordPoints } = useProfile();
@@ -16,9 +15,7 @@ const ProfileOutline = ({ opacity }: Props) => {
 
   return (
     <animated.mesh
-      position-x={profileSpring.gridX.to(
-        (x) => x + (gridPositionX * CANVAS_WIDTH) / 2
-      )}
+      position-x={profileSpring.gridX.to((x) => (x * CANVAS_WIDTH) / 2)}
       rotation-z={profileSpring.angle}
       scale={profileSpring.scale}
     >

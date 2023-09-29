@@ -67,6 +67,7 @@ const Steps = () => {
                 getStepIndex(step.feature, step.path) <= currentStepIndex &&
                 "step-primary"
               }`}
+              {...(step.symbol && { "data-content": step.symbol })}
               onClick={() => navigateTo(step)}
             >
               {step.name}
