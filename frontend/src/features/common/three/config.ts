@@ -5,6 +5,7 @@ import { useMemo } from "react";
 //Profile
 export const NUMBER_OF_AIRFOIL_POINTS = 25;
 export const PROFILE_POSITION = -0.65;
+export const PROFILE_WIDTH = 0.4;
 export const WING_POSITION = -0.45;
 
 export const GRID_WIDTH = 1.0;

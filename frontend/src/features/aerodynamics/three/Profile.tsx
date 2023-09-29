@@ -5,7 +5,6 @@ import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
 import LineChart from "../../common/three/LineChart";
 import useProfileCharts from "../hooks/useProfileCharts";
-import { PROFILE_POSITION } from "../../common/three/config";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -23,8 +22,6 @@ const Profile = ({ opacity }: Props) => {
         </div>
       </Inputs3D>
       <ProfileVisualizer
-        width={0.4}
-        gridPositionX={PROFILE_POSITION}
         opacity={opacity}
       />
       <LineChart

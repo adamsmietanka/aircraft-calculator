@@ -3,20 +3,16 @@ import useWingScale from "../../hooks/useWingScale";
 import { useLocation } from "react-router-dom";
 import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 import { useWingStore } from "../../stores/useWing";
-import {
-  CANVAS_WIDTH,
-  PROFILE_POSITION,
-  WING_POSITION,
-} from "../../../common/three/config";
+import { PROFILE_POSITION, WING_POSITION } from "../../../common/three/config";
 
-const useProfileSpring = (width: number) => {
+const useProfileSpring = () => {
   const x = useProfileChartsStore((state) => state.x);
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
   const chord = useWingStore((state) => state.chord);
 
-  const { scale, scaleProfile } = useWingScale(width);
+  const { scale, scaleProfile } = useWingScale();
 
   const location = useLocation();
 
@@ -57,7 +53,7 @@ const useProfileSpring = (width: number) => {
     }),
     [x, scale, chord, rotateProfile, location.pathname]
   );
-  
+
   return { profileSpring };
 };
 export default useProfileSpring;
