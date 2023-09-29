@@ -5,20 +5,22 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import useProfileSpring from "./hooks/useProfileSpring";
 import { useLocation } from "react-router-dom";
 import { useIntroductionStore } from "../stores/useIntroduction";
+import { useWingStore } from "../stores/useWing";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const ProfileOutline = ({ opacity }: Props) => {
-  const profile = useIntroductionStore((state) => state.profile);
   const location = useLocation();
 
-  const onIntroduction = location.pathname === "/aerodynamics/introduction";
+  const onProfile = location.pathname === "/aerodynamics/profile";
 
-  const { profilePoints, chordPoints } = useProfile();
-  const { profilePoints: introOutline, chordPoints: introCamber } =
-    useProfile(profile);
+  const profile = onProfile
+    ? undefined
+    : useIntroductionStore((state) => state.profile);
+
+  const { profilePoints, chordPoints } = useProfile(profile);
   const { profileSpring } = useProfileSpring();
 
   return (
@@ -28,13 +30,9 @@ const ProfileOutline = ({ opacity }: Props) => {
       scale={profileSpring.scale}
     >
       <animated.mesh position-x={profileSpring.x}>
+        <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
         <AnimatedLine
-          points={onIntroduction ? introOutline : profilePoints}
-          width={2}
-          opacity={opacity}
-        />
-        <AnimatedLine
-          points={onIntroduction ? introCamber : chordPoints}
+          points={chordPoints}
           width={1.5}
           color="secondary"
           opacity={opacity.to((o) => o / 1.5)}

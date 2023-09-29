@@ -22,9 +22,14 @@ interface Props {
 const ProfileNACAExplanation = ({ opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
+  const location = useLocation();
 
-  const profile = useIntroductionStore((state) => state.profile);
-  // const disableHover = useIntroductionStore((state) => state.disableHover);
+  const onProfile = location.pathname === "/aerodynamics/profile";
+
+  const profile = onProfile
+    ? useWingStore((state) => state.profile)
+    : useIntroductionStore((state) => state.profile);
+
   const hoverPlane = useIntroductionStore((state) => state.hoverPlane);
   const hoverA = useIntroductionStore((state) => state.hoverA);
   const hoverB = useIntroductionStore((state) => state.hoverB);
@@ -36,14 +41,11 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
     hover["Coefficient of Lift"] ||
     hover["Coefficient of Drag"]
   );
-  const location = useLocation();
-
-  const hoverEnabled = location.pathname !== "/aerodynamics/introduction";
 
   const { scaleProfile } = useWingScale();
 
   const { M, P, T, F } = useProfileCamber(profile);
-  const { maxThickness, lowestPoint } = useProfile(profile);
+  const { maxThickness, lowestPoint, highestPoint } = useProfile(profile);
 
   const { profileSpring } = useProfileSpring();
 
@@ -60,8 +62,8 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           material-transparent
           material-opacity={0}
           onPointerMove={(e) => {}}
-          onPointerEnter={(e) => hoverEnabled && set({ hoverPlane: true })}
-          onPointerLeave={(e) => hoverEnabled && set({ hoverPlane: false })}
+          onPointerEnter={(e) => onProfile && set({ hoverPlane: true })}
+          onPointerLeave={(e) => onProfile && set({ hoverPlane: false })}
           onClick={(e) => {}}
           visible={false}
         />
@@ -76,22 +78,22 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
               name="Maximum camber of the airfoil"
               tex={`${M * 100}`}
               hover={hoverA}
-              onEnter={() => hoverEnabled && set({ hoverA: true })}
-              onLeave={() => hoverEnabled && set({ hoverA: false })}
+              onEnter={() => onProfile && set({ hoverA: true })}
+              onLeave={() => onProfile && set({ hoverA: false })}
             />
             <HoverableFormulaColor
               name="Position of maximum camber"
               tex={`${P * 10}`}
               hover={hoverB}
-              onEnter={() => hoverEnabled && set({ hoverB: true })}
-              onLeave={() => hoverEnabled && set({ hoverB: false })}
+              onEnter={() => onProfile && set({ hoverB: true })}
+              onLeave={() => onProfile && set({ hoverB: false })}
             />
             <HoverableFormulaColor
               name="Maximum thickness of the airfoil"
               tex={`${String(T * 100).padStart(2, "0")}`}
               hover={hoverC}
-              onEnter={() => hoverEnabled && set({ hoverC: true })}
-              onLeave={() => hoverEnabled && set({ hoverC: false })}
+              onEnter={() => onProfile && set({ hoverC: true })}
+              onLeave={() => onProfile && set({ hoverC: false })}
             />
           </div>
         </AnimatedHtml>
@@ -143,14 +145,12 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
             </AnimatedInputTechnical>
           </mesh>
           <mesh visible={hoverC}>
-            <mesh
-              position-x={F * scaleProfile}
-              position-y={lowestPoint * scaleProfile}
-            >
+            <mesh position-x={F * scaleProfile}>
               <AnimatedInputTechnical
                 scale={scaleProfile}
-                distance={-0.7 * scaleProfile - 0.5}
+                distance={-0.7 * scaleProfile - 0.6}
                 value={maxThickness}
+                startX={lowestPoint}
                 opacity={0.75}
                 vertical
               >
@@ -164,8 +164,8 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
               </AnimatedInputTechnical>
               <AnimatedLine
                 points={[
-                  [0, 0, 0],
-                  [0, maxThickness, 0],
+                  [0, lowestPoint, 0],
+                  [0, highestPoint, 0],
                 ]}
                 scale={[scaleProfile, scaleProfile, scaleProfile]}
                 opacity={0.75}
