@@ -1,20 +1,17 @@
-import { CANVAS_WIDTH } from "../../common/three/config";
+import { CANVAS_WIDTH, PROFILE_POSITION } from "../../common/three/config";
 import { SpringValue, animated } from "@react-spring/three";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import Vector from "./Vector";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
-import ProfileNACAExplanation from "./ProfileNACAExplanation";
 import useWingScale from "../hooks/useWingScale";
 import useProfileSpring from "./hooks/useProfileSpring";
 import ProfileAirstreams from "./ProfileAirstreams";
 
 interface Props {
-  width: number;
-  gridPositionX: number;
   opacity: SpringValue<number>;
 }
 
-const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
+const ProfileVisualizer = ({ opacity }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
   const hover = useProfileChartsStore((state) => state.hover);
@@ -23,12 +20,12 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
   const show =
     !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
 
-  const { scaleProfile } = useWingScale(width);
+  const { scaleProfile } = useWingScale();
 
-  const { profileSpring } = useProfileSpring(width);
+  const { profileSpring } = useProfileSpring();
 
   return (
-    <animated.mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
+    <animated.mesh position-x={(PROFILE_POSITION * CANVAS_WIDTH) / 2}>
       <Vector
         value={y["Coefficient of Lift"]}
         rotation={0}
@@ -57,7 +54,6 @@ const ProfileVisualizer = ({ width, gridPositionX, opacity }: Props) => {
         />
       </Vector>
       <animated.mesh rotation-z={profileSpring.angle} scale={scaleProfile}>
-        <ProfileNACAExplanation scale={scaleProfile} show={!show} />
         <ProfileAirstreams opacity={opacity} show={show} />
       </animated.mesh>
     </animated.mesh>

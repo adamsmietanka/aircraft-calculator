@@ -1,17 +1,16 @@
 import { SpringValue, animated } from "@react-spring/three";
 import useProfile from "../hooks/useProfile";
-import { CANVAS_WIDTH, PROFILE_POSITION } from "../../common/three/config";
+import { CANVAS_WIDTH } from "../../common/three/config";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import useProfileSpring from "./hooks/useProfileSpring";
 
 interface Props {
   opacity: SpringValue<number>;
 }
-const width = 0.4;
 
 const ProfileOutline = ({ opacity }: Props) => {
   const { profilePoints, chordPoints } = useProfile();
-  const { profileSpring } = useProfileSpring(width);
+  const { profileSpring } = useProfileSpring();
 
   return (
     <animated.mesh
