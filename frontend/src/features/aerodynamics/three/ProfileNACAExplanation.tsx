@@ -11,6 +11,9 @@ import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import useWingScale from "../hooks/useWingScale";
 import useProfileSpring from "./hooks/useProfileSpring";
 import { CANVAS_WIDTH } from "../../common/three/config";
+import { useWingStore } from "../stores/useWing";
+import { useIntroductionStore } from "../stores/useIntroduction";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   opacity?: SpringValue<number>;
@@ -20,21 +23,27 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
+  const profile = useIntroductionStore((state) => state.profile);
+  // const disableHover = useIntroductionStore((state) => state.disableHover);
+  const hoverPlane = useIntroductionStore((state) => state.hoverPlane);
+  const hoverA = useIntroductionStore((state) => state.hoverA);
+  const hoverB = useIntroductionStore((state) => state.hoverB);
+  const hoverC = useIntroductionStore((state) => state.hoverC);
+  const set = useIntroductionStore((state) => state.set);
+
   const show = !(
     !!locked ||
     hover["Coefficient of Lift"] ||
     hover["Coefficient of Drag"]
   );
+  const location = useLocation();
+
+  const hoverEnabled = location.pathname !== "/aerodynamics/introduction";
 
   const { scaleProfile } = useWingScale();
 
-  const [hoverPlane, setHoverPlane] = useState(false);
-  const [hoverA, setHoverA] = useState(false);
-  const [hoverB, setHoverB] = useState(false);
-  const [hoverC, setHoverC] = useState(false);
-
-  const { M, P, T, F } = useProfileCamber();
-  const { maxThickness, lowestPoint } = useProfile();
+  const { M, P, T, F } = useProfileCamber(profile);
+  const { maxThickness, lowestPoint } = useProfile(profile);
 
   const { profileSpring } = useProfileSpring();
 
@@ -51,8 +60,8 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           material-transparent
           material-opacity={0}
           onPointerMove={(e) => {}}
-          onPointerEnter={(e) => setHoverPlane(true)}
-          onPointerLeave={(e) => setHoverPlane(false)}
+          onPointerEnter={(e) => hoverEnabled && set({ hoverPlane: true })}
+          onPointerLeave={(e) => hoverEnabled && set({ hoverPlane: false })}
           onClick={(e) => {}}
           visible={false}
         />
@@ -67,22 +76,22 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
               name="Maximum camber of the airfoil"
               tex={`${M * 100}`}
               hover={hoverA}
-              onEnter={() => setHoverA(true)}
-              onLeave={() => setHoverA(false)}
+              onEnter={() => hoverEnabled && set({ hoverA: true })}
+              onLeave={() => hoverEnabled && set({ hoverA: false })}
             />
             <HoverableFormulaColor
               name="Position of maximum camber"
               tex={`${P * 10}`}
               hover={hoverB}
-              onEnter={() => setHoverB(true)}
-              onLeave={() => setHoverB(false)}
+              onEnter={() => hoverEnabled && set({ hoverB: true })}
+              onLeave={() => hoverEnabled && set({ hoverB: false })}
             />
             <HoverableFormulaColor
               name="Maximum thickness of the airfoil"
               tex={`${String(T * 100).padStart(2, "0")}`}
               hover={hoverC}
-              onEnter={() => setHoverC(true)}
-              onLeave={() => setHoverC(false)}
+              onEnter={() => hoverEnabled && set({ hoverC: true })}
+              onLeave={() => hoverEnabled && set({ hoverC: false })}
             />
           </div>
         </AnimatedHtml>

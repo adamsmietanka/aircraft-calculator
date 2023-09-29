@@ -12,6 +12,7 @@ import { checkVisible } from "../common/three/checkVisible";
 import InducedDrag from "../aerodynamics/three/tutorials/InducedDrag";
 import { OrbitControls } from "@react-three/drei";
 import ProfileNACAExplanation from "../aerodynamics/three/ProfileNACAExplanation";
+import Introduction from "../aerodynamics/three/tutorials/Introduction";
 
 const PlaneBuilder = () => {
   return (
@@ -40,6 +41,7 @@ const PlaneBuilder = () => {
           paths={["/aerodynamics/introduction", "/aerodynamics/profile"]}
           Element={ProfileNACAExplanation}
         />
+        <Route paths={["/aerodynamics/introduction"]} Element={Introduction} />
         <Route
           paths={[
             "/aerodynamics/introduction",

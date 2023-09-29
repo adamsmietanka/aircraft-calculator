@@ -3,13 +3,22 @@ import useProfile from "../hooks/useProfile";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import useProfileSpring from "./hooks/useProfileSpring";
+import { useLocation } from "react-router-dom";
+import { useIntroductionStore } from "../stores/useIntroduction";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const ProfileOutline = ({ opacity }: Props) => {
+  const profile = useIntroductionStore((state) => state.profile);
+  const location = useLocation();
+
+  const onIntroduction = location.pathname === "/aerodynamics/introduction";
+
   const { profilePoints, chordPoints } = useProfile();
+  const { profilePoints: introOutline, chordPoints: introCamber } =
+    useProfile(profile);
   const { profileSpring } = useProfileSpring();
 
   return (
@@ -19,9 +28,13 @@ const ProfileOutline = ({ opacity }: Props) => {
       scale={profileSpring.scale}
     >
       <animated.mesh position-x={profileSpring.x}>
-        <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
         <AnimatedLine
-          points={chordPoints}
+          points={onIntroduction ? introOutline : profilePoints}
+          width={2}
+          opacity={opacity}
+        />
+        <AnimatedLine
+          points={onIntroduction ? introCamber : chordPoints}
           width={1.5}
           color="secondary"
           opacity={opacity.to((o) => o / 1.5)}
