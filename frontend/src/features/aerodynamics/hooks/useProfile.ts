@@ -27,6 +27,7 @@ const useProfile = (customProfile?: string) => {
   const [chordPoints, setChordPoints] = useState<number[][]>([]);
   const [maxThickness, setMaxThickness] = useState(0);
   const [lowestPoint, setLowestPoint] = useState(0);
+  const [highestPoint, setHighestPoint] = useState(0);
 
   const { M, P, T, F } = useProfileCamber(profile);
 
@@ -98,6 +99,7 @@ const useProfile = (customProfile?: string) => {
     setChordPoints(chord);
     setMaxThickness(max[1][1] - max[0][1]);
     setLowestPoint(max[0][1]);
+    setHighestPoint(max[1][1]);
   }, [profile]);
 
   return {
@@ -107,6 +109,7 @@ const useProfile = (customProfile?: string) => {
     chordPoints,
     maxThickness,
     lowestPoint,
+    highestPoint,
   };
 };
 

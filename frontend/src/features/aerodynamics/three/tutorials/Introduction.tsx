@@ -78,10 +78,9 @@ const Introduction = ({ opacity }: Props) => {
             "4418",
             "4421",
             "4424",
-            "4412",
+            "4415",
           ]);
           set({ hoverPlane: false });
-          await next({ delay: 500 });
 
           navigate("/aerodynamics/profile");
         } else {

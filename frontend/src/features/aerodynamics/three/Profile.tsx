@@ -15,7 +15,7 @@ const Profile = ({ opacity }: Props) => {
 
   return (
     <animated.mesh position-z={0}>
-      <Inputs3D gridPositionX={-1.25}>
+      <Inputs3D gridPositionX={-1.3}>
         <div className="w-72 space-y-2 -mt-8">
           <ProfileChoose />
           <ProfileReynolds />
