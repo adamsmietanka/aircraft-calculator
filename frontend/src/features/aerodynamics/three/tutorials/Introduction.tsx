@@ -8,7 +8,7 @@ interface Props {
   opacity: SpringValue<number>;
 }
 
-const SUB_SIZE = 0.6;
+const SUB_SIZE = 0.35;
 
 const Introduction = ({ opacity }: Props) => {
   const setProfile = useIntroductionStore((state) => state.setProfile);
@@ -110,7 +110,7 @@ const Introduction = ({ opacity }: Props) => {
         visible={introductionSpring.outline}
         color={colors["primary"]}
       >
-        This is a profile
+        This is an aerodynamic profile
       </AnimatedText>
       <AnimatedText
         fontSize={SUB_SIZE}
@@ -118,7 +118,7 @@ const Introduction = ({ opacity }: Props) => {
         color={colors["grid"]}
         fillOpacity={0.2}
       >
-        Chord Line
+        chord line
       </AnimatedText>
       <AnimatedText
         fontSize={SUB_SIZE}
@@ -126,7 +126,7 @@ const Introduction = ({ opacity }: Props) => {
         color={colors["secondary"]}
         fillOpacity={0.6}
       >
-        Camber Line
+        camber line
       </AnimatedText>
       <mesh position-y={-1.5}>
         <AnimatedText
@@ -134,21 +134,21 @@ const Introduction = ({ opacity }: Props) => {
           visible={introductionSpring.hoverA}
           color={colors["error"]}
         >
-          Max camber
+          max camber
         </AnimatedText>
         <AnimatedText
           fontSize={SUB_SIZE}
           visible={introductionSpring.hoverB}
           color={colors["error"]}
         >
-          Position of max camber
+          position of max camber
         </AnimatedText>
         <AnimatedText
           fontSize={SUB_SIZE}
           visible={introductionSpring.hoverC}
           color={colors["error"]}
         >
-          Max thickness
+          max thickness
         </AnimatedText>
       </mesh>
     </mesh>
