@@ -15,27 +15,31 @@ const ProfileOutline = ({ opacity }: Props) => {
   return (
     <animated.mesh
       position-x={profileSpring.gridX.to((x) => (x * CANVAS_WIDTH) / 2)}
-      rotation-z={profileSpring.angle}
       scale={profileSpring.scale}
     >
-      <animated.mesh position-x={profileSpring.x}>
-        <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
-        <AnimatedLine
-          points={chordPoints}
-          width={1.5}
-          color="secondary"
-          opacity={opacity.to((o) => o / 1.5)}
-        />
-        <AnimatedLine
-          points={[
-            [0, 0, -0.01],
-            [1, 0, -0.01],
-          ]}
-          scale={[1, 1, 1]}
-          style="thin"
-          color="grid"
-          opacity={opacity.to((o) => o / 5)}
-        />
+      <animated.mesh
+        rotation-z={profileSpring.angle}
+        position-x={profileSpring.x.to((x) => x + 0.25)}
+      >
+        <mesh position-x={-0.25}>
+          <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
+          <AnimatedLine
+            points={chordPoints}
+            width={1.5}
+            color="secondary"
+            opacity={opacity.to((o) => o / 1.5)}
+          />
+          <AnimatedLine
+            points={[
+              [0, 0, -0.01],
+              [1, 0, -0.01],
+            ]}
+            scale={[1, 1, 1]}
+            style="thin"
+            color="grid"
+            opacity={opacity.to((o) => o / 5)}
+          />
+        </mesh>
       </animated.mesh>
     </animated.mesh>
   );
