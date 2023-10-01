@@ -70,7 +70,9 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
         <AnimatedHtml
           position-x={0.5}
           position-y={0.25}
-          show={show && (hoverPlane || hoverA || hoverB || hoverC)}
+          show={
+            (!onProfile || show) && (hoverPlane || hoverA || hoverB || hoverC)
+          }
           scale={1 / scaleProfile}
         >
           <div className="flex text-3xl">
