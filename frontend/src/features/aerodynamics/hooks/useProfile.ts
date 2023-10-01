@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
 import { useWingStore } from "../stores/useWing";
 
-export const useProfileCamber = (customProfile?: string) => {
-  const profile = customProfile
-    ? customProfile
-    : useWingStore((state) => state.profile);
+export const useProfileCamber = () => {
+  const profile = useWingStore((state) => state.profile);
 
   return {
     M: parseInt(profile[0]) / 100,
@@ -16,10 +14,8 @@ export const useProfileCamber = (customProfile?: string) => {
   };
 };
 
-const useProfile = (customProfile?: string) => {
-  const profile = customProfile
-    ? customProfile
-    : useWingStore((state) => state.profile);
+const useProfile = () => {
+  const profile = useWingStore((state) => state.profile);
 
   const [profilePoints, setProfilePoints] = useState<number[][]>([]);
   const [upperPoints, setUpperPoints] = useState<number[][]>([]);
@@ -29,7 +25,7 @@ const useProfile = (customProfile?: string) => {
   const [lowestPoint, setLowestPoint] = useState(0);
   const [highestPoint, setHighestPoint] = useState(0);
 
-  const { M, P, T, F } = useProfileCamber(profile);
+  const { M, P, T, F } = useProfileCamber();
 
   const getCamberY = (x: number) => {
     if (x < P) {

@@ -1,27 +1,22 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-export interface IntroductionState {
-  profile: string;
+export interface HoverProfileState {
   hoverPlane: boolean;
   hoverA: boolean;
   hoverB: boolean;
   hoverC: boolean;
-  setProfile: (value: string) => void;
   setHoverPlane: (value: boolean) => void;
   setHoverA: (value: boolean) => void;
   setHoverB: (value: boolean) => void;
   setHoverC: (value: boolean) => void;
-  set: (value: Partial<IntroductionState>) => void;
+  set: (value: Partial<HoverProfileState>) => void;
 }
 
-export const useIntroductionStore = create<IntroductionState>()((set) => ({
-  profile: "2412",
+export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   hoverPlane: false,
   hoverA: false,
   hoverB: false,
   hoverC: false,
-  setProfile: (value) => set({ profile: value }),
   setHoverPlane: (value) => set({ hoverPlane: value }),
   setHoverA: (value) => set({ hoverA: value }),
   setHoverB: (value) => set({ hoverB: value }),

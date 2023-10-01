@@ -1,4 +1,4 @@
-import { reynolds } from "../data/profiles";
+import { getReynolds } from "../data/profiles";
 import { useWingStore } from "../stores/useWing";
 import { useProfileCamber } from "./useProfile";
 import useProfileData from "./useProfileData";
@@ -6,7 +6,7 @@ import useProfileTable, { Row } from "./useProfileTable";
 
 const useClosestReynolds = (stallReynolds: number) => {
   const profile = useWingStore((state) => state.profile);
-  const closest = reynolds[profile].map((re) =>
+  const closest = getReynolds(profile).map((re) =>
     Math.abs(stallReynolds - re * 1000000)
   );
   let closestIndex = closest.reduce(

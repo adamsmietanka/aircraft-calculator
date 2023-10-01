@@ -1,5 +1,4 @@
 import { Plane } from "@react-three/drei";
-import { useState } from "react";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
 import useProfile, { useProfileCamber } from "../hooks/useProfile";
 import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
@@ -11,8 +10,7 @@ import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import useWingScale from "../hooks/useWingScale";
 import useProfileSpring from "./hooks/useProfileSpring";
 import { CANVAS_WIDTH } from "../../common/three/config";
-import { useWingStore } from "../stores/useWing";
-import { useIntroductionStore } from "../stores/useIntroduction";
+import { useHoverProfileStore } from "../stores/useHoverProfile";
 import { useLocation } from "react-router-dom";
 
 interface Props {
@@ -26,15 +24,11 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
 
   const onProfile = location.pathname === "/aerodynamics/profile";
 
-  const profile = onProfile
-    ? useWingStore((state) => state.profile)
-    : useIntroductionStore((state) => state.profile);
-
-  const hoverPlane = useIntroductionStore((state) => state.hoverPlane);
-  const hoverA = useIntroductionStore((state) => state.hoverA);
-  const hoverB = useIntroductionStore((state) => state.hoverB);
-  const hoverC = useIntroductionStore((state) => state.hoverC);
-  const set = useIntroductionStore((state) => state.set);
+  const hoverPlane = useHoverProfileStore((state) => state.hoverPlane);
+  const hoverA = useHoverProfileStore((state) => state.hoverA);
+  const hoverB = useHoverProfileStore((state) => state.hoverB);
+  const hoverC = useHoverProfileStore((state) => state.hoverC);
+  const set = useHoverProfileStore((state) => state.set);
 
   const show = !(
     !!locked ||
@@ -44,8 +38,8 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
 
   const { scaleProfile } = useWingScale();
 
-  const { M, P, T, F } = useProfileCamber(profile);
-  const { maxThickness, lowestPoint, highestPoint } = useProfile(profile);
+  const { M, P, T, F } = useProfileCamber();
+  const { maxThickness, lowestPoint, highestPoint } = useProfile();
 
   const { profileSpring } = useProfileSpring();
 

@@ -2,7 +2,9 @@ import { SpringValue, animated, useSpring } from "@react-spring/three";
 import { Text } from "@react-three/drei";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCSSColors } from "../../../common/three/config";
-import { useIntroductionStore } from "../../stores/useIntroduction";
+import { useHoverProfileStore } from "../../stores/useHoverProfile";
+import { useWingStore } from "../../stores/useWing";
+import { useRef } from "react";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -11,8 +13,11 @@ interface Props {
 const SUB_SIZE = 0.35;
 
 const Introduction = ({ opacity }: Props) => {
-  const setProfile = useIntroductionStore((state) => state.setProfile);
-  const set = useIntroductionStore((state) => state.set);
+  const profile = useWingStore((state) => state.profile);
+  const setProfile = useWingStore((state) => state.setProfile);
+  const set = useHoverProfileStore((state) => state.set);
+
+  const savedProfile = useRef("2412");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -50,6 +55,7 @@ const Introduction = ({ opacity }: Props) => {
       },
       to: async (next) => {
         if (location.pathname === "/aerodynamics/introduction") {
+          savedProfile.current = profile;
           await next({ delay: 2000 });
           await showSubtitle(next, "outline");
           await showSubtitle(next, "chord");
@@ -80,9 +86,11 @@ const Introduction = ({ opacity }: Props) => {
             "4424",
             "4415",
           ]);
-          set({ hoverPlane: false });
+          await set({ hoverPlane: false });
+          await next({ delay: 500 });
+          await setProfile(savedProfile.current);
 
-          navigate("/aerodynamics/profile");
+          await navigate("/aerodynamics/profile");
         } else {
           await next({
             outline: false,
@@ -104,52 +112,52 @@ const Introduction = ({ opacity }: Props) => {
     [location.pathname]
   );
   return (
-    <mesh position-y={-1.5}>
-      <AnimatedText
-        fontSize={SUB_SIZE}
-        visible={introductionSpring.outline}
-        color={colors["primary"]}
-      >
-        This is an aerodynamic profile
-      </AnimatedText>
-      <AnimatedText
-        fontSize={SUB_SIZE}
-        visible={introductionSpring.chord}
-        color={colors["grid"]}
-        fillOpacity={0.2}
-      >
-        chord line
-      </AnimatedText>
-      <AnimatedText
-        fontSize={SUB_SIZE}
-        visible={introductionSpring.camber}
-        color={colors["secondary"]}
-        fillOpacity={0.6}
-      >
-        camber line
-      </AnimatedText>
       <mesh position-y={-1.5}>
         <AnimatedText
           fontSize={SUB_SIZE}
-          visible={introductionSpring.hoverA}
-          color={colors["error"]}
+          visible={introductionSpring.outline}
+          color={colors["primary"]}
         >
-          max camber
+          This is an aerodynamic profile
         </AnimatedText>
         <AnimatedText
           fontSize={SUB_SIZE}
-          visible={introductionSpring.hoverB}
-          color={colors["error"]}
+          visible={introductionSpring.chord}
+          color={colors["grid"]}
+          fillOpacity={0.2}
         >
-          position of max camber
+          chord line
         </AnimatedText>
         <AnimatedText
           fontSize={SUB_SIZE}
-          visible={introductionSpring.hoverC}
-          color={colors["error"]}
+          visible={introductionSpring.camber}
+          color={colors["secondary"]}
+          fillOpacity={0.6}
         >
-          max thickness
+          camber line
         </AnimatedText>
+        <mesh position-y={-1.5}>
+          <AnimatedText
+            fontSize={SUB_SIZE}
+            visible={introductionSpring.hoverA}
+            color={colors["error"]}
+          >
+            max camber
+          </AnimatedText>
+          <AnimatedText
+            fontSize={SUB_SIZE}
+            visible={introductionSpring.hoverB}
+            color={colors["error"]}
+          >
+            position of max camber
+          </AnimatedText>
+          <AnimatedText
+            fontSize={SUB_SIZE}
+            visible={introductionSpring.hoverC}
+            color={colors["error"]}
+          >
+            max thickness
+          </AnimatedText>
       </mesh>
     </mesh>
   );
