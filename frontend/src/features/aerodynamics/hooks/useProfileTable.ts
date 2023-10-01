@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import profiles from "../data/profiles_interpolated";
-import { useWingStore } from "../stores/useWing";
+import profiles, { getProfileData } from "../data/profiles_interpolated";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 
 export interface Row {
@@ -37,8 +36,8 @@ const useProfileTable = (index: number, profile?: string) => {
     () =>
       [0, 1, 2].map((reynoldsIndex) => {
         let tableForReynolds = Object.keys(profiles).map((profile) => {
-          const cz = profiles[profile].cz[reynoldsIndex];
-          const cd = profiles[profile].cd[reynoldsIndex];
+          const cz = getProfileData(profile).cz[reynoldsIndex];
+          const cd = getProfileData(profile).cd[reynoldsIndex];
 
           const highestCz = cz.reduce((previous, current) =>
             current[1] > previous[1] ? current : previous
@@ -73,7 +72,10 @@ const useProfileTable = (index: number, profile?: string) => {
   );
 
   return profile
-    ? tableData[index].find((row) => row.name === profile)
+    ? tableData[index].find(
+        (row) =>
+          row.name === (profiles.hasOwnProperty(profile) ? profile : "default")
+      )
     : tableData[index];
 };
 export default useProfileTable;

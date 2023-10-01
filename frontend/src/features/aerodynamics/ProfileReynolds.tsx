@@ -1,4 +1,4 @@
-import { reynolds } from "./data/profiles";
+import { getReynolds } from "./data/profiles";
 import { useWingStore } from "./stores/useWing";
 import InfoTooltip from "../common/InfoTooltip";
 import Formula from "../common/Formula";
@@ -29,7 +29,7 @@ const ProfileReynolds = () => {
           className="range range-xs join-item pr-2"
         />
         <button className="btn w-24 h-12 bg-base-300 join-item">
-          <Formula tex={`${reynolds[profile][reynoldsIndex]}*10^6`} />
+          <Formula tex={`${getReynolds(profile)[reynoldsIndex]}*10^6`} />
         </button>
       </div>
     </div>

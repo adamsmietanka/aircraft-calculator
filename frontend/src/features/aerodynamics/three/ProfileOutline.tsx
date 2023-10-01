@@ -3,24 +3,13 @@ import useProfile from "../hooks/useProfile";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import useProfileSpring from "./hooks/useProfileSpring";
-import { useLocation } from "react-router-dom";
-import { useIntroductionStore } from "../stores/useIntroduction";
-import { useWingStore } from "../stores/useWing";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const ProfileOutline = ({ opacity }: Props) => {
-  const location = useLocation();
-
-  const onProfile = location.pathname === "/aerodynamics/profile";
-
-  const profile = onProfile
-    ? undefined
-    : useIntroductionStore((state) => state.profile);
-
-  const { profilePoints, chordPoints } = useProfile(profile);
+  const { profilePoints, chordPoints } = useProfile();
   const { profileSpring } = useProfileSpring();
 
   return (
