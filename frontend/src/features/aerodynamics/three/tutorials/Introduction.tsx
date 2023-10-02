@@ -106,6 +106,7 @@ const Introduction = ({ opacity }: Props) => {
             hoverC: false,
             hoverPlane: false,
           });
+          await setProfile(savedProfile.current);
         }
       },
     }),
