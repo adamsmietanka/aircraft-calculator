@@ -67,7 +67,6 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           show={
             (!onProfile || show) && (hoverPlane || hoverA || hoverB || hoverC)
           }
-          scale={1 / scaleProfile}
         >
           <div className="flex text-3xl">
             <HoverableFormulaColor
@@ -95,55 +94,49 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
         </AnimatedHtml>
         <mesh
           visible={hoverPlane || hoverA || hoverB || hoverC}
-          scale={1 / scaleProfile}
           position-z={0.005}
         >
-          <mesh visible={hoverA || hoverB}>
-            <AnimatedInputTechnical
-              scale={scaleProfile}
-              distance={-2}
-              value={1}
-              opacity={0.75}
-            >
-              <Formula
-                className={`text-xl ${hoverA || hoverB || "hidden"}`}
-                tex={`1`}
-              />
-            </AnimatedInputTechnical>
-          </mesh>
-          <mesh visible={hoverA}>
-            <AnimatedInputTechnical
-              scale={scaleProfile}
-              distance={0.25}
-              value={M}
-              valueY={-P}
-              opacity={0.75}
-              vertical
-            >
-              <div className={`flex text-xl ${hoverA || "hidden"}`}>
-                <Formula className={`${M === 0 && "hidden"}`} tex={`0.0`} />
-                <Formula className="text-error" tex={`${M * 100}`} />
-              </div>
-            </AnimatedInputTechnical>
-          </mesh>
-          <mesh visible={hoverB}>
-            <AnimatedInputTechnical
-              scale={scaleProfile}
-              distance={-1.25}
-              value={P}
-              valueY={M}
-              opacity={0.75}
-            >
-              <div className={`flex text-xl ${hoverB || "hidden"}`}>
-                <Formula className={`${P === 0 && "hidden"}`} tex={`0.`} />
-                <Formula className="text-error" tex={`${P * 10}`} />
-              </div>
-            </AnimatedInputTechnical>
-          </mesh>
+          <AnimatedInputTechnical
+            scale={scaleProfile}
+            visible={hoverA || hoverB}
+            distance={-2}
+            value={1}
+            opacity={0.75}
+          >
+            <Formula
+              className={`text-xl ${hoverA || hoverB || "hidden"}`}
+              tex={`1`}
+            />
+          </AnimatedInputTechnical>
+          <AnimatedInputTechnical
+            visible={hoverA}
+            scale={scaleProfile}
+            distance={0.25}
+            value={M}
+            valueY={-P}
+            opacity={0.75}
+            vertical
+          >
+            <div className={`flex text-xl ${hoverA || "hidden"}`}>
+              <Formula className={`${M === 0 && "hidden"}`} tex={`0.0`} />
+              <Formula className="text-error" tex={`${M * 100}`} />
+            </div>
+          </AnimatedInputTechnical>
+          <AnimatedInputTechnical
+            visible={hoverB}
+            distance={-1.25}
+            value={P}
+            valueY={M}
+            opacity={0.75}
+          >
+            <div className={`flex text-xl ${hoverB || "hidden"}`}>
+              <Formula className={`${P === 0 && "hidden"}`} tex={`0.`} />
+              <Formula className="text-error" tex={`${P * 10}`} />
+            </div>
+          </AnimatedInputTechnical>
           <mesh visible={hoverC}>
-            <mesh position-x={F * scaleProfile}>
+            <mesh position-x={F}>
               <AnimatedInputTechnical
-                scale={scaleProfile}
                 distance={-0.7 * scaleProfile - 0.6}
                 value={maxThickness}
                 startX={lowestPoint}
@@ -171,7 +164,6 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
               />
             </mesh>
             <AnimatedInputTechnical
-              scale={scaleProfile}
               distance={-1.25}
               value={F}
               valueY={lowestPoint}

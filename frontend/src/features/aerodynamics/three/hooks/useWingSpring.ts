@@ -15,7 +15,7 @@ const useWingSpring = (width: number) => {
   const shape = useWingStore((state) => state.shape);
   const { F } = useProfileCamber();
 
-  const { scale } = useWingScale(width);
+  const { scale } = useWingScale();
 
   const [wingSpring] = useSpring(
     () => ({

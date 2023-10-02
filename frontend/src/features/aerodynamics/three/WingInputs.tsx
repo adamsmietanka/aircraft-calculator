@@ -1,9 +1,13 @@
 import { SpringValue } from "@react-spring/three";
 import WingInputTip from "./WingInputTip";
 import WingInputSpan from "./WingInputSpan";
-import WingInputChord from "./WingInputChord";
 import WingInputAngle from "./WingInputAngle";
 import { useWingStore } from "../stores/useWing";
+import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
+import { useHoverWingStore } from "../hooks/useHoverables";
+import InputDrawing from "../../common/inputs/InputDrawing";
+import Formula from "../../common/Formula";
+import useWingScale from "../hooks/useWingScale";
 
 interface Props {
   scale: SpringValue<number>;
@@ -25,6 +29,10 @@ const WingInputs = ({
   opacity,
 }: Props) => {
   const shape = useWingStore((state) => state.shape);
+  const wing = useWingStore();
+  const hoverWing = useHoverWingStore();
+
+  const { scale: wingScale } = useWingScale();
   return (
     <>
       {shape === 1 && (
@@ -36,14 +44,23 @@ const WingInputs = ({
             x={x}
             y={y}
           />
-          <WingInputAngle
-            opacity={opacity} scale={scale} y={y} angle={angle} />
+          <WingInputAngle opacity={opacity} scale={scale} y={y} angle={angle} />
         </>
       )}
-      <WingInputChord
-            opacity={opacity} scale={scale} chord={chord} />
-      <WingInputSpan
-            opacity={opacity} scale={scale} x={x} y={y} />
+      <AnimatedInputTechnical
+        value={wing.chord}
+        opacity={0.75}
+        scale={wingScale}
+      >
+        <div className={`${hoverWing.chords && "hidden"}`}>
+          <InputDrawing value={wing.chord} setter={wing.setChord} />
+        </div>
+        <Formula
+          className={`text-xl ${hoverWing.chords || "hidden"}`}
+          tex={`\\color{green}c`}
+        />
+      </AnimatedInputTechnical>
+      <WingInputSpan opacity={opacity} scale={scale} x={x} y={y} />
     </>
   );
 };

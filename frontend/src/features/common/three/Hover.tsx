@@ -4,6 +4,8 @@ import { StoreApi, UseBoundStore } from "zustand";
 import HoverMarker from "./HoverMarker";
 import round from "../../../utils/interpolation/round";
 import { SpringValue } from "@react-spring/three";
+import { useRef } from "react";
+import { Mesh } from "three";
 
 export interface SimpleMarkerStore {
   x: number;
@@ -65,21 +67,19 @@ const Hover = ({
   zHover,
   opacity,
 }: HoverProps) => {
+  const meshRef = useRef<Mesh>(null!);
+
   return (
-    <>
+    <mesh ref={meshRef}>
       <Plane
         visible={false}
-        args={[max.x - min.x, max.y - min.y]}
-        position-x={(min.x + max.x) / 2}
-        position-y={(min.y + max.y) / 2}
-        material-transparent
-        material-opacity={0}
+        args={[(max.x - min.x) / scale[0], (max.y - min.y) / scale[1]]}
+        position-x={(min.x + max.x) / (2 * scale[0])}
+        position-y={(min.y + max.y) / (2 * scale[1])}
         onPointerMove={(e) => {
+          const point = meshRef.current.worldToLocal(e.point);
           if (yHover || zHover) {
-            const y = round(
-              ((yHover ? e.point.y : -e.point.z) + mid.y) / scale[1],
-              step.y / 10
-            );
+            const y = round(point.y, step.y / 10);
             const clampedY = clamp(y, data.min.y, data.max.y);
             const locked = store.getState().locked;
             const oldY = store.getState().y;
@@ -92,11 +92,7 @@ const Hover = ({
               }
             }
           } else {
-            const gridPositionFix = e.object.parent?.parent?.position.x || 0;
-            const x = round(
-              (e.point.x + mid.x - gridPositionFix) / scale[0],
-              step.x / 10
-            );
+            const x = round(point.x, step.x / 10);
             const clampedX = clamp(x, data.min.x, data.max.x);
             const locked = store.getState().locked;
             const oldX = store.getState().x;
@@ -155,7 +151,7 @@ const Hover = ({
         min={min}
         opacity={opacity}
       />
-    </>
+    </mesh>
   );
 };
 

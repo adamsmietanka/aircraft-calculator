@@ -1,7 +1,7 @@
 import useAxes from "./hooks/useAxes";
 import LinesVertical from "./LinesVertical";
 import LinesHorizontal from "./LinesHorizontal";
-import { SpringValue, useChain, useSpringRef } from "@react-spring/three";
+import { SpringValue, animated, useSpring } from "@react-spring/three";
 import { StoreApi, UseBoundStore } from "zustand";
 import Hover, {
   MarkersStore,
@@ -62,9 +62,14 @@ const LineChart = ({
   );
 
   const colors = ["primary", "green", "orange", "secondary"];
-  const springRefs = traces.map(() => useSpringRef());
 
-  useChain(springRefs);
+  const [chartSpring] = useSpring(
+    () => ({
+      scaleX: scale[0],
+      scaleY: scale[1],
+    }),
+    [scale]
+  );
 
   return (
     <mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
@@ -87,32 +92,37 @@ const LineChart = ({
           max={max}
           stepOpacity={opacity}
         />
-        {traces.map((trace, index) => (
-          <AnimatedLine
-            key={index}
-            points={trace.points}
-            scale={scale}
-            color={trace.style ? "primary" : colors[index]}
-            style={trace.style}
-            opacity={opacity}
-          />
-        ))}
-        {store && (
-          <Hover
-            name={name}
-            axes={axes}
-            data={data}
-            min={min}
-            max={max}
-            mid={mid}
-            scale={scale}
-            step={step}
-            store={store}
-            yHover={yHover}
-            zHover={zHover}
-            opacity={opacity}
-          />
-        )}
+        <animated.mesh
+          scale-x={chartSpring.scaleX}
+          scale-y={chartSpring.scaleY}
+        >
+          {traces.map((trace, index) => (
+            <AnimatedLine
+              key={index}
+              points={trace.points}
+              scale={scale}
+              color={trace.style ? "primary" : colors[index]}
+              style={trace.style}
+              opacity={opacity}
+            />
+          ))}
+          {store && (
+            <Hover
+              name={name}
+              axes={axes}
+              data={data}
+              min={min}
+              max={max}
+              mid={mid}
+              scale={scale}
+              step={step}
+              store={store}
+              yHover={yHover}
+              zHover={zHover}
+              opacity={opacity}
+            />
+          )}
+        </animated.mesh>
       </mesh>
     </mesh>
   );

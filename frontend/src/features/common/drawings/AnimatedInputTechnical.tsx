@@ -1,12 +1,15 @@
 import { animated, to, useSpring } from "@react-spring/three";
-import { ReactNode, useMemo } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 import AnimatedLine from "../three/AnimatedLine";
 import AnimatedTipNew from "./AnimatedTipNew";
 import AnimatedHtml from "../three/AnimatedHtml";
 import { VECTOR_TIP_LENGTH } from "../three/config";
+import { Mesh, Vector3 } from "three";
+import { useFrame } from "@react-three/fiber";
 
 interface Props {
-  scale: number;
+  visible?: boolean;
+  scale?: number;
   value: number;
   valueY?: number;
   startX?: number;
@@ -20,12 +23,13 @@ interface Props {
 const STICK_OUT = 0.2;
 
 /**
- * Generic technical input in 3D. It needs to be in **world scale**.
+ * Generic technical input in 3D.
  * X is always parallel to the line with arrows
  *
- * It will start at [0,0,0] and go to [value,0,0]
+ * It will start at [startX,0,0] and go to [value,0,0]
  */
 const AnimatedInputTechnical = ({
+  visible = true,
   scale,
   value,
   valueY = 0,
@@ -36,51 +40,68 @@ const AnimatedInputTechnical = ({
   outside = false,
   children,
 }: Props) => {
-  const [inputSpring] = useSpring(
-    () => ({
-      opacity,
-      scale,
-      value,
-      startX,
-    }),
-    [opacity, scale, value, startX]
-  );
-  const autoOutside = outside || value * scale < 1.25;
+  const meshRef = useRef<Mesh>(null!);
+
+  const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
+  const fluidScale = !!scale ? scale : worldScale.x;
+  console.log(scale, fluidScale);
+
+  useFrame(() => {
+    worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
+  });
+  const autoOutside = outside || value * worldScale.x < 1.25;
 
   const outsideStickOut = useMemo(() => (value === 0 ? 0.75 : 1.5), [value]);
 
+  const [inputSpring] = useSpring(
+    () => ({
+      opacity,
+      value,
+      startX,
+      scale: fluidScale,
+    }),
+    [opacity, value, startX, fluidScale]
+  );
+
   return (
-    <animated.mesh rotation-z={vertical ? Math.PI / 2 : 0}>
-      <animated.mesh position-x={inputSpring.startX.to((x) => x * scale)}>
+    <animated.mesh
+      rotation-z={vertical ? Math.PI / 2 : 0}
+      ref={meshRef}
+      visible={visible}
+    >
+      <animated.mesh position-x={inputSpring.startX}>
         <AnimatedLine
           points={[
             [0, 0, 0],
-            [0, (distance + Math.sign(distance) * STICK_OUT) / scale, 0],
-            [0, distance / scale, 0],
+            [0, (distance + Math.sign(distance) * STICK_OUT) / fluidScale, 0],
+            [0, distance / fluidScale, 0],
             [
-              value + (autoOutside ? outsideStickOut / scale : 0),
-              distance / scale,
+              value + (autoOutside ? outsideStickOut / fluidScale : 0),
+              distance / fluidScale,
               0,
             ],
-            [value, (distance + Math.sign(distance) * STICK_OUT) / scale, 0],
+            [
+              value,
+              (distance + Math.sign(distance) * STICK_OUT) / fluidScale,
+              0,
+            ],
             [value, valueY, 0],
           ]}
-          scale={[scale, scale, scale]}
           opacity={opacity}
           style="thin"
           color="grid"
           segments
         />
         <AnimatedTipNew
+          scale={fluidScale}
           distance={distance}
           opacity={inputSpring.opacity}
-          scale={scale}
           outside={autoOutside}
         />
         <AnimatedTipNew
+          scale={fluidScale}
           distance={distance}
           opacity={inputSpring.opacity}
-          scale={scale}
           value={value}
           outside={autoOutside}
         />
@@ -90,9 +111,9 @@ const AnimatedInputTechnical = ({
             [inputSpring.value, inputSpring.scale],
             (value, scale) => [
               autoOutside
-                ? scale * value + (VECTOR_TIP_LENGTH + outsideStickOut) / 2
-                : (scale * value) / 2,
-              0.3 + distance,
+                ? value + (VECTOR_TIP_LENGTH + outsideStickOut) / (2 * scale)
+                : value / 2,
+              (0.3 + distance) / scale,
               0,
             ]
           )}
