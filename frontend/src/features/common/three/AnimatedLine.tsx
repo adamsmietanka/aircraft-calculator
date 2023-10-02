@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import { Interpolation, SpringValue, useSpring } from "@react-spring/three";
@@ -6,6 +6,12 @@ import { Line2, LineSegments2, LineMaterialParameters } from "three-stdlib";
 
 import { useCSSColors } from "./config";
 import { styles } from "./utils/lineStyles";
+import {
+  BufferGeometry,
+  InstancedInterleavedBuffer,
+  InterleavedBufferAttribute,
+  Vector3,
+} from "three";
 
 type Props = {
   points: number[][];
@@ -31,30 +37,73 @@ const AnimatedLine = ({
 }: Props) => {
   const { colors } = useCSSColors();
 
-  const lineRef = useRef<Line2 | LineSegments2>(null);
+  const lineRef = useRef<Line2 | LineSegments2>(null!);
+
+  const worldScale = useMemo(() => new Vector3(), []);
 
   const [lineSpring] = useSpring(
     () => ({
-      points: points
-        .map(([x, y, z]) => [x * scale[0], y * scale[1], z * scale[2]])
-        .flat(),
+      points: points.flat(),
       opacity,
       width: styles[style]?.width || width,
       offset: styles[style]?.offset || 0,
     }),
-    [points, scale, opacity, width]
+    [points, scale, opacity, width, worldScale]
   );
 
   useFrame(() => {
-    if (lineRef.current) {
-      lineRef.current.geometry.setPositions(lineSpring.points.get());
-      lineRef.current.computeLineDistances();
+    worldScale.setFromMatrixScale(lineRef.current.matrixWorld);
+    lineRef.current.geometry.setPositions(lineSpring.points.get());
+    computeLineDistancesScaled(lineRef.current.geometry, worldScale);
 
-      lineRef.current.material.opacity = lineSpring.opacity.get();
-      lineRef.current.material.linewidth = lineSpring.width.get();
-      lineRef.current.material.dashOffset -= offset;
-    }
+    lineRef.current.material.opacity = lineSpring.opacity.get();
+    lineRef.current.material.linewidth = lineSpring.width.get();
+    lineRef.current.material.dashOffset -= offset;
   });
+
+  const _start = useMemo(() => new Vector3(), []);
+  const _end = useMemo(() => new Vector3(), []);
+
+  const distanceScaled = (start: Vector3, end: Vector3, scale: Vector3) => {
+    const dx = (start.x - end.x) * scale.x,
+      dy = (start.y - end.y) * scale.y,
+      dz = start.z - end.z;
+
+    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  };
+
+  const computeLineDistancesScaled = (
+    geometry: BufferGeometry,
+    scale: Vector3
+  ) => {
+    const instanceStart = geometry.attributes.instanceStart;
+    const instanceEnd = geometry.attributes.instanceEnd;
+    const lineDistances = new Float32Array(2 * instanceStart.count);
+
+    for (let i = 0, j = 0, l = instanceStart.count; i < l; i++, j += 2) {
+      _start.fromBufferAttribute(instanceStart, i);
+      _end.fromBufferAttribute(instanceEnd, i);
+
+      lineDistances[j] = j === 0 ? 0 : lineDistances[j - 1];
+      lineDistances[j + 1] =
+        lineDistances[j] + distanceScaled(_start, _end, scale);
+    }
+
+    const instanceDistanceBuffer = new InstancedInterleavedBuffer(
+      lineDistances,
+      2,
+      1
+    ); // d0, d1
+
+    geometry.setAttribute(
+      "instanceDistanceStart",
+      new InterleavedBufferAttribute(instanceDistanceBuffer, 1, 0)
+    ); // d0
+    geometry.setAttribute(
+      "instanceDistanceEnd",
+      new InterleavedBufferAttribute(instanceDistanceBuffer, 1, 1)
+    ); // d1
+  };
 
   return (
     <Line

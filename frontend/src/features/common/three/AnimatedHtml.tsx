@@ -1,10 +1,12 @@
 import { Interpolation, SpringValue, animated } from "@react-spring/three";
 import { useSpring, animated as animatedWeb } from "@react-spring/web";
 import { Html } from "@react-three/drei";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { checkVisible } from "./checkVisible";
 import { ROUTE_DELAY } from "./config";
+import { Mesh, Vector3 } from "three";
+import { useFrame } from "@react-three/fiber";
 
 type Props = {
   position?: Interpolation<number[]>;
@@ -17,9 +19,13 @@ type Props = {
 };
 
 const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
-  const htmlRef = useRef(null);
+  const htmlRef = useRef<Mesh>(null!);
+  const childRef = useRef<Mesh>(null!);
+
   const location = useLocation();
   const Anim = animatedWeb(Html);
+
+  const worldScale = useMemo(() => new Vector3(1,1,1), []);
 
   const [props, propsApi] = useSpring(
     () => ({
@@ -34,6 +40,15 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
     [location.pathname]
   );
 
+  useFrame(() => {
+    worldScale.setFromMatrixScale(htmlRef.current.matrixWorld);
+    childRef.current.scale.set(
+      1 / worldScale.getComponent(0),
+      1 / worldScale.getComponent(1),
+      1 / worldScale.getComponent(2)
+    );
+  });
+
   useEffect(() => {
     propsApi.start({
       to: async (next) => {
@@ -47,9 +62,11 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
 
   return (
     <animated.mesh {...rest} ref={htmlRef}>
-      <Anim className={`select-none `} style={props} transform>
-        <div>{children}</div>
-      </Anim>
+      <mesh ref={childRef}>
+        <Anim className={`select-none `} style={props} transform>
+          <div>{children}</div>
+        </Anim>
+      </mesh>
     </animated.mesh>
   );
 };

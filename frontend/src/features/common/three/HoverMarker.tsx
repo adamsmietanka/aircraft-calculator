@@ -12,6 +12,9 @@ import {
 } from "./Hover";
 
 import AnimatedLine from "./AnimatedLine";
+import { useMemo, useRef } from "react";
+import { Mesh, Vector3 } from "three";
+import { useFrame } from "@react-three/fiber";
 
 interface Props {
   name: string;
@@ -34,9 +37,28 @@ const HoverMarker = ({
   step,
   opacity,
 }: Props) => {
+  const meshRef = useRef<Mesh>(null!);
+  const textRef = useRef<Mesh>(null!);
+  const textRef2 = useRef<Mesh>(null!);
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
   const { primaryColor, backgroundColor } = useCSSColors();
+
+  const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
+
+  useFrame(() => {
+    worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
+    textRef.current.scale.set(
+      1 / worldScale.getComponent(0),
+      1 / worldScale.getComponent(1),
+      1 / worldScale.getComponent(2)
+    );
+    textRef2.current.scale.set(
+      1 / worldScale.getComponent(0),
+      1 / worldScale.getComponent(1),
+      1 / worldScale.getComponent(2)
+    );
+  });
 
   const AnimatedText = animated(Text);
 
@@ -51,15 +73,15 @@ const HoverMarker = ({
   const y = typeof yObj !== "number" ? yObj[name] : yObj;
 
   const points = [
-    [min.x / scale[0], y, 0.1],
-    [x, y, 0.1],
-    [x, min.y / scale[1], 0.1],
+    [min.x / worldScale.x, y, 0.05],
+    [x, y, 0.05],
+    [x, min.y / worldScale.y, 0.05],
   ];
 
   const [hoverSpring] = useSpring(
     () => ({
-      x: x * scale[0],
-      y: y * scale[1],
+      x: x,
+      y: y,
       opacity: !!locked || show ? 1 : 0,
     }),
     [x, y, scale, locked, show]
@@ -71,10 +93,9 @@ const HoverMarker = ({
   const displayY = round(y / yMultiplier, step.y / 100);
 
   return (
-    <>
+    <mesh ref={meshRef}>
       <AnimatedLine
         points={points}
-        scale={scale}
         opacity={to(
           [hoverSpring.opacity, opacity],
           (opacity, stepOpacity) => opacity * stepOpacity
@@ -86,8 +107,13 @@ const HoverMarker = ({
         color="grid"
       />
       <AnimatedText
+        ref={textRef}
         fontSize={0.6 * FONT_SIZE}
-        position={hoverSpring.x.to((x) => [x, min.y - NUMBERS_PADDING, 0.375])}
+        position={hoverSpring.x.to((x) => [
+          x,
+          (min.y - NUMBERS_PADDING) / worldScale.y,
+          0.375,
+        ])}
         color={primaryColor}
         fillOpacity={to(
           [hoverSpring.opacity, opacity],
@@ -103,9 +129,10 @@ const HoverMarker = ({
         {displayX}
       </AnimatedText>
       <AnimatedText
+        ref={textRef2}
         fontSize={0.6 * FONT_SIZE}
         position={hoverSpring.y.to((y) => [
-          min.x - 1.5 * NUMBERS_PADDING,
+          (min.x - 1.5 * NUMBERS_PADDING) / worldScale.x,
           y,
           0.375,
         ])}
@@ -123,7 +150,7 @@ const HoverMarker = ({
       >
         {displayY}
       </AnimatedText>
-    </>
+    </mesh>
   );
 };
 
