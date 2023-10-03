@@ -20,14 +20,13 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
 
   const omittedPoints = Math.floor(NUMBER_OF_AIRFOIL_POINTS * 0.1);
   return (
-    <mesh position-x={-0.3}>
+    <mesh>
       <mesh position-y={0.02}>
         <AnimatedLine
           points={upperPoints.slice(
             omittedPoints,
-            NUMBER_OF_AIRFOIL_POINTS - omittedPoints
+            NUMBER_OF_AIRFOIL_POINTS - omittedPoints + 1
           )}
-          scale={[1.2, 1.2, 1]}
           style="airstream"
           color="grid"
           offset={speed}
@@ -38,9 +37,8 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
         <AnimatedLine
           points={lowerPoints.slice(
             omittedPoints,
-            NUMBER_OF_AIRFOIL_POINTS - omittedPoints
+            NUMBER_OF_AIRFOIL_POINTS - omittedPoints + 1
           )}
-          scale={[1.2, 1.2, 1]}
           style="airstream"
           color="grid"
           offset={0.8 * speed}

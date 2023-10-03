@@ -2,35 +2,26 @@ import Vector from "./Vector";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import { SpringValue, useSpring } from "@react-spring/three";
-import { useLocation } from "react-router-dom";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import Formula from "../../common/Formula";
 
 interface Props {
   opacity: SpringValue<number>;
+  show: boolean;
 }
 
-const ProfileVectors = ({ opacity }: Props) => {
+const ProfileVectors = ({ opacity, show }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
-  const hover = useProfileChartsStore((state) => state.hover);
-  const locked = useProfileChartsStore((state) => state.locked);
 
-  const set = useHoverProfileStore((state) => state.set);
   const splitVectors = useHoverProfileStore((state) => state.splitVectors);
   const dragMultiplier = useHoverProfileStore((state) => state.dragMultiplier);
-
-  const location = useLocation();
-
-  const show =
-    (location.pathname === "/aerodynamics/profile" && !!locked) || hover;
 
   const cl = y["Coefficient of Lift"];
   const cd = dragMultiplier * x["Coefficient of Drag"];
 
   const [vectorsSpring] = useSpring(
     () => ({
-      zero: 0,
       rotationLift: splitVectors ? 0 : -Math.atan(cd / cl),
       rotationDrag: splitVectors
         ? -Math.PI / 2

@@ -7,12 +7,12 @@ import Fuselage from "../aerodynamics/three/Fuselage";
 import Home from "./Home";
 import Camera from "../common/three/Camera";
 import { Perf } from "r3f-perf";
-import ProfileOutline from "../aerodynamics/three/ProfileOutline";
 import { checkVisible } from "../common/three/checkVisible";
 import InducedDrag from "../aerodynamics/three/tutorials/InducedDrag";
 import { OrbitControls } from "@react-three/drei";
 import ProfileNACAExplanation from "../aerodynamics/three/ProfileNACAExplanation";
 import Introduction from "../aerodynamics/three/tutorials/Introduction";
+import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
 
 const PlaneBuilder = () => {
   return (
@@ -48,7 +48,7 @@ const PlaneBuilder = () => {
             "/aerodynamics/profile",
             "/aerodynamics/wing",
           ]}
-          Element={ProfileOutline}
+          Element={ProfileVisualizer}
         />
         <Route path="/aerodynamics/wing" Element={Wing} />
         <Route path="/aerodynamics/inducedDrag" Element={InducedDrag} />

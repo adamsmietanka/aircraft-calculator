@@ -5,7 +5,7 @@ import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 import { useWingStore } from "../../stores/useWing";
 import { PROFILE_POSITION, WING_POSITION } from "../../../common/three/config";
 
-const useProfileSpring = () => {
+const useProfileVisualizer = () => {
   const x = useProfileChartsStore((state) => state.x);
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
@@ -16,7 +16,7 @@ const useProfileSpring = () => {
 
   const location = useLocation();
 
-  const rotateProfile =
+  const showVisuals =
     (location.pathname === "/aerodynamics/profile" && !!locked) || hover;
 
   const getScale = () => {
@@ -45,14 +45,14 @@ const useProfileSpring = () => {
 
   const [profileSpring] = useSpring(
     () => ({
-      angle: rotateProfile ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
+      angle: showVisuals ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
       scale: getScale(),
       gridX: getPosition()[0],
       x: getPosition()[1],
     }),
-    [x, scale, chord, rotateProfile, location.pathname]
+    [x, scale, chord, showVisuals, location.pathname]
   );
 
-  return { profileSpring };
+  return { profileSpring, showVisuals };
 };
-export default useProfileSpring;
+export default useProfileVisualizer;

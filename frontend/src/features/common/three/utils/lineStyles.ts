@@ -14,7 +14,7 @@ export const styles: Record<string, Record<string, number>> = {
   airstream: {
     dashSize: 1,
     gapSize: 1,
-    dashScale: 20,
+    dashScale: 5,
     width: 1,
   },
   thin: {

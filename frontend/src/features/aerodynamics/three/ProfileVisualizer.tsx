@@ -1,32 +1,54 @@
-import { CANVAS_WIDTH, PROFILE_POSITION } from "../../common/three/config";
+import { CANVAS_WIDTH } from "../../common/three/config";
 import { SpringValue, animated } from "@react-spring/three";
-import { useProfileChartsStore } from "../hooks/useProfileCharts";
-import Vector from "./Vector";
-import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
-import useWingScale from "../hooks/useWingScale";
-import useProfileSpring from "./hooks/useProfileSpring";
+import useProfileVisualizer from "./hooks/useProfileVisualizer";
 import ProfileAirstreams from "./ProfileAirstreams";
+import useProfile from "../hooks/useProfile";
+import AnimatedLine from "../../common/three/AnimatedLine";
+import ProfileVectors from "./ProfileVectors";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const ProfileVisualizer = ({ opacity }: Props) => {
-  const x = useProfileChartsStore((state) => state.x);
-  const y = useProfileChartsStore((state) => state.y);
-  const hover = useProfileChartsStore((state) => state.hover);
-  const locked = useProfileChartsStore((state) => state.locked);
-
-  const show = !!locked || hover;
-
-  const { scaleProfile } = useWingScale();
-
-  const { profileSpring } = useProfileSpring();
+  const { profilePoints, chordPoints } = useProfile();
+  const { profileSpring, showVisuals } = useProfileVisualizer();
 
   return (
-    <animated.mesh position-x={(PROFILE_POSITION * CANVAS_WIDTH) / 2}>
-      <animated.mesh rotation-z={profileSpring.angle} scale={scaleProfile}>
-        <ProfileAirstreams opacity={opacity} show={show} />
+    <animated.mesh
+      position-x={profileSpring.gridX.to((x) => (x * CANVAS_WIDTH) / 2)}
+      scale={profileSpring.scale}
+    >
+      <animated.mesh
+        rotation-z={profileSpring.angle}
+        position-x={profileSpring.x.to((x) => x + 0.25)}
+      >
+        <mesh position-x={-0.25}>
+          <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
+          <AnimatedLine
+            points={chordPoints}
+            width={1.5}
+            color="secondary"
+            opacity={opacity.to((o) => o / 1.5)}
+          />
+          <AnimatedLine
+            points={[
+              [0, 0, -0.01],
+              [1, 0, -0.01],
+            ]}
+            scale={[1, 1, 1]}
+            style="thin"
+            color="grid"
+            opacity={opacity.to((o) => o / 5)}
+          />
+          <ProfileAirstreams opacity={opacity} show={showVisuals} />
+        </mesh>
+      </animated.mesh>
+      <animated.mesh
+        position-x={profileSpring.x.to((x) => x + 0.25)}
+        scale={profileSpring.scale.to((scale) => 1 / scale)}
+      >
+        <ProfileVectors opacity={opacity} show={showVisuals} />
       </animated.mesh>
     </animated.mesh>
   );
