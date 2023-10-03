@@ -28,6 +28,8 @@ export interface SynchronizedXMarkersStore {
 export interface MarkersStore {
   x: Record<string, number>;
   y: Record<string, number>;
+  xHover: number;
+  yHover: number;
   hover: Record<string, boolean>;
   show: boolean;
   locked: string | boolean;
@@ -40,7 +42,6 @@ interface HoverProps {
   data: Record<string, Record<string, number>>;
   min: Record<string, number>;
   max: Record<string, number>;
-  mid: Record<string, number>;
   scale: Array<number>;
   step: Record<string, number>;
   store: UseBoundStore<
@@ -59,7 +60,6 @@ const Hover = ({
   data,
   min,
   max,
-  mid,
   scale,
   step,
   store,
@@ -78,32 +78,15 @@ const Hover = ({
         position-y={(min.y + max.y) / (2 * scale[1])}
         onPointerMove={(e) => {
           const point = meshRef.current.worldToLocal(e.point);
+          const locked = store.getState().locked;
           if (yHover || zHover) {
             const y = round(point.y, step.y / 10);
             const clampedY = clamp(y, data.min.y, data.max.y);
-            const locked = store.getState().locked;
-            const oldY = store.getState().y;
-
-            if (!locked) {
-              if (typeof oldY === "number") {
-                store.setState({ y: clampedY });
-              } else {
-                store.setState({ y: { ...oldY, [name]: clampedY } });
-              }
-            }
+            !locked && store.setState({ yHover: clampedY });
           } else {
             const x = round(point.x, step.x / 10);
             const clampedX = clamp(x, data.min.x, data.max.x);
-            const locked = store.getState().locked;
-            const oldX = store.getState().x;
-
-            if (!locked) {
-              if (typeof oldX === "number") {
-                store.setState({ x: clampedX });
-              } else {
-                store.setState({ x: { ...oldX, [name]: clampedX } });
-              }
-            }
+            !locked && store.setState({ xHover: clampedX });
           }
         }}
         onPointerEnter={(e) => {

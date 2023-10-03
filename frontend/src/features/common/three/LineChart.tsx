@@ -113,7 +113,6 @@ const LineChart = ({
               data={data}
               min={min}
               max={max}
-              mid={mid}
               scale={scale}
               step={step}
               store={store}
