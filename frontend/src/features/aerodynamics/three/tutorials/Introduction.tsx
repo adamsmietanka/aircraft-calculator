@@ -5,6 +5,7 @@ import { useCSSColors } from "../../../common/three/config";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import { useRef } from "react";
+import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -16,6 +17,8 @@ const Introduction = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
   const setProfile = useWingStore((state) => state.setProfile);
   const set = useHoverProfileStore((state) => state.set);
+  const setChart = useProfileChartsStore((state) => state.set);
+  const chart = useProfileChartsStore();
 
   const savedProfile = useRef("2412");
 
@@ -46,6 +49,12 @@ const Introduction = ({ opacity }: Props) => {
   const [introductionSpring, introductionSpringApi] = useSpring(
     () => ({
       from: {
+        basics: false,
+        drag: false,
+        angled: false,
+        forces: false,
+        forces2: false,
+        split: false,
         outline: false,
         chord: false,
         camber: false,
@@ -56,7 +65,54 @@ const Introduction = ({ opacity }: Props) => {
       to: async (next) => {
         if (location.pathname === "/aerodynamics/introduction") {
           savedProfile.current = profile;
+          setProfile("0009");
+          set({ splitVectors: false });
+          setChart({
+            x: {
+              "Coefficient of Lift": 0,
+              "Coefficient of Drag": 1,
+            },
+          });
           await next({ delay: 2000 });
+          await showSubtitle(next, "basics");
+          setChart({
+            hover: {
+              "Coefficient of Lift": true,
+              "Coefficient of Drag": false,
+            },
+            x: {
+              "Coefficient of Lift": 0,
+              "Coefficient of Drag": 1,
+            },
+          });
+          await showSubtitle(next, "drag");
+          // setChart({
+          //   x: {
+          //     "Coefficient of Lift": 4,
+          //     "Coefficient of Drag": 1,
+          //   },
+          // });
+          setChart({
+            x: {
+              "Coefficient of Lift": 8,
+              "Coefficient of Drag": 1,
+            },
+          });
+          await showSubtitle(next, "angled");
+          await showSubtitle(next, "forces");
+          await showSubtitle(next, "forces2");
+          set({ splitVectors: true });
+          await showSubtitle(next, "split");
+          setChart({
+            hover: {
+              "Coefficient of Lift": false,
+              "Coefficient of Drag": false,
+            },
+            // x: {
+            //   "Coefficient of Lift": 0,
+            //   "Coefficient of Drag": 1,
+            // },
+          });
           await showSubtitle(next, "outline");
           await showSubtitle(next, "chord");
           await showSubtitle(next, "camber");
@@ -93,6 +149,11 @@ const Introduction = ({ opacity }: Props) => {
           await navigate("/aerodynamics/profile");
         } else {
           await next({
+            basics: false,
+            drag: false,
+            angled: false,
+            forces: false,
+            forces2: false,
             outline: false,
             chord: false,
             camber: false,
@@ -106,6 +167,16 @@ const Introduction = ({ opacity }: Props) => {
             hoverC: false,
             hoverPlane: false,
           });
+          setChart({
+            hover: {
+              "Coefficient of Lift": false,
+              "Coefficient of Drag": false,
+            },
+            // x: {
+            //   "Coefficient of Lift": 0,
+            //   "Coefficient of Drag": 1,
+            // },
+          });
           await setProfile(savedProfile.current);
         }
       },
@@ -113,52 +184,94 @@ const Introduction = ({ opacity }: Props) => {
     [location.pathname]
   );
   return (
+    <mesh position-y={-1.5}>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.basics}
+        color={colors["primary"]}
+      >
+        Let's start with a simple rectangular plate
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.drag}
+        color={colors["primary"]}
+      >
+        When it is not angled the force acting on the plate is only horizontal
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.angled}
+        color={colors["primary"]}
+      >
+        In order to deflect the air downwards
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.forces}
+        color={colors["primary"]}
+      >
+        the plate must exert a force on the flow
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.forces2}
+        color={colors["primary"]}
+      >
+        By Newton's 3rd Law we should have a force acting on the plate
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.split}
+        color={colors["primary"]}
+      >
+        We can split it into vertical and horizontal components
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.outline}
+        color={colors["primary"]}
+      >
+        This is an aerodynamic profile
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.chord}
+        color={colors["grid"]}
+        fillOpacity={0.2}
+      >
+        chord line
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.camber}
+        color={colors["secondary"]}
+        fillOpacity={0.6}
+      >
+        camber line
+      </AnimatedText>
       <mesh position-y={-1.5}>
         <AnimatedText
           fontSize={SUB_SIZE}
-          visible={introductionSpring.outline}
-          color={colors["primary"]}
+          visible={introductionSpring.hoverA}
+          color={colors["error"]}
         >
-          This is an aerodynamic profile
+          max camber
         </AnimatedText>
         <AnimatedText
           fontSize={SUB_SIZE}
-          visible={introductionSpring.chord}
-          color={colors["grid"]}
-          fillOpacity={0.2}
+          visible={introductionSpring.hoverB}
+          color={colors["error"]}
         >
-          chord line
+          position of max camber
         </AnimatedText>
         <AnimatedText
           fontSize={SUB_SIZE}
-          visible={introductionSpring.camber}
-          color={colors["secondary"]}
-          fillOpacity={0.6}
+          visible={introductionSpring.hoverC}
+          color={colors["error"]}
         >
-          camber line
+          max thickness
         </AnimatedText>
-        <mesh position-y={-1.5}>
-          <AnimatedText
-            fontSize={SUB_SIZE}
-            visible={introductionSpring.hoverA}
-            color={colors["error"]}
-          >
-            max camber
-          </AnimatedText>
-          <AnimatedText
-            fontSize={SUB_SIZE}
-            visible={introductionSpring.hoverB}
-            color={colors["error"]}
-          >
-            position of max camber
-          </AnimatedText>
-          <AnimatedText
-            fontSize={SUB_SIZE}
-            visible={introductionSpring.hoverC}
-            color={colors["error"]}
-          >
-            max thickness
-          </AnimatedText>
       </mesh>
     </mesh>
   );

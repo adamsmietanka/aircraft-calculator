@@ -1,6 +1,8 @@
 import { create } from "zustand";
 
 export interface HoverProfileState {
+  splitVectors: boolean;
+  dragMultiplier: number;
   hoverPlane: boolean;
   hoverA: boolean;
   hoverB: boolean;
@@ -13,6 +15,8 @@ export interface HoverProfileState {
 }
 
 export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
+  splitVectors: true,
+  dragMultiplier: 50,
   hoverPlane: false,
   hoverA: false,
   hoverB: false,
