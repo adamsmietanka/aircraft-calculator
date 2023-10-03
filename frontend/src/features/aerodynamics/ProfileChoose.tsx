@@ -27,7 +27,7 @@ const ProfileChoose = () => {
             tabIndex={0}
             className="flex items-center justify-between p-4 cursor-pointer z-10 w-full h-full"
           >
-            NACA {profile}
+            {profile.length === 4 ? `NACA ${profile}` : "Flat plate"}
           </label>
           <ul
             tabIndex={0}
@@ -69,6 +69,31 @@ const ProfileChoose = () => {
                       </button>
                     </li>
                   ))} */}
+                </ul>
+              </details>
+            </li>
+            <li>
+              <details
+                onClick={() => (document.activeElement as HTMLElement).blur()}
+              >
+                <summary>Flat Plate</summary>
+                <ul>
+                  <li>
+                    <button
+                      className={`${profile === "05" && "active"}`}
+                      onClick={() => handleClick("05")}
+                    >
+                      5% thick
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className={`${profile === "10" && "active"}`}
+                      onClick={() => handleClick("10")}
+                    >
+                      10% thick
+                    </button>
+                  </li>
                 </ul>
               </details>
             </li>
