@@ -22,6 +22,7 @@ const Introduction = ({ opacity }: Props) => {
 
   const savedProfile = useRef("");
   const savedAngle = useRef(0);
+  const savedLock = useRef<string | boolean>("");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -64,7 +65,11 @@ const Introduction = ({ opacity }: Props) => {
         forces: false,
         forces2: false,
         split: false,
+        split2: false,
+        split3: false,
         outline: false,
+        outline2: false,
+        outline3: false,
         chord: false,
         camber: false,
         hoverA: false,
@@ -75,13 +80,14 @@ const Introduction = ({ opacity }: Props) => {
         if (location.pathname === "/aerodynamics/introduction") {
           savedProfile.current = profile;
           savedAngle.current = chart.xHover;
-          setProfile("0009");
+          savedLock.current = chart.locked;
+          setProfile("06");
 
           await next({ delay: 2000 });
-          set({ splitVectors: false });
+          set({ splitVectors: false, dragMultiplier: 1 });
           setChart({ xHover: 0 });
           await showSubtitle(next, "basics");
-          setChart({ hover: true });
+          setChart({ hover: true, locked: "Coefficient of Lift" });
           await showSubtitle(next, "drag");
 
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]);
@@ -91,8 +97,14 @@ const Introduction = ({ opacity }: Props) => {
           await showSubtitle(next, "forces2");
           set({ splitVectors: true });
           await showSubtitle(next, "split");
-          setChart({ hover: false });
+          await showSubtitle(next, "split2");
+          await showSubtitle(next, "split3");
+          setProfile("0009");
           await showSubtitle(next, "outline");
+          await showSubtitle(next, "outline2");
+          set({ dragMultiplier: 50 });
+          await showSubtitle(next, "outline3");
+          setChart({ hover: false, locked: "" });
           await showSubtitle(next, "chord");
           await showSubtitle(next, "camber");
 
@@ -124,7 +136,7 @@ const Introduction = ({ opacity }: Props) => {
           set({ hoverPlane: false });
           await next({ delay: 500 });
           setProfile(savedProfile.current);
-          setChart({ xHover: savedAngle.current });
+          setChart({ xHover: savedAngle.current, locked: savedLock.current });
 
           navigate("/aerodynamics/profile");
         } else {
@@ -146,6 +158,7 @@ const Introduction = ({ opacity }: Props) => {
             hoverB: false,
             hoverC: false,
             hoverPlane: false,
+            dragMultiplier: 50,
           });
           setChart({ hover: false, xHover: savedAngle.current });
           setProfile(savedProfile.current ? savedProfile.current : profile);
@@ -200,10 +213,38 @@ const Introduction = ({ opacity }: Props) => {
       </AnimatedText>
       <AnimatedText
         fontSize={SUB_SIZE}
+        visible={introductionSpring.split2}
+        color={colors["primary"]}
+      >
+        Even a simple plate can produce lift
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.split3}
+        color={colors["primary"]}
+      >
+        There are however better shapes
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
         visible={introductionSpring.outline}
         color={colors["primary"]}
       >
-        This is an aerodynamic profile
+        Like this aerodynamic profile
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.outline2}
+        color={colors["primary"]}
+      >
+        It produces so much less drag
+      </AnimatedText>
+      <AnimatedText
+        fontSize={SUB_SIZE}
+        visible={introductionSpring.outline3}
+        color={colors["primary"]}
+      >
+        that we have to scale it 50x
       </AnimatedText>
       <AnimatedText
         fontSize={SUB_SIZE}
