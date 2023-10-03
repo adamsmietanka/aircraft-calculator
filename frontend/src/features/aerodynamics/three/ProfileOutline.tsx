@@ -3,6 +3,7 @@ import useProfile from "../hooks/useProfile";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import useProfileSpring from "./hooks/useProfileSpring";
+import ProfileVectors from "./ProfileVectors";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -40,6 +41,12 @@ const ProfileOutline = ({ opacity }: Props) => {
             opacity={opacity.to((o) => o / 5)}
           />
         </mesh>
+      </animated.mesh>
+      <animated.mesh
+        position-x={profileSpring.x.to((x) => x + 0.25)}
+        scale={profileSpring.scale.to((scale) => 1 / scale)}
+      >
+        <ProfileVectors opacity={opacity} />
       </animated.mesh>
     </animated.mesh>
   );

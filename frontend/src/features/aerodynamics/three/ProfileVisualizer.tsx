@@ -26,33 +26,6 @@ const ProfileVisualizer = ({ opacity }: Props) => {
 
   return (
     <animated.mesh position-x={(PROFILE_POSITION * CANVAS_WIDTH) / 2}>
-      <Vector
-        value={y["Coefficient of Lift"]}
-        rotation={0}
-        show={y["Coefficient of Lift"] !== 0 && show}
-        opacity={opacity}
-        color="primary"
-      >
-        <HoverableFormulaSimple
-          name="Lift"
-          tex={`F_L`}
-          texHover={`F_L=\\frac{1}{2} \\rho V^2 S C_L`}
-        />
-      </Vector>
-      <Vector
-        value={50 * x["Coefficient of Drag"]}
-        otherValue={y["Coefficient of Lift"]}
-        rotation={-Math.PI / 2}
-        show={show}
-        opacity={opacity}
-        color="error"
-      >
-        <HoverableFormulaSimple
-          name="Drag"
-          tex={`F_D`}
-          texHover={` F_D=\\frac{1}{2} \\rho V^2 SC_D`}
-        />
-      </Vector>
       <animated.mesh rotation-z={profileSpring.angle} scale={scaleProfile}>
         <ProfileAirstreams opacity={opacity} show={show} />
       </animated.mesh>
