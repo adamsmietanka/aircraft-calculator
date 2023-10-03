@@ -27,6 +27,11 @@ const STICK_OUT = 0.2;
  * X is always parallel to the line with arrows
  *
  * It will start at [startX,0,0] and go to [value,0,0]
+ * 
+ * @param {number} scale
+ * Allows a consistent size of measurement tips and inputs.
+ * Not needed when the scale of the parent component doesn't change. 
+ * It'll be calculated automatically.
  */
 const AnimatedInputTechnical = ({
   visible = true,
