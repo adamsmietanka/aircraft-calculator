@@ -12,7 +12,7 @@ export const useProfileCamber = () => {
       P: 0,
       T: parseInt(profile) / 100,
       // max thickness position
-      F: 1,
+      F: 0.3,
     };
 
   return {
