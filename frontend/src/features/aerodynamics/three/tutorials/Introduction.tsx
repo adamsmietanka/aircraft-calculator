@@ -46,6 +46,14 @@ const Introduction = ({ opacity }: Props) => {
     await next({ delay: 1500 });
   };
 
+  const setAngles = async (next: any, angles: number[]) => {
+    for (const a of angles) {
+      setChart({ xHover: a });
+      await next({ delay: 100 });
+    }
+    await next({ delay: 1000 });
+  };
+
   const [introductionSpring, introductionSpringApi] = useSpring(
     () => ({
       from: {
@@ -67,12 +75,8 @@ const Introduction = ({ opacity }: Props) => {
           savedProfile.current = profile;
           setProfile("0009");
           set({ splitVectors: false });
-          setChart({
-            x: {
-              "Coefficient of Lift": 0,
-              "Coefficient of Drag": 1,
-            },
-          });
+          setChart({ xHover: 0 });
+
           await next({ delay: 2000 });
           await showSubtitle(next, "basics");
           setChart({
@@ -86,18 +90,9 @@ const Introduction = ({ opacity }: Props) => {
             },
           });
           await showSubtitle(next, "drag");
-          // setChart({
-          //   x: {
-          //     "Coefficient of Lift": 4,
-          //     "Coefficient of Drag": 1,
-          //   },
-          // });
-          setChart({
-            x: {
-              "Coefficient of Lift": 8,
-              "Coefficient of Drag": 1,
-            },
-          });
+
+          await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]);
+
           await showSubtitle(next, "angled");
           await showSubtitle(next, "forces");
           await showSubtitle(next, "forces2");
