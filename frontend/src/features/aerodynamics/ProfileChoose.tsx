@@ -80,18 +80,18 @@ const ProfileChoose = () => {
                 <ul>
                   <li>
                     <button
-                      className={`${profile === "05" && "active"}`}
-                      onClick={() => handleClick("05")}
+                      className={`${profile === "06" && "active"}`}
+                      onClick={() => handleClick("06")}
                     >
-                      5% thick
+                      6% thick
                     </button>
                   </li>
                   <li>
                     <button
-                      className={`${profile === "10" && "active"}`}
-                      onClick={() => handleClick("10")}
+                      className={`${profile === "09" && "active"}`}
+                      onClick={() => handleClick("09")}
                     >
-                      10% thick
+                      9% thick
                     </button>
                   </li>
                 </ul>

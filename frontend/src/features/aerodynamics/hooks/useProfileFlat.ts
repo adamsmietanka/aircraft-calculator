@@ -5,7 +5,7 @@ const useProfileFlat = (T: number) => {
   let lower = [];
   let chord = [];
 
-  const verticalPoints = Math.ceil((NUMBER_OF_AIRFOIL_POINTS * T) / 2);
+  const verticalPoints = 2;
   console.log(verticalPoints, NUMBER_OF_AIRFOIL_POINTS);
   for (let i = 0; i <= NUMBER_OF_AIRFOIL_POINTS; i++) {
     let x, y;
