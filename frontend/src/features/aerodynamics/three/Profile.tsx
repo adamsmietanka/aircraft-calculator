@@ -1,5 +1,4 @@
 import ProfileReynolds from "../ProfileReynolds";
-import ProfileVisualizer from "./ProfileVisualizer";
 import { SpringValue, animated } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
@@ -21,9 +20,6 @@ const Profile = ({ opacity }: Props) => {
           <ProfileReynolds />
         </div>
       </Inputs3D>
-      <ProfileVisualizer
-        opacity={opacity}
-      />
       <LineChart
         width={0.33}
         gridPositionX={0.25}

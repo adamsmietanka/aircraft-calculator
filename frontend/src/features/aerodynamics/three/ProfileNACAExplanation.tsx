@@ -8,7 +8,7 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import { SpringValue, animated } from "@react-spring/three";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import useWingScale from "../hooks/useWingScale";
-import useProfileSpring from "./hooks/useProfileSpring";
+import useProfileVisualizer from "./hooks/useProfileVisualizer";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import { useLocation } from "react-router-dom";
@@ -37,7 +37,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
   const { M, P, T, F } = useProfileCamber();
   const { maxThickness, lowestPoint, highestPoint } = useProfile();
 
-  const { profileSpring } = useProfileSpring();
+  const { profileSpring } = useProfileVisualizer();
 
   return (
     <animated.mesh
