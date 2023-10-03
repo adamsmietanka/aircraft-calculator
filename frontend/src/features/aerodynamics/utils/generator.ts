@@ -4,6 +4,7 @@ import {
 } from "../../../utils/interpolation/binarySearch";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import round from "../../../utils/interpolation/round";
+import plate, { plates } from "../data/flatPlate";
 import profiles from "../data/profiles";
 import { default as profilesInterpolated } from "../data/profiles_interpolated";
 
@@ -109,7 +110,6 @@ export const symmetrical_fixer = () => {
     ]);
     deltas.push(linearInterpolationArray(points, 0));
   }
-  console.log(deltas);
   const fixed = profiles["0009"].cz.map(([x, y1, y2, y3]) => [
     x,
     y1 ? round(y1 - deltas[1], 1e-5) : null,
@@ -117,6 +117,24 @@ export const symmetrical_fixer = () => {
     y3 ? round(y3 - deltas[3], 1e-5) : null,
   ]);
   console.log(fixed);
+};
+
+export const plateGenerator = () => {
+  let results: Record<string, Record<string, Array<Array<number | null>>>> = {};
+
+  plates.forEach((p) => {
+    const t = parseFloat(p) / 100;
+    results[p] = {
+      cz: plate.map(([aoa, cz]) => [aoa, cz, cz, cz]),
+      cd: plate.map(([aoa, cz]) => {
+        const cd =
+          cz * Math.sin((aoa * Math.PI) / 180) +
+          0.3 * t * Math.cos((aoa * Math.PI) / 180);
+        return [cz, cd, cd, cd];
+      }),
+    };
+  });
+  console.log(results);
 };
 
 export default generate_coefficients;

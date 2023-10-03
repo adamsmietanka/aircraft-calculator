@@ -6,7 +6,6 @@ const useProfileFlat = (T: number) => {
   let chord = [];
 
   const verticalPoints = 2;
-  console.log(verticalPoints, NUMBER_OF_AIRFOIL_POINTS);
   for (let i = 0; i <= NUMBER_OF_AIRFOIL_POINTS; i++) {
     let x, y;
     if (i < verticalPoints) {
@@ -15,7 +14,6 @@ const useProfileFlat = (T: number) => {
     } else if (i <= NUMBER_OF_AIRFOIL_POINTS - verticalPoints) {
       x =
         (i - verticalPoints) / (NUMBER_OF_AIRFOIL_POINTS - 2 * verticalPoints);
-      console.log(i - verticalPoints, x);
       y = T / 2;
     } else {
       x = 1;
