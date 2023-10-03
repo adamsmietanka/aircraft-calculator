@@ -23,9 +23,7 @@ const ProfileVectors = ({ opacity }: Props) => {
   const location = useLocation();
 
   const show =
-    (location.pathname === "/aerodynamics/profile" && !!locked) ||
-    hover["Coefficient of Lift"] ||
-    hover["Coefficient of Drag"];
+    (location.pathname === "/aerodynamics/profile" && !!locked) || hover;
 
   const cl = y["Coefficient of Lift"];
   const cd = dragMultiplier * x["Coefficient of Drag"];

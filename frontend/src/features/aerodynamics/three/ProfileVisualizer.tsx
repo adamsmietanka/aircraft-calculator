@@ -17,8 +17,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
 
-  const show =
-    !!locked || hover["Coefficient of Lift"] || hover["Coefficient of Drag"];
+  const show = !!locked || hover;
 
   const { scaleProfile } = useWingScale();
 

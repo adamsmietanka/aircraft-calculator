@@ -11,7 +11,6 @@ export interface SimpleMarkerStore {
   x: number;
   y: number;
   hover: boolean;
-  show: boolean;
   locked: boolean;
   set: (value: Partial<SimpleMarkerStore>) => void;
 }
@@ -19,8 +18,7 @@ export interface SimpleMarkerStore {
 export interface SynchronizedXMarkersStore {
   x: number;
   y: number | Record<string, number>;
-  hover: boolean | Record<string, boolean>;
-  show: boolean;
+  hover: boolean;
   locked: boolean;
   set: (value: Partial<SynchronizedXMarkersStore>) => void;
 }
@@ -30,8 +28,7 @@ export interface MarkersStore {
   y: Record<string, number>;
   xHover: number;
   yHover: number;
-  hover: Record<string, boolean>;
-  show: boolean;
+  hover: boolean;
   locked: string | boolean;
   set: (value: Partial<MarkersStore>) => void;
 }
@@ -89,28 +86,8 @@ const Hover = ({
             !locked && store.setState({ xHover: clampedX });
           }
         }}
-        onPointerEnter={(e) => {
-          const oldHover = store.getState().hover;
-          if (typeof oldHover === "boolean") {
-            store.setState({ hover: true, show: true });
-          } else {
-            store.setState({
-              hover: { ...oldHover, [name]: true },
-              show: true,
-            });
-          }
-        }}
-        onPointerLeave={(e) => {
-          const oldHover = store.getState().hover;
-          if (typeof oldHover === "boolean") {
-            store.setState({ hover: false, show: false });
-          } else {
-            store.setState({
-              hover: { ...oldHover, [name]: false },
-              show: false,
-            });
-          }
-        }}
+        onPointerEnter={(e) => store.setState({ hover: true })}
+        onPointerLeave={(e) => store.setState({ hover: false })}
         onClick={(e) => {
           const oldLocked = store.getState().locked;
           // for charts that have individual locks

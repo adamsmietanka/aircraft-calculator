@@ -11,8 +11,7 @@ export const useWingChartsStore = create<MarkersStore>()((set) => ({
   y: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
   xHover: 0,
   yHover: 0,
-  hover: { "Coefficient of Lift": false, "Coefficient of Drag": false },
-  show: false,
+  hover: false,
   locked: "",
   set: (value) => set(value),
 }));

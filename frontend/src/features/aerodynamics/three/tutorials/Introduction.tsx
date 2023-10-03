@@ -21,6 +21,7 @@ const Introduction = ({ opacity }: Props) => {
   const chart = useProfileChartsStore();
 
   const savedProfile = useRef("2412");
+  const savedAngle = useRef(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,22 +74,14 @@ const Introduction = ({ opacity }: Props) => {
       to: async (next) => {
         if (location.pathname === "/aerodynamics/introduction") {
           savedProfile.current = profile;
+          savedAngle.current = chart.xHover;
           setProfile("0009");
-          set({ splitVectors: false });
-          setChart({ xHover: 0 });
 
           await next({ delay: 2000 });
+          set({ splitVectors: false });
+          setChart({ xHover: 0 });
           await showSubtitle(next, "basics");
-          setChart({
-            hover: {
-              "Coefficient of Lift": true,
-              "Coefficient of Drag": false,
-            },
-            x: {
-              "Coefficient of Lift": 0,
-              "Coefficient of Drag": 1,
-            },
-          });
+          setChart({ hover: true });
           await showSubtitle(next, "drag");
 
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5, 6, 7, 8]);
@@ -98,16 +91,7 @@ const Introduction = ({ opacity }: Props) => {
           await showSubtitle(next, "forces2");
           set({ splitVectors: true });
           await showSubtitle(next, "split");
-          setChart({
-            hover: {
-              "Coefficient of Lift": false,
-              "Coefficient of Drag": false,
-            },
-            // x: {
-            //   "Coefficient of Lift": 0,
-            //   "Coefficient of Drag": 1,
-            // },
-          });
+          setChart({ hover: false });
           await showSubtitle(next, "outline");
           await showSubtitle(next, "chord");
           await showSubtitle(next, "camber");
@@ -137,11 +121,12 @@ const Introduction = ({ opacity }: Props) => {
             "4424",
             "4415",
           ]);
-          await set({ hoverPlane: false });
+          set({ hoverPlane: false });
           await next({ delay: 500 });
-          await setProfile(savedProfile.current);
+          setProfile(savedProfile.current);
+          setChart({ xHover: savedAngle.current });
 
-          await navigate("/aerodynamics/profile");
+          navigate("/aerodynamics/profile");
         } else {
           await next({
             basics: false,
@@ -162,17 +147,8 @@ const Introduction = ({ opacity }: Props) => {
             hoverC: false,
             hoverPlane: false,
           });
-          setChart({
-            hover: {
-              "Coefficient of Lift": false,
-              "Coefficient of Drag": false,
-            },
-            // x: {
-            //   "Coefficient of Lift": 0,
-            //   "Coefficient of Drag": 1,
-            // },
-          });
-          await setProfile(savedProfile.current);
+          setChart({ hover: false, xHover: savedAngle.current });
+          setProfile(savedProfile.current);
         }
       },
     }),
