@@ -44,7 +44,6 @@ const AnimatedInputTechnical = ({
 
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
   const fluidScale = !!scale ? scale : worldScale.x;
-  console.log(scale, fluidScale);
 
   useFrame(() => {
     worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
