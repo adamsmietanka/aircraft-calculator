@@ -20,7 +20,7 @@ const Introduction = ({ opacity }: Props) => {
   const setChart = useProfileChartsStore((state) => state.set);
   const chart = useProfileChartsStore();
 
-  const savedProfile = useRef("2412");
+  const savedProfile = useRef("");
   const savedAngle = useRef(0);
 
   const location = useLocation();
@@ -148,7 +148,7 @@ const Introduction = ({ opacity }: Props) => {
             hoverPlane: false,
           });
           setChart({ hover: false, xHover: savedAngle.current });
-          setProfile(savedProfile.current);
+          setProfile(savedProfile.current ? savedProfile.current : profile);
         }
       },
     }),
