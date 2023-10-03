@@ -63,7 +63,7 @@ const HoverMarker = ({
   const AnimatedText = animated(Text);
 
   const locked = store((state) => state.locked);
-  const show = store((state) => state.show);
+  const hover = store((state) => state.hover);
 
   const xObj = store((state) => state.x);
   const yObj = store((state) => state.y);
@@ -82,9 +82,9 @@ const HoverMarker = ({
     () => ({
       x: x,
       y: y,
-      opacity: !!locked || show ? 1 : 0,
+      opacity: !!locked || hover ? 1 : 0,
     }),
-    [x, y, scale, locked, show]
+    [x, y, scale, locked, hover]
   );
 
   const width = !!locked ? 2 : 1;

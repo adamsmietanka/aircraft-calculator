@@ -17,9 +17,7 @@ const useProfileSpring = () => {
   const location = useLocation();
 
   const rotateProfile =
-    (location.pathname === "/aerodynamics/profile" && !!locked) ||
-    hover["Coefficient of Lift"] ||
-    hover["Coefficient of Drag"];
+    (location.pathname === "/aerodynamics/profile" && !!locked) || hover;
 
   const getScale = () => {
     switch (location.pathname) {

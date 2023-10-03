@@ -30,11 +30,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
   const hoverC = useHoverProfileStore((state) => state.hoverC);
   const set = useHoverProfileStore((state) => state.set);
 
-  const show = !(
-    !!locked ||
-    hover["Coefficient of Lift"] ||
-    hover["Coefficient of Drag"]
-  );
+  const show = !(!!locked || hover);
 
   const { scaleProfile } = useWingScale();
 
