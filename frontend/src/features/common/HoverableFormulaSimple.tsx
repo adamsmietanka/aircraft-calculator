@@ -1,13 +1,15 @@
 import { useState } from "react";
 
 interface Props {
+  className?: string;
   name: string;
   tex: string;
-  texHover: string;
+  texHover?: string;
   center?: boolean;
 }
 
 const HoverableFormulaSimple = ({
+  className = "",
   name,
   tex,
   texHover,
@@ -17,13 +19,15 @@ const HoverableFormulaSimple = ({
 
   return (
     <div
-      className={`tooltip h-8 flex ${center && "items-left"}`}
+      className={`tooltip flex justify-center ${center || "items-left"} ` + className}
       data-tip={name}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
     >
       <p className={` ${hover && "hidden"}`}>{`\\(${tex}\\)`}</p>
-      <p className={` ${hover || "hidden"}`}>{`\\(${texHover}\\)`}</p>
+      <p className={` ${hover || "hidden"}`}>{`\\(${
+        texHover ? texHover : tex
+      }\\)`}</p>
     </div>
   );
 };
