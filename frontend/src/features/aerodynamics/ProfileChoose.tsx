@@ -40,16 +40,19 @@ const ProfileChoose = () => {
               >
                 <summary>NACA 4-series</summary>
                 <ul>
-                  {profileList.map((p) => (
-                    <li key={p}>
-                      <button
-                        className={`${p === profile && "active"}`}
-                        onClick={() => handleClick(p)}
-                      >
-                        {p}
-                      </button>
-                    </li>
-                  ))}
+                  {profileList.map(
+                    (p) =>
+                      p.length === 4 && (
+                        <li key={p}>
+                          <button
+                            className={`${p === profile && "active"}`}
+                            onClick={() => handleClick(p)}
+                          >
+                            {p}
+                          </button>
+                        </li>
+                      )
+                  )}
                 </ul>
               </details>
             </li>
@@ -59,16 +62,19 @@ const ProfileChoose = () => {
               >
                 <summary>NACA 5-series</summary>
                 <ul>
-                  {/* {profileList.map((p) => (
-                    <li key={p}>
-                      <button
-                        className={`${p === profile && "active"}`}
-                        onClick={() => handleClick(p)}
-                      >
-                        {p}
-                      </button>
-                    </li>
-                  ))} */}
+                  {profileList.map(
+                    (p) =>
+                      p.length === 5 && (
+                        <li key={p}>
+                          <button
+                            className={`${p === profile && "active"}`}
+                            onClick={() => handleClick(p)}
+                          >
+                            {p}
+                          </button>
+                        </li>
+                      )
+                  )}
                 </ul>
               </details>
             </li>
@@ -78,22 +84,19 @@ const ProfileChoose = () => {
               >
                 <summary>Flat Plate</summary>
                 <ul>
-                  <li>
-                    <button
-                      className={`${profile === "06" && "active"}`}
-                      onClick={() => handleClick("06")}
-                    >
-                      6% thick
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      className={`${profile === "09" && "active"}`}
-                      onClick={() => handleClick("09")}
-                    >
-                      9% thick
-                    </button>
-                  </li>
+                  {profileList.map(
+                    (p) =>
+                      p.length === 2 && (
+                        <li key={p}>
+                          <button
+                            className={`${p === profile && "active"}`}
+                            onClick={() => handleClick(p)}
+                          >
+                            {parseFloat(p)}% thick
+                          </button>
+                        </li>
+                      )
+                  )}
                 </ul>
               </details>
             </li>
