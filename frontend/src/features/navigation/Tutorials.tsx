@@ -20,7 +20,7 @@ const Tutorials = () => {
     });
   };
 
-  return (
+  return tutorialSteps.length ? (
     <div className="dropdown dropdown-right dropdown-top">
       <div
         className="tooltip tooltip-hover tooltip-right z-50"
@@ -49,6 +49,8 @@ const Tutorials = () => {
         ))}
       </ul>
     </div>
+  ) : (
+    <></>
   );
 };
 
