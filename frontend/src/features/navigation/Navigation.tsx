@@ -1,13 +1,14 @@
-import { ReactComponent as Home } from "../assets/home.svg";
-import { ReactComponent as Airplane } from "../assets/airplane.svg";
-import { ReactComponent as Propeller } from "../assets/propeller.svg";
-import { ReactComponent as Engine } from "../assets/engine.svg";
-import { ReactComponent as Scales } from "../assets/scales.svg";
-import { ReactComponent as Curve } from "../assets/curve.svg";
+import { ReactComponent as Home } from "../../assets/home.svg";
+import { ReactComponent as Airplane } from "../../assets/airplane.svg";
+import { ReactComponent as Propeller } from "../../assets/propeller.svg";
+import { ReactComponent as Engine } from "../../assets/engine.svg";
+import { ReactComponent as Swing } from "../../assets/swing.svg";
+import { ReactComponent as Scales } from "../../assets/scales.svg";
+import { ReactComponent as Curve } from "../../assets/curve.svg";
 import React from "react";
-import { Settings } from "../features";
+import { Settings } from "..";
 import { NavLink, useLocation } from "react-router-dom";
-import Tutorials from "../features/navigation/Tutorials";
+import Tutorials from "./Tutorials";
 
 const links = [
   { to: "/", name: "Home", icon: <Home /> },
@@ -29,12 +30,12 @@ const links = [
   {
     to: "/weight",
     name: "Mass Distribution",
-    icon: <img src="https://img.icons8.com/ios/100/null/weight-kg.png" />,
+    icon: <Scales />,
   },
   {
     to: "/stability",
     name: "Longitudinal Stability",
-    icon: <Scales />,
+    icon: <Swing />,
   },
   {
     to: "/turn",

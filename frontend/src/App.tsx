@@ -1,6 +1,6 @@
 import "./App.css";
-import Navigation from "./components/Navigation";
-import Steps from "./components/Steps";
+import Navigation from "./features/navigation/Navigation";
+import Steps from "./features/navigation/Steps";
 
 function App() {
   return (
