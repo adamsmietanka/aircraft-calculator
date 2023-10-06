@@ -9,6 +9,7 @@ import React from "react";
 import { Settings } from "..";
 import { NavLink, useLocation } from "react-router-dom";
 import Tutorials from "./Tutorials";
+import steps from "./data/steps";
 
 const links = [
   { to: "/", name: "Home", icon: <Home /> },
@@ -46,11 +47,23 @@ const links = [
 
 const Navigation = () => {
   const { pathname } = useLocation();
+  const feature = pathname.split("/")[1];
+  const pathSubRoute = pathname.split("/")[2];
+  const getStepIndex = (feature: string, subRoute?: string): number => {
+    if (!feature) return 0;
+    return steps.findIndex((r) =>
+      subRoute
+        ? r.path === subRoute && r.feature === feature
+        : r.feature === feature
+    );
+  };
+  const currentStepIndex = getStepIndex(feature, pathSubRoute);
+
   return (
     <div className="sticky flex flex-col justify-between h-screen top-0 p-2 z-50">
       <div
         className={`flex flex-col justify-between h-full ${
-          pathname === "/" && "hidden"
+          (pathname === "/" || steps[currentStepIndex].tutorial) && "hidden"
         }`}
       >
         <div className="flex flex-col">
