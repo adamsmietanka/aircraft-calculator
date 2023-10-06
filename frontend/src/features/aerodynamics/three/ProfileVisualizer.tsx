@@ -5,6 +5,7 @@ import ProfileAirstreams from "./ProfileAirstreams";
 import useProfile from "../hooks/useProfile";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import ProfileVectors from "./ProfileVectors";
+import { useHoverProfileStore } from "../stores/useHoverProfile";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -13,6 +14,9 @@ interface Props {
 const ProfileVisualizer = ({ opacity }: Props) => {
   const { profilePoints, chordPoints } = useProfile();
   const { profileSpring, showVisuals } = useProfileVisualizer();
+
+  const showChord = useHoverProfileStore((state) => state.showChord);
+  const showCamber = useHoverProfileStore((state) => state.showCamber);
 
   return (
     <animated.mesh
@@ -29,7 +33,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
             points={chordPoints}
             width={1.5}
             color="secondary"
-            opacity={opacity.to((o) => o / 1.5)}
+            opacity={opacity.to((o) => (showCamber ? o / 1.5 : 0))}
           />
           <AnimatedLine
             points={[
@@ -39,7 +43,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
             scale={[1, 1, 1]}
             style="thin"
             color="grid"
-            opacity={opacity.to((o) => o / 5)}
+            opacity={opacity.to((o) => (showChord ? o / 5 : 0))}
           />
           <ProfileAirstreams opacity={opacity} show={showVisuals} />
         </mesh>
