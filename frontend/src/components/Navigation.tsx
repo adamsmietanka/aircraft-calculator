@@ -7,6 +7,7 @@ import { ReactComponent as Curve } from "../assets/curve.svg";
 import React from "react";
 import { Settings } from "../features";
 import { NavLink, useLocation } from "react-router-dom";
+import Tutorials from "../features/navigation/Tutorials";
 
 const links = [
   { to: "/", name: "Home", icon: <Home /> },
@@ -71,7 +72,10 @@ const Navigation = () => {
             </NavLink>
           ))}
         </div>
-        <Settings />
+        <div className="flex flex-col">
+          <Tutorials />
+          <Settings />
+        </div>
       </div>
     </div>
   );

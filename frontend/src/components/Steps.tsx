@@ -86,7 +86,7 @@ const Steps = () => {
       <div className="h-full">
         <Outlet />
       </div>
-      <div className="sticky flex justify-between bottom-0 p-4 z-50 h-20">
+      <div className="sticky flex justify-between bottom-0 p-4 z-40 h-20">
         <a.button
           className={`btn normal-case ${
             (currentStepIndex === 0 || steps[currentStepIndex].tutorial) &&

@@ -18,12 +18,17 @@ const Settings = () => {
 
   return (
     <>
-      <button
-        className="btn btn-block btn-ghost justify-start"
-        onClick={() => (window as any).settings_modal.showModal()}
+      <div
+        className="tooltip tooltip-hover tooltip-right z-50"
+        data-tip="Settings"
       >
-        <Cog className="w-6" />
-      </button>
+        <button
+          className="btn btn-block btn-ghost justify-start"
+          onClick={() => (window as any).settings_modal.showModal()}
+        >
+          <Cog className="w-6" />
+        </button>
+      </div>
       <dialog id="settings_modal" className="modal">
         <form method="dialog" className="modal-box">
           <h3>Settings</h3>
