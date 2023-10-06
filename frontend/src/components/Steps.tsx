@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useNavigationStore } from "../features/navigation/useNavigation";
 import steps, { Step } from "../features/navigation/data/steps";
 import { a, useSpring } from "@react-spring/web";
+import { ReactComponent as Arrow } from "../assets/arrow.svg";
 
 const Steps = () => {
   let { pathname } = useLocation();
@@ -13,7 +14,9 @@ const Steps = () => {
   const savedSubRoute = useNavigationStore((state) => state.routes[feature]);
   const saveSubRoute = useNavigationStore((state) => state.setRoute);
 
-  const featureSteps = steps.filter((s) => s.feature === feature);
+  const featureSteps = steps.filter(
+    (s) => s.feature === feature && !s.tutorial
+  );
 
   useEffect(() => {
     saveSubRoute(feature, pathSubRoute);
@@ -62,44 +65,48 @@ const Steps = () => {
 
   return (
     <>
-      {featureSteps && featureSteps.length > 1 && (
-        <ul className="sticky top-0 steps z-40 p-4">
-          {featureSteps.map((step) => (
-            <li
-              key={step.name}
-              className={`step cursor-pointer ${
-                getStepIndex(step.feature, step.path) <= currentStepIndex &&
-                "step-primary"
-              }`}
-              {...(step.symbol && { "data-content": step.symbol })}
-              onClick={() => navigateTo(step)}
-            >
-              {step.name}
-            </li>
-          ))}
-        </ul>
-      )}
+      {featureSteps &&
+        featureSteps.length > 1 &&
+        !steps[currentStepIndex].tutorial && (
+          <ul className="sticky top-0 steps z-40 p-4">
+            {featureSteps.map((step) => (
+              <li
+                key={step.name}
+                className={`step cursor-pointer ${
+                  getStepIndex(step.feature, step.path) <= currentStepIndex &&
+                  "step-primary"
+                }`}
+                onClick={() => navigateTo(step)}
+              >
+                {step.name}
+              </li>
+            ))}
+          </ul>
+        )}
       <div className="h-full">
         <Outlet />
       </div>
       <div className="sticky flex justify-between bottom-0 p-4 z-50 h-20">
         <a.button
-          className={`btn btn-error normal-case ${
-            currentStepIndex === 0 && "invisible"
+          className={`btn normal-case ${
+            (currentStepIndex === 0 || steps[currentStepIndex].tutorial) &&
+            "invisible"
           }`}
           style={props}
           onClick={() => navigateTo(previousStep)}
         >
-          Previous: {previousStep.name}
+          <Arrow className="text-color transform rotate-180" />
+          {previousStep.name}
         </a.button>
         <a.button
-          className={`btn btn-info normal-case ${
+          className={`btn ${
             currentStepIndex === steps.length - 1 && "invisible"
-          }`}
+          } normal-case `}
           style={props}
           onClick={() => navigateTo(nextStep)}
         >
-          Next: {nextStep.name}
+          {steps[currentStepIndex].tutorial ? "Skip" : nextStep.name}
+          <Arrow className="text-color" />
         </a.button>
       </div>
     </>

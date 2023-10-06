@@ -131,7 +131,12 @@ const Introduction = ({ opacity }: Props) => {
           );
           set({ showCamber: true });
           await displaySub(next, <p className="text-secondary">camber line</p>);
-          await displaySub(next, "it's a NACA 2412 profile");
+          await displaySub(
+            next,
+            <>
+              it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
+            </>
+          );
 
           set({ hoverPlane: true });
           set({ hoverA: true });
