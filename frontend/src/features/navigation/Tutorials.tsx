@@ -1,13 +1,12 @@
-import { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { a, useSpring } from "@react-spring/web";
-import { ReactComponent as Arrow } from "../assets/arrow.svg";
+import { useLocation, useNavigate } from "react-router-dom";
 import steps, { Step } from "./data/steps";
 import { ReactComponent as Info } from "../../assets/info.svg";
+import { useNavigationStore } from "./useNavigation";
 
 const Tutorials = () => {
   let { pathname } = useLocation();
   let navigate = useNavigate();
+  const tutorials = useNavigationStore((state) => state.tutorials);
 
   const feature = pathname.split("/")[1];
 
@@ -44,7 +43,7 @@ const Tutorials = () => {
             >
               <p>{step.symbol}</p>
               <p className="font-bold">{step.name}</p>
-              <p>✓</p>
+              <p>{!!tutorials[`/${step.feature}/${step.path}`] ? "✓" : ""}</p>
             </a>
           </li>
         ))}
