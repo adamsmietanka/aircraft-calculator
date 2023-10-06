@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { useNavigationStore } from "../features/navigation/useNavigation";
-import steps, { Step } from "../features/navigation/data/steps";
+import { useNavigationStore } from "./useNavigation";
+import steps, { Step } from "./data/steps";
 import { a, useSpring } from "@react-spring/web";
-import { ReactComponent as Arrow } from "../assets/arrow.svg";
+import { ReactComponent as Arrow } from "../../assets/arrow.svg";
 
 const Steps = () => {
   let { pathname } = useLocation();
@@ -25,7 +25,7 @@ const Steps = () => {
         state: { previousPath: pathname },
       });
     }
-  }, [savedSubRoute, feature, pathSubRoute, saveSubRoute, navigate]);
+  }, [feature, pathSubRoute, saveSubRoute, navigate]);
 
   const getStepIndex = (feature: string, subRoute?: string): number => {
     if (!feature) return 0;
