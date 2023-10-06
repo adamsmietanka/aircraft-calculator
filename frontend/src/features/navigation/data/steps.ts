@@ -1,6 +1,5 @@
 export interface Step {
   name: string;
-  symbol?: string | number;
   feature: string;
   path?: string;
   tutorial?: boolean;
@@ -12,36 +11,47 @@ const steps: Step[] = [
   },
   {
     name: "Introduction",
-    symbol: "?",
     feature: "aerodynamics",
     path: "introduction",
     tutorial: true,
   },
   {
     name: "Profile",
-    symbol: 1,
     feature: "aerodynamics",
     path: "profile",
   },
   {
+    name: "Level Flight",
+    feature: "aerodynamics",
+    path: "levelFlight",
+    tutorial: true,
+  },
+  {
     name: "Induced Drag",
-    symbol: "?",
     feature: "aerodynamics",
     path: "inducedDrag",
     tutorial: true,
   },
   {
     name: "Wing",
-    symbol: 2,
     feature: "aerodynamics",
     path: "wing",
   },
   {
     name: "Fuselage",
-    symbol: 3,
     feature: "aerodynamics",
     path: "fuselage",
   },
+  // {
+  //   name: "Shapes",
+  //   feature: "aerodynamics",
+  //   path: "shapes",
+  // },
+  // {
+  //   name: "Stabilizers",
+  //   feature: "aerodynamics",
+  //   path: "stabilizers",
+  // },
   {
     name: "Engine",
     feature: "powerunit",
