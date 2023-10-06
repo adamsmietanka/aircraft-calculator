@@ -24,7 +24,7 @@ const Introduction = ({ opacity }: Props) => {
   const savedAngle = useRef(0);
   const savedLock = useRef<string | boolean>("");
 
-  const location = useLocation();
+  const { pathname, state } = useLocation();
   const navigate = useNavigate();
   const AnimatedText = animated(Text);
   const { colors } = useCSSColors();
@@ -77,7 +77,7 @@ const Introduction = ({ opacity }: Props) => {
         hoverC: false,
       },
       to: async (next) => {
-        if (location.pathname === "/aerodynamics/introduction") {
+        if (pathname === "/aerodynamics/introduction") {
           savedProfile.current = profile;
           savedAngle.current = chart.xHover;
           savedLock.current = chart.locked;
@@ -138,8 +138,10 @@ const Introduction = ({ opacity }: Props) => {
           setProfile(savedProfile.current);
           setChart({ xHover: savedAngle.current, locked: savedLock.current });
 
-          navigate("/aerodynamics/profile");
-        } else {
+          navigate("/aerodynamics/profile", {
+            state: { previousPath: pathname },
+          });
+        } else if (state.previousPath === "/aerodynamics/introduction") {
           await next({
             basics: false,
             drag: false,
@@ -165,7 +167,7 @@ const Introduction = ({ opacity }: Props) => {
         }
       },
     }),
-    [location.pathname]
+    [pathname]
   );
   return (
     <mesh position-y={-1.5}>

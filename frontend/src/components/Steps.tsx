@@ -5,11 +5,11 @@ import steps, { Step } from "../features/navigation/data/steps";
 import { a, useSpring } from "@react-spring/web";
 
 const Steps = () => {
-  let location = useLocation();
+  let { pathname } = useLocation();
   let navigate = useNavigate();
 
-  const feature = location.pathname.split("/")[1];
-  const pathSubRoute = location.pathname.split("/")[2];
+  const feature = pathname.split("/")[1];
+  const pathSubRoute = pathname.split("/")[2];
   const savedSubRoute = useNavigationStore((state) => state.routes[feature]);
   const saveSubRoute = useNavigationStore((state) => state.setRoute);
 
@@ -18,7 +18,9 @@ const Steps = () => {
   useEffect(() => {
     saveSubRoute(feature, pathSubRoute);
     if (!pathSubRoute && savedSubRoute) {
-      navigate(`${feature}/${savedSubRoute}`);
+      navigate(`${feature}/${savedSubRoute}`, {
+        state: { previousPath: pathname },
+      });
     }
   }, [savedSubRoute, feature, pathSubRoute, saveSubRoute, navigate]);
 
@@ -38,8 +40,10 @@ const Steps = () => {
 
   const navigateTo = (step: Step) => {
     step.path
-      ? navigate(`${step.feature}/${step.path}`)
-      : navigate(`${step.feature}`);
+      ? navigate(`${step.feature}/${step.path}`, {
+          state: { previousPath: pathname },
+        })
+      : navigate(`${step.feature}`, { state: { previousPath: pathname } });
   };
 
   const [props, propsApi] = useSpring(

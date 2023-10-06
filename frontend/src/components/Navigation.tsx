@@ -43,17 +43,17 @@ const links = [
 ];
 
 const Navigation = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
   return (
     <div className="sticky flex flex-col justify-between h-screen top-0 p-2 z-50">
       <div
         className={`flex flex-col justify-between h-full ${
-          location.pathname === "/" && "hidden"
+          pathname === "/" && "hidden"
         }`}
       >
         <div className="flex flex-col">
           {links.map((l) => (
-            <NavLink to={l.to}>
+            <NavLink to={l.to} state={{ previousPath: pathname }}>
               {({ isActive }) => (
                 <div
                   className="tooltip tooltip-hover tooltip-right z-50"
