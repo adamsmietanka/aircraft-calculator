@@ -13,10 +13,14 @@ const Steps = () => {
   const pathSubRoute = pathname.split("/")[2];
   const savedSubRoute = useNavigationStore((state) => state.routes[feature]);
   const saveSubRoute = useNavigationStore((state) => state.setRoute);
+  const tutorials = useNavigationStore((state) => state.tutorials);
+  const setSeen = useNavigationStore((state) => state.setTutorialSeen);
 
   const featureSteps = steps.filter(
     (s) => s.feature === feature && !s.tutorial
   );
+
+  const wasSeen = (step: Step) => !!tutorials[`/${step.feature}/${step.path}`];
 
   useEffect(() => {
     saveSubRoute(feature, pathSubRoute);
@@ -25,6 +29,7 @@ const Steps = () => {
         state: { previousPath: pathname },
       });
     }
+    if (steps[currentStepIndex].tutorial) setSeen(pathname);
   }, [feature, pathSubRoute, saveSubRoute, navigate]);
 
   const getStepIndex = (feature: string, subRoute?: string): number => {
@@ -38,8 +43,20 @@ const Steps = () => {
 
   const currentStepIndex = getStepIndex(feature, pathSubRoute);
 
-  const previousStep = steps[currentStepIndex - 1] || steps[0];
-  const nextStep = steps[currentStepIndex + 1] || steps[steps.length - 1];
+  const getPreviousStep = (index: number): Step => {
+    if (index - 1 < 0) return steps[0];
+    if (wasSeen(steps[index - 1])) return getPreviousStep(index - 1);
+    return steps[index - 1];
+  };
+
+  const getNextStep = (index: number): Step => {
+    if (index + 1 > steps.length - 1) return steps[steps.length - 1];
+    if (wasSeen(steps[index + 1])) return getNextStep(index + 1);
+    return steps[index + 1];
+  };
+
+  const previousStep = getPreviousStep(currentStepIndex);
+  const nextStep = getNextStep(currentStepIndex);
 
   const navigateTo = (step: Step) => {
     step.path
@@ -100,12 +117,24 @@ const Steps = () => {
         </a.button>
         <a.button
           className={`btn ${
-            currentStepIndex === steps.length - 1 && "invisible"
+            (currentStepIndex === steps.length - 1 ||
+              steps[currentStepIndex].tutorial) &&
+            "invisible"
           } normal-case `}
           style={props}
           onClick={() => navigateTo(nextStep)}
         >
-          {steps[currentStepIndex].tutorial ? "Skip" : nextStep.name}
+          {nextStep.name}
+          <Arrow className="text-color" />
+        </a.button>
+        <a.button
+          className={`btn ${
+            !steps[currentStepIndex].tutorial && "hidden"
+          } normal-case `}
+          style={props}
+          onClick={() => navigateTo(nextStep)}
+        >
+          Skip
           <Arrow className="text-color" />
         </a.button>
       </div>
