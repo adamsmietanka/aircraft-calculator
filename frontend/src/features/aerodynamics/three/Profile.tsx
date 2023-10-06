@@ -4,6 +4,7 @@ import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
 import LineChart from "../../common/three/LineChart";
 import useProfileCharts from "../hooks/useProfileCharts";
+import { useWingStore } from "../stores/useWing";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -11,6 +12,7 @@ interface Props {
 
 const Profile = ({ opacity }: Props) => {
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const profile = useWingStore((state) => state.profile);
 
   return (
     <animated.mesh position-z={0}>
@@ -46,7 +48,7 @@ const Profile = ({ opacity }: Props) => {
           x: {
             name: "Coefficient of Drag (Cd)",
             min: 0,
-            max: 0.026,
+            max: profile.length === 2 ? 0.2 : 0.026,
           },
           y: {
             name: "Cl",
