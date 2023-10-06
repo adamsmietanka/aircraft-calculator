@@ -16,6 +16,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
 
   const splitVectors = useHoverProfileStore((state) => state.splitVectors);
   const dragMultiplier = useHoverProfileStore((state) => state.dragMultiplier);
+  const vectorSize = useHoverProfileStore((state) => state.vectorSize);
 
   const cl = y["Coefficient of Lift"];
   const cd = dragMultiplier * x["Coefficient of Drag"];
@@ -33,9 +34,10 @@ const ProfileVectors = ({ opacity, show }: Props) => {
     <>
       <Vector
         value={
-          splitVectors
+          (splitVectors
             ? cl
-            : Math.sqrt(cd * cd + cl * cl) * (Math.sign(cl) === -1 ? -1 : 1)
+            : Math.sqrt(cd * cd + cl * cl) * (Math.sign(cl) === -1 ? -1 : 1)) *
+          vectorSize
         }
         rotation={vectorsSpring.rotationLift}
         show={(!splitVectors || cl !== 0) && show}
@@ -55,7 +57,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
         </div>
       </Vector>
       <Vector
-        value={cd}
+        value={cd * vectorSize}
         otherValue={cl}
         rotation={vectorsSpring.rotationDrag}
         show={splitVectors && show}

@@ -6,7 +6,7 @@ import { ReactNode } from "react";
 
 const VECTOR_WIDTH = 0.05;
 const VECTOR_TIP_LENGTH = 0.5;
-const VECTOR_SIZE = 2.5;
+const VECTOR_SIZE = 3.5;
 
 interface VectorProps {
   value: number;

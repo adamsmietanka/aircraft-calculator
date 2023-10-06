@@ -1,9 +1,13 @@
 import { create } from "zustand";
+import { DRAG_VECTOR_SCALE } from "../../common/three/config";
 
 export interface HoverProfileState {
   splitVectors: boolean;
   dragMultiplier: number;
+  vectorSize: number;
   hoverPlane: boolean;
+  showChord: boolean;
+  showCamber: boolean;
   hoverA: boolean;
   hoverB: boolean;
   hoverC: boolean;
@@ -16,7 +20,10 @@ export interface HoverProfileState {
 
 export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   splitVectors: true,
-  dragMultiplier: 50,
+  dragMultiplier: DRAG_VECTOR_SCALE,
+  vectorSize: 1,
+  showChord: true,
+  showCamber: true,
   hoverPlane: false,
   hoverA: false,
   hoverB: false,
