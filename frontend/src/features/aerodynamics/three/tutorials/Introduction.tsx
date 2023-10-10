@@ -216,7 +216,7 @@ const Introduction = ({ opacity }: Props) => {
   );
 
   return (
-    <mesh position-y={-3}>
+    <mesh position={[-4.5, -3, 0]}>
       <AnimatedHtml show={showSubtitle}>
         <div className="flex justify-center">{subtitle}</div>
       </AnimatedHtml>

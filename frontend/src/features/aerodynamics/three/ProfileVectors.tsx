@@ -14,6 +14,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
 
+  const showWeight = useHoverProfileStore((state) => state.showWeight);
   const splitVectors = useHoverProfileStore((state) => state.splitVectors);
   const dragMultiplier = useHoverProfileStore((state) => state.dragMultiplier);
   const vectorSize = useHoverProfileStore((state) => state.vectorSize);
@@ -23,6 +24,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
 
   const [vectorsSpring] = useSpring(
     () => ({
+      rotationWeight: Math.PI,
       rotationLift: splitVectors ? 0 : -Math.atan(cd / cl),
       rotationDrag: splitVectors
         ? -Math.PI / 2
@@ -67,6 +69,19 @@ const ProfileVectors = ({ opacity, show }: Props) => {
         <HoverableFormulaSimple
           name="Drag"
           tex={`F_D`}
+          texHover={` F_D=\\frac{1}{2} \\rho V^2 SC_D`}
+        />
+      </Vector>
+      <Vector
+        value={cd * vectorSize}
+        rotation={vectorsSpring.rotationWeight}
+        show={showWeight && show}
+        opacity={opacity}
+        color="error"
+      >
+        <HoverableFormulaSimple
+          name="Weight"
+          tex={`W`}
           texHover={` F_D=\\frac{1}{2} \\rho V^2 SC_D`}
         />
       </Vector>
