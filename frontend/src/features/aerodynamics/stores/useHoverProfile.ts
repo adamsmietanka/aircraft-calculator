@@ -1,5 +1,5 @@
-import { create } from "zustand";
-import { DRAG_VECTOR_SCALE } from "../../common/three/config";
+import { create } from 'zustand';
+import { DRAG_VECTOR_SCALE } from '../../common/three/config';
 
 export interface HoverProfileState {
   splitVectors: boolean;
@@ -12,10 +12,10 @@ export interface HoverProfileState {
   hoverA: boolean;
   hoverB: boolean;
   hoverC: boolean;
-  setHoverPlane: (value: boolean) => void;
-  setHoverA: (value: boolean) => void;
-  setHoverB: (value: boolean) => void;
-  setHoverC: (value: boolean) => void;
+  mass: number;
+  speed: number;
+  setMass: (value: number) => void;
+  setSpeed: (value: number) => void;
   set: (value: Partial<HoverProfileState>) => void;
 }
 
@@ -30,9 +30,9 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   hoverA: false,
   hoverB: false,
   hoverC: false,
-  setHoverPlane: (value) => set({ hoverPlane: value }),
-  setHoverA: (value) => set({ hoverA: value }),
-  setHoverB: (value) => set({ hoverB: value }),
-  setHoverC: (value) => set({ hoverC: value }),
+  mass: 0.5,
+  speed: 1,
+  setMass: (value) => set({ mass: value }),
+  setSpeed: (value) => set({ speed: value }),
   set: (value) => set(value),
 }));
