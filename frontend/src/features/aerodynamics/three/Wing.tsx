@@ -87,7 +87,7 @@ const Wing = ({ opacity }: Props) => {
               max: 1.75,
             },
           }}
-          zHover
+          yHover
           store={useWingChartsStore}
         />
         <Legend

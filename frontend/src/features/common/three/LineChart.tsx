@@ -38,7 +38,6 @@ export type ChartProps = {
     StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
   >;
   yHover?: boolean;
-  zHover?: boolean;
   width: number;
   gridPositionX?: number;
   opacity?: SpringValue<number>;
@@ -50,7 +49,6 @@ const LineChart = ({
   axes,
   store,
   yHover = false,
-  zHover = false,
   width = 1,
   gridPositionX = 0,
   opacity = new SpringValue(1),
@@ -117,7 +115,6 @@ const LineChart = ({
               step={step}
               store={store}
               yHover={yHover}
-              zHover={zHover}
               opacity={opacity}
             />
           )}

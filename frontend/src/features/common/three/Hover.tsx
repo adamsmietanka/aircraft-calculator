@@ -45,7 +45,6 @@ interface HoverProps {
     StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
   >;
   yHover: boolean;
-  zHover: boolean;
   opacity: SpringValue<number>;
 }
 const clamp = (num: number, min: number, max: number) =>
@@ -61,7 +60,6 @@ const Hover = ({
   step,
   store,
   yHover,
-  zHover,
   opacity,
 }: HoverProps) => {
   const meshRef = useRef<Mesh>(null!);
@@ -76,7 +74,7 @@ const Hover = ({
         onPointerMove={(e) => {
           const point = meshRef.current.worldToLocal(e.point);
           const locked = store.getState().locked;
-          if (yHover || zHover) {
+          if (yHover) {
             const y = round(point.y, step.y / 10);
             const clampedY = clamp(y, data.min.y, data.max.y);
             !locked && store.setState({ yHover: clampedY });
