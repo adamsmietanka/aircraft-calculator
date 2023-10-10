@@ -5,6 +5,7 @@ export interface HoverProfileState {
   splitVectors: boolean;
   dragMultiplier: number;
   vectorSize: number;
+  showWeight: boolean;
   hoverPlane: boolean;
   showChord: boolean;
   showCamber: boolean;
@@ -22,6 +23,7 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   splitVectors: true,
   dragMultiplier: DRAG_VECTOR_SCALE,
   vectorSize: 1,
+  showWeight: false,
   showChord: true,
   showCamber: true,
   hoverPlane: false,

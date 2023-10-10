@@ -4,13 +4,14 @@ import AnimatedHtml from "./AnimatedHtml";
 
 interface Props {
   gridPositionX: number;
+  show?: boolean;
   children: React.ReactNode;
 }
 
-const Inputs3D = ({ gridPositionX, children }: Props) => {
+const Inputs3D = ({ gridPositionX, children, show = true }: Props) => {
   return (
     <mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
-      <AnimatedHtml>
+      <AnimatedHtml show={show}>
         <div className="space-y-2">{children}</div>
       </AnimatedHtml>
     </mesh>

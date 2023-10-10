@@ -24,6 +24,7 @@ const useProfileVisualizer = () => {
       case "/":
       case "/aerodynamics/introduction":
       case "/aerodynamics/profile":
+      case "/aerodynamics/levelFlight":
         return scaleProfile;
       default:
         return scale * chord;
@@ -35,8 +36,8 @@ const useProfileVisualizer = () => {
     switch (location.pathname) {
       case "/":
       case "/aerodynamics/introduction":
-        return [0, -0.5];
       case "/aerodynamics/profile":
+      case "/aerodynamics/levelFlight":
         return [PROFILE_POSITION, -0.25];
       default:
         return [WING_POSITION, 0];
