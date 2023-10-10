@@ -30,6 +30,7 @@ export interface Point {
 }
 
 export type ChartProps = {
+  disableHover?: boolean;
   name: string;
   traces: Trace[];
   axes: Record<string, Axis>;
@@ -44,6 +45,7 @@ export type ChartProps = {
 };
 
 const LineChart = ({
+  disableHover = false,
   name,
   traces,
   axes,
@@ -106,6 +108,7 @@ const LineChart = ({
           ))}
           {store && (
             <Hover
+              disable={disableHover}
               name={name}
               axes={axes}
               data={data}
