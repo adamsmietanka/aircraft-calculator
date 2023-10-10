@@ -1,15 +1,17 @@
-import { useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { SpringValue, useSpring } from "@react-spring/three";
-import { DRAG_VECTOR_SCALE } from "../../../common/three/config";
 import AnimatedHtml from "../../../common/three/AnimatedHtml";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
-import { useProfileChartsStore } from "../../hooks/useProfileCharts";
-import Formula from "../../../common/Formula";
+import useProfileCharts from "../../hooks/useProfileCharts";
 import { useCameraStore } from "../../../common/three/stores/useCamera";
 import Inputs3D from "../../../common/three/Inputs3D";
 import MassSlider from "./MassSlider";
+import SpeedSlider from "./SpeedSlider";
+import LineChart from "../../../common/three/LineChart";
+import useProfileTable, { Row } from "../../hooks/useProfileTable";
+import Formula from "../../../common/Formula";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -17,6 +19,12 @@ interface Props {
 
 const LevelFlight = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
+  const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const mass = useHoverProfileStore((state) => state.mass);
+  const setMass = useHoverProfileStore((state) => state.setMass);
+  const speed = useHoverProfileStore((state) => state.speed);
+  const setSpeed = useHoverProfileStore((state) => state.setSpeed);
+
   const setProfile = useWingStore((state) => state.setProfile);
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
@@ -27,26 +35,15 @@ const LevelFlight = ({ opacity }: Props) => {
   const savedAngle = useRef(0);
   const savedLock = useRef<string | boolean>("");
 
-  const [mass, setMass] = useState(1);
+  const { maxCz } = useProfileTable(1, profile) as Row;
+
+  useEffect(() => {
+    setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
+  }, [mass, speed]);
+
   const [showLayout, setShowLayout] = useState(false);
 
   const { pathname, state } = useLocation();
-  const navigate = useNavigate();
-
-  const showDimension = async (next: any, name: string, profiles: string[]) => {
-    for (const p of profiles) {
-      await next({ delay: 750 });
-      setProfile(p);
-    }
-  };
-
-  const setAngles = async (next: any, angles: number[]) => {
-    for (const a of angles) {
-      setChart({ xHover: a });
-      await next({ delay: 100 });
-    }
-    await next({ delay: 1000 });
-  };
 
   const [subtitle, setSubtitle] = useState<string | React.ReactNode>("");
   const [showSubtitle, setShowSubtitle] = useState(false);
@@ -82,12 +79,12 @@ const LevelFlight = ({ opacity }: Props) => {
           savedLock.current = chart.locked;
 
           await next({ delay: 2000 });
-          setChart({ xHover: 5 });
-          setChart({ hover: true, locked: "Coefficient of Lift" });
-          await displaySub(next, "When we want to maintain level flight", 2000);
+          setChart({ yHover: 0.5 });
+          setChart({ hover: true, locked: "Coefficient of Drag" });
+          await displaySub(next, 'When we want to maintain level flight', 2000);
           await displaySub(
             next,
-            "The forces acting in the vertical direction must be equal",
+            'The forces acting in the vertical direction must be equal',
             1500
           );
           set({ showWeight: true });
@@ -110,7 +107,7 @@ const LevelFlight = ({ opacity }: Props) => {
               />
             </div>
           );
-          await displaySub(next, "So our coefficient of lift must be equal to");
+          await displaySub(next, 'So our coefficient of lift must be equal to');
           await displaySub(
             next,
             <div className="flex items-center h-20">
@@ -126,7 +123,7 @@ const LevelFlight = ({ opacity }: Props) => {
           setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/levelFlight") {
-          set({ showWeight: false });
+          set({ showWeight: false, mass: 1, speed: 1 });
           setChart({
             hover: false,
             xHover: savedAngle.current,
@@ -146,24 +143,66 @@ const LevelFlight = ({ opacity }: Props) => {
         <AnimatedHtml show={showSubtitle}>
           <div className="flex justify-center">{subtitle}</div>
         </AnimatedHtml>
-        {/* <AnimatedHtml show={showSubtitle}>
-        <div className="flex">
-          <Formula className={`text-xl text-error`} tex={`W`} />
-          <Formula className={`text-xl`} tex={`=`} />
-          <Formula className={`text-xl text-primary`} tex={`F_L`} />
-        </div>
-      </AnimatedHtml> */}
       </mesh>
       <Inputs3D gridPositionX={-1.3} show={showLayout}>
         <MassSlider
           label="Mass"
           value={mass}
-          min={0.5}
+          min={0.3}
           step={0.1}
-          max={1.5}
+          max={0.7}
           setter={setMass}
         />
+        <SpeedSlider
+          label="Speed"
+          value={speed}
+          min={0.5}
+          step={0.5}
+          max={3}
+          setter={setSpeed}
+        />
       </Inputs3D>
+      <mesh visible={showLayout}>
+        <LineChart
+          disableHover
+          width={0.33}
+          gridPositionX={0.25}
+          opacity={opacity}
+          name="Coefficient of Lift"
+          traces={[{ name: "Power", points: pointsCl }]}
+          axes={{
+            x: { name: "Angle of Attack", min: -20, max: 20 },
+            y: {
+              name: "Coefficient of Lift (Cl)",
+              min: -1.75,
+              max: 1.75,
+            },
+          }}
+          store={useProfileChartsStore}
+        />
+        <LineChart
+          disableHover
+          width={0.5}
+          gridPositionX={1.1}
+          opacity={opacity}
+          name="Coefficient of Drag"
+          traces={[{ name: "Power", points: pointsCd }]}
+          axes={{
+            x: {
+              name: "Coefficient of Drag (Cd)",
+              min: 0,
+              max: profile.length === 2 ? 0.2 : 0.026,
+            },
+            y: {
+              name: "Cl",
+              min: -1.75,
+              max: 1.75,
+            },
+          }}
+          store={useProfileChartsStore}
+          yHover
+        />
+      </mesh>
     </>
   );
 };

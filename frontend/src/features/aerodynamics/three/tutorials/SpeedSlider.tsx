@@ -1,4 +1,5 @@
-import { ReactComponent as Mass } from '../../../../assets/mass.svg';
+import { ReactComponent as Turtle } from "../../../../assets/turtle.svg";
+import { ReactComponent as Eagle } from "../../../../assets/eagle.svg";
 
 interface Props {
   label: string;
@@ -9,7 +10,7 @@ interface Props {
   setter: (value: number) => void;
 }
 
-const MassSlider = ({
+const SpeedSlider = ({
   label,
   value,
   step = 1,
@@ -33,12 +34,16 @@ const MassSlider = ({
           className="range range-xs join-item pr-2"
         />
         <div className="w-full flex justify-between mt-1">
-          <Mass className="w-5 h-8 text-color -ml-2" />
-          <Mass className="w-8 h-8 text-color -mr-2" />
+          <p className="invisible" />
+          <p> 1x</p>
+          <p className="invisible" />
+          <p> 2x</p>
+          <p className="invisible" />
+          <p className=""> 3x</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default MassSlider;
+export default SpeedSlider;

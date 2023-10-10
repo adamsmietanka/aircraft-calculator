@@ -18,9 +18,13 @@ const ProfileVectors = ({ opacity, show }: Props) => {
   const splitVectors = useHoverProfileStore((state) => state.splitVectors);
   const dragMultiplier = useHoverProfileStore((state) => state.dragMultiplier);
   const vectorSize = useHoverProfileStore((state) => state.vectorSize);
+  const mass = useHoverProfileStore((state) => state.mass);
+  const speed = useHoverProfileStore((state) => state.speed);
 
   const cl = y["Coefficient of Lift"];
   const cd = dragMultiplier * x["Coefficient of Drag"];
+  const lift = cl * speed * speed;
+  const drag = cd * speed * speed;
 
   const [vectorsSpring] = useSpring(
     () => ({
@@ -37,7 +41,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
       <Vector
         value={
           (splitVectors
-            ? cl
+            ? lift
             : Math.sqrt(cd * cd + cl * cl) * (Math.sign(cl) === -1 ? -1 : 1)) *
           vectorSize
         }
@@ -59,7 +63,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
         </div>
       </Vector>
       <Vector
-        value={cd * vectorSize}
+        value={drag * vectorSize}
         otherValue={cl}
         rotation={vectorsSpring.rotationDrag}
         show={splitVectors && show}
@@ -73,17 +77,13 @@ const ProfileVectors = ({ opacity, show }: Props) => {
         />
       </Vector>
       <Vector
-        value={cd * vectorSize}
+        value={mass * vectorSize}
         rotation={vectorsSpring.rotationWeight}
         show={showWeight && show}
         opacity={opacity}
         color="error"
       >
-        <HoverableFormulaSimple
-          name="Weight"
-          tex={`W`}
-          texHover={` F_D=\\frac{1}{2} \\rho V^2 SC_D`}
-        />
+        <HoverableFormulaSimple name="Weight" tex={`W`} texHover={`W=mg`} />
       </Vector>
     </>
   );
