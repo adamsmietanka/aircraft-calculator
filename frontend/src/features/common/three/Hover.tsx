@@ -34,6 +34,7 @@ export interface MarkersStore {
 }
 
 interface HoverProps {
+  disable: boolean;
   name: string;
   axes: Record<string, Axis>;
   data: Record<string, Record<string, number>>;
@@ -51,6 +52,7 @@ const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
 
 const Hover = ({
+  disable,
   name,
   axes,
   data,
@@ -84,19 +86,20 @@ const Hover = ({
             !locked && store.setState({ xHover: clampedX });
           }
         }}
-        onPointerEnter={(e) => store.setState({ hover: true })}
-        onPointerLeave={(e) => store.setState({ hover: false })}
+        onPointerEnter={(e) => !disable && store.setState({ hover: true })}
+        onPointerLeave={(e) => !disable && store.setState({ hover: false })}
         onClick={(e) => {
           const oldLocked = store.getState().locked;
           // for charts that have individual locks
           if (typeof oldLocked === "string") {
-            store.setState((state) => ({
-              locked: state.locked === "" ? name : "",
-            }));
+            !disable &&
+              store.setState((state) => ({
+                locked: state.locked === "" ? name : "",
+              }));
           }
           // for charts sharing a lock
           else {
-            store.setState((state) => ({ locked: !state.locked }));
+            !disable && store.setState((state) => ({ locked: !state.locked }));
           }
         }}
       />
