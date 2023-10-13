@@ -23,10 +23,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
       position-x={profileSpring.gridX.to((x) => (x * CANVAS_WIDTH) / 2)}
       scale={profileSpring.scale}
     >
-      <animated.mesh
-        rotation-z={profileSpring.angle}
-        position-x={profileSpring.x.to((x) => x + 0.25)}
-      >
+      <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
         <mesh position-x={-0.25}>
           <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
           <AnimatedLine
@@ -49,7 +46,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
         </mesh>
       </animated.mesh>
       <animated.mesh
-        position-x={profileSpring.x.to((x) => x + 0.25)}
+        position-x={0.25}
         scale={profileSpring.scale.to((scale) => 1 / scale)}
       >
         <ProfileVectors opacity={opacity} show={showVisuals} />
