@@ -4,18 +4,12 @@ import { ReactComponent as Eagle } from "../../../../assets/eagle.svg";
 interface Props {
   label: string;
   value: number;
-  step?: number;
-  min?: number;
-  max: number;
   setter: (value: number) => void;
 }
 
 const SpeedSlider = ({
   label,
   value,
-  step = 1,
-  min = 0,
-  max,
   setter,
 }: Props) => {
   return (
@@ -26,20 +20,18 @@ const SpeedSlider = ({
       <div className="flex flex-col">
         <input
           type="range"
-          min={min}
-          max={max}
-          step={step}
+          min={0.5}
+          step={0.25}
+          max={2}
           value={value}
           onChange={(e) => setter(parseFloat(e.target.value))}
           className="range range-xs join-item pr-2"
         />
-        <div className="w-full flex justify-between mt-1">
-          <p className="invisible" />
-          <p> 1x</p>
-          <p className="invisible" />
-          <p> 2x</p>
-          <p className="invisible" />
-          <p className=""> 3x</p>
+        <div className="w-full grid grid-cols-4 gap-4 mt-1 text-center">
+          <p>0.5x</p>
+          <p>1x</p>
+          <p>1.5x</p>
+          <p>2x</p>
         </div>
       </div>
     </div>
