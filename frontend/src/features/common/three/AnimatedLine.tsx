@@ -67,7 +67,7 @@ const AnimatedLine = ({
   const distanceScaled = (start: Vector3, end: Vector3, scale: Vector3) => {
     const dx = (start.x - end.x) * scale.x,
       dy = (start.y - end.y) * scale.y,
-      dz = start.z - end.z;
+      dz = (start.z - end.z) * scale.z;
 
     return Math.sqrt(dx * dx + dy * dy + dz * dz);
   };
