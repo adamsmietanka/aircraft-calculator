@@ -25,6 +25,7 @@ const useProfileVisualizer = () => {
       case "/aerodynamics/introduction":
       case "/aerodynamics/profile":
       case "/aerodynamics/levelFlight":
+      case "/aerodynamics/inducedDrag":
         return scaleProfile;
       default:
         return scale * chord;
@@ -38,9 +39,10 @@ const useProfileVisualizer = () => {
       case "/aerodynamics/introduction":
       case "/aerodynamics/profile":
       case "/aerodynamics/levelFlight":
-        return [PROFILE_POSITION, -0.25];
+      case "/aerodynamics/inducedDrag":
+        return PROFILE_POSITION;
       default:
-        return [WING_POSITION, 0];
+        return WING_POSITION;
     }
   };
 
@@ -48,8 +50,7 @@ const useProfileVisualizer = () => {
     () => ({
       angle: showVisuals ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
       scale: getScale(),
-      gridX: getPosition()[0],
-      x: getPosition()[1],
+      gridX: getPosition(),
     }),
     [x, scale, chord, showVisuals, location.pathname]
   );
