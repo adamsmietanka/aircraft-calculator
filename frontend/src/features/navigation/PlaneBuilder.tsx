@@ -14,11 +14,13 @@ import ProfileNACAExplanation from "../aerodynamics/three/ProfileNACAExplanation
 import Introduction from "../aerodynamics/three/tutorials/Introduction";
 import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
 import LevelFlight from "../aerodynamics/three/tutorials/LevelFlight";
+import Subtitle from "./Subtitle";
 
 const PlaneBuilder = () => {
   return (
     <div className="fixed top-0 left-0 h-screen w-screen">
       <ProfileModal />
+      <Subtitle />
       <Canvas
         flat
         camera={{ position: [0, -200, 200], fov: 60 }}
@@ -30,6 +32,7 @@ const PlaneBuilder = () => {
         }}
       >
         {/* <Perf /> */}
+        {/* <gridHelper rotation-x={Math.PI / 2} position-x={-5}/> */}
         <OrbitControls enabled={false} />
         <ambientLight intensity={0.5} />
         <pointLight position={[0, 10, 0]} intensity={0.5} />
@@ -48,6 +51,7 @@ const PlaneBuilder = () => {
             "/aerodynamics/introduction",
             "/aerodynamics/profile",
             "/aerodynamics/levelFlight",
+            "/aerodynamics/inducedDrag",
             "/aerodynamics/wing",
           ]}
           Element={ProfileVisualizer}

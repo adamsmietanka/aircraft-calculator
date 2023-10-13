@@ -11,21 +11,16 @@ const obj: Record<string, number[]> = {
   "/aerodynamics/introduction": [10, 90, 0],
   "/aerodynamics/profile": [20, 90, 0],
   "/aerodynamics/levelFlight": [10, 90, 0],
-  "/aerodynamics/inducedDrag": [20, 60, 45],
+  "/aerodynamics/inducedDrag": [20, 90, 0],
   "/aerodynamics/wing": [20, 0, 0],
   "/aerodynamics/fuselage": [15, 70, -45],
-};
-
-// cartesian coords
-const center: Record<string, number[]> = {
-  "/aerodynamics/levelFlight": [-5, 0, 0],
 };
 
 const getCenter = (pathname: string) => {
   // cartesian coords
   const center: Record<string, number[]> = {
     "/aerodynamics/introduction": [-5, 0, 0],
-    "/aerodynamics/levelFlight": [-5, 0, 0],
+    "/aerodynamics/inducedDrag": [-5, 0, 0],
   };
   return center[pathname] || [0, 0, 0];
 };

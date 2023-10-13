@@ -156,9 +156,6 @@ const LevelFlight = ({ opacity }: Props) => {
         <SpeedSlider
           label="Speed"
           value={speed}
-          min={0.5}
-          step={0.5}
-          max={3}
           setter={setSpeed}
         />
       </Inputs3D>
