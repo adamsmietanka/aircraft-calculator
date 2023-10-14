@@ -15,24 +15,30 @@ type Props = {
   "rotation-z"?: Interpolation<number> | SpringValue<number> | number;
   scale?: Interpolation<number> | number;
   show?: boolean;
+  delayVisible?: number;
   children: React.ReactNode;
 };
 
-const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
+const AnimatedHtml = ({
+  children,
+  show = true,
+  delayVisible = 0,
+  ...rest
+}: Props) => {
   const htmlRef = useRef<Mesh>(null!);
   const childRef = useRef<Mesh>(null!);
 
   const location = useLocation();
   const Anim = animatedWeb(Html);
 
-  const worldScale = useMemo(() => new Vector3(1,1,1), []);
+  const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
 
   const [props, propsApi] = useSpring(
     () => ({
       from: { opacity: 0, display: "none" },
       to: async (next) => {
         const vis = htmlRef.current && checkVisible(htmlRef.current);
-        vis && show && (await next({ display: "block", delay: ROUTE_DELAY }));
+        vis && show && (await next({ display: "block", delay: ROUTE_DELAY + delayVisible }));
         await next({ opacity: vis && show ? 1 : 0 });
         (vis && show) || (await next({ display: "none" }));
       },
@@ -53,7 +59,7 @@ const AnimatedHtml = ({ children, show = true, ...rest }: Props) => {
     propsApi.start({
       to: async (next) => {
         const vis = htmlRef.current && checkVisible(htmlRef.current);
-        vis && show && (await next({ display: "block" }));
+        vis && show && (await next({ display: "block", delay: delayVisible }));
         await next({ opacity: vis && show ? 1 : 0 });
         (vis && show) || (await next({ display: "none" }));
       },

@@ -57,8 +57,8 @@ const PlaneBuilder = () => {
           Element={ProfileVisualizer}
         />
         <Route path="/aerodynamics/levelFlight" Element={LevelFlight} />
-        <Route path="/aerodynamics/wing" Element={Wing} />
         <Route path="/aerodynamics/inducedDrag" Element={InducedDrag} />
+        <Route path="/aerodynamics/wing" Element={Wing} />
         <Route path="/aerodynamics/fuselage" Element={Fuselage} />
       </Canvas>
     </div>

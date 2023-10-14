@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   className?: string;
@@ -16,6 +16,13 @@ const HoverableFormulaSimple = ({
   center = true,
 }: Props) => {
   const [hover, setHover] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window?.MathJax !== "undefined") {
+      window.MathJax.typesetClear();
+      window.MathJax.typeset();
+    }
+  }, [tex]);
 
   return (
     <div

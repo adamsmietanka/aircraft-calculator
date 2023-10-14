@@ -13,6 +13,7 @@ import AnimatedLine from "./AnimatedLine";
 
 export interface Axis {
   name: string;
+  symbol?: React.ReactNode;
   type?: string;
   min?: number;
   max?: number;
@@ -30,6 +31,7 @@ export interface Point {
 }
 
 export type ChartProps = {
+  show?: boolean;
   disableHover?: boolean;
   name: string;
   traces: Trace[];
@@ -45,6 +47,7 @@ export type ChartProps = {
 };
 
 const LineChart = ({
+  show = true,
   disableHover = false,
   name,
   traces,
@@ -75,6 +78,7 @@ const LineChart = ({
     <mesh position-x={(gridPositionX * CANVAS_WIDTH) / 2}>
       <mesh position={[-mid.x, -mid.y, 0]}>
         <LinesVertical
+          show={show}
           axis={axes.x}
           ticks={ticks.x}
           scale={scale}
@@ -84,6 +88,7 @@ const LineChart = ({
           stepOpacity={opacity}
         />
         <LinesHorizontal
+          show={show}
           axis={axes.y}
           ticks={ticks.y}
           scale={scale}

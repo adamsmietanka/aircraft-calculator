@@ -12,6 +12,7 @@ import Legend from "../../common/three/Legend";
 import WingShape from "../WingShape";
 import useWingCharts from "../hooks/useWingCharts";
 import { WING_POSITION } from "../../common/three/config";
+import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -57,8 +58,27 @@ const Wing = ({ opacity }: Props) => {
             { name: "Profile", points: cl, style: "dotted" },
           ]}
           axes={{
-            x: { name: "Angle of Attack", min: -20, max: 20 },
+            x: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Angle of attack"
+                  tex={`\\alpha`}
+                  texHover={`\\alpha \\: [\\degree]`}
+                />
+              ),
+              name: "Angle of Attack",
+              min: -20,
+              max: 20,
+            },
             y: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Coefficient of Lift"
+                  tex={`C_L`}
+                />
+              ),
               name: "Coefficient of Lift (Cl)",
               min: -1.75,
               max: 1.75,
@@ -78,10 +98,24 @@ const Wing = ({ opacity }: Props) => {
           ]}
           axes={{
             x: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Coefficient of Drag"
+                  tex={`C_D`}
+                />
+              ),
               name: "Coefficient of Drag (Cd)",
               min: 0,
             },
             y: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Coefficient of Lift"
+                  tex={`C_L`}
+                />
+              ),
               name: "Cl",
               min: -1.75,
               max: 1.75,
