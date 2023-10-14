@@ -11,6 +11,7 @@ import MassSlider from "./MassSlider";
 import SpeedSlider from "./SpeedSlider";
 import LineChart from "../../../common/three/LineChart";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
+import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
 
 interface Props {
@@ -153,14 +154,11 @@ const LevelFlight = ({ opacity }: Props) => {
           max={0.7}
           setter={setMass}
         />
-        <SpeedSlider
-          label="Speed"
-          value={speed}
-          setter={setSpeed}
-        />
+        <SpeedSlider label="Speed" value={speed} setter={setSpeed} />
       </Inputs3D>
       <mesh visible={showLayout}>
         <LineChart
+          show={showLayout}
           disableHover
           width={0.33}
           gridPositionX={0.25}
@@ -168,8 +166,27 @@ const LevelFlight = ({ opacity }: Props) => {
           name="Coefficient of Lift"
           traces={[{ name: "Power", points: pointsCl }]}
           axes={{
-            x: { name: "Angle of Attack", min: -20, max: 20 },
+            x: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Angle of attack"
+                  tex={`\\alpha`}
+                  texHover={`\\alpha \\: [\\degree]`}
+                />
+              ),
+              name: "Angle of Attack",
+              min: -20,
+              max: 20,
+            },
             y: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Coefficient of Lift"
+                  tex={`C_L`}
+                />
+              ),
               name: "Coefficient of Lift (Cl)",
               min: -1.75,
               max: 1.75,
@@ -178,6 +195,7 @@ const LevelFlight = ({ opacity }: Props) => {
           store={useProfileChartsStore}
         />
         <LineChart
+          show={showLayout}
           disableHover
           width={0.5}
           gridPositionX={1.1}
@@ -186,11 +204,25 @@ const LevelFlight = ({ opacity }: Props) => {
           traces={[{ name: "Power", points: pointsCd }]}
           axes={{
             x: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Coefficient of Drag"
+                  tex={`C_D`}
+                />
+              ),
               name: "Coefficient of Drag (Cd)",
               min: 0,
               max: profile.length === 2 ? 0.2 : 0.026,
             },
             y: {
+              symbol: (
+                <HoverableFormulaSimple
+                  className="text-lg"
+                  name="Coefficient of Lift"
+                  tex={`C_L`}
+                />
+              ),
               name: "Cl",
               min: -1.75,
               max: 1.75,

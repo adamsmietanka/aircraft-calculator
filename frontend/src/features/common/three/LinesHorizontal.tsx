@@ -14,8 +14,10 @@ import { Axis } from "./LineChart";
 import { useEffect, useRef } from "react";
 import { checkVisible } from "./checkVisible";
 import { useLocation } from "react-router-dom";
+import AnimatedHtml from "./AnimatedHtml";
 
 interface AxisProps {
+  show: boolean;
   ticks: number[];
   axis: Axis;
   scale: number[];
@@ -26,6 +28,7 @@ interface AxisProps {
 }
 
 const LinesHorizontal = ({
+  show,
   ticks,
   axis,
   scale,
@@ -37,8 +40,7 @@ const LinesHorizontal = ({
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
 
-  
-  const meshRef = useRef<THREE.Mesh>(null);
+  const meshRef = useRef<THREE.Mesh>(null!);
   const location = useLocation();
 
   const [opacityTrail, trailApi] = useTrail(
@@ -58,7 +60,7 @@ const LinesHorizontal = ({
   );
 
   useEffect(() => {
-    const vis = meshRef.current && checkVisible(meshRef.current);
+    const vis = show && checkVisible(meshRef.current);
     if (vis) {
       trailApi.start({ opacity: 1, delay: 800 });
       titleApi.start({ opacity: 1, delay: 1600 });
@@ -66,7 +68,7 @@ const LinesHorizontal = ({
       trailApi.start({ opacity: 0, delay: 0 });
       titleApi.start({ opacity: 0, delay: 0 });
     }
-  }, [location.pathname]);
+  }, [location.pathname, show]);
 
   const { unit } = useChartUnits(axis.type as string);
 
@@ -84,18 +86,28 @@ const LinesHorizontal = ({
           scale={scale}
         />
       ))}
-      <AnimatedText
-        position={[min - 1.2 * TITLE_PADDING, mid + 1, 0.5]}
-        rotation-z={Math.PI / 2}
-        fontSize={0.6 * FONT_SIZE}
-        color={gridColor}
-        fillOpacity={to(
-          [title.opacity, stepOpacity],
-          (opacity, stepOpacity) => opacity * stepOpacity
-        )}
-      >
-        {`${axis.name} ${unit && `[${unit}]`}`}
-      </AnimatedText>
+      {axis.symbol ? (
+        <AnimatedHtml
+          show={show}
+          delayVisible={1600}
+          position={[min - TITLE_PADDING, mid + 0.25, 0.5]}
+        >
+          {axis.symbol}
+        </AnimatedHtml>
+      ) : (
+        <AnimatedText
+          position={[min - 1.2 * TITLE_PADDING, mid + 1, 0.5]}
+          rotation-z={Math.PI / 2}
+          fontSize={0.6 * FONT_SIZE}
+          color={gridColor}
+          fillOpacity={to(
+            [title.opacity, stepOpacity],
+            (opacity, stepOpacity) => opacity * stepOpacity
+          )}
+        >
+          {`${axis.name} ${unit && `[${unit}]`}`}
+        </AnimatedText>
+      )}
     </mesh>
   );
 };
