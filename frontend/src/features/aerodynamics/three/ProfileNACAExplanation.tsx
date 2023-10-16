@@ -151,7 +151,6 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
                 [0, lowestPoint, 0],
                 [0, highestPoint, 0],
               ]}
-              scale={[scaleProfile, scaleProfile, scaleProfile]}
               opacity={0.75}
               width={1.5}
               color="secondary"

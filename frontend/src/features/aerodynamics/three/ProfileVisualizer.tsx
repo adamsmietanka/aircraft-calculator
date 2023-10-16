@@ -38,7 +38,6 @@ const ProfileVisualizer = ({ opacity }: Props) => {
               [0, 0, -0.01],
               [1, 0, -0.01],
             ]}
-            scale={[1, 1, 1]}
             style="thin"
             color="grid"
             opacity={opacity.to((o) => (showChord ? o / 5 : 0))}
