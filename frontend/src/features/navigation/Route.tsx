@@ -15,10 +15,10 @@ interface Props {
 
 const Route = ({ path, paths, Element }: Props) => {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const location = useLocation();
+  const { pathname } = useLocation();
   const pathsArray = paths ? paths : [path];
 
-  const isVisible = pathsArray.some((p) => location.pathname === p);
+  const isVisible = pathsArray.some((p) => pathname === p);
 
   const [props, propsApi] = useSpring(
     () => ({

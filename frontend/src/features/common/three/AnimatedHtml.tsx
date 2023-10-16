@@ -28,7 +28,7 @@ const AnimatedHtml = ({
   const htmlRef = useRef<Mesh>(null!);
   const childRef = useRef<Mesh>(null!);
 
-  const location = useLocation();
+  const {pathname} = useLocation();
   const Anim = animatedWeb(Html);
 
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
@@ -43,7 +43,7 @@ const AnimatedHtml = ({
         (vis && show) || (await next({ display: "none" }));
       },
     }),
-    [location.pathname]
+    [pathname]
   );
 
   useFrame(() => {

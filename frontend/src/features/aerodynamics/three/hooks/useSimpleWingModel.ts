@@ -7,7 +7,7 @@ import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
 const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
 const useSimpleWingModel = () => {
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const { profilePoints } = useProfile();
 
@@ -44,7 +44,7 @@ const useSimpleWingModel = () => {
       geom.computeVertexNormals();
       return geom;
     }
-  }, [profilePoints, location.pathname]);
+  }, [profilePoints, pathname]);
   return { geometry, tipGeometry };
 };
 export default useSimpleWingModel;

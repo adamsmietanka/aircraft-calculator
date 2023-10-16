@@ -11,7 +11,7 @@ const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
 const useWingModel = (customShape?: number) => {
   const wing = useWingStore();
-  const location = useLocation();
+  const {pathname} = useLocation();
 
   const { profilePoints } = useProfile();
   const { modelPoints } = useWingOutline();
@@ -61,7 +61,7 @@ const useWingModel = (customShape?: number) => {
       geometry.translate(0, 0, tip[0][2]);
       return geometry;
     }
-  }, [profilePoints, location.pathname]);
+  }, [profilePoints, pathname]);
 
   const geometry = useMemo(() => {
     const geom = new BufferGeometry();
@@ -97,7 +97,7 @@ const useWingModel = (customShape?: number) => {
       geom.computeVertexNormals();
       return geom;
     }
-  }, [profilePoints, location.pathname]);
+  }, [profilePoints, pathname]);
   return { geometry, tipGeometry };
 };
 export default useWingModel;

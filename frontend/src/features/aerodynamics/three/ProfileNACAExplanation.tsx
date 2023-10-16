@@ -20,9 +20,9 @@ interface Props {
 const ProfileNACAExplanation = ({ opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
-  const location = useLocation();
+  const { pathname } = useLocation();
 
-  const onProfile = location.pathname === "/aerodynamics/profile";
+  const onProfile = pathname === "/aerodynamics/profile";
 
   const hoverPlane = useHoverProfileStore((state) => state.hoverPlane);
   const hoverA = useHoverProfileStore((state) => state.hoverA);
