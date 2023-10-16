@@ -30,7 +30,8 @@ const AnimatedLine = ({
   width = 3,
   color = "primary",
   style = "normal",
-  segments = false
+  segments = false,
+  ...rest
 }: Props) => {
   const { colors } = useCSSColors();
 
@@ -111,7 +112,7 @@ const AnimatedLine = ({
       segments={segments}
       transparent
       {...styles[style]}
-      // {...rest}
+      {...rest}
     />
   );
 };
