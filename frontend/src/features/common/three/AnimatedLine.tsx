@@ -15,7 +15,6 @@ import {
 
 type Props = {
   points: number[][];
-  scale?: number[];
   opacity?: number | SpringValue<number> | Interpolation<number>;
   offset?: number;
   width?: SpringValue<number> | number;
@@ -26,7 +25,6 @@ type Props = {
 
 const AnimatedLine = ({
   points,
-  scale = [1, 1, 1],
   opacity = 1,
   offset = 0,
   width = 3,
@@ -48,7 +46,7 @@ const AnimatedLine = ({
       width: styles[style]?.width || width,
       offset: styles[style]?.offset || 0,
     }),
-    [points, scale, opacity, width, worldScale]
+    [points, opacity, width, worldScale]
   );
 
   useFrame(() => {

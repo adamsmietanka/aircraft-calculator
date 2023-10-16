@@ -32,7 +32,6 @@ const WingHoverables = ({ scale }: Props) => {
               [0, 0, 0],
               [1, 0, 0],
             ]}
-            scale={[meanAerodynamicChord, 1, 1]}
             color="gray"
           />
         </mesh>
@@ -44,7 +43,6 @@ const WingHoverables = ({ scale }: Props) => {
             [0, -wing.span / 2, 0],
             [0, wing.span / 2, 0],
           ]}
-          scale={[meanAerodynamicChord, 1, 1]}
           color="gray"
           style="dotted"
         />
