@@ -30,7 +30,7 @@ const WingHoverables = ({ scale }: Props) => {
           <AnimatedLine
             points={[
               [0, 0, 0],
-              [1, 0, 0],
+              [meanAerodynamicChord, 0, 0],
             ]}
             color="gray"
           />
@@ -38,8 +38,8 @@ const WingHoverables = ({ scale }: Props) => {
         <AnimatedLine
           points={[
             [0, wing.span / 2, 0],
-            [1, wing.span / 2, 0],
-            [1, -wing.span / 2, 0],
+            [meanAerodynamicChord, wing.span / 2, 0],
+            [meanAerodynamicChord, -wing.span / 2, 0],
             [0, -wing.span / 2, 0],
             [0, wing.span / 2, 0],
           ]}
