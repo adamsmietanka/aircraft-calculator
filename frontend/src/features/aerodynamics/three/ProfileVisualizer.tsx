@@ -17,6 +17,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
 
   const showChord = useHoverProfileStore((state) => state.showChord);
   const showCamber = useHoverProfileStore((state) => state.showCamber);
+  const showVectors = useHoverProfileStore((state) => state.showVectors);
 
   return (
     <animated.mesh
@@ -49,7 +50,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
         position-x={0.25}
         scale={profileSpring.scale.to((scale) => 1 / scale)}
       >
-        <ProfileVectors opacity={opacity} show={showVisuals} />
+        <ProfileVectors opacity={opacity} show={showVectors && showVisuals} />
       </animated.mesh>
     </animated.mesh>
   );
