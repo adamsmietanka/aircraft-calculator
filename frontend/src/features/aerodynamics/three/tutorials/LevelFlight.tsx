@@ -58,7 +58,7 @@ const LevelFlight = ({ opacity }: Props) => {
     setShowSubtitle(true);
     await next({ delay: duration });
     setShowSubtitle(false);
-    await next({ delay: 1500 });
+    await next({ delay: 1000 });
   };
 
   const showSub = (text: string | React.ReactNode) => {

@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { SpringValue, animated, to, useSpring } from "@react-spring/three";
-import AnimatedHtml from "../../../common/three/AnimatedHtml";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import useProfileCharts from "../../hooks/useProfileCharts";
@@ -9,19 +8,16 @@ import { useCameraStore } from "../../../common/three/stores/useCamera";
 import Inputs3D from "../../../common/three/Inputs3D";
 import MassSlider from "./MassSlider";
 import SpeedSlider from "./SpeedSlider";
-import LineChart from "../../../common/three/LineChart";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
-import Formula from "../../../common/Formula";
-import useWingModel from "../hooks/useWingModel";
-import { DoubleSide, Mesh, SpotLightHelper } from "three";
+import { DoubleSide } from "three";
 import { useSubtitleStore } from "../../../navigation/stores/useSubtitles";
 import useWingScale from "../../hooks/useWingScale";
 import useSimpleWingModel from "../hooks/useSimpleWingModel";
-import { useHelper } from "@react-three/drei";
 import AnimatedLine from "../../../common/three/AnimatedLine";
 import useInduced from "./useInduced";
 import useProfileVisualizer from "../hooks/useProfileVisualizer";
-import a1_0M from "../../../../utils/steerCalculation/aCoefficients/a1_0M";
+import VectorNew from "../../../common/three/VectorNew";
+import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -29,14 +25,10 @@ interface Props {
 
 const InducedDrag = ({ opacity }: Props) => {
   const { geometry, tipGeometry } = useSimpleWingModel();
-  const lightRef = useRef<Mesh>(null!);
-  // useHelper(lightRef, SpotLightHelper);
 
   const profile = useWingStore((state) => state.profile);
-  const chord = useWingStore((state) => state.chord);
-  const span = useWingStore((state) => state.span);
 
-  const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const { useProfileChartsStore } = useProfileCharts();
   const mass = useHoverProfileStore((state) => state.mass);
   const setMass = useHoverProfileStore((state) => state.setMass);
   const speed = useHoverProfileStore((state) => state.speed);
@@ -54,17 +46,14 @@ const InducedDrag = ({ opacity }: Props) => {
 
   const { maxCz } = useProfileTable(1, profile) as Row;
 
-  useEffect(() => {
-    setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
-    animationSpringApi.start({ speed });
-  }, [mass, speed]);
-
   const [showLayout, setShowLayout] = useState(false);
+  const [showVelocities, setShowVelocities] = useState(false);
+  const [showLift, setShowLift] = useState(false);
+  const [updateLift, setUpdateLift] = useState(false);
+  const [showDirection, setShowDirection] = useState(false);
+  const [showDrag, setShowDrag] = useState(false);
 
   const { pathname, state } = useLocation();
-
-  const [subtitle, setSubtitle] = useState<string | React.ReactNode>("");
-  const [showSubtitle, setShowSubtitle] = useState(false);
 
   const setSub = useSubtitleStore((state) => state.setSub);
   const show = useSubtitleStore((state) => state.show);
@@ -81,15 +70,8 @@ const InducedDrag = ({ opacity }: Props) => {
     show();
     await next({ delay: duration });
     hide();
-    await next({ delay: 1500 });
+    await next({ delay: 1000 });
   };
-
-  const showSub = (text: string | React.ReactNode) => {
-    setSubtitle(text);
-    setShowSubtitle(true);
-  };
-
-  const hideSub = () => setShowSubtitle(false);
 
   const [animationSpring, animationSpringApi] = useSpring(
     () => ({
@@ -105,6 +87,8 @@ const InducedDrag = ({ opacity }: Props) => {
         vortexVisible: false,
         vortexOpacity: 0,
         speed: 1,
+        epsilon: 0,
+        downwashX: 0,
       },
       to: async (next) => {
         if (pathname === "/aerodynamics/inducedDrag") {
@@ -112,65 +96,59 @@ const InducedDrag = ({ opacity }: Props) => {
           savedAngle.current = chart.xHover;
           savedLock.current = chart.locked;
 
-          await next({ delay: 2000 });
-          // setChart({ yHover: 0.5 });
+          set({ showVectors: false });
           setChart({ hover: true, locked: "Coefficient of Drag" });
-          // await displaySub(
-          //   next,
-          //   "We have studied the aerodynamics of a 2D airfoil",
-          //   3000
-          // );
+          await next({ delay: 2000 });
+          await displaySub(
+            next,
+            "We have studied the aerodynamics of a 2D airfoil"
+          );
           setCamera({ center: [-5, 0, 0], spherical: [20, 80, -80] });
           await next({ delay: 500 });
           await next({ wingVisible: true });
-          await next({ wingOpacity: 0.5 });
-          // await displaySub(
-          //   next,
-          //   "Which is also true for a wing with an infinite span",
-          //   4000
-          // );
+          await next({ wingOpacity: 1 });
+          await displaySub(
+            next,
+            "Which happens to be the same for a wing with an infinite span",
+            4000
+          );
           set({ showWeight: true });
           await next({ wingLength: 0.5 });
           await next({ tunnelVisible: true });
           await next({ tunnelOpacity: 0.5 });
-          // await displaySub(next, "Or one inside a wind tunnel", 2000);
+          await displaySub(next, "Or one inside a wind tunnel", 2000);
           await next({ tunnelOpacity: 0 });
           await next({ tunnelVisible: false });
           setCamera({ spherical: [20, 70, 40] });
           await next({ wingLength: 1 });
-          // await displaySub(
-          //   next,
-          //   "Airflow speeds up along the upper surface creating an area of low pressure",
-          //   3000
-          // );
+          await displaySub(
+            next,
+            "Airflow speeds up along the upper surface creating an area of low pressure"
+          );
           await next({ spanVisible: true });
           await next({ spanOpacity: 1 });
-          // await displaySub(
-          //   next,
-          //   "This creates a flow from the lower wing surface to the upper around the wingtip",
-          //   4000
-          // );
+          await displaySub(
+            next,
+            "This creates a flow from the lower wing surface to the upper around the wingtip",
+            4000
+          );
+          await next({ spanOpacity: 0 });
+          await next({ spanVisible: false });
           await next({ vortexVisible: true });
           await next({ vortexOpacity: 1 });
-          // await displaySub(
-          //   next,
-          //   "This combined with the speed of the freeflow creates a vortex at the wingtip",
-          //   4000
-          // );
-          setCamera({ center: [-5, -1, 7.5], spherical: [20, 90, 90] });
-          // await displaySub(
-          //   next,
-          //   "The vortex deflects the airflow behind the trailing edge downwards",
-          //   4000
-          // );
-          setCamera({ center: [-5, 0, 0], spherical: [20, 70, 40] });
+          await displaySub(
+            next,
+            "This combined with the speed of the freeflow creates a vortex at the wingtip",
+            4000
+          );
+          setCamera({ spherical: [20, 70, 40] });
           await next({ delay: 2000 });
           setMass(1);
-          // await displaySub(
-          //   next,
-          //   "When we increase the angle of attack the vortex gets more violent",
-          //   4000
-          // );
+          await displaySub(
+            next,
+            "When we increase the angle of attack the vortex gets more violent",
+            4000
+          );
           setMass(0.5);
           await next({ delay: 1000 });
           setSpeed(1.25);
@@ -181,43 +159,43 @@ const InducedDrag = ({ opacity }: Props) => {
             4000
           );
           setSpeed(1);
-          await next({ delay: 500 });
-          // await displaySub(
-          //   next,
-          //   <div className="flex">
-          //     <Formula className={`text-xl text-error`} tex={`W`} />
-          //     <Formula className={`text-xl`} tex={`=`} />
-          //     <Formula className={`text-xl text-primary`} tex={`F_L`} />
-          //   </div>
-          // );
-          // await displaySub(
-          //   next,
-          //   <div className="flex items-center h-20">
-          //     <Formula className={`text-xl`} tex={`mg`} />
-          //     <Formula className={`text-xl`} tex={`=`} />
-          //     <Formula
-          //       className={`text-xl`}
-          //       tex={`\\frac{1}{2} \\rho V^2 S C_L`}
-          //     />
-          //   </div>
-          // );
-          // await displaySub(next, "So our coefficient of lift must be equal to");
-          // await displaySub(
-          //   next,
-          //   <div className="flex items-center h-20">
-          //     <Formula className={`text-xl text-primary`} tex={`C_L`} />
-          //     <Formula className={`text-xl`} tex={`=`} />
-          //     <Formula
-          //       className={`text-xl`}
-          //       tex={`\\frac{2mg}{\\rho V^2 S }`}
-          //     />
-          //   </div>,
-          //   4000
-          // );
+          setCamera({ center: [-5, -1, 7.5], spherical: [20, 90, 90] });
+          await displaySub(
+            next,
+            "The vortex deflects the airflow behind the trailing edge downwards",
+            4000
+          );
+          await displaySub(next, "This is called downwash");
           setCamera({ center: [-5, 0, 0], spherical: [20, 90, 0] });
+          await next({ delay: 500 });
+          await next({ vortexOpacity: 0 });
+          await next({ vortexVisible: false });
+          setShowLift(true);
+          setShowDirection(true);
+          await displaySub(next, "In a 2D world lift is always vertical");
+          setShowVelocities(true);
+          await displaySub(next, "An airfoil produces no downwash");
+          setUpdateLift(true);
+          await next({ vortexVisible: true });
+          await next({ vortexOpacity: 1 });
+          await displaySub(
+            next,
+            "The downwash angles the relative airflow backwards",
+            4000
+          );
+          await displaySub(
+            next,
+            "Lift is always perpendicular to the flow direction"
+          );
+          setShowDrag(true);
+          await displaySub(
+            next,
+            "The x component of lift is called induced drag",
+            4000
+          );
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/inducedDrag") {
-          set({ showWeight: false, mass: 1, speed: 1 });
+          set({ showWeight: false, mass: 1, speed: 1, showVectors: true });
           setChart({
             hover: false,
             xHover: savedAngle.current,
@@ -225,6 +203,7 @@ const InducedDrag = ({ opacity }: Props) => {
           });
           setProfile(savedProfile.current ? savedProfile.current : profile);
           setShowLayout(false);
+          hide();
         }
       },
     }),
@@ -232,19 +211,25 @@ const InducedDrag = ({ opacity }: Props) => {
   );
   const { spanwise, vortex } = useInduced();
   const { profileSpring } = useProfileVisualizer();
-  const spanWiseSpeed = 0.3 * chart.yHover * speed;
-  const vortexSpeed = Math.sqrt(
-    spanWiseSpeed * spanWiseSpeed + 0.01 * speed * speed
-  );
+
+  const spanWiseSpeed = 0.2 * chart.yHover * speed;
+  const vortexSpeed =
+    5 * Math.sqrt(spanWiseSpeed * spanWiseSpeed + 0.01 * speed * speed);
+  const downWashAngle = Math.atan(spanWiseSpeed / speed);
+  const lift = chart.yHover * speed * speed * 1.25;
+
+  useEffect(() => {
+    setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
+    animationSpringApi.start({
+      speed,
+      epsilon: updateLift ? Math.atan(spanWiseSpeed / speed) : 0,
+      downwashX: speed * 3.5,
+    });
+  }, [mass, speed, updateLift, spanWiseSpeed]);
 
   return (
     <>
-      <mesh position={[-4.5, -3, 0]}>
-        <AnimatedHtml show={showSubtitle}>
-          <div className="flex justify-center">{subtitle}</div>
-        </AnimatedHtml>
-      </mesh>
-      <Inputs3D gridPositionX={-1.3} show={showLayout}>
+      <Inputs3D gridPositionX={-1.5} show={showLayout}>
         <MassSlider
           label="Mass"
           value={mass}
@@ -255,16 +240,16 @@ const InducedDrag = ({ opacity }: Props) => {
         />
         <SpeedSlider label="Speed" value={speed} setter={setSpeed} />
       </Inputs3D>
-      <spotLight ref={lightRef} position={[-20, -2, 20]} intensity={0.2} />
+      <spotLight position={[-15, -2, 20]} intensity={0.3} />
       <mesh position-x={-8.5} scale={scaleProfile}>
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
           <mesh position-x={-0.25}>
             <animated.mesh
-              position-x={0.5}
+              position-x={0.4}
               rotation-z={Math.PI / 2}
               visible={animationSpring.tunnelVisible}
             >
-              <cylinderGeometry args={[0.5, 0.5, 1, 32, 1, true]} />
+              <cylinderGeometry args={[0.5, 0.5, 1.1, 32, 1, true]} />
               <animated.meshStandardMaterial
                 color={"lightgray"}
                 side={DoubleSide}
@@ -282,68 +267,145 @@ const InducedDrag = ({ opacity }: Props) => {
                 style="dotted"
                 color="grid"
                 offset={spanWiseSpeed}
-                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+                opacity={to(
+                  [opacity, animationSpring.spanOpacity],
+                  (opacity, spanOpacity) => opacity * spanOpacity
+                )}
               />
             </animated.mesh>
             <animated.mesh
-              position-x={0.95}
+              position-x={0.25}
               position-z={1}
-              scale-x={animationSpring.speed}
-              rotation-z={(-2 * Math.PI) / 180}
               visible={animationSpring.vortexVisible}
             >
-              <AnimatedLine
-                points={vortex}
-                style="dotted"
-                color="airstream"
-                offset={vortexSpeed}
-                opacity={opacity.to((o) => (true ? o * 0.2 : 0))}
-              />
-              <mesh rotation-x={Math.PI}>
+              <animated.mesh
+                scale-x={animationSpring.speed}
+                rotation-z={profileSpring.angle.to(
+                  (a) => -a - (3 * Math.PI) / 180
+                )}
+              >
                 <AnimatedLine
                   points={vortex}
-                  style="dotted"
+                  style="vortex"
                   color="airstream"
                   offset={vortexSpeed}
-                  opacity={opacity.to((o) => (true ? o * 0.2 : 0))}
+                  opacity={to(
+                    [opacity, animationSpring.vortexOpacity],
+                    (opacity, vortexOpacity) => opacity * vortexOpacity
+                  )}
                 />
-              </mesh>
-            </animated.mesh>
-            <mesh scale={1}>
-              <animated.mesh
-                scale-z={animationSpring.wingLength}
-                visible={animationSpring.wingVisible}
-              >
-                <mesh geometry={geometry}>
-                  <animated.meshStandardMaterial
-                    color={"lightgray"}
-                    side={DoubleSide}
-                    metalness={1}
-                    transparent
+                <mesh rotation-x={Math.PI}>
+                  <AnimatedLine
+                    points={vortex}
+                    style="vortex"
+                    color="airstream"
+                    offset={vortexSpeed}
                     opacity={to(
-                      [opacity, animationSpring.wingOpacity],
-                      (o, wingOpacity) => o * wingOpacity
-                    )}
-                  />
-                </mesh>
-                <mesh geometry={tipGeometry}>
-                  <animated.meshStandardMaterial
-                    color={"lightgray"}
-                    side={DoubleSide}
-                    metalness={1}
-                    transparent
-                    opacity={to(
-                      [opacity, animationSpring.wingOpacity],
-                      (o, wingOpacity) => o * wingOpacity
+                      [opacity, animationSpring.vortexOpacity],
+                      (opacity, vortexOpacity) => opacity * vortexOpacity
                     )}
                   />
                 </mesh>
               </animated.mesh>
-            </mesh>
+            </animated.mesh>
+            <animated.mesh
+              scale-z={animationSpring.wingLength}
+              visible={animationSpring.wingVisible}
+            >
+              <mesh geometry={geometry}>
+                <animated.meshStandardMaterial
+                  color={"lightgray"}
+                  side={DoubleSide}
+                  metalness={1}
+                  transparent
+                  opacity={to(
+                    [opacity, animationSpring.wingOpacity],
+                    (o, wingOpacity) => o * wingOpacity
+                  )}
+                />
+              </mesh>
+              <mesh geometry={tipGeometry}>
+                <animated.meshStandardMaterial
+                  color={"lightgray"}
+                  side={DoubleSide}
+                  metalness={1}
+                  transparent
+                  opacity={to(
+                    [opacity, animationSpring.wingOpacity],
+                    (o, wingOpacity) => o * wingOpacity
+                  )}
+                />
+              </mesh>
+            </animated.mesh>
+            <animated.mesh
+              position-x={1}
+              position-z={1}
+              rotation-z={profileSpring.angle.to((a) => -a)}
+            >
+              <mesh scale={1 / scaleProfile}>
+                <VectorNew
+                  x={speed}
+                  show={showVelocities}
+                  opacity={opacity}
+                  color="primary"
+                >
+                  <HoverableFormulaSimple name="Freeflow speed" tex={`V`} />
+                </VectorNew>
+                <animated.mesh position-x={animationSpring.downwashX}>
+                  <VectorNew
+                    x={0}
+                    y={updateLift ? -spanWiseSpeed : 0}
+                    show={showVelocities}
+                    opacity={opacity}
+                    color="error"
+                  >
+                    <HoverableFormulaSimple name="Downwash" tex={`w`} />
+                  </VectorNew>
+                </animated.mesh>
+              </mesh>
+              <animated.mesh rotation-z={animationSpring.epsilon.to((e) => -e)}>
+                <AnimatedLine
+                  points={[
+                    [-1, 0, 0.01],
+                    [1, 0, 0.01],
+                  ]}
+                  style="dotted"
+                  color="airstream"
+                  opacity={opacity.to((o) => (showDirection ? o * 0.25 : 0))}
+                />
+              </animated.mesh>
+            </animated.mesh>
           </mesh>
         </animated.mesh>
+        <mesh scale={1 / scaleProfile} position-x={0.25} position-z={1}>
+          <animated.mesh></animated.mesh>
+          <VectorNew
+            x={updateLift ? lift * Math.sin(downWashAngle) : 0}
+            y={lift * Math.cos(downWashAngle)}
+            show={showLift}
+            opacity={opacity}
+            color="primary"
+          >
+            <HoverableFormulaSimple name="Freeflow speed" tex={`F_L`} />
+          </VectorNew>
+          <VectorNew
+            x={lift * Math.sin(downWashAngle)}
+            show={showDrag}
+            opacity={opacity}
+            color="error"
+          >
+            <HoverableFormulaSimple name="Induced Drag" tex={`D_i`} />
+          </VectorNew>
+          <VectorNew
+            y={lift * Math.cos(downWashAngle)}
+            show={false}
+            opacity={opacity}
+            color="error"
+          >
+            <HoverableFormulaSimple name="Effective Lift" tex={`F_{L_{eff}}`} />
+          </VectorNew>
+        </mesh>
       </mesh>
-      {/* <AnimatedHtml rotation-y={Math.PI / 2}>LOW</AnimatedHtml> */}
     </>
   );
 };

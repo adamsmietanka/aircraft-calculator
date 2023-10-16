@@ -17,6 +17,12 @@ export const styles: Record<string, Record<string, number>> = {
     dashScale: 5,
     width: 1,
   },
+  vortex: {
+    dashSize: 1,
+    gapSize: 10,
+    dashScale: 20,
+    width: 1,
+  },
   thin: {
     gapSize: 0,
     width: 1,
