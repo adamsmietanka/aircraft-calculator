@@ -2,7 +2,7 @@ import { SpringValue, animated, to, useSpring } from "@react-spring/three";
 import { Cone, Cylinder } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 const VECTOR_WIDTH = 0.05;
 const VECTOR_TIP_LENGTH = 0.5;
@@ -32,18 +32,34 @@ const Vector = ({
 
   const { colors } = useCSSColors();
 
-  const [spring] = useSpring(
+  const [spring, springApi] = useSpring(
     () => ({
       value,
-      textY: value * VECTOR_SIZE + (otherValue ? 0.1 : 0.5) * (value < 0 ? -1 : 1),
+      textY:
+        value * VECTOR_SIZE + (otherValue ? 0.1 : 0.5) * (value < 0 ? -1 : 1),
       otherDirection: otherValue ? Math.sign(otherValue) : 0,
       opacity: show && value !== 0 ? 1 : 0,
+      visible: show,
     }),
-    [value, otherValue, show]
+    [value, otherValue]
   );
 
+  useEffect(() => {
+    springApi.start({
+      to: async (next) => {
+        show && (await next({ visible: true }));
+        await next({ opacity: show && value !== 0 ? 1 : 0 });
+        show || (await next({ visible: false }));
+      },
+    });
+  }, [show, value]);
+
   return (
-    <animated.mesh rotation-z={rotation} position-z={0.2}>
+    <animated.mesh
+      rotation-z={rotation}
+      position-z={0.2}
+      visible={spring.visible}
+    >
       <AnimatedCylinder
         args={[VECTOR_WIDTH, VECTOR_WIDTH, 1, 32]}
         scale-x={spring.value.to((v) => Math.sqrt(Math.abs(v)))}

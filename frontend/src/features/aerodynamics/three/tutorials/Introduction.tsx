@@ -27,7 +27,7 @@ const Introduction = ({ opacity }: Props) => {
 
   const showDimension = async (next: any, name: string, profiles: string[]) => {
     for (const p of profiles) {
-      await next({ delay: 750 });
+      await next({ delay: 600 });
       setProfile(p);
     }
   };
@@ -52,7 +52,7 @@ const Introduction = ({ opacity }: Props) => {
     setShowSubtitle(true);
     await next({ delay: duration });
     setShowSubtitle(false);
-    await next({ delay: 1500 });
+    await next({ delay: 1000 });
   };
 
   const showSub = (text: string | React.ReactNode) => {
@@ -84,13 +84,13 @@ const Introduction = ({ opacity }: Props) => {
             dragMultiplier: 1,
             vectorSize: 1.5,
           });
-          setChart({ xHover: 0 });
+          setChart({ xHover: 0.01 });
           await displaySub(
             next,
             "Let's start with a simple rectangular plate.",
             2000
           );
-          setChart({ hover: true, locked: "Coefficient of Lift" });
+          setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
           await displaySub(next, "When it is not angled", 1500);
           await displaySub(
             next,

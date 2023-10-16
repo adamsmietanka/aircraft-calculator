@@ -42,7 +42,10 @@ const ProfileVisualizer = ({ opacity }: Props) => {
             color="grid"
             opacity={opacity.to((o) => (showChord ? o / 5 : 0))}
           />
-          <ProfileAirstreams opacity={opacity} show={showVisuals} />
+          <ProfileAirstreams
+            opacity={opacity}
+            show={showVectors && showVisuals}
+          />
         </mesh>
       </animated.mesh>
       <animated.mesh
