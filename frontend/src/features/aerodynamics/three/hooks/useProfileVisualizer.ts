@@ -14,13 +14,13 @@ const useProfileVisualizer = () => {
 
   const { scale, scaleProfile } = useWingScale();
 
-  const location = useLocation();
+  const { pathname } = useLocation();
 
   const showVisuals =
-    (location.pathname === "/aerodynamics/profile" && !!locked) || hover;
+    (pathname === "/aerodynamics/profile" && !!locked) || hover;
 
   const getScale = () => {
-    switch (location.pathname) {
+    switch (pathname) {
       case "/":
       case "/aerodynamics/introduction":
       case "/aerodynamics/profile":
@@ -34,7 +34,7 @@ const useProfileVisualizer = () => {
 
   // Returns [gridPosition, localPosition]
   const getPosition = () => {
-    switch (location.pathname) {
+    switch (pathname) {
       case "/":
       case "/aerodynamics/introduction":
       case "/aerodynamics/profile":
@@ -52,7 +52,7 @@ const useProfileVisualizer = () => {
       scale: getScale(),
       gridX: getPosition(),
     }),
-    [x, scale, chord, showVisuals, location.pathname]
+    [x, scale, chord, showVisuals, pathname]
   );
 
   return { profileSpring, showVisuals };

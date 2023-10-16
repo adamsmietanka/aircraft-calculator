@@ -41,7 +41,7 @@ const LinesVertical = ({
   const { gridColor } = useCSSColors();
 
   const meshRef = useRef<THREE.Mesh>(null!);
-  const location = useLocation();
+  const {pathname} = useLocation();
 
   const [opacityTrail, trailApi] = useTrail(
     ticks.length,
@@ -68,7 +68,7 @@ const LinesVertical = ({
       trailApi.start({ opacity: 0, delay: 0 });
       titleApi.start({ opacity: 0, delay: 0 });
     }
-  }, [location.pathname, show]);
+  }, [pathname, show]);
 
   const { unit } = useChartUnits(axis.type as string);
 
