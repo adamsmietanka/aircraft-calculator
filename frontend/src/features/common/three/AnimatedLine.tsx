@@ -15,6 +15,7 @@ import {
 
 type Props = {
   points: number[][];
+  scale?: number[];
   opacity?: number | SpringValue<number> | Interpolation<number>;
   offset?: number;
   width?: SpringValue<number> | number;
@@ -25,6 +26,7 @@ type Props = {
 
 const AnimatedLine = ({
   points,
+  scale,
   opacity = 1,
   offset = 0,
   width = 3,
