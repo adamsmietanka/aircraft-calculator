@@ -7,7 +7,7 @@ export interface PlaneState {
 }
 
 export const usePlaneStore = create<PlaneState>()((set) => ({
-  configuration: 1,
+  configuration: 0,
   setConfiguration: (value) => set({ configuration: value }),
   set: (value) => set(value),
 }));
