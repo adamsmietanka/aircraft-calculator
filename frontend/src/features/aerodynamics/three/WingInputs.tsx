@@ -49,7 +49,7 @@ const WingInputs = ({
       )}
       <AnimatedInputTechnical
         value={wing.chord}
-        opacity={0.75}
+        opacity={opacity.to((o) => 0.75 * o)}
         scale={wingScale}
       >
         <div className={`${hoverWing.chords && "hidden"}`}>

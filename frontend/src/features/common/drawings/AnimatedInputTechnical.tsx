@@ -1,4 +1,4 @@
-import { animated, to, useSpring } from "@react-spring/three";
+import { Interpolation, SpringValue, animated, to, useSpring } from "@react-spring/three";
 import { ReactNode, useMemo, useRef } from "react";
 import AnimatedLine from "../three/AnimatedLine";
 import AnimatedTipNew from "./AnimatedTipNew";
@@ -13,7 +13,7 @@ interface Props {
   value: number;
   valueY?: number;
   startX?: number;
-  opacity: number;
+  opacity: number | SpringValue<number> | Interpolation<number>;
   distance?: number;
   vertical?: boolean;
   outside?: boolean;
@@ -27,10 +27,10 @@ const STICK_OUT = 0.2;
  * X is always parallel to the line with arrows
  *
  * It will start at [startX,0,0] and go to [value,0,0]
- * 
+ *
  * @param {number} scale
  * Allows a consistent size of measurement tips and inputs.
- * Not needed when the scale of the parent component doesn't change. 
+ * Not needed when the scale of the parent component doesn't change.
  * It'll be calculated automatically.
  */
 const AnimatedInputTechnical = ({
