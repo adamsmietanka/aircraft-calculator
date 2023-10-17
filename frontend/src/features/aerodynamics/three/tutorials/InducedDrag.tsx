@@ -188,7 +188,11 @@ const InducedDrag = ({ opacity }: Props) => {
           setShowDrag(true);
           await displaySub(
             next,
-            "The x component of lift is called induced drag",
+            <p className="flex">
+              The x component of
+              <Formula className="text-primary mt-1" tex="\: F_L \:" /> is
+              called induced drag
+            </p>,
             4000
           );
           await displaySub(
@@ -196,6 +200,21 @@ const InducedDrag = ({ opacity }: Props) => {
             <p className="flex">
               It's inveresely proportional to <Formula tex="\: V^2" />
             </p>,
+            4000
+          );
+          await displaySub(
+            next,
+            <p className="flex">
+              The y component of
+              <Formula className="text-primary mt-1" tex="\: F_L \:" /> is the
+              "true" lift
+            </p>,
+            4000
+          );
+          await displaySub(next, "Due to the downwash it's slightly smaller");
+          await displaySub(
+            next,
+            "So we actually need a steeper angle of attack to achieve the same lift in a wing",
             4000
           );
           setShowLayout(true);
