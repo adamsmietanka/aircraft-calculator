@@ -20,7 +20,7 @@ const FuselageConfiguration = () => {
   return (
     <div className="form-control">
       <label className="label">
-        <span className="label-text flex">Plane configuration</span>
+        <span className="label-text flex">Configuration</span>
       </label>
       <div className="join h-12 w-60 input input-bordered p-0">
         <div className="dropdown dropdown-hover h-full w-full">
