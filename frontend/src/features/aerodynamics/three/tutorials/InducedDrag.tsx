@@ -18,6 +18,7 @@ import useInduced from "./useInduced";
 import useProfileVisualizer from "../hooks/useProfileVisualizer";
 import VectorNew from "../../../common/three/VectorNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
+import Formula from "../../../common/Formula";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -183,14 +184,18 @@ const InducedDrag = ({ opacity }: Props) => {
             "The downwash angles the relative airflow backwards",
             4000
           );
-          await displaySub(
-            next,
-            "Lift is always perpendicular to the flow direction"
-          );
+          await displaySub(next, "Lift is always perpendicular to the airflow");
           setShowDrag(true);
           await displaySub(
             next,
             "The x component of lift is called induced drag",
+            4000
+          );
+          await displaySub(
+            next,
+            <p className="flex">
+              It's inveresely proportional to <Formula tex="\: V^2" />
+            </p>,
             4000
           );
           setShowLayout(true);
