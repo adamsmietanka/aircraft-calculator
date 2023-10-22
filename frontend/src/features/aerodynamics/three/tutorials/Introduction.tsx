@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SpringValue, useSpring } from "@react-spring/three";
 import { DRAG_VECTOR_SCALE } from "../../../common/three/config";
@@ -6,6 +6,8 @@ import AnimatedHtml from "../../../common/three/AnimatedHtml";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import { useProfileChartsStore } from "../../hooks/useProfileCharts";
+import { useAwaitClickStore } from "../../../navigation/stores/useAwaitClick";
+import useAwaitClick from "../../../navigation/hooks/useAwaitClick";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -62,6 +64,8 @@ const Introduction = ({ opacity }: Props) => {
 
   const hideSub = () => setShowSubtitle(false);
 
+  const waitUserInput = useAwaitClick();
+
   const [introductionSpring, introductionSpringApi] = useSpring(
     () => ({
       from: {
@@ -90,12 +94,14 @@ const Introduction = ({ opacity }: Props) => {
             "Let's start with a simple rectangular plate.",
             2000
           );
+          // await waitUserInput();
           setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
           await displaySub(next, "When it is not angled", 1500);
           await displaySub(
             next,
             "the force acting on the plate is only horizontal."
           );
+          // await waitUserInput();
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5]);
           await displaySub(next, "In order to deflect the air downwards");
           await displaySub(next, "the plate must exert a force on the flow");
@@ -104,6 +110,7 @@ const Introduction = ({ opacity }: Props) => {
             "By Newton's 3rd Law we should have a force acting on the plate.",
             4000
           );
+          // await waitUserInput();
           set({ splitVectors: true });
           await displaySub(
             next,
