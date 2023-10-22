@@ -5,6 +5,7 @@ import { ReactComponent as Engine } from "../../assets/engine.svg";
 import { ReactComponent as Swing } from "../../assets/swing.svg";
 import { ReactComponent as Scales } from "../../assets/scales.svg";
 import { ReactComponent as Curve } from "../../assets/curve.svg";
+import { ReactComponent as Compass } from "../../assets/compass.svg";
 import React from "react";
 import { Settings } from "..";
 import { NavLink, useLocation } from "react-router-dom";
@@ -42,6 +43,11 @@ const links = [
     to: "/turn",
     name: "Turn Analysis",
     icon: <Curve />,
+  },
+  {
+    to: "/navigation",
+    name: "Navigation",
+    icon: <Compass />,
   },
 ];
 

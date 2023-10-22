@@ -104,6 +104,11 @@ const steps: Step[] = [
     feature: "stability",
     path: "stabillty-and-manouverabillty",
   },
+  {
+    name: "Hyperbolic navigation",
+    feature: "navigation",
+    path: "hyperbolic",
+  },
 ];
 
 export default steps;

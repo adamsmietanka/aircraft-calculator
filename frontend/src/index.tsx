@@ -52,6 +52,7 @@ root.render(
           </Route>
 
           <Route path="turn" element={<Turn />} />
+          <Route path="navigation/*" element={<PlaneBuilder />} />
           <Route path="settings" element={<Settings />} />
         </Route>
       </Routes>

@@ -15,6 +15,7 @@ import Introduction from "../aerodynamics/three/tutorials/Introduction";
 import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
 import LevelFlight from "../aerodynamics/three/tutorials/LevelFlight";
 import Subtitle from "./Subtitle";
+import NavigationHyperbolic from "../compass/NavigationHyperbolic";
 
 const PlaneBuilder = () => {
   return (
@@ -60,6 +61,7 @@ const PlaneBuilder = () => {
         <Route path="/aerodynamics/inducedDrag" Element={InducedDrag} />
         <Route path="/aerodynamics/wing" Element={Wing} />
         <Route path="/aerodynamics/fuselage" Element={Fuselage} />
+        <Route path="/navigation/hyperbolic" Element={NavigationHyperbolic} />
       </Canvas>
     </div>
   );

@@ -14,6 +14,7 @@ const obj: Record<string, number[]> = {
   "/aerodynamics/inducedDrag": [20, 90, 0],
   "/aerodynamics/wing": [20, 0, 0],
   "/aerodynamics/fuselage": [15, 70, -45],
+  "/navigation/hyperbolic": [20, 90, 0],
 };
 
 const getCenter = (pathname: string) => {
