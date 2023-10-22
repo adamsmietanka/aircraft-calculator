@@ -105,6 +105,11 @@ const steps: Step[] = [
     path: "stabillty-and-manouverabillty",
   },
   {
+    name: "Turn",
+    feature: "turn",
+    path: "",
+  },
+  {
     name: "Hyperbolic navigation",
     feature: "navigation",
     path: "hyperbolic",
