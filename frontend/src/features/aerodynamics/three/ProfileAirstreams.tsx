@@ -4,6 +4,7 @@ import { getReynolds } from "../data/profiles";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
 import useProfile from "../hooks/useProfile";
 import { SpringValue } from "@react-spring/three";
+import { useProfileChartsStore } from "../hooks/useProfileCharts";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -19,6 +20,8 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
   const speed = 0.03 * getReynolds(profile)[reynoldsIndex];
 
   const omittedPoints = Math.floor(NUMBER_OF_AIRFOIL_POINTS * 0.1);
+
+  const y = useProfileChartsStore((state) => state.y);
   return (
     <mesh>
       <mesh position-y={0.02}>
@@ -29,7 +32,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
           )}
           style="airstream"
           color="grid"
-          offset={speed}
+          offset={speed + y["Coefficient of Lift"] * 0.025}
           opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
         />
       </mesh>
@@ -41,7 +44,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
           )}
           style="airstream"
           color="grid"
-          offset={0.8 * speed}
+          offset={speed - y["Coefficient of Lift"] * 0.025}
           opacity={opacity.to((o) => (show ? o * 0.33 : 0))}
         />
       </mesh>
