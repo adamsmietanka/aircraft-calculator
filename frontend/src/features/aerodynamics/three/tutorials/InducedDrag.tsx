@@ -243,12 +243,14 @@ const InducedDrag = ({ opacity }: Props) => {
   const lift = chart.yHover * speed * speed * 1.25;
 
   useEffect(() => {
-    setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
-    animationSpringApi.start({
-      speed,
-      epsilon: updateLift ? Math.atan(spanWiseSpeed / speed) : 0,
-      downwashX: speed * 3.5,
-    });
+    if (pathname === "/aerodynamics/inducedDrag") {
+      setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
+      animationSpringApi.start({
+        speed,
+        epsilon: updateLift ? Math.atan(spanWiseSpeed / speed) : 0,
+        downwashX: speed * 3.5,
+      });
+    }
   }, [mass, speed, updateLift, spanWiseSpeed]);
 
   return (
