@@ -83,6 +83,7 @@ const HoverMarker = ({
       x: x,
       y: y,
       opacity: !!locked || hover ? 1 : 0,
+      scale: scale[0],
     }),
     [x, y, scale, locked, hover]
   );
@@ -131,8 +132,8 @@ const HoverMarker = ({
       <AnimatedText
         ref={textRef2}
         fontSize={0.6 * FONT_SIZE}
-        position={hoverSpring.y.to((y) => [
-          (min.x - 1.5 * NUMBERS_PADDING) / worldScale.x,
+        position={to([hoverSpring.y, hoverSpring.scale], (y, scale) => [
+          (min.x - 1.5 * NUMBERS_PADDING) / scale,
           y,
           0.375,
         ])}
