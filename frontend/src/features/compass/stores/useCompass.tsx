@@ -16,7 +16,7 @@ export const useCompassStore = create<CompassState>()((set) => ({
   ACdelta: 0,
   A: { x: -1, y: 0 },
   B: { x: 1, y: 0 },
-  C: { x: 0, y: 1.6 },
+  C: { x: -1, y: 2 },
   setTimedelta: (value) => set({ timedelta: value }),
   setACdelta: (value) => set({ ACdelta: value }),
   set: (value) => set(value),
