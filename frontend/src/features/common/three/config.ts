@@ -2,6 +2,8 @@ import { getHSLColorFromCSS } from "../../../utils/getCSScolor";
 import { useThemeStore } from "../../settings/stores/useTheme";
 import { useMemo } from "react";
 
+export const PRESENTATION_MODE = true;
+
 //Profile
 export const NUMBER_OF_AIRFOIL_POINTS = 25;
 export const PROFILE_POSITION = -0.85;
