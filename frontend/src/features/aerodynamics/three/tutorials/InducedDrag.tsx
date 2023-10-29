@@ -54,6 +54,7 @@ const InducedDrag = ({ opacity }: Props) => {
   const [showLayout, setShowLayout] = useState(false);
   const [showVelocities, setShowVelocities] = useState(false);
   const [showLift, setShowLift] = useState(false);
+  const [showEffectiveLift, setShowEffectiveLift] = useState(false);
   const [updateLift, setUpdateLift] = useState(false);
   const [showDirection, setShowDirection] = useState(false);
   const [showDrag, setShowDrag] = useState(false);
@@ -198,26 +199,25 @@ const InducedDrag = ({ opacity }: Props) => {
           await displaySub(
             <p className="flex">
               The x component of
-              <Formula className="text-primary mt-1" tex="\: F_L \:" /> is
-              called &nbsp;<p className="text-error">induced drag</p>
+              <Formula className="text-primary mt-1" tex="\: L \:" /> is called
+              &nbsp;<p className="text-error">induced drag</p>
             </p>,
             4000,
             true
           );
           await waitUserInput();
           await displaySub(
-            next,
             <p className="flex">
               It's inveresely proportional to <Formula tex="\: V^2" />
             </p>,
             4000
           );
+          setShowEffectiveLift(true);
           await displaySub(
-            next,
             <p className="flex">
               The y component of
-              <Formula className="text-primary mt-1" tex="\: F_L \:" /> is the
-              "true" lift
+              <Formula className="text-primary mt-1" tex="\: L \:" /> is the
+              &nbsp;<p className="text-secondary">effective lift</p>
             </p>,
             4000,
             true
@@ -424,12 +424,12 @@ const InducedDrag = ({ opacity }: Props) => {
           <animated.mesh></animated.mesh>
           <VectorNew
             x={updateLift ? lift * Math.sin(downWashAngle) : 0}
-            y={lift * Math.cos(downWashAngle)}
+            y={updateLift ? lift * Math.cos(downWashAngle) : lift}
             show={showLift}
             opacity={opacity}
             color="primary"
           >
-            <HoverableFormulaSimple name="Freeflow speed" tex={`F_L`} />
+            <HoverableFormulaSimple name="Lift" tex={`L`} />
           </VectorNew>
           <VectorNew
             x={lift * Math.sin(downWashAngle)}
@@ -441,11 +441,13 @@ const InducedDrag = ({ opacity }: Props) => {
           </VectorNew>
           <VectorNew
             y={lift * Math.cos(downWashAngle)}
-            show={false}
+            show={showEffectiveLift}
             opacity={opacity}
-            color="error"
+            color="secondary"
           >
-            <HoverableFormulaSimple name="Effective Lift" tex={`F_{L_{eff}}`} />
+            <div className="mr-16 mt-10">
+              <HoverableFormulaSimple name="Effective Lift" tex={`L_{eff}`} />
+            </div>
           </VectorNew>
         </mesh>
       </mesh>
