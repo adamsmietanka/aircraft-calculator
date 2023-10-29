@@ -13,6 +13,7 @@ import LineChart from "../../../common/three/LineChart";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
+import useAwaitClick from "../../../navigation/hooks/useAwaitClick";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -56,17 +57,12 @@ const LevelFlight = ({ opacity }: Props) => {
   ) => {
     setSubtitle(text);
     setShowSubtitle(true);
-    await next({ delay: duration });
+    await waitUserInput();
     setShowSubtitle(false);
     await next({ delay: 1000 });
   };
 
-  const showSub = (text: string | React.ReactNode) => {
-    setSubtitle(text);
-    setShowSubtitle(true);
-  };
-
-  const hideSub = () => setShowSubtitle(false);
+  const waitUserInput = useAwaitClick();
 
   const [introductionSpring, introductionSpringApi] = useSpring(
     () => ({
@@ -82,12 +78,12 @@ const LevelFlight = ({ opacity }: Props) => {
           await next({ delay: 2000 });
           setChart({ yHover: 0.5 });
           setChart({ hover: true, locked: "Coefficient of Drag" });
-          await displaySub(next, "When we want to maintain level flight", 2000);
-          await displaySub(
-            next,
-            "The forces acting in the vertical direction must be equal",
-            1500
-          );
+          // await displaySub(next, "When we want to maintain level flight", 2000);
+          // await displaySub(
+          //   next,
+          //   "The forces acting in the vertical direction must be equal",
+          //   1500
+          // );
           set({ showWeight: true });
           await displaySub(
             next,
@@ -108,7 +104,7 @@ const LevelFlight = ({ opacity }: Props) => {
               />
             </div>
           );
-          await displaySub(next, "So our coefficient of lift must be equal to");
+          // await displaySub(next, "So our coefficient of lift must be equal to");
           await displaySub(
             next,
             <div className="flex items-center h-20">
@@ -121,12 +117,12 @@ const LevelFlight = ({ opacity }: Props) => {
             </div>,
             4000
           );
-          await displaySub(
-            next,
-            <p className="flex">
-              Drag is proportional to <Formula tex="\: V^2" />
-            </p>
-          );
+          // await displaySub(
+          //   next,
+          //   <p className="flex">
+          //     Drag is proportional to <Formula tex="\: V^2" />
+          //   </p>
+          // );
           setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/levelFlight") {
