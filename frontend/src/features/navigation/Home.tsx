@@ -12,6 +12,7 @@ const Home = () => {
         depth={1.5} // Z-dir depth
         segments={20} // Number of particles
       />
+      <spotLight position={[-10, 10, 70]} intensity={0.5} />
       <Float
         speed={1} // Animation speed, defaults to 1
         rotationIntensity={0.1} // XYZ rotation intensity, defaults to 1
@@ -23,7 +24,11 @@ const Home = () => {
             lineHeight={0.75}
             letterSpacing={-0.025}
             size={1.75}
-            height={0.5}
+            height={0.25}
+            curveSegments={32}
+            bevelEnabled
+            bevelSize={0.01}
+            bevelThickness={0.1}
           >
             {"Book \n   of\nFlight"}
             <meshPhongMaterial></meshPhongMaterial>
