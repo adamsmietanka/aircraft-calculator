@@ -39,7 +39,7 @@ const useWingCharts = () => {
         x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
         y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
-  }, [wing.profile, wing.reynolds, xHover, wing.shape]);
+  }, [wing, xHover]);
 
   useEffect(() => {
     const Cl = yHover;
@@ -50,7 +50,7 @@ const useWingCharts = () => {
         x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
         y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
-  }, [wing.profile, wing.reynolds, yHover, wing.shape]);
+  }, [wing, yHover]);
 
   return { useWingChartsStore };
 };
