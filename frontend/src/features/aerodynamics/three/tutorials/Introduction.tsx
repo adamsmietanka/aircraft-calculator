@@ -52,7 +52,7 @@ const Introduction = ({ opacity }: Props) => {
   ) => {
     setSubtitle(text);
     setShowSubtitle(true);
-    await next({ delay: duration });
+    await waitUserInput();
     setShowSubtitle(false);
     await next({ delay: 1000 });
   };
@@ -89,40 +89,43 @@ const Introduction = ({ opacity }: Props) => {
             vectorSize: 1.5,
           });
           setChart({ xHover: 0.01 });
-          await displaySub(
-            next,
-            "Let's start with a simple rectangular plate.",
-            2000
-          );
-          // await waitUserInput();
+          // await displaySub(
+          //   next,
+          //   "Let's start with a simple rectangular plate.",
+          //   2000
+          // );
+          await waitUserInput();
           setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
-          await displaySub(next, "When it is not angled", 1500);
-          await displaySub(
-            next,
-            "the force acting on the plate is only horizontal."
-          );
-          // await waitUserInput();
+          // await displaySub(next, "When it is not angled", 1500);
+          // await displaySub(
+          //   next,
+          //   "the force acting on the plate is only horizontal."
+          // );
+          await waitUserInput();
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5]);
-          await displaySub(next, "In order to deflect the air downwards");
-          await displaySub(next, "the plate must exert a force on the flow");
-          await displaySub(
-            next,
-            "By Newton's 3rd Law we should have a force acting on the plate.",
-            4000
-          );
-          // await waitUserInput();
+          // await displaySub(next, "In order to deflect the air downwards");
+          // await displaySub(next, "the plate must exert a force on the flow");
+          // await displaySub(
+          //   next,
+          //   "By Newton's 3rd Law we should have a force acting on the plate.",
+          //   4000
+          // );
+          await waitUserInput();
           set({ splitVectors: true });
-          await displaySub(
-            next,
-            "We can split it into vertical and horizontal components."
-          );
-          await displaySub(next, "Even a simple plate can produce lift.");
-          await displaySub(next, "There are however better shapes");
+          // await displaySub(
+          //   next,
+          //   "We can split it into vertical and horizontal components."
+          // );
+          // await displaySub(next, "Even a simple plate can produce lift.");
+          // await displaySub(next, "There are however better shapes");
+          await waitUserInput();
           setProfile("2412");
-          await displaySub(next, "Like this aerodynamic profile");
-          await displaySub(next, "It produces so much less drag");
+          // await displaySub(next, "Like this aerodynamic profile");
+          // await displaySub(next, "It produces so much less drag");
+          await waitUserInput();
           set({ dragMultiplier: 10 });
-          await displaySub(next, "that we have to scale it 10x");
+          // await displaySub(next, "that we have to scale it 10x");
+          await waitUserInput();
           setChart({ hover: false, locked: "" });
           set({ showChord: false });
           await displaySub(
@@ -144,6 +147,7 @@ const Introduction = ({ opacity }: Props) => {
               it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
             </>
           );
+          await waitUserInput();
 
           set({ hoverPlane: true });
           set({ hoverA: true });
@@ -187,11 +191,13 @@ const Introduction = ({ opacity }: Props) => {
             "4424",
             "4415",
           ]);
+          await waitUserInput();
           set({ hoverC: false });
           hideSub();
 
           set({ hoverPlane: false, vectorSize: 1 });
           await next({ delay: 500 });
+          await waitUserInput();
           setProfile(savedProfile.current);
           setChart({ xHover: savedAngle.current, locked: savedLock.current });
 
