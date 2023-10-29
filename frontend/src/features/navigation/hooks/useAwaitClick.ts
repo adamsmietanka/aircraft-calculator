@@ -1,8 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useAwaitClickStore } from "../stores/useAwaitClick";
 import { PRESENTATION_MODE } from "../../common/three/config";
-
-const timeout = async (ms: number) => new Promise((res) => setTimeout(res, ms));
+import timeout from "../../common/utils/timeout";
 
 const useAwaitClick = () => {
   const next = useAwaitClickStore((state) => state.next);
