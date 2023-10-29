@@ -126,7 +126,7 @@ const LevelFlight = ({ opacity }: Props) => {
           setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/levelFlight") {
-          set({ showWeight: false, mass: 1, speed: 1 });
+          set({ showWeight: false, mass: 0.5, speed: 1 });
           setChart({
             hover: false,
             xHover: savedAngle.current,

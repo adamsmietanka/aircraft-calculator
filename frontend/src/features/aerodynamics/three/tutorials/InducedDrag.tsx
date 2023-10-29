@@ -230,7 +230,7 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/inducedDrag") {
-          set({ showWeight: false, mass: 1, speed: 1, showVectors: true });
+          set({ showWeight: false, mass: 0.5, speed: 1, showVectors: true });
           setChart({
             hover: false,
             xHover: savedAngle.current,
