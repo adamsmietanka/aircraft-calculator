@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useAwaitClickStore } from "../stores/useAwaitClick";
-import { PRESENTATION_MODE } from "../../common/three/config";
-import timeout from "../../common/utils/timeout";
+import { PRESENTATION_MODE } from "../../three/config";
+import timeout from "../../utils/timeout";
 
 const useAwaitClick = () => {
   const next = useAwaitClickStore((state) => state.next);

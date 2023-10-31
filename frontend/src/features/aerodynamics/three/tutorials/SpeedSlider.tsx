@@ -2,20 +2,15 @@ import { ReactComponent as Turtle } from "../../../../assets/turtle.svg";
 import { ReactComponent as Eagle } from "../../../../assets/eagle.svg";
 
 interface Props {
-  label: string;
   value: number;
   setter: (value: number) => void;
 }
 
-const SpeedSlider = ({
-  label,
-  value,
-  setter,
-}: Props) => {
+const SpeedSlider = ({ value, setter }: Props) => {
   return (
     <div className="form-control">
       <label className="label">
-        <span className="label-text">{label}</span>
+        <span className="label-text">Speed</span>
       </label>
       <div className="flex flex-col">
         <input

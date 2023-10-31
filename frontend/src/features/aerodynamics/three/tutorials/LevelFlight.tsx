@@ -13,7 +13,7 @@ import LineChart from "../../../common/three/LineChart";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
-import useAwaitClick from "../../../navigation/hooks/useAwaitClick";
+import useAwaitClick from "../../../common/subtitles/hooks/useAwaitClick";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -148,15 +148,8 @@ const LevelFlight = ({ opacity }: Props) => {
         </AnimatedHtml>
       </mesh>
       <Inputs3D gridPositionX={-1.3} show={showLayout}>
-        <MassSlider
-          label="Mass"
-          value={mass}
-          min={0.3}
-          step={0.1}
-          max={0.7}
-          setter={setMass}
-        />
-        <SpeedSlider label="Speed" value={speed} setter={setSpeed} />
+        <MassSlider value={mass} setter={setMass} />
+        <SpeedSlider value={speed} setter={setSpeed} />
       </Inputs3D>
       <mesh visible={showLayout}>
         <LineChart

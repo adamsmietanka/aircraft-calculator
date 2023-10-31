@@ -2,9 +2,6 @@ import React, { useState } from "react";
 import { useSubtitleStore } from "./stores/useSubtitles";
 
 const Subtitle = () => {
-  //   const [subtitle, setSubtitle] = useState<string | React.ReactNode>("");
-  const [showSubtitle, setShowSubtitle] = useState(false);
-
   const subtitle = useSubtitleStore((state) => state.subtitle);
   const visible = useSubtitleStore((state) => state.visible);
   return (
