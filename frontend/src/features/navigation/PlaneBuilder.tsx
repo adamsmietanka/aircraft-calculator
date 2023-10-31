@@ -14,7 +14,7 @@ import ProfileNACAExplanation from "../aerodynamics/three/ProfileNACAExplanation
 import Introduction from "../aerodynamics/three/tutorials/Introduction";
 import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
 import LevelFlight from "../aerodynamics/three/tutorials/LevelFlight";
-import Subtitle from "./Subtitle";
+import Subtitle from "../common/subtitles/Subtitle";
 import NavigationHyperbolic from "../compass/NavigationHyperbolic";
 
 const PlaneBuilder = () => {

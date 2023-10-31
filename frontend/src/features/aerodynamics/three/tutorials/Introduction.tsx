@@ -6,8 +6,8 @@ import AnimatedHtml from "../../../common/three/AnimatedHtml";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import { useProfileChartsStore } from "../../hooks/useProfileCharts";
-import { useAwaitClickStore } from "../../../navigation/stores/useAwaitClick";
-import useAwaitClick from "../../../navigation/hooks/useAwaitClick";
+import { useAwaitClickStore } from "../../../common/subtitles/stores/useAwaitClick";
+import useAwaitClick from "../../../common/subtitles/hooks/useAwaitClick";
 
 interface Props {
   opacity: SpringValue<number>;

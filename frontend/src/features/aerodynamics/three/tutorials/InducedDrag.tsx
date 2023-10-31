@@ -10,7 +10,6 @@ import MassSlider from "./MassSlider";
 import SpeedSlider from "./SpeedSlider";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import { DoubleSide } from "three";
-import { useSubtitleStore } from "../../../navigation/stores/useSubtitles";
 import useWingScale from "../../hooks/useWingScale";
 import useSimpleWingModel from "../hooks/useSimpleWingModel";
 import AnimatedLine from "../../../common/three/AnimatedLine";
@@ -19,10 +18,10 @@ import useProfileVisualizer from "../hooks/useProfileVisualizer";
 import VectorNew from "../../../common/three/VectorNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
-import useAwaitClick from "../../../navigation/hooks/useAwaitClick";
 import ProfileAirstreams from "../ProfileAirstreams";
 import { PRESENTATION_MODE } from "../../../common/three/config";
-import timeout from "../../../common/utils/timeout";
+import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles";
+import useAwaitClick from "../../../common/subtitles/hooks/useAwaitClick";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -55,7 +54,7 @@ const InducedDrag = ({ opacity }: Props) => {
   const [showVelocities, setShowVelocities] = useState(false);
   const [showLift, setShowLift] = useState(false);
   const [showEffectiveLift, setShowEffectiveLift] = useState(false);
-  const [updateLift, setUpdateLift] = useState(false);
+  const [isWing, setIsWing] = useState(false);
   const [showDirection, setShowDirection] = useState(false);
   const [showDrag, setShowDrag] = useState(false);
 
@@ -68,6 +67,7 @@ const InducedDrag = ({ opacity }: Props) => {
   const { scaleProfile } = useWingScale();
 
   const displaySub = async (
+    next: any,
     text: string | React.ReactNode,
     duration = 3000,
     showInPresentation = false
@@ -75,9 +75,11 @@ const InducedDrag = ({ opacity }: Props) => {
     if (!PRESENTATION_MODE || showInPresentation) {
       setSub(text);
       show();
-      await timeout(duration);
+      await next({ delay: duration });
       hide();
-      await timeout(1000);
+      await next({ delay: 1000 });
+    } else {
+      await waitUserInput();
     }
   };
   const waitUserInput = useAwaitClick();
@@ -108,95 +110,96 @@ const InducedDrag = ({ opacity }: Props) => {
 
           set({ showVectors: false });
           setChart({ hover: true, locked: "Coefficient of Drag" });
-          await timeout(2000);
-          await displaySub("We have studied the aerodynamics of a 2D airfoil");
-          await waitUserInput();
+          await next({ delay: 2000 });
+          await displaySub(
+            next,
+            "We have studied the aerodynamics of a 2D airfoil"
+          );
           setCamera({ center: [-5, 0, 0], spherical: [20, 80, -80] });
-          await timeout(500);
+          await next({ delay: 500 });
           await next({ wingVisible: true });
           await next({ wingOpacity: 1 });
           await displaySub(
+            next,
             "Which happens to be the same for a wing with an infinite span",
             4000
           );
-          await waitUserInput();
           set({ showWeight: true });
           await next({ wingLength: 0.5 });
           await next({ tunnelVisible: true });
           await next({ tunnelOpacity: 0.5 });
-          await displaySub("Or one inside a wind tunnel", 2000);
-          await waitUserInput();
+          await displaySub(next, "Or one inside a wind tunnel", 2000);
           await next({ tunnelOpacity: 0 });
           await next({ tunnelVisible: false });
           setCamera({ spherical: [20, 70, 40] });
           await next({ wingLength: 1 });
           await next({ streamOpacity: 3 });
           await displaySub(
+            next,
             "Airflow speeds up along the upper surface creating an area of low pressure"
           );
-          await waitUserInput();
           await next({ spanVisible: true });
           await next({ spanOpacity: 1 });
           await displaySub(
+            next,
             "This creates a flow from the lower wing surface to the upper around the wingtip",
             4000
           );
-          await waitUserInput();
           await next({ streamOpacity: 0, spanOpacity: 0 });
           await next({ spanVisible: false });
           await next({ vortexVisible: true });
           await next({ vortexOpacity: 1 });
           await displaySub(
+            next,
             "This combined with the speed of the freeflow creates a vortex at the wingtip",
             4000
           );
-          await waitUserInput();
           setCamera({ spherical: [20, 70, 40] });
-          !PRESENTATION_MODE && (await timeout(2000));
+          await next({ delay: 2000 });
           setMass(1);
           await displaySub(
+            next,
             "When we increase the angle of attack the vortex gets more violent",
             4000
           );
-          await waitUserInput();
           setMass(0.5);
-          await timeout(1000);
-          await waitUserInput();
-          setSpeed(1.3);
-          await timeout(1000);
-          await displaySub("Increasing speed makes the vortex smaller", 4000);
-          await waitUserInput();
+          await next({ delay: 1000 });
+          setSpeed(1.25);
+          await next({ delay: 1000 });
+          await displaySub(
+            next,
+            "Increasing speed makes the vortex smaller",
+            4000
+          );
           setSpeed(1);
-          await timeout(500);
           setCamera({ center: [-5, -1, 7.5], spherical: [20, 90, 90] });
           await displaySub(
+            next,
             "The vortex deflects the airflow behind the trailing edge downwards",
             4000
           );
-          await waitUserInput();
-          await displaySub("This is called downwash");
+          await displaySub(next, "This is called downwash");
           setCamera({ center: [-5, 0, 0], spherical: [20, 90, 0] });
-          await timeout(500);
+          await next({ delay: 500 });
           await next({ vortexOpacity: 0 });
           await next({ vortexVisible: false });
           setShowLift(true);
           setShowDirection(true);
-          await displaySub("In a 2D world lift is always vertical");
-          await waitUserInput();
+          await displaySub(next, "In a 2D world lift is always vertical");
           setShowVelocities(true);
-          await displaySub("An airfoil produces no downwash");
-          await waitUserInput();
-          setUpdateLift(true);
+          await displaySub(next, "An airfoil produces no downwash");
+          setIsWing(true);
           await next({ vortexVisible: true });
           await next({ vortexOpacity: 1 });
           await displaySub(
+            next,
             "The downwash angles the relative airflow backwards",
             4000
           );
-          await waitUserInput();
-          await displaySub("Lift is always perpendicular to the airflow");
+          await displaySub(next, "Lift is always perpendicular to the airflow");
           setShowDrag(true);
           await displaySub(
+            next,
             <p className="flex">
               The x component of
               <Formula className="text-primary mt-1" tex="\: L \:" /> is called
@@ -207,6 +210,7 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           await waitUserInput();
           await displaySub(
+            next,
             <p className="flex">
               It's inveresely proportional to <Formula tex="\: V^2" />
             </p>,
@@ -214,6 +218,7 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           setShowEffectiveLift(true);
           await displaySub(
+            next,
             <p className="flex">
               The y component of
               <Formula className="text-primary mt-1" tex="\: L \:" /> is the
@@ -222,15 +227,15 @@ const InducedDrag = ({ opacity }: Props) => {
             4000,
             true
           );
-          await waitUserInput();
-          await displaySub("Due to the downwash it's slightly smaller");
+          await displaySub(next, "Due to the downwash it's slightly smaller");
           await displaySub(
+            next,
             "So we actually need a steeper angle of attack to achieve the same lift in a wing",
             4000
           );
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/inducedDrag") {
-          set({ showWeight: false, mass: 0.5, speed: 1, showVectors: true });
+          set({ showWeight: false, mass: 1, speed: 1, showVectors: true });
           setChart({
             hover: false,
             xHover: savedAngle.current,
@@ -258,11 +263,11 @@ const InducedDrag = ({ opacity }: Props) => {
       setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
       animationSpringApi.start({
         speed,
-        epsilon: updateLift ? Math.atan(spanWiseSpeed / speed) : 0,
+        epsilon: isWing ? Math.atan(spanWiseSpeed / speed) : 0,
         downwashX: speed * 3.5,
       });
     }
-  }, [mass, speed, updateLift, spanWiseSpeed]);
+  }, [mass, speed, isWing, spanWiseSpeed]);
 
   return (
     <>
@@ -397,7 +402,7 @@ const InducedDrag = ({ opacity }: Props) => {
                 <animated.mesh position-x={animationSpring.downwashX}>
                   <VectorNew
                     x={0}
-                    y={updateLift ? -spanWiseSpeed : 0}
+                    y={isWing ? -spanWiseSpeed : 0}
                     show={showVelocities}
                     opacity={opacity}
                     color="error"
@@ -421,10 +426,9 @@ const InducedDrag = ({ opacity }: Props) => {
           </mesh>
         </animated.mesh>
         <mesh scale={1 / scaleProfile} position-x={0.25} position-z={1}>
-          <animated.mesh></animated.mesh>
           <VectorNew
-            x={updateLift ? lift * Math.sin(downWashAngle) : 0}
-            y={updateLift ? lift * Math.cos(downWashAngle) : lift}
+            x={isWing ? lift * Math.sin(downWashAngle) : 0}
+            y={isWing ? lift * Math.cos(downWashAngle) : lift}
             show={showLift}
             opacity={opacity}
             color="primary"
