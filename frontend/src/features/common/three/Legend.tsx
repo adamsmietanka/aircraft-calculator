@@ -18,7 +18,7 @@ const Legend = ({ gridPositionX, items, opacity }: Props) => {
       position-y={items.length / 2}
     >
       {items.map((i, index) => (
-        <>
+        <mesh key={index}>
           <AnimatedLine
             points={[
               [0, 0 - index, 0],
@@ -37,7 +37,7 @@ const Legend = ({ gridPositionX, items, opacity }: Props) => {
           >
             {i.name}
           </AnimatedText>
-        </>
+        </mesh>
       ))}
     </animated.mesh>
   );
