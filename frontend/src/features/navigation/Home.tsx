@@ -1,14 +1,21 @@
 import React from "react";
 import { Center, Cloud, Float, Text3D } from "@react-three/drei";
+import WingModel from "../aerodynamics/three/WingModel";
+import { SpringValue } from "@react-spring/three";
+import FuseModel from "../aerodynamics/three/FuseModel";
 
-const Home = () => {
+interface Props {
+  opacity: SpringValue<number>;
+}
+
+const Home = ({ opacity }: Props) => {
   return (
     <mesh receiveShadow>
       <Cloud
         position={[0, 0, 50]}
         opacity={0.25}
         speed={0.4} // Rotation speed
-        width={10} // Width of the full cloud
+        width={7.5} // Width of the full cloud
         depth={1.5} // Z-dir depth
         segments={20} // Number of particles
       />
@@ -22,7 +29,7 @@ const Home = () => {
           <Text3D
             font="/fonts/Roboto Medium_Regular.json"
             lineHeight={0.75}
-            letterSpacing={-0.025}
+            // letterSpacing={-0.025}
             size={1.75}
             height={0.25}
             curveSegments={32}
@@ -34,6 +41,39 @@ const Home = () => {
             <meshPhongMaterial></meshPhongMaterial>
           </Text3D>
         </Center>
+      </Float>
+      <Float
+        position={[1, 0, 0]}
+        rotation={[0, Math.PI / 8, Math.PI / 16]}
+        rotationIntensity={1}
+        floatIntensity={10}
+        speed={1.75}
+      >
+        <mesh position={[0, 0, 45]} receiveShadow>
+          <mesh scale-z={0.5}>
+            <WingModel opacity={opacity} />
+          </mesh>
+          <mesh scale-z={0.5} position-y={1.25}>
+            <WingModel opacity={opacity} />
+          </mesh>
+          <FuseModel opacity={opacity} />
+        </mesh>
+      </Float>
+      <Float
+        position={[1, 1.1, -0.5]}
+        rotation={[0, 0, 0]}
+        rotationIntensity={3}
+        floatIntensity={2}
+        speed={1.25}
+      >
+        <mesh position={[-30, 0, 25]} receiveShadow scale-x={-1}>
+          <mesh scale-z={1.5}>
+            <WingModel opacity={opacity} shape={1} />
+          </mesh>
+          <mesh scale-x={1.5}>
+            <FuseModel opacity={opacity} />
+          </mesh>
+        </mesh>
       </Float>
     </mesh>
   );
