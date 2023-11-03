@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { SpringValue, useSpring } from "@react-spring/three";
-import AnimatedHtml from "../../../common/three/AnimatedHtml";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import useProfileCharts from "../../hooks/useProfileCharts";
@@ -13,7 +12,7 @@ import LineChart from "../../../common/three/LineChart";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
-import useAwaitClick from "../../../common/subtitles/hooks/useAwaitClick";
+import useSubs from "../../../common/subtitles/hooks/useSubs";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -47,24 +46,9 @@ const LevelFlight = ({ opacity }: Props) => {
 
   const { pathname, state } = useLocation();
 
-  const [subtitle, setSubtitle] = useState<string | React.ReactNode>("");
-  const [showSubtitle, setShowSubtitle] = useState(false);
+  const { displaySub, hideSubs } = useSubs();
 
-  const displaySub = async (
-    next: any,
-    text: string | React.ReactNode,
-    duration = 3000
-  ) => {
-    setSubtitle(text);
-    setShowSubtitle(true);
-    await waitUserInput();
-    setShowSubtitle(false);
-    await next({ delay: 1000 });
-  };
-
-  const waitUserInput = useAwaitClick();
-
-  const [introductionSpring, introductionSpringApi] = useSpring(
+  useSpring(
     () => ({
       from: {
         debug: true,
@@ -78,54 +62,54 @@ const LevelFlight = ({ opacity }: Props) => {
           await next({ delay: 2000 });
           setChart({ yHover: 0.5 });
           setChart({ hover: true, locked: "Coefficient of Drag" });
-          // await displaySub(next, "When we want to maintain level flight", 2000);
-          // await displaySub(
-          //   next,
-          //   "The forces acting in the vertical direction must be equal",
-          //   1500
-          // );
+          await displaySub(next, "When we want to maintain level flight", 2000);
+          await displaySub(
+            next,
+            "The forces acting in the vertical direction must be equal",
+            1500
+          );
           set({ showWeight: true });
           await displaySub(
             next,
-            <div className="flex">
-              <Formula className={`text-xl text-error`} tex={`W`} />
-              <Formula className={`text-xl`} tex={`=`} />
-              <Formula className={`text-xl text-primary`} tex={`F_L`} />
-            </div>
-          );
-          await displaySub(
-            next,
-            <div className="flex items-center h-20">
-              <Formula className={`text-xl`} tex={`mg`} />
-              <Formula className={`text-xl`} tex={`=`} />
-              <Formula
-                className={`text-xl`}
-                tex={`\\frac{1}{2} \\rho V^2 S C_L`}
-              />
-            </div>
-          );
-          // await displaySub(next, "So our coefficient of lift must be equal to");
-          await displaySub(
-            next,
-            <div className="flex items-center h-20">
-              <Formula className={`text-xl text-primary`} tex={`C_L`} />
-              <Formula className={`text-xl`} tex={`=`} />
-              <Formula
-                className={`text-xl`}
-                tex={`\\frac{2mg}{\\rho V^2 S }`}
-              />
+            <div className="flex text-4xl">
+              <Formula className={` text-error`} tex={`W`} />
+              <Formula tex={`=`} />
+              <Formula className={` text-primary`} tex={`F_L`} />
             </div>,
-            4000
+            3000,
+            true
           );
-          // await displaySub(
-          //   next,
-          //   <p className="flex">
-          //     Drag is proportional to <Formula tex="\: V^2" />
-          //   </p>
-          // );
+          await displaySub(
+            next,
+            <div className="flex items-center h-20 text-4xl">
+              <Formula tex={`mg`} />
+              <Formula tex={`=`} />
+              <Formula tex={`\\frac{1}{2} \\rho V^2 S C_L`} />
+            </div>,
+            3000,
+            true
+          );
+          await displaySub(next, "So our coefficient of lift must be equal to");
+          await displaySub(
+            next,
+            <div className="flex items-center h-20 text-4xl">
+              <Formula className={` text-primary`} tex={`C_L`} />
+              <Formula tex={`=`} />
+              <Formula tex={`\\frac{2mg}{\\rho V^2 S }`} />
+            </div>,
+            4000,
+            true
+          );
+          await displaySub(
+            next,
+            <p className="flex">
+              Drag is proportional to <Formula tex="\: V^2" />
+            </p>
+          );
           setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/levelFlight") {
+          hideSubs();
           set({ showWeight: false, mass: 0.5, speed: 1 });
           setChart({
             hover: false,
@@ -142,11 +126,6 @@ const LevelFlight = ({ opacity }: Props) => {
 
   return (
     <>
-      <mesh position={[-4.5, -3, 0]}>
-        <AnimatedHtml show={showSubtitle}>
-          <div className="flex justify-center">{subtitle}</div>
-        </AnimatedHtml>
-      </mesh>
       <Inputs3D gridPositionX={-1.3} show={showLayout}>
         <MassSlider value={mass} setter={setMass} />
         <SpeedSlider value={speed} setter={setSpeed} />

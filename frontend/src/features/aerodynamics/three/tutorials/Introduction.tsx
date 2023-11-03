@@ -1,13 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SpringValue, useSpring } from "@react-spring/three";
 import { DRAG_VECTOR_SCALE } from "../../../common/three/config";
-import AnimatedHtml from "../../../common/three/AnimatedHtml";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import { useProfileChartsStore } from "../../hooks/useProfileCharts";
-import { useAwaitClickStore } from "../../../common/subtitles/stores/useAwaitClick";
-import useAwaitClick from "../../../common/subtitles/hooks/useAwaitClick";
+import useSubs from "../../../common/subtitles/hooks/useSubs";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -42,31 +40,9 @@ const Introduction = ({ opacity }: Props) => {
     await next({ delay: 1000 });
   };
 
-  const [subtitle, setSubtitle] = useState<string | React.ReactNode>("");
-  const [showSubtitle, setShowSubtitle] = useState(false);
+  const { displaySub, hideSubs, showSub } = useSubs();
 
-  const displaySub = async (
-    next: any,
-    text: string | React.ReactNode,
-    duration = 3000
-  ) => {
-    setSubtitle(text);
-    setShowSubtitle(true);
-    await waitUserInput();
-    setShowSubtitle(false);
-    await next({ delay: 1000 });
-  };
-
-  const showSub = (text: string | React.ReactNode) => {
-    setSubtitle(text);
-    setShowSubtitle(true);
-  };
-
-  const hideSub = () => setShowSubtitle(false);
-
-  const waitUserInput = useAwaitClick();
-
-  const [introductionSpring, introductionSpringApi] = useSpring(
+  useSpring(
     () => ({
       from: {
         debug: true,
@@ -89,43 +65,37 @@ const Introduction = ({ opacity }: Props) => {
             vectorSize: 1.5,
           });
           setChart({ xHover: 0.01 });
-          // await displaySub(
-          //   next,
-          //   "Let's start with a simple rectangular plate.",
-          //   2000
-          // );
-          await waitUserInput();
+          await displaySub(
+            next,
+            "Let's start with a simple rectangular plate.",
+            2000
+          );
           setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
-          // await displaySub(next, "When it is not angled", 1500);
-          // await displaySub(
-          //   next,
-          //   "the force acting on the plate is only horizontal."
-          // );
-          await waitUserInput();
+          await displaySub(next, "When it is not angled", 1500);
+          await displaySub(
+            next,
+            "the force acting on the plate is only horizontal."
+          );
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5]);
-          // await displaySub(next, "In order to deflect the air downwards");
-          // await displaySub(next, "the plate must exert a force on the flow");
-          // await displaySub(
-          //   next,
-          //   "By Newton's 3rd Law we should have a force acting on the plate.",
-          //   4000
-          // );
-          await waitUserInput();
+          await displaySub(next, "In order to deflect the air downwards");
+          await displaySub(next, "the plate must exert a force on the flow");
+          await displaySub(
+            next,
+            "By Newton's 3rd Law we should have a force acting on the plate.",
+            4000
+          );
           set({ splitVectors: true });
-          // await displaySub(
-          //   next,
-          //   "We can split it into vertical and horizontal components."
-          // );
-          // await displaySub(next, "Even a simple plate can produce lift.");
-          // await displaySub(next, "There are however better shapes");
-          await waitUserInput();
+          await displaySub(
+            next,
+            "We can split it into vertical and horizontal components."
+          );
+          await displaySub(next, "Even a simple plate can produce lift.");
+          await displaySub(next, "There are however better shapes");
           setProfile("2412");
-          // await displaySub(next, "Like this aerodynamic profile");
-          // await displaySub(next, "It produces so much less drag");
-          await waitUserInput();
+          await displaySub(next, "Like this aerodynamic profile");
+          await displaySub(next, "It produces so much less drag");
           set({ dragMultiplier: 10 });
-          // await displaySub(next, "that we have to scale it 10x");
-          await waitUserInput();
+          await displaySub(next, "that we have to scale it 10x");
           setChart({ hover: false, locked: "" });
           set({ showChord: false });
           await displaySub(
@@ -147,7 +117,6 @@ const Introduction = ({ opacity }: Props) => {
               it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
             </>
           );
-          await waitUserInput();
 
           set({ hoverPlane: true });
           set({ hoverA: true });
@@ -163,7 +132,7 @@ const Introduction = ({ opacity }: Props) => {
             "4412",
           ]);
           set({ hoverA: false });
-          hideSub();
+          hideSubs();
           await next({ delay: 1000 });
 
           set({ hoverB: true });
@@ -178,7 +147,7 @@ const Introduction = ({ opacity }: Props) => {
             "4412",
           ]);
           set({ hoverB: false });
-          hideSub();
+          hideSubs();
           await next({ delay: 1000 });
 
           set({ hoverC: true });
@@ -191,13 +160,11 @@ const Introduction = ({ opacity }: Props) => {
             "4424",
             "4415",
           ]);
-          await waitUserInput();
           set({ hoverC: false });
-          hideSub();
+          hideSubs();
 
           set({ hoverPlane: false, vectorSize: 1 });
           await next({ delay: 500 });
-          await waitUserInput();
           setProfile(savedProfile.current);
           setChart({ xHover: savedAngle.current, locked: savedLock.current });
 
@@ -205,6 +172,7 @@ const Introduction = ({ opacity }: Props) => {
             state: { previousPath: pathname },
           });
         } else if (state.previousPath === "/aerodynamics/introduction") {
+          hideSubs();
           set({
             hoverA: false,
             hoverB: false,
@@ -228,13 +196,7 @@ const Introduction = ({ opacity }: Props) => {
     [pathname]
   );
 
-  return (
-    <mesh position={[-4.5, -3, 0]}>
-      <AnimatedHtml show={showSubtitle}>
-        <div className="flex justify-center">{subtitle}</div>
-      </AnimatedHtml>
-    </mesh>
-  );
+  return null;
 };
 
 export default Introduction;
