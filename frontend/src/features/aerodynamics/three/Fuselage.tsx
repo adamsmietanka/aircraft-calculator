@@ -2,65 +2,17 @@ import { DoubleSide } from "three";
 import { PresentationControls } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
-import useWingModel from "./hooks/useWingModel";
 import { SpringValue, animated, useSpring } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import FuselageConfiguration from "../FuselageConfiguration";
 import { usePlaneStore } from "../stores/usePlane";
 import { useWingStore } from "../stores/useWing";
+import WingModel from "./WingModel";
+import FuseModel from "./FuseModel";
 
 interface Props {
   opacity: SpringValue<number>;
 }
-
-const WingModel = ({ opacity }: Props) => {
-  const { geometry, tipGeometry } = useWingModel();
-
-  return (
-    <>
-      <mesh geometry={geometry}>
-        <animated.meshStandardMaterial
-          color={"lightgray"}
-          side={DoubleSide}
-          metalness={1}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-      <mesh geometry={tipGeometry}>
-        <animated.meshStandardMaterial
-          color={"lightgray"}
-          side={DoubleSide}
-          metalness={1}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-    </>
-  );
-};
-
-const FuseModel = ({ opacity }: Props) => {
-  const { nodes } = useLoader(GLTFLoader, "/models/2303.glb");
-
-  return (
-    <mesh
-      geometry={nodes.fuselage?.geometry}
-      rotation-x={Math.PI / 2}
-      rotation-z={-Math.PI / 2}
-      scale={0.1 * 6}
-      position-x={-1}
-    >
-      <animated.meshStandardMaterial
-        color={"lightgray"}
-        side={DoubleSide}
-        metalness={1}
-        transparent
-        opacity={opacity}
-      />
-    </mesh>
-  );
-};
 
 const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
