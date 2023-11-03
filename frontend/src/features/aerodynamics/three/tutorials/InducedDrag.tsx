@@ -272,15 +272,8 @@ const InducedDrag = ({ opacity }: Props) => {
   return (
     <>
       <Inputs3D gridPositionX={-1.5} show={showLayout}>
-        <MassSlider
-          label="Mass"
-          value={mass}
-          min={0.3}
-          step={0.1}
-          max={0.7}
-          setter={setMass}
-        />
-        <SpeedSlider label="Speed" value={speed} setter={setSpeed} />
+        <MassSlider value={mass} setter={setMass} />
+        <SpeedSlider value={speed} setter={setSpeed} />
       </Inputs3D>
       <spotLight position={[-15, -2, 20]} intensity={0.3} />
       <mesh position-x={-8.5} scale={scaleProfile}>
@@ -335,7 +328,7 @@ const InducedDrag = ({ opacity }: Props) => {
                 <AnimatedLine
                   points={vortex}
                   style="vortex"
-                  color="airstream"
+                  color="grid"
                   offset={vortexSpeed}
                   opacity={to(
                     [opacity, animationSpring.vortexOpacity],
@@ -346,7 +339,7 @@ const InducedDrag = ({ opacity }: Props) => {
                   <AnimatedLine
                     points={vortex}
                     style="vortex"
-                    color="airstream"
+                    color="grid"
                     offset={vortexSpeed}
                     opacity={to(
                       [opacity, animationSpring.vortexOpacity],
@@ -418,7 +411,7 @@ const InducedDrag = ({ opacity }: Props) => {
                     [1, 0, 0.01],
                   ]}
                   style="dotted"
-                  color="airstream"
+                  color="grid"
                   opacity={opacity.to((o) => (showDirection ? o * 0.25 : 0))}
                 />
               </animated.mesh>

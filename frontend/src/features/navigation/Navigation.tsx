@@ -74,7 +74,7 @@ const Navigation = () => {
       >
         <div className="flex flex-col">
           {links.map((l) => (
-            <NavLink to={l.to} state={{ previousPath: pathname }}>
+            <NavLink key={l.name} to={l.to} state={{ previousPath: pathname }}>
               {({ isActive }) => (
                 <div
                   className="tooltip tooltip-hover tooltip-right z-50"

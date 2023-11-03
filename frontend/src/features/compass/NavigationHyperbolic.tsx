@@ -119,25 +119,25 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       const r22 = p / (1 / e - u2 * cos + Math.sqrt(1 - u2 * u2) * sin);
       return { r11, r12, r21, r22 };
     };
-    console.log(
-      {
-        p1,
-        p2,
-      },
-      {
-        e1,
-        e2,
-      },
-      {
-        u1,
-        u2,
-      },
-      {
-        u1angle: (Math.acos(u1) * 180) / Math.PI,
-        u2angle: (Math.acos(u2) * 180) / Math.PI,
-      },
-    );
-    console.table([getR(p1, e1, u1, alphaAB), getR(p2, e2, u2, alphaAC)])
+    // console.log(
+    //   {
+    //     p1,
+    //     p2,
+    //   },
+    //   {
+    //     e1,
+    //     e2,
+    //   },
+    //   {
+    //     u1,
+    //     u2,
+    //   },
+    //   {
+    //     u1angle: (Math.acos(u1) * 180) / Math.PI,
+    //     u2angle: (Math.acos(u2) * 180) / Math.PI,
+    //   },
+    // );
+    // console.table([getR(p1, e1, u1, alphaAB), getR(p2, e2, u2, alphaAC)]);
     const { r22 } = getR(p1, e1, u1, alphaAB);
     return { x: r22 * u2, y: r22 * Math.sqrt(1 - u2 * u2), u1, u2 };
   };
