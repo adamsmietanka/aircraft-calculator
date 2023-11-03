@@ -19,9 +19,8 @@ import VectorNew from "../../../common/three/VectorNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
 import ProfileAirstreams from "../ProfileAirstreams";
-import { PRESENTATION_MODE } from "../../../common/three/config";
 import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles";
-import useAwaitClick from "../../../common/subtitles/hooks/useAwaitClick";
+import useSubs from "../../../common/subtitles/hooks/useSubs";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -60,29 +59,10 @@ const InducedDrag = ({ opacity }: Props) => {
 
   const { pathname, state } = useLocation();
 
-  const setSub = useSubtitleStore((state) => state.setSub);
-  const show = useSubtitleStore((state) => state.show);
-  const hide = useSubtitleStore((state) => state.hide);
+  const hideSubs = useSubtitleStore((state) => state.hide);
+  const { displaySub } = useSubs();
 
   const { scaleProfile } = useWingScale();
-
-  const displaySub = async (
-    next: any,
-    text: string | React.ReactNode,
-    duration = 3000,
-    showInPresentation = false
-  ) => {
-    if (!PRESENTATION_MODE || showInPresentation) {
-      setSub(text);
-      show();
-      await next({ delay: duration });
-      hide();
-      await next({ delay: 1000 });
-    } else {
-      await waitUserInput();
-    }
-  };
-  const waitUserInput = useAwaitClick();
 
   const [animationSpring, animationSpringApi] = useSpring(
     () => ({
@@ -121,7 +101,7 @@ const InducedDrag = ({ opacity }: Props) => {
           await next({ wingOpacity: 1 });
           await displaySub(
             next,
-            "Which happens to be the same for a wing with an infinite span",
+            "Which happen to be the same for a wing with an infinite span",
             4000
           );
           set({ showWeight: true });
@@ -155,7 +135,7 @@ const InducedDrag = ({ opacity }: Props) => {
             4000
           );
           setCamera({ spherical: [20, 70, 40] });
-          await next({ delay: 2000 });
+          await next({ delay: 1000 });
           setMass(1);
           await displaySub(
             next,
@@ -208,7 +188,6 @@ const InducedDrag = ({ opacity }: Props) => {
             4000,
             true
           );
-          await waitUserInput();
           await displaySub(
             next,
             <p className="flex">
@@ -243,7 +222,7 @@ const InducedDrag = ({ opacity }: Props) => {
           });
           setProfile(savedProfile.current ? savedProfile.current : profile);
           setShowLayout(false);
-          hide();
+          hideSubs();
         }
       },
     }),
