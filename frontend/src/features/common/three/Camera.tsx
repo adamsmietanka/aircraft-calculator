@@ -13,7 +13,7 @@ const obj: Record<string, number[]> = {
   "/aerodynamics/levelFlight": [10, 90, 0],
   "/aerodynamics/inducedDrag": [20, 90, 0],
   "/aerodynamics/wing": [20, 0, 0],
-  "/aerodynamics/fuselage": [15, 70, -45],
+  "/aerodynamics/fuselage": [20, 70, -45],
   "/navigation/hyperbolic": [20, 90, 0],
 };
 
@@ -23,7 +23,7 @@ const getCenter = (pathname: string) => {
     "/aerodynamics/introduction": [-5, 0, 0],
     "/aerodynamics/levelFlight": [-5, 0, 0],
     "/aerodynamics/inducedDrag": [-5, 0, 0],
-    "/aerodynamics/fuselage": [-3.5, 0, 0],
+    "/aerodynamics/fuselage": [0, 0, 0],
   };
   return center[pathname] || [0, 0, 0];
 };
