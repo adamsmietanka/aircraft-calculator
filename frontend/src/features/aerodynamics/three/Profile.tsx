@@ -35,8 +35,8 @@ const Profile = ({ opacity }: Props) => {
               <HoverableFormulaSimple
                 className="text-lg"
                 name="Angle of attack"
-                tex={`\\alpha`}
-                texHover={`\\alpha \\: [\\degree]`}
+                tex="\alpha"
+                texHover="\alpha \: [\degree]"
               />
             ),
             name: "Angle of Attack",
@@ -48,7 +48,7 @@ const Profile = ({ opacity }: Props) => {
               <HoverableFormulaSimple
                 className="text-lg"
                 name="Coefficient of Lift"
-                tex={`C_L`}
+                tex="C_L"
               />
             ),
             name: "Coefficient of Lift (Cl)",
@@ -70,7 +70,7 @@ const Profile = ({ opacity }: Props) => {
               <HoverableFormulaSimple
                 className="text-lg"
                 name="Coefficient of Drag"
-                tex={`C_D`}
+                tex="C_D"
               />
             ),
             name: "Coefficient of Drag (Cd)",
@@ -82,7 +82,7 @@ const Profile = ({ opacity }: Props) => {
               <HoverableFormulaSimple
                 className="text-lg"
                 name="Coefficient of Lift"
-                tex={`C_L`}
+                tex="C_L"
               />
             ),
             name: "Cl",

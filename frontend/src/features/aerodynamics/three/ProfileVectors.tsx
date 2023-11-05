@@ -36,7 +36,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
     }),
     [splitVectors, x, y]
   );
-  
+
   return (
     <>
       <Vector
@@ -53,13 +53,13 @@ const ProfileVectors = ({ opacity, show }: Props) => {
       >
         <Formula
           className={`text-xl text-primary ${splitVectors && "hidden"}`}
-          tex={`F`}
+          tex="F"
         />
         <div className={`${splitVectors || "hidden"}`}>
           <HoverableFormulaSimple
             name="Lift"
-            tex={`L`}
-            texHover={`L=\\frac{1}{2} \\rho V^2 S C_L`}
+            tex="L"
+            texHover="L=\frac{1}{2} \rho V^2 S C_L"
           />
         </div>
       </Vector>
@@ -73,8 +73,8 @@ const ProfileVectors = ({ opacity, show }: Props) => {
       >
         <HoverableFormulaSimple
           name="Drag"
-          tex={`D`}
-          texHover={`D=\\frac{1}{2} \\rho V^2 SC_D`}
+          tex="D"
+          texHover="D=\frac{1}{2} \rho V^2 SC_D"
         />
       </Vector>
       <Vector
@@ -84,7 +84,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
         opacity={opacity}
         color="error"
       >
-        <HoverableFormulaSimple name="Weight" tex={`W`} texHover={`W=mg`} />
+        <HoverableFormulaSimple name="Weight" tex="W" texHover="W=mg" />
       </Vector>
     </>
   );

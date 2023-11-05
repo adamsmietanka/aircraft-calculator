@@ -56,7 +56,7 @@ const WingHoverables = ({ scale }: Props) => {
           <HoverableFormula
             name="Aspect Ratio"
             tex={`AR=${aspectRatio.toFixed(2)}`}
-            texHover={`AR=\\frac{\\color{red}b^2}{\\color{green}S}`}
+            texHover="AR=\frac{\color{red}b^2}{\color{green}S}"
             hover={hoverStore.b}
             onEnter={() => hoverStore.set({ surface: true, b: true })}
             onLeave={() => hoverStore.set({ surface: false, b: false })}
@@ -65,7 +65,7 @@ const WingHoverables = ({ scale }: Props) => {
           <HoverableFormula
             name="Taper Ratio"
             tex={`\\large\\lambda\\normalsize=${taperRatio.toFixed(2)}`}
-            texHover={`\\large\\lambda\\normalsize= \\frac{\\color{orange}c_t}{\\color{green}c}`}
+            texHover="\large\lambda \normalsize = \frac {\color{orange} c_t} {\color{green} c}"
             hover={hoverStore.chords}
             onEnter={() => hoverStore.set({ chords: true })}
             onLeave={() => hoverStore.set({ chords: false })}

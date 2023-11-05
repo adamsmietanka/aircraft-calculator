@@ -58,13 +58,13 @@ const IntroBernoulli = () => {
       className="fixed w-full h-full flex justify-center items-center translate-y-1/4 text-4xl"
       style={eqn}
     >
-      <Formula style={kinetic} tex={`\\frac{V^2}{2}`} />
-      <Formula style={potential} tex={`\\:+\\:`} />
-      <Formula style={potential} tex={`gh`} />
-      <Formula tex={`\\:+\\:`} />
-      <Formula className="mt-1" style={pressure} tex={`\\frac{p}{\\rho}`} />
-      <Formula tex={`\\:=\\:`} />
-      <Formula tex={`constant`} />
+      <Formula style={kinetic} tex="\frac {V^2} {2}" />
+      <Formula style={potential} tex="\: + \:" />
+      <Formula style={potential} tex="gh" />
+      <Formula tex="\: + \:" />
+      <Formula className="mt-1" style={pressure} tex="\frac {p} {\rho}" />
+      <Formula tex="\: = \:" />
+      <Formula tex="constant" />
     </animated.div>
   );
 };

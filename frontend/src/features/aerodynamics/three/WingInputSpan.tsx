@@ -106,7 +106,7 @@ const WingInputSpan = ({ scale, x, y, opacity }: Props) => {
           </div>
           <Formula
             className={`text-xl ${hoverWing.b || "hidden"}`}
-            tex={`\\color{red}b`}
+            tex="\color{red} b"
           />
         </AnimatedHtml>
       </mesh>

@@ -369,7 +369,7 @@ const InducedDrag = ({ opacity }: Props) => {
                   opacity={opacity}
                   color="primary"
                 >
-                  <HoverableFormulaSimple name="Freeflow speed" tex={`V`} />
+                  <HoverableFormulaSimple name="Freeflow speed" tex="V" />
                 </VectorNew>
                 <animated.mesh position-x={animationSpring.downwashX}>
                   <VectorNew
@@ -379,7 +379,7 @@ const InducedDrag = ({ opacity }: Props) => {
                     opacity={opacity}
                     color="error"
                   >
-                    <HoverableFormulaSimple name="Downwash" tex={`w`} />
+                    <HoverableFormulaSimple name="Downwash" tex="w" />
                   </VectorNew>
                 </animated.mesh>
               </mesh>
@@ -405,7 +405,7 @@ const InducedDrag = ({ opacity }: Props) => {
             opacity={opacity}
             color="primary"
           >
-            <HoverableFormulaSimple name="Lift" tex={`L`} />
+            <HoverableFormulaSimple name="Lift" tex="L" />
           </VectorNew>
           <VectorNew
             x={lift * Math.sin(downWashAngle)}
@@ -413,7 +413,7 @@ const InducedDrag = ({ opacity }: Props) => {
             opacity={opacity}
             color="error"
           >
-            <HoverableFormulaSimple name="Induced Drag" tex={`D_i`} />
+            <HoverableFormulaSimple name="Induced Drag" tex="D_i" />
           </VectorNew>
           <VectorNew
             y={lift * Math.cos(downWashAngle)}
@@ -422,7 +422,7 @@ const InducedDrag = ({ opacity }: Props) => {
             color="secondary"
           >
             <div className="mr-16 mt-10">
-              <HoverableFormulaSimple name="Effective Lift" tex={`L_{eff}`} />
+              <HoverableFormulaSimple name="Effective Lift" tex="L_{eff}" />
             </div>
           </VectorNew>
         </mesh>

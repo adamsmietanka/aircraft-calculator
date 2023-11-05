@@ -15,27 +15,27 @@ const ProfileTable = () => {
           <tr>
             <th>Profile</th>
             <th>
-              <Formula tex={`C_{L_{max}}`} className="text-lg" />
+              <Formula tex="C_{L_{max}}" className="text-lg" />
             </th>
             <th>
-              <Formula tex={`\\alpha(C_{L_{max}})`} className="text-lg" />
+              <Formula tex="\alpha(L_{max})" className="text-lg" />
             </th>
             <th>
               <HoverableFormulaSimple
                 className="text-lg"
                 name="Angle of zero lift"
-                tex={`\\alpha_0`}
+                tex="\alpha_0"
               />
             </th>
             <th>
-              <Formula tex={`C_{D_{min}}`} className="text-lg" />
+              <Formula tex="C_{D_{min}}" className="text-lg" />
             </th>
             <th>
-              <Formula tex={`C_L(C_{D_{min}})`} className="text-lg" />
+              <Formula tex="C_L(D_{min})" className="text-lg" />
             </th>
             <th>
               <Formula
-                tex={`\\frac{dC_L}{d\\alpha}[\\frac{1}{rad}]`}
+                tex="\frac{dC_L}{d\alpha}[\frac{1}{rad}]"
                 className="text-xl"
               />
             </th>

@@ -57,7 +57,7 @@ const WingInputs = ({
         </div>
         <Formula
           className={`text-xl ${hoverWing.chords || "hidden"}`}
-          tex={`\\color{green}c`}
+          tex="\color{green} c"
         />
       </AnimatedInputTechnical>
       <WingInputSpan opacity={opacity} scale={scale} x={x} y={y} />

@@ -51,7 +51,7 @@ const Fuselage = ({ opacity }: Props) => {
                 <HoverableFormulaSimple
                   className="text-lg"
                   name="Coefficient of Drag"
-                  tex={`C_D`}
+                  tex="C_D"
                 />
               ),
               name: "Coefficient of Drag (Cd)",
@@ -62,7 +62,7 @@ const Fuselage = ({ opacity }: Props) => {
                 <HoverableFormulaSimple
                   className="text-lg"
                   name="Coefficient of Lift"
-                  tex={`C_L`}
+                  tex="C_L"
                 />
               ),
               name: "Cl",
