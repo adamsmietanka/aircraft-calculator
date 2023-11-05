@@ -51,10 +51,10 @@ const Home = ({ opacity }: Props) => {
       >
         <mesh position={[0, 0, 45]} receiveShadow>
           <mesh scale-z={0.5}>
-            <WingModel opacity={opacity} />
+            <WingModel opacity={opacity} shape={0} />
           </mesh>
           <mesh scale-z={0.5} position-y={1.25}>
-            <WingModel opacity={opacity} />
+            <WingModel opacity={opacity} shape={0} />
           </mesh>
           <FuseModel opacity={opacity} />
         </mesh>
