@@ -98,7 +98,7 @@ const WingInputTip = ({ chordTip, scale, x, y, opacity }: Props) => {
         </div>
         <Formula
           className={`text-xl ${hoverWing.chords || "hidden"}`}
-          tex={`\\color{orange}c_t`}
+          tex="\color{orange} c_t"
         />
       </AnimatedHtml>
     </animated.mesh>

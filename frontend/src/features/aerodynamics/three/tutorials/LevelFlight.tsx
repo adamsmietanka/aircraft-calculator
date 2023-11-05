@@ -72,9 +72,9 @@ const LevelFlight = ({ opacity }: Props) => {
           await displaySub(
             next,
             <div className="flex text-4xl">
-              <Formula className={` text-error`} tex={`W`} />
-              <Formula tex={`=`} />
-              <Formula className={` text-primary`} tex={`L`} />
+              <Formula className=" text-error" tex="W" />
+              <Formula tex="\: = \:" />
+              <Formula className="text-primary" tex="L" />
             </div>,
             3000,
             true
@@ -82,9 +82,9 @@ const LevelFlight = ({ opacity }: Props) => {
           await displaySub(
             next,
             <div className="flex items-center h-20 text-4xl">
-              <Formula tex={`mg`} />
-              <Formula tex={`=`} />
-              <Formula tex={`\\frac{1}{2} \\rho V^2 S C_L`} />
+              <Formula tex="mg" className="mt-4" />
+              <Formula tex="\: = \:" />
+              <Formula tex="\frac{1}{2} \rho V^2 S C_L" />
             </div>,
             3000,
             true
@@ -93,9 +93,9 @@ const LevelFlight = ({ opacity }: Props) => {
           await displaySub(
             next,
             <div className="flex items-center h-20 text-4xl">
-              <Formula className={` text-primary`} tex={`C_L`} />
-              <Formula tex={`=`} />
-              <Formula tex={`\\frac{2mg}{\\rho V^2 S }`} />
+              <Formula className=" text-primary" tex="C_L" />
+              <Formula tex="\: = \:" />
+              <Formula tex="\frac {2mg} {\rho V^2 S }" />
             </div>,
             4000,
             true
@@ -145,8 +145,8 @@ const LevelFlight = ({ opacity }: Props) => {
                 <HoverableFormulaSimple
                   className="text-lg"
                   name="Angle of attack"
-                  tex={`\\alpha`}
-                  texHover={`\\alpha \\: [\\degree]`}
+                  tex="\alpha"
+                  texHover="\alpha \: [\degree]"
                 />
               ),
               name: "Angle of Attack",
@@ -158,7 +158,7 @@ const LevelFlight = ({ opacity }: Props) => {
                 <HoverableFormulaSimple
                   className="text-lg"
                   name="Coefficient of Lift"
-                  tex={`C_L`}
+                  tex="C_L"
                 />
               ),
               name: "Coefficient of Lift (Cl)",
@@ -182,7 +182,7 @@ const LevelFlight = ({ opacity }: Props) => {
                 <HoverableFormulaSimple
                   className="text-lg"
                   name="Coefficient of Drag"
-                  tex={`C_D`}
+                  tex="C_D"
                 />
               ),
               name: "Coefficient of Drag (Cd)",
@@ -194,7 +194,7 @@ const LevelFlight = ({ opacity }: Props) => {
                 <HoverableFormulaSimple
                   className="text-lg"
                   name="Coefficient of Lift"
-                  tex={`C_L`}
+                  tex="C_L"
                 />
               ),
               name: "Cl",

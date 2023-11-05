@@ -100,7 +100,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
         >
           <Formula
             className={`text-xl ${hoverA || hoverB || "hidden"}`}
-            tex={`1`}
+            tex="1"
           />
         </AnimatedInputTechnical>
         <AnimatedInputTechnical
@@ -113,7 +113,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           vertical
         >
           <div className={`flex text-xl ${hoverA || "hidden"}`}>
-            <Formula className={`${M === 0 && "hidden"}`} tex={`0.0`} />
+            <Formula className={`${M === 0 && "hidden"}`} tex="0.0" />
             <Formula className="text-error" tex={`${M * 100}`} />
           </div>
         </AnimatedInputTechnical>
@@ -125,7 +125,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           opacity={0.75}
         >
           <div className={`flex text-xl ${hoverB || "hidden"}`}>
-            <Formula className={`${P === 0 && "hidden"}`} tex={`0.`} />
+            <Formula className={`${P === 0 && "hidden"}`} tex="0." />
             <Formula className="text-error" tex={`${P * 10}`} />
           </div>
         </AnimatedInputTechnical>
@@ -139,7 +139,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
               vertical
             >
               <div className={`flex text-xl ${hoverC || "hidden"}`}>
-                <Formula tex={`0.`} />
+                <Formula tex="0." />
                 <Formula
                   className="text-error"
                   tex={`${String(T * 100).padStart(2, "0")}`}
