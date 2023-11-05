@@ -132,6 +132,27 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 1000 });
           await displaySub(next, "but at 25% of length");
 
+          showSub("However this will create a torque and spin our plate");
+          await next({ delay: 500 });
+          await setAngles(next, [5.25, 5.5, 6, 6.5, 7, 8, 5]);
+          hideSubs();
+          await next({ delay: 500 });
+
+          await displaySub(
+            next,
+            "so we actually need a moment to counteract it"
+          );
+          set({ moment: true });
+          await next({ delay: 1000 });
+
+          await displaySub(
+            next,
+            "Nearly every profile has some pitching moment"
+          );
+          await displaySub(next, "But we'll skip it for a moment");
+          set({ moment: false });
+          await next({ delay: 1000 });
+
           await displaySub(
             next,
             "The pressure difference affects the flow around the plate",
@@ -262,6 +283,7 @@ const Introduction = ({ opacity }: Props) => {
             vectorTop: false,
             vectorsSide: false,
             vectorsNet: false,
+            moment: false,
             dragMultiplier: DRAG_VECTOR_SCALE,
             splitVectors: true,
             vectorSize: 1,

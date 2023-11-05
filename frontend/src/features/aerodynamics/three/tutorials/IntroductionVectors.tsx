@@ -7,6 +7,8 @@ import {
 import VectorNew from "../../../common/three/VectorNew";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { SpringValue, animated, config, useSpring } from "@react-spring/three";
+import MomentNew from "../../../common/three/MomentNew";
+import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -19,6 +21,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
   const vectorTop = useHoverProfileStore((state) => state.vectorTop);
   const vectorsSide = useHoverProfileStore((state) => state.vectorsSide);
   const vectorsNet = useHoverProfileStore((state) => state.vectorsNet);
+  const moment = useHoverProfileStore((state) => state.moment);
 
   const { scaleProfile } = useWingScale();
 
@@ -42,6 +45,15 @@ const IntroductionVectors = ({ opacity }: Props) => {
       scale={scaleProfile}
     >
       <mesh position-x={0.25} rotation-z={(-5 * Math.PI) / 180}>
+        <mesh scale={1 / scaleProfile} position-z={0.1}>
+          <MomentNew show={moment} opacity={opacity} color="secondary">
+            <HoverableFormulaSimple
+              name="Pitching Moment"
+              tex="M"
+              texHover="M"
+            />
+          </MomentNew>
+        </mesh>
         <mesh position-x={-0.25}>
           {/* vertical */}
           <animated.mesh
