@@ -74,7 +74,7 @@ const LevelFlight = ({ opacity }: Props) => {
             <div className="flex text-4xl">
               <Formula className={` text-error`} tex={`W`} />
               <Formula tex={`=`} />
-              <Formula className={` text-primary`} tex={`F_L`} />
+              <Formula className={` text-primary`} tex={`L`} />
             </div>,
             3000,
             true
