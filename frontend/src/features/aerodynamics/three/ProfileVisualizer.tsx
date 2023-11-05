@@ -44,15 +44,17 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           />
           <ProfileAirstreams
             opacity={opacity}
-            show={showVectors && showVisuals}
+            show={showVisuals}
           />
         </mesh>
-      </animated.mesh>
-      <animated.mesh
-        position-x={0.25}
-        scale={profileSpring.scale.to((scale) => 1 / scale)}
-      >
-        <ProfileVectors opacity={opacity} show={showVectors && showVisuals} />
+
+        <animated.mesh
+          position-x={profileSpring.vectorsPosition}
+          rotation-z={profileSpring.angle.to((a) => -a)}
+          scale={profileSpring.scale.to((scale) => 1 / scale)}
+        >
+          <ProfileVectors opacity={opacity} show={showVectors && showVisuals} />
+        </animated.mesh>
       </animated.mesh>
     </animated.mesh>
   );

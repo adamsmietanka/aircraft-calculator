@@ -16,11 +16,13 @@ import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
 import LevelFlight from "../aerodynamics/three/tutorials/LevelFlight";
 import Subtitle from "../common/subtitles/Subtitle";
 import NavigationHyperbolic from "../compass/NavigationHyperbolic";
+import IntroBernoulli from "../aerodynamics/three/tutorials/IntroBernoulli";
 
 const PlaneBuilder = () => {
   return (
     <div className="fixed top-0 left-0 h-screen w-screen">
       <ProfileModal />
+      <IntroBernoulli />
       <Subtitle />
       <Canvas
         flat

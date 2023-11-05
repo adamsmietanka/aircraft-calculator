@@ -15,7 +15,7 @@ interface VectorProps {
   show: boolean;
   color?: string;
   opacity: SpringValue<number>;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const Vector = ({
@@ -57,7 +57,7 @@ const Vector = ({
   return (
     <animated.mesh
       rotation-z={rotation}
-      position-z={0.2}
+      position-z={0.1}
       visible={spring.visible}
     >
       <AnimatedCylinder

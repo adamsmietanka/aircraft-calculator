@@ -36,6 +36,7 @@ const ProfileVectors = ({ opacity, show }: Props) => {
     }),
     [splitVectors, x, y]
   );
+  
   return (
     <>
       <Vector
