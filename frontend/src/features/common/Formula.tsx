@@ -1,3 +1,4 @@
+import { SpringValues, animated } from "@react-spring/web";
 import { useEffect } from "react";
 
 declare global {
@@ -5,8 +6,18 @@ declare global {
     MathJax: any;
   }
 }
+interface Props {
+  tex?: string;
+  className?: string;
+  style?: SpringValues<{
+    opacity?: number;
+    width?: string;
+    "font-size"?: string;
+    display?: string;
+  }>;
+}
 
-const Formula = ({ tex = "", className = "" }) => {
+const Formula = ({ tex = "", className = "", style }: Props) => {
   useEffect(() => {
     if (typeof window?.MathJax !== "undefined") {
       window.MathJax.typesetClear();
@@ -14,7 +25,12 @@ const Formula = ({ tex = "", className = "" }) => {
     }
   }, [tex]);
 
-  return <p className={className}>{`\\(${tex}\\)`}</p>;
+  return (
+    <animated.p
+      className={className}
+      style={style}
+    >{`\\(${tex}\\)`}</animated.p>
+  );
 };
 
 export default Formula;

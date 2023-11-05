@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 import { useWingStore } from "../../stores/useWing";
 import { PROFILE_POSITION, WING_POSITION } from "../../../common/three/config";
+import { useHoverProfileStore } from "../../stores/useHoverProfile";
 
 const useProfileVisualizer = () => {
   const x = useProfileChartsStore((state) => state.x);
@@ -11,6 +12,8 @@ const useProfileVisualizer = () => {
   const locked = useProfileChartsStore((state) => state.locked);
 
   const chord = useWingStore((state) => state.chord);
+
+  const centerVectors = useHoverProfileStore((state) => state.centerVectors);
 
   const { scale, scaleProfile } = useWingScale();
 
@@ -51,8 +54,9 @@ const useProfileVisualizer = () => {
       angle: showVisuals ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
       scale: getScale(),
       gridX: getPosition(),
+      vectorsPosition: centerVectors ? 0.25 : 0,
     }),
-    [x, scale, chord, showVisuals, pathname]
+    [x, scale, chord, showVisuals, pathname, centerVectors]
   );
 
   return { profileSpring, showVisuals };

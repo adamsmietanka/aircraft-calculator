@@ -6,6 +6,7 @@ import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
+import IntroductionVectors from "./IntroductionVectors";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -25,7 +26,7 @@ const Introduction = ({ opacity }: Props) => {
   const { pathname, state } = useLocation();
   const navigate = useNavigate();
 
-  const showDimension = async (next: any, name: string, profiles: string[]) => {
+  const showDimension = async (next: any, profiles: string[]) => {
     for (const p of profiles) {
       await next({ delay: 600 });
       setProfile(p);
@@ -60,6 +61,7 @@ const Introduction = ({ opacity }: Props) => {
 
           await next({ delay: 2000 });
           set({
+            centerVectors: true,
             splitVectors: false,
             dragMultiplier: 1,
             vectorSize: 1.5,
@@ -67,37 +69,121 @@ const Introduction = ({ opacity }: Props) => {
           setChart({ xHover: 0.01 });
           await displaySub(
             next,
-            "Let's start with a simple rectangular plate.",
+            "Let's start with a simple rectangular plate",
             2000
           );
           setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
           await displaySub(next, "When it is not angled", 1500);
           await displaySub(
             next,
-            "the force acting on the plate is only horizontal."
+            "the force acting on the plate is only horizontal"
           );
+
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5]);
+          await displaySub(next, "When angled it quickly grows");
+          await displaySub(next, "What is the source of this force?");
+          set({ showVectors: false });
+          await next({ delay: 1000 });
+
+          await displaySub(
+            next,
+            "The lower side of the plate is facing the flow"
+          );
+          await displaySub(
+            next,
+            "This means more air molecules smash into it and the pressure goes up"
+          );
+          set({ vectorBottom: true });
+          await next({ delay: 1000 });
+
+          await displaySub(next, "The upper surface is shielded from the flow");
+          await displaySub(next, "So actually less particles are hitting it");
+          set({ vectorTop: true });
+          await next({ delay: 1000 });
+
+          await displaySub(
+            next,
+            "In fact the pressure is acting on every side of our plate"
+          );
+          set({ vectorsSide: true });
+          await next({ delay: 1000 });
+
+          await displaySub(next, "When we add them up");
+          set({ vectorsNet: true });
+          await next({ delay: 1000 });
+
+          await displaySub(next, "We get our net force");
+          set({
+            vectorBottom: false,
+            vectorTop: false,
+            vectorsSide: false,
+          });
+          await next({ delay: 200 });
+          set({
+            showVectors: true,
+          });
+          await next({ delay: 1000 });
+
+          await displaySub(
+            next,
+            "Usually the aerodynamic force is not positioned in the center"
+          );
+          set({ centerVectors: false });
+          await next({ delay: 1000 });
+          await displaySub(next, "but at 25% of length");
+
+          await displaySub(
+            next,
+            "The pressure difference affects the flow around the plate",
+            3500
+          );
+          await displaySub(next, "We can explain the change in velocity");
+          await displaySub(next, "using the Bernoulli's principle");
+          set({ showBernoulli: true });
+          await next({ delay: 2000 });
+
+          await displaySub(next, "The height difference is negligible");
+          await displaySub(next, "so we can hide the second term");
+          set({ showBernoulliPotential: false });
+          await next({ delay: 2000 });
+
+          await displaySub(next, "Now when we decrease the pressure");
+          set({ showBernoulliDiff: true });
+          await next({ delay: 2000 });
+
+          await displaySub(next, "The speed will increase");
+          set({ showBernoulli: false });
+
+          await displaySub(
+            next,
+            "There is another explanation using Newton's 3rd Law"
+          );
           await displaySub(next, "In order to deflect the air downwards");
           await displaySub(next, "the plate must exert a force on the flow");
           await displaySub(
             next,
-            "By Newton's 3rd Law we should have a force acting on the plate.",
+            "so we should have a force acting on the plate.",
             4000
           );
           set({ splitVectors: true });
+
           await displaySub(
             next,
             "We can split it into vertical and horizontal components."
           );
           await displaySub(next, "Even a simple plate can produce lift.");
           await displaySub(next, "There are however better shapes");
+
           setProfile("2412");
           await displaySub(next, "Like this aerodynamic profile");
           await displaySub(next, "It produces so much less drag");
+
           set({ dragMultiplier: 10 });
           await displaySub(next, "that we have to scale it 10x");
+
           setChart({ hover: false, locked: "" });
           set({ showChord: false });
+          await displaySub(next, "The components of an airfoil:");
           await displaySub(
             next,
             <>
@@ -122,7 +208,7 @@ const Introduction = ({ opacity }: Props) => {
           set({ hoverA: true });
           await next({ delay: 750 });
           showSub("max camber");
-          await showDimension(next, "hoverA", [
+          await showDimension(next, [
             "1412",
             "2412",
             "3412",
@@ -138,7 +224,7 @@ const Introduction = ({ opacity }: Props) => {
           set({ hoverB: true });
           await next({ delay: 750 });
           showSub("position of max camber");
-          await showDimension(next, "hoverB", [
+          await showDimension(next, [
             "4312",
             "4412",
             "4512",
@@ -153,13 +239,7 @@ const Introduction = ({ opacity }: Props) => {
           set({ hoverC: true });
           await next({ delay: 750 });
           showSub("max thickness");
-          await showDimension(next, "hoverC", [
-            "4415",
-            "4418",
-            "4421",
-            "4424",
-            "4415",
-          ]);
+          await showDimension(next, ["4415", "4418", "4421", "4424", "4415"]);
           set({ hoverC: false });
           hideSubs();
 
@@ -178,11 +258,18 @@ const Introduction = ({ opacity }: Props) => {
             hoverB: false,
             hoverC: false,
             hoverPlane: false,
+            vectorBottom: false,
+            vectorTop: false,
+            vectorsSide: false,
+            vectorsNet: false,
             dragMultiplier: DRAG_VECTOR_SCALE,
             splitVectors: true,
             vectorSize: 1,
             showChord: true,
             showCamber: true,
+            showBernoulli: false,
+            showBernoulliPotential: true,
+            showBernoulliDiff: false,
           });
           setChart({
             hover: false,
@@ -196,7 +283,7 @@ const Introduction = ({ opacity }: Props) => {
     [pathname]
   );
 
-  return null;
+  return <IntroductionVectors opacity={opacity} />;
 };
 
 export default Introduction;

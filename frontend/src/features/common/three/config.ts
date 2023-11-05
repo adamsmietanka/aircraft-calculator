@@ -30,6 +30,9 @@ export const MEASUREMENT_SIDE = MEASUREMENT_DISTANCE * 1.2;
 export const VECTOR_TIP_LENGTH = 0.15;
 export const VECTOR_TIP_WIDTH = VECTOR_TIP_LENGTH / 2.5;
 
+//VectorNew
+export const VECTOR_SIZE = 3.5;
+
 //Camera and route animation
 export const ROUTE_DELAY = 600;
 export const CAMERA_DELAY = 100;

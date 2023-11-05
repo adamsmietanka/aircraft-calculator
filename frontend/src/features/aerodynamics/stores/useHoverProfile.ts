@@ -5,6 +5,14 @@ export interface HoverProfileState {
   splitVectors: boolean;
   dragMultiplier: number;
   vectorSize: number;
+  centerVectors: boolean;
+  vectorBottom: boolean;
+  vectorTop: boolean;
+  vectorsSide: boolean;
+  vectorsNet: boolean;
+  showBernoulli: boolean;
+  showBernoulliPotential: boolean;
+  showBernoulliDiff: boolean;
   showVectors: boolean;
   showWeight: boolean;
   hoverPlane: boolean;
@@ -24,6 +32,14 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   splitVectors: true,
   dragMultiplier: DRAG_VECTOR_SCALE,
   vectorSize: 1,
+  centerVectors: false,
+  vectorBottom: false,
+  vectorTop: false,
+  vectorsSide: false,
+  vectorsNet: false,
+  showBernoulli: false,
+  showBernoulliPotential: true,
+  showBernoulliDiff: false,
   showVectors: true,
   showWeight: false,
   showChord: true,
