@@ -22,6 +22,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
   return (
     <animated.mesh
       position-x={profileSpring.gridX.to((x) => (x * CANVAS_WIDTH) / 2)}
+      position-y={profileSpring.positionZ}
       scale={profileSpring.scale}
     >
       <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
@@ -42,10 +43,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
             color="grid"
             opacity={opacity.to((o) => (showChord ? o / 5 : 0))}
           />
-          <ProfileAirstreams
-            opacity={opacity}
-            show={showVisuals}
-          />
+          <ProfileAirstreams opacity={opacity} show={showVisuals} />
         </mesh>
 
         <animated.mesh
@@ -56,7 +54,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           <ProfileVectors opacity={opacity} show={showVectors && showVisuals} />
         </animated.mesh>
       </animated.mesh>
-    </animated.mesh>
+          </animated.mesh>
   );
 };
 

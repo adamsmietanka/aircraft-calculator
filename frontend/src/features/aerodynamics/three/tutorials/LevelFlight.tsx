@@ -40,6 +40,8 @@ const LevelFlight = ({ opacity }: Props) => {
 
   useEffect(() => {
     setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
+    const diff = Math.min(maxCz, mass / (speed * speed)) * speed * speed - mass;
+    set({ fallVelocity: -diff });
   }, [mass, speed]);
 
   const [showLayout, setShowLayout] = useState(false);
