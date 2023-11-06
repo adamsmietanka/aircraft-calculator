@@ -5,7 +5,7 @@ import HoverableFormulaSimple from "../common/HoverableFormulaSimple";
 
 const ProfileTable = () => {
   const wing = useWingStore();
-  const table = useProfileTable(wing.reynolds) as Row[];
+  const table = useProfileTable(wing.reynoldsIndex) as Row[];
 
   return (
     <div className="">

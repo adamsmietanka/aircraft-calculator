@@ -6,6 +6,7 @@ import useProfile from "../hooks/useProfile";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import ProfileVectors from "./ProfileVectors";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
+import ProfileFlowSpeed from "./ProfileFlowSpeed";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -54,7 +55,10 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           <ProfileVectors opacity={opacity} show={showVectors && showVisuals} />
         </animated.mesh>
       </animated.mesh>
-          </animated.mesh>
+      <animated.mesh scale={profileSpring.scale.to((s) => 1 / s)}>
+        <ProfileFlowSpeed opacity={opacity} show={showVisuals} />
+      </animated.mesh>
+    </animated.mesh>
   );
 };
 

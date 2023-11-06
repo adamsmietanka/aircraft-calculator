@@ -6,7 +6,7 @@ export const PRESENTATION_MODE = false;
 
 //Profile
 export const NUMBER_OF_AIRFOIL_POINTS = 25;
-export const PROFILE_POSITION = -0.85;
+export const PROFILE_POSITION = -0.8;
 export const PROFILE_WIDTH = 0.4;
 export const WING_POSITION = -0.45;
 
