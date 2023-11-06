@@ -1,12 +1,14 @@
-import { ReactComponent as Turtle } from "../../../../assets/turtle.svg";
-import { ReactComponent as Eagle } from "../../../../assets/eagle.svg";
+import { useWingStore } from "../../stores/useWing";
 
 interface Props {
-  value: number;
-  setter: (value: number) => void;
+  value?: number;
+  setter?: (value: number) => void;
 }
 
 const SpeedSlider = ({ value, setter }: Props) => {
+  const reynolds = useWingStore((state) => state.reynolds);
+  const setReynolds = useWingStore((state) => state.setReynolds);
+
   return (
     <div className="form-control">
       <label className="label">
@@ -15,11 +17,11 @@ const SpeedSlider = ({ value, setter }: Props) => {
       <div className="flex flex-col">
         <input
           type="range"
-          min={0.5}
-          step={0.25}
-          max={2}
-          value={value}
-          onChange={(e) => setter(parseFloat(e.target.value))}
+          min={3}
+          step={1.5}
+          max={12}
+          value={reynolds}
+          onChange={(e) => setReynolds(parseFloat(e.target.value))}
           className="range range-xs join-item pr-2"
         />
         <div className="w-full grid grid-cols-4 gap-4 mt-1 text-center">

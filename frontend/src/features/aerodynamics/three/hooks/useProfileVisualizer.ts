@@ -62,7 +62,7 @@ const useProfileVisualizer = () => {
   );
 
   useEffect(() => {
-    if (fallVelocity > 0) {
+    if (fallVelocity > 0 && pathname === "/aerodynamics/levelFlight") {
       api.start({
         positionZ: -15,
         config: {
@@ -76,7 +76,7 @@ const useProfileVisualizer = () => {
         config: config.slow,
       });
     }
-  }, [fallVelocity]);
+  }, [fallVelocity, pathname]);
 
   return { profileSpring, showVisuals };
 };

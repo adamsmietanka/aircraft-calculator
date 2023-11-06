@@ -20,7 +20,7 @@ const obj: Record<string, number[]> = {
 const getCenter = (pathname: string) => {
   // cartesian coords
   const center: Record<string, number[]> = {
-    "/aerodynamics/introduction": [-5, 0, 0],
+    "/aerodynamics/introduction": [-4, 0, 0],
     "/aerodynamics/levelFlight": [-5, 0, 0],
     "/aerodynamics/inducedDrag": [-5, 0, 0],
     "/aerodynamics/fuselage": [0, 0, 0],

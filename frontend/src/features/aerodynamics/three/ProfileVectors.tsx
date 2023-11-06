@@ -4,6 +4,7 @@ import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import { SpringValue, useSpring } from "@react-spring/three";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import Formula from "../../common/Formula";
+import { useWingStore } from "../stores/useWing";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -14,17 +15,18 @@ const ProfileVectors = ({ opacity, show }: Props) => {
   const x = useProfileChartsStore((state) => state.x);
   const y = useProfileChartsStore((state) => state.y);
 
+  const reynolds = useWingStore((state) => state.reynolds);
+
   const showWeight = useHoverProfileStore((state) => state.showWeight);
   const splitVectors = useHoverProfileStore((state) => state.splitVectors);
   const dragMultiplier = useHoverProfileStore((state) => state.dragMultiplier);
   const vectorSize = useHoverProfileStore((state) => state.vectorSize);
   const mass = useHoverProfileStore((state) => state.mass);
-  const speed = useHoverProfileStore((state) => state.speed);
 
   const cl = y["Coefficient of Lift"];
   const cd = dragMultiplier * x["Coefficient of Drag"];
-  const lift = cl * speed * speed;
-  const drag = cd * speed * speed;
+  const lift = cl * Math.pow(reynolds / 6, 2);
+  const drag = cd * Math.pow(reynolds / 6, 2);
 
   const [vectorsSpring] = useSpring(
     () => ({

@@ -30,12 +30,12 @@ const InducedDrag = ({ opacity }: Props) => {
   const { geometry, tipGeometry } = useSimpleWingModel();
 
   const profile = useWingStore((state) => state.profile);
+  const reynolds = useWingStore((state) => state.reynolds);
+  const setReynolds = useWingStore((state) => state.setReynolds);
 
   const { useProfileChartsStore } = useProfileCharts();
   const mass = useHoverProfileStore((state) => state.mass);
   const setMass = useHoverProfileStore((state) => state.setMass);
-  const speed = useHoverProfileStore((state) => state.speed);
-  const setSpeed = useHoverProfileStore((state) => state.setSpeed);
 
   const setProfile = useWingStore((state) => state.setProfile);
   const set = useHoverProfileStore((state) => state.set);
@@ -108,7 +108,7 @@ const InducedDrag = ({ opacity }: Props) => {
           await next({ wingLength: 0.5 });
           await next({ tunnelVisible: true });
           await next({ tunnelOpacity: 0.5 });
-          await displaySub(next, "Or one inside a wind tunnel", 2000);
+          await displaySub(next, "Or one inside of a wind tunnel", 2000);
           await next({ tunnelOpacity: 0 });
           await next({ tunnelVisible: false });
           setCamera({ spherical: [20, 70, 40] });
@@ -144,14 +144,14 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           setMass(0.5);
           await next({ delay: 1000 });
-          setSpeed(1.25);
+          setReynolds(1.25 * 6);
           await next({ delay: 1000 });
           await displaySub(
             next,
             "Increasing speed makes the vortex smaller",
             4000
           );
-          setSpeed(1);
+          setReynolds(1 * 6);
           setCamera({ center: [-5, -1, 7.5], spherical: [20, 90, 90] });
           await displaySub(
             next,
@@ -231,6 +231,7 @@ const InducedDrag = ({ opacity }: Props) => {
   const { spanwise, vortex } = useInduced();
   const { profileSpring } = useProfileVisualizer();
 
+  const speed = reynolds / 6;
   const spanWiseSpeed = 0.2 * chart.yHover * speed;
   const vortexSpeed =
     5 * Math.sqrt(spanWiseSpeed * spanWiseSpeed + 0.01 * speed * speed);
@@ -243,7 +244,7 @@ const InducedDrag = ({ opacity }: Props) => {
       animationSpringApi.start({
         speed,
         epsilon: isWing ? Math.atan(spanWiseSpeed / speed) : 0,
-        downwashX: speed * 3.5,
+        downwashX: speed,
       });
     }
   }, [mass, speed, isWing, spanWiseSpeed]);
@@ -252,10 +253,10 @@ const InducedDrag = ({ opacity }: Props) => {
     <>
       <Inputs3D gridPositionX={-1.5} show={showLayout}>
         <MassSlider value={mass} setter={setMass} />
-        <SpeedSlider value={speed} setter={setSpeed} />
+        <SpeedSlider />
       </Inputs3D>
       <spotLight position={[-15, -2, 20]} intensity={0.3} />
-      <mesh position-x={-8.5} scale={scaleProfile}>
+      <mesh position-x={-8} scale={scaleProfile}>
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
           <mesh position-x={-0.25}>
             <animated.mesh
@@ -364,7 +365,7 @@ const InducedDrag = ({ opacity }: Props) => {
             >
               <mesh scale={1 / scaleProfile}>
                 <VectorNew
-                  x={speed}
+                  x={speed / 3.5}
                   show={showVelocities}
                   opacity={opacity}
                   color="primary"
@@ -374,7 +375,7 @@ const InducedDrag = ({ opacity }: Props) => {
                 <animated.mesh position-x={animationSpring.downwashX}>
                   <VectorNew
                     x={0}
-                    y={isWing ? -spanWiseSpeed : 0}
+                    y={isWing ? -spanWiseSpeed / 3.5 : 0}
                     show={showVelocities}
                     opacity={opacity}
                     color="error"
