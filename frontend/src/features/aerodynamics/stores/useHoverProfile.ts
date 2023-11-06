@@ -24,6 +24,7 @@ export interface HoverProfileState {
   hoverC: boolean;
   mass: number;
   speed: number;
+  fallVelocity: number;
   setMass: (value: number) => void;
   setSpeed: (value: number) => void;
   set: (value: Partial<HoverProfileState>) => void;
@@ -52,6 +53,7 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   hoverC: false,
   mass: 0.5,
   speed: 1,
+  fallVelocity: 0,
   setMass: (value) => set({ mass: value }),
   setSpeed: (value) => set({ speed: value }),
   set: (value) => set(value),
