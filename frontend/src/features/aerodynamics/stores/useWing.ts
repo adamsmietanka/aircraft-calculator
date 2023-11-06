@@ -9,6 +9,7 @@ export interface WingState {
   angle: number;
   isRectangular: boolean;
   profile: string;
+  reynoldsIndex: number;
   reynolds: number;
   stallVelocity: number;
   material: number;
@@ -19,6 +20,7 @@ export interface WingState {
   setSpan: (value: number) => void;
   setAngle: (value: number) => void;
   setProfile: (value: string) => void;
+  setReynoldsIndex: (value: number) => void;
   setReynolds: (value: number) => void;
   setStallVelocity: (value: number) => void;
   setMaterial: (value: number) => void;
@@ -36,7 +38,8 @@ export const useWingStore = create<WingState>()(
       angle: 15,
       isRectangular: true,
       profile: "2412",
-      reynolds: 1,
+      reynoldsIndex: 1,
+      reynolds: 3,
       stallVelocity: 30,
       material: 0,
       shape: 1,
@@ -46,6 +49,7 @@ export const useWingStore = create<WingState>()(
       setSpan: (value) => set({ span: value }),
       setAngle: (value) => set({ angle: value }),
       setProfile: (value) => set({ profile: value }),
+      setReynoldsIndex: (value) => set({ reynoldsIndex: value }),
       setReynolds: (value) => set({ reynolds: value }),
       setStallVelocity: (value) => set({ stallVelocity: value }),
       setMaterial: (value) => set({ material: value }),

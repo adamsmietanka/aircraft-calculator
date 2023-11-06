@@ -26,7 +26,7 @@ const useProfileCharts = () => {
   const setCharts = useProfileChartsStore((state) => state.set);
 
   const { pointsCl, pointsCd, pointsClMonotonic, pointsCdReversed } =
-    useProfileData(wing.reynolds);
+    useProfileData(wing.reynoldsIndex);
 
   const { M } = useProfileCamber();
 
@@ -44,7 +44,7 @@ const useProfileCharts = () => {
         x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
         y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
-  }, [wing.profile, wing.reynolds, xHover]);
+  }, [wing.profile, wing.reynoldsIndex, xHover]);
 
   useEffect(() => {
     const Cl = yHover;
@@ -55,7 +55,7 @@ const useProfileCharts = () => {
         x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
         y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
-  }, [wing.profile, wing.reynolds, yHover]);
+  }, [wing.profile, wing.reynoldsIndex, yHover]);
 
   return { pointsCl, pointsCd, useProfileChartsStore };
 };

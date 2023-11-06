@@ -62,7 +62,7 @@ const IntroBernoulli = () => {
       <Formula style={potential} tex="\: + \:" />
       <Formula style={potential} tex="gh" />
       <Formula tex="\: + \:" />
-      <Formula className="mt-1" style={pressure} tex="\frac {p} {\rho}" />
+      <Formula className="mt-2" style={pressure} tex="\frac {p} {\rho}" />
       <Formula tex="\: = \:" />
       <Formula tex="constant" />
     </animated.div>

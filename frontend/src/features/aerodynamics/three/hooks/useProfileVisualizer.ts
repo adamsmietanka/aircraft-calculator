@@ -37,7 +37,6 @@ const useProfileVisualizer = () => {
     }
   };
 
-  // Returns [gridPosition, localPosition]
   const getPosition = () => {
     switch (pathname) {
       case "/":

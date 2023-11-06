@@ -1,6 +1,5 @@
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { useWingStore } from "../stores/useWing";
-import { getReynolds } from "../data/profiles";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
 import useProfile from "../hooks/useProfile";
 import { SpringValue } from "@react-spring/three";
@@ -14,10 +13,9 @@ interface Props {
 const ProfileAirstreams = ({ opacity, show }: Props) => {
   const { upperPoints, lowerPoints } = useProfile();
 
-  const profile = useWingStore((state) => state.profile);
-  const reynoldsIndex = useWingStore((state) => state.reynolds);
+  const reynolds = useWingStore((state) => state.reynolds);
 
-  const speed = 0.03 * getReynolds(profile)[reynoldsIndex];
+  const speed = 0.03 * reynolds;
 
   const omittedPoints = Math.floor(NUMBER_OF_AIRFOIL_POINTS * 0.1);
 

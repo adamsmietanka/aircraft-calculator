@@ -17,7 +17,7 @@ const Profile = ({ opacity }: Props) => {
 
   return (
     <animated.mesh position-z={0}>
-      <Inputs3D gridPositionX={-1.3}>
+      <Inputs3D gridPositionX={-1.4}>
         <div className="w-72 space-y-2 -mt-8">
           <ProfileChoose />
           <ProfileReynolds />
@@ -25,7 +25,7 @@ const Profile = ({ opacity }: Props) => {
       </Inputs3D>
       <LineChart
         width={0.33}
-        gridPositionX={0.25}
+        gridPositionX={0.35}
         opacity={opacity}
         name="Coefficient of Lift"
         traces={[{ name: "Power", points: pointsCl }]}
@@ -60,7 +60,7 @@ const Profile = ({ opacity }: Props) => {
       />
       <LineChart
         width={0.5}
-        gridPositionX={1.1}
+        gridPositionX={1.2}
         opacity={opacity}
         name="Coefficient of Drag"
         traces={[{ name: "Power", points: pointsCd }]}

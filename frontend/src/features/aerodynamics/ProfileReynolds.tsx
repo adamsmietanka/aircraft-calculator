@@ -5,8 +5,12 @@ import Formula from "../common/Formula";
 
 const ProfileReynolds = () => {
   const profile = useWingStore((state) => state.profile);
-  const reynoldsIndex = useWingStore((state) => state.reynolds);
+
+  const reynolds = useWingStore((state) => state.reynolds);
   const setReynolds = useWingStore((state) => state.setReynolds);
+  const reynoldsIndex = useWingStore((state) => state.reynoldsIndex);
+  const setReynoldsIndex = useWingStore((state) => state.setReynoldsIndex);
+
   return (
     <div className="form-control">
       <label className="label">
@@ -25,11 +29,15 @@ const ProfileReynolds = () => {
           min={0}
           max={2}
           value={reynoldsIndex}
-          onChange={(e) => setReynolds(parseFloat(e.target.value))}
+          onChange={(e) => {
+            const index = parseFloat(e.target.value);
+            setReynoldsIndex(index);
+            setReynolds(getReynolds(profile)[index]);
+          }}
           className="range range-xs join-item pr-2"
         />
         <button className="btn w-24 h-12 bg-base-300 join-item">
-          <Formula tex={`${getReynolds(profile)[reynoldsIndex]}*10^6`} />
+          <Formula tex={`${reynolds}*10^6`} />
         </button>
       </div>
     </div>
