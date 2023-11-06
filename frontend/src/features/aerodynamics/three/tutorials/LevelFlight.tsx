@@ -21,12 +21,13 @@ interface Props {
 const LevelFlight = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
-  const mass = useHoverProfileStore((state) => state.mass);
-  const setMass = useHoverProfileStore((state) => state.setMass);
-  const speed = useHoverProfileStore((state) => state.speed);
-  const setSpeed = useHoverProfileStore((state) => state.setSpeed);
 
   const setProfile = useWingStore((state) => state.setProfile);
+  const reynolds = useWingStore((state) => state.reynolds);
+
+  const mass = useHoverProfileStore((state) => state.mass);
+  const setMass = useHoverProfileStore((state) => state.setMass);
+  
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
@@ -39,10 +40,15 @@ const LevelFlight = ({ opacity }: Props) => {
   const { maxCz } = useProfileTable(1, profile) as Row;
 
   useEffect(() => {
-    setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
-    const diff = Math.min(maxCz, mass / (speed * speed)) * speed * speed - mass;
-    set({ fallVelocity: -diff });
-  }, [mass, speed]);
+    if (pathname === "/aerodynamics/levelFlight") {
+      // Cause default reynolds is 6
+      const speed = reynolds / 6;
+      setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
+      const diff =
+        Math.min(maxCz, mass / (speed * speed)) * speed * speed - mass;
+      set({ fallVelocity: -diff });
+    }
+  }, [mass, reynolds]);
 
   const [showLayout, setShowLayout] = useState(false);
 
@@ -130,7 +136,7 @@ const LevelFlight = ({ opacity }: Props) => {
     <>
       <Inputs3D gridPositionX={-1.3} show={showLayout}>
         <MassSlider value={mass} setter={setMass} />
-        <SpeedSlider value={speed} setter={setSpeed} />
+        <SpeedSlider />
       </Inputs3D>
       <mesh visible={showLayout}>
         <LineChart
