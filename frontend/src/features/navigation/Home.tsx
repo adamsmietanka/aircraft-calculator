@@ -1,12 +1,15 @@
 import React from "react";
-import { Center, Cloud, Float, Text3D } from "@react-three/drei";
+import { Center, Cloud, Cylinder, Float, Text3D } from "@react-three/drei";
 import WingModel from "../aerodynamics/three/WingModel";
 import { SpringValue } from "@react-spring/three";
 import FuseModel from "../aerodynamics/three/FuseModel";
+import { DoubleSide } from "three";
 
 interface Props {
   opacity: SpringValue<number>;
 }
+
+const SPAR_DIAMETER = 0.03;
 
 const Home = ({ opacity }: Props) => {
   return (
@@ -50,6 +53,45 @@ const Home = ({ opacity }: Props) => {
         speed={1.75}
       >
         <mesh position={[0, 0, 45]} receiveShadow>
+          <mesh position-y={1.25 / 2} position-x={0.1}>
+            {/* <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]} /> */}
+            <mesh position-z={2.75} position-x={0.2}>
+              <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
+                <meshStandardMaterial
+                  color={"lightgray"}
+                  side={DoubleSide}
+                  metalness={1}
+                />
+              </Cylinder>
+              <mesh position-x={1.2}>
+                <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
+                  <meshStandardMaterial
+                    color={"lightgray"}
+                    side={DoubleSide}
+                    metalness={1}
+                  />
+                </Cylinder>
+              </mesh>
+            </mesh>
+            <mesh position-z={-2.75} position-x={0.2}>
+              <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
+                <meshStandardMaterial
+                  color={"lightgray"}
+                  side={DoubleSide}
+                  metalness={1}
+                />
+              </Cylinder>
+              <mesh position-x={1.2}>
+                <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
+                  <meshStandardMaterial
+                    color={"lightgray"}
+                    side={DoubleSide}
+                    metalness={1}
+                  />
+                </Cylinder>
+              </mesh>
+            </mesh>
+          </mesh>
           <mesh scale-z={0.5}>
             <WingModel opacity={opacity} shape={0} />
           </mesh>
