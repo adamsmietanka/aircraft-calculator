@@ -68,15 +68,15 @@ const Introduction = ({ opacity }: Props) => {
           });
           setChart({ xHover: 0.01 });
           await displaySub(
-          next,
-          "Let's start with a simple rectangular plate",
-          2000
+            next,
+            "Let's start with a simple rectangular plate",
+            2000
           );
           setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
           await displaySub(next, "When it is not angled", 1500);
           await displaySub(
-          next,
-          "the force acting on the plate is only horizontal"
+            next,
+            "the force acting on the plate is only horizontal"
           );
 
           await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5]);
@@ -86,12 +86,12 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 1000 });
 
           await displaySub(
-          next,
-          "The lower side of the plate is facing the flow"
+            next,
+            "The lower side of the plate is facing the flow"
           );
           await displaySub(
-          next,
-          "This means more air molecules smash into it and the pressure goes up"
+            next,
+            "This means more air molecules smash into it and the pressure goes up"
           );
           set({ vectorBottom: true });
           await next({ delay: 1000 });
@@ -102,8 +102,8 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 1000 });
 
           await displaySub(
-          next,
-          "In fact the pressure is acting on every side of our plate"
+            next,
+            "In fact the pressure is acting on every side of our plate"
           );
           set({ vectorsSide: true });
           await next({ delay: 1000 });
@@ -114,13 +114,13 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(next, "We get our net force");
           set({
-          vectorBottom: false,
-          vectorTop: false,
-          vectorsSide: false,
+            vectorBottom: false,
+            vectorTop: false,
+            vectorsSide: false,
           });
           await next({ delay: 200 });
           set({
-          showVectors: true,
+            showVectors: true,
           });
           await next({ delay: 1000 });
 
@@ -279,6 +279,7 @@ const Introduction = ({ opacity }: Props) => {
             hoverB: false,
             hoverC: false,
             hoverPlane: false,
+            centerVectors: false,
             vectorBottom: false,
             vectorTop: false,
             vectorsSide: false,
