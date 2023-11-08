@@ -27,7 +27,11 @@ const ProfileChoose = () => {
             tabIndex={0}
             className="flex items-center justify-between p-4 cursor-pointer z-10 w-full h-full"
           >
-            {profile.length === 4 ? `NACA ${profile}` : "Flat plate"}
+            {profile.length === 4
+              ? `NACA ${profile}`
+              : profile === "30"
+              ? "Brick"
+              : "Flat plate"}
           </label>
           <ul
             tabIndex={0}
@@ -86,7 +90,8 @@ const ProfileChoose = () => {
                 <ul>
                   {profileList.map(
                     (p) =>
-                      p.length === 2 && (
+                      p.length === 2 &&
+                      p !== "30" && (
                         <li key={p}>
                           <button
                             className={`${p === profile && "active"}`}
@@ -99,6 +104,14 @@ const ProfileChoose = () => {
                   )}
                 </ul>
               </details>
+            </li>
+            <li>
+              <button
+                className={`${profile === "30" && "active"}`}
+                onClick={() => handleClick("30")}
+              >
+                Brick
+              </button>
             </li>
           </ul>
         </div>

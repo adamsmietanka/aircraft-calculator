@@ -1,4 +1,4 @@
-export const plates = ["06", "09"];
+export const plates = ["06", "09", "30"];
 const plate = [
   [-14.6244, -0.55643],
   [-14.6, -0.55824],

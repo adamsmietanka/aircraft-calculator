@@ -29,7 +29,7 @@ const generatePoints = (
     if (i === NUMBER_OF_POINTS) {
       x = end;
     }
-    console.log(extrapolate);
+
     const index = findUpperBound(X, x, extrapolate);
     const y = linearInterpolation(
       X[index - 1],
