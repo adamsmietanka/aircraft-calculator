@@ -15,6 +15,8 @@ interface Props {
 const Introduction = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
   const setProfile = useWingStore((state) => state.setProfile);
+  const setReynolds = useWingStore((state) => state.setReynolds);
+
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
   const chart = useProfileChartsStore();
@@ -54,6 +56,7 @@ const Introduction = ({ opacity }: Props) => {
           savedAngle.current = chart.xHover;
           savedLock.current = chart.locked;
           setProfile("06");
+          setReynolds(6);
           set({
             showChord: true,
             showCamber: false,
