@@ -129,15 +129,13 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(
             next,
-            "Usually the aerodynamic force is not positioned in the center"
+            "Usually the wing rotation axis is not positioned in the center"
           );
-          set({ centerVectors: false });
-          await next({ delay: 1000 });
           await displaySub(next, "but at 25% of length");
 
           showSub("However this will create a torque and spin our plate");
           await next({ delay: 500 });
-          await setAngles(next, [5.25, 5.5, 6, 6.5, 7, 8, 5], 150);
+          await setAngles(next, [5, 4, 3, 2, 1, 0.5, 5], 150);
           hideSubs();
           await next({ delay: 500 });
 
@@ -146,6 +144,8 @@ const Introduction = ({ opacity }: Props) => {
             "so we actually need a moment to counteract it"
           );
           set({ moment: true });
+          await next({ delay: 1000 });
+          set({ centerVectors: false });
           await next({ delay: 1000 });
 
           await displaySub(

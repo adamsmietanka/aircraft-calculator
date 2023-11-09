@@ -61,7 +61,7 @@ const MomentNew = ({
   }, [show]);
 
   return (
-    <animated.mesh position-z={0} visible={spring.visible}>
+    <animated.mesh position-z={0} scale-x={-1} visible={spring.visible}>
       <mesh rotation-z={-Math.PI / 2}>
         <AnimatedTorus
           args={[0.4, 0.03, 12, 48, Math.PI * 1.25]}
@@ -90,7 +90,7 @@ const MomentNew = ({
           </mesh>
         </animated.mesh>
       </mesh>
-      <AnimatedHtml position-x={-0.75} position-y={0.75} show={show}>
+      <AnimatedHtml position-x={-0.75} scale-x={-1} position-y={0.75} show={show}>
         <div className={`text-${color} text-xl`}>{children}</div>
       </AnimatedHtml>
     </animated.mesh>
