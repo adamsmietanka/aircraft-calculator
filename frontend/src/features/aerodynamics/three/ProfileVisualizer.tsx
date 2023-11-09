@@ -7,12 +7,15 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import ProfileVectors from "./ProfileVectors";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import ProfileFlowSpeed from "./ProfileFlowSpeed";
+import { useWingStore } from "../stores/useWing";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const ProfileVisualizer = ({ opacity }: Props) => {
+  const profile = useWingStore((state) => state.profile);
+
   const { profilePoints, chordPoints } = useProfile();
   const { profileSpring, showVisuals } = useProfileVisualizer();
 
@@ -33,7 +36,9 @@ const ProfileVisualizer = ({ opacity }: Props) => {
             points={chordPoints}
             width={1.5}
             color="secondary"
-            opacity={opacity.to((o) => (showCamber ? o / 1.5 : 0))}
+            opacity={opacity.to((o) =>
+              showCamber && profile.length === 4 ? o / 1.5 : 0
+            )}
           />
           <AnimatedLine
             points={[
