@@ -61,7 +61,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               (vectorsNet) => 0.5 - vectorsNet * VECTOR_SPREAD
             )}
             position-y={spring.vectorsNet.to(
-              (vectorsNet) => (vectorsNet - 1) * 0.045
+              (vectorsNet) => (vectorsNet - 1) * 0.03
             )}
             scale={1 / scaleProfile}
           >
@@ -83,7 +83,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               (vectorsNet) => 0.5 + vectorsNet * VECTOR_SPREAD
             )}
             position-y={spring.vectorsNet.to(
-              (vectorsNet) => (vectorsNet - 1) * -0.045
+              (vectorsNet) => (vectorsNet - 1) * -0.03
             )}
             scale={1 / scaleProfile}
           >

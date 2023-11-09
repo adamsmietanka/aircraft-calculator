@@ -53,7 +53,7 @@ const Introduction = ({ opacity }: Props) => {
           savedProfile.current = profile;
           savedAngle.current = chart.xHover;
           savedLock.current = chart.locked;
-          setProfile("09");
+          setProfile("06");
           set({
             showChord: true,
             showCamber: false,
