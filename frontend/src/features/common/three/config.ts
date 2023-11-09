@@ -10,7 +10,7 @@ export const PROFILE_POSITION = -0.8;
 export const PROFILE_WIDTH = 0.4;
 export const WING_POSITION = -0.45;
 
-export const DRAG_VECTOR_SCALE = 20;
+export const DRAG_VECTOR_SCALE = 10;
 
 export const GRID_WIDTH = 1.0;
 export const GRID_OPACITY = 0.1;
