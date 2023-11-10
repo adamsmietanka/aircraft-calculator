@@ -5,6 +5,8 @@ import { useHoverables, useHoverWingStore } from "../hooks/useHoverables";
 import HoverableFormula from "../../common/HoverableFormula";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
 import AnimatedLine from "../../common/three/AnimatedLine";
+import { useGlobalUnitsStore } from "../../settings/stores/useGlobalUnits";
+import { unitDisplay, unitMultipliers } from "../../settings/data/units";
 
 interface Props {
   scale: SpringValue<number>;
@@ -18,6 +20,9 @@ const WingHoverables = ({ scale }: Props) => {
     useWingAerodynamics();
 
   const { shape } = useHoverables();
+
+  const length = useGlobalUnitsStore((state) => state.types.length);
+  const areaUnit = useGlobalUnitsStore((state) => state.types.area);
 
   return (
     <>
@@ -72,18 +77,24 @@ const WingHoverables = ({ scale }: Props) => {
           />
           <HoverableFormula
             name="Wing Surface"
-            tex={`S=${area.toFixed(2)}\\, m^2`}
-            texHover={` \\textcolor{green}{S}=${area.toFixed(2)}\\, m^2`}
+            tex={`S=${(area / unitMultipliers.area[areaUnit]).toFixed(2)}\\, ${
+              unitDisplay.area[areaUnit]
+            }`}
+            texHover={` \\textcolor{green}{S}=${(
+              area / unitMultipliers.area[areaUnit]
+            ).toFixed(2)}\\, ${unitDisplay.area[areaUnit]}`}
             hover={hoverStore.surface}
             onEnter={() => hoverStore.set({ surface: true })}
             onLeave={() => hoverStore.set({ surface: false })}
           />
           <HoverableFormula
             name="Mean Aerodynamic Chord"
-            tex={`MAC=${meanAerodynamicChord.toFixed(2)}\\, m`}
-            texHover={` \\textcolor{gray}{MAC}=${meanAerodynamicChord.toFixed(
-              2
-            )}\\, m`}
+            tex={`MAC=${(
+              meanAerodynamicChord / unitMultipliers.length[length]
+            ).toFixed(2)}\\, ${unitDisplay.length[length]}`}
+            texHover={` \\textcolor{gray}{MAC}=${(
+              meanAerodynamicChord / unitMultipliers.length[length]
+            ).toFixed(2)}\\, ${unitDisplay.length[length]}`}
             hover={hoverStore.MAC}
             onEnter={() => hoverStore.set({ MAC: true })}
             onLeave={() => hoverStore.set({ MAC: false })}
