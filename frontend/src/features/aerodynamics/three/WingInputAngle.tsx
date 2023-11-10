@@ -2,10 +2,10 @@ import { useMemo, useRef } from "react";
 import { useCSSColors } from "../../common/three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated, to } from "@react-spring/three";
-import InputDrawing from "../../common/inputs/InputDrawing";
 import { useWingStore } from "../stores/useWing";
 import AnimatedTip from "../../common/drawings/AnimatedTip";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
+import InputDrawingAngle from "../../common/inputs/InputDrawingAngle";
 
 interface Props {
   scale: SpringValue<number>;
@@ -83,11 +83,7 @@ const WingInputAngle = ({ scale, y, angle, opacity }: Props) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial
-          ref={materialRef}
-          color={gridColor}
-          transparent
-        />
+        <lineBasicMaterial ref={materialRef} color={gridColor} transparent />
       </animated.lineSegments>
       <animated.line>
         <bufferGeometry>
@@ -130,7 +126,7 @@ const WingInputAngle = ({ scale, y, angle, opacity }: Props) => {
         rotation-z={angle.to((angle) => -(angle / 2))}
         scale={scale.to((s) => 1 / s)}
       >
-        <InputDrawing value={wing.angle} setter={wing.setAngle} />
+        <InputDrawingAngle value={wing.angle} setter={wing.setAngle} />
       </AnimatedHtml>
     </animated.mesh>
   );

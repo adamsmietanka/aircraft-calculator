@@ -67,7 +67,7 @@ const InputUnits = ({
             className="dropdown-content menu shadow bg-base-200 rounded-box p-0 w-16 [&_li>*]:rounded-2xl"
           >
             {Object.keys(units).map((u) => (
-              <li key={u} onClick={() => setUnit(u)}>
+              <li key={u} onClick={() => handleClick(u)}>
                 <button
                   className={`flex justify-center ${u === unit && "active"} ${
                     !small && "h-12"
