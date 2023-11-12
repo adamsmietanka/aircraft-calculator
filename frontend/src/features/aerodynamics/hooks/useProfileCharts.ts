@@ -5,6 +5,9 @@ import { linearInterpolationArray } from "../../../utils/interpolation/binarySea
 import { MarkersStore } from "../../common/three/Hover";
 import useProfileData from "./useProfileData";
 import { useProfileCamber } from "./useProfile";
+import useProfileTable from "./useProfileTable";
+import clamp from "../../../utils/interpolation/clamp";
+import useProfileInfo from "./useProfileInfo";
 
 export const useProfileChartsStore = create<MarkersStore>()((set) => ({
   x: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
@@ -18,6 +21,8 @@ export const useProfileChartsStore = create<MarkersStore>()((set) => ({
 
 const useProfileCharts = () => {
   const wing = useWingStore();
+
+  const table = useProfileInfo();
 
   const xHover = useProfileChartsStore((state) => state.xHover);
   const yHover = useProfileChartsStore((state) => state.yHover);
@@ -36,9 +41,22 @@ const useProfileCharts = () => {
   };
 
   useEffect(() => {
-    const aoa = xHover;
+    const aoa = clamp(xHover, table.minAngle, table.maxAngle);
     const Cl = getCl(xHover);
-    const Cd = linearInterpolationArray(pointsCdReversed, Cl);
+    let Cd;
+    if (aoa < table.angleOfMinCz) {
+      const delta = table.angleOfMinCz - aoa;
+      Cd =
+        linearInterpolationArray(pointsCdReversed, table.angleOfMinCz) +
+        0.01 * delta;
+    } else if (table.angleOfMaxCz < aoa) {
+      const delta = aoa - table.angleOfMaxCz;
+      Cd =
+        linearInterpolationArray(pointsCdReversed, table.angleOfMaxCz) +
+        0.01 * delta;
+    } else {
+      Cd = linearInterpolationArray(pointsCdReversed, Cl);
+    }
     locked !== "Coefficient of Drag" &&
       setCharts({
         x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
@@ -47,7 +65,7 @@ const useProfileCharts = () => {
   }, [wing.profile, wing.reynoldsIndex, xHover]);
 
   useEffect(() => {
-    const Cl = yHover;
+    const Cl = clamp(yHover, table.minCz, table.maxCz);
     const Cd = linearInterpolationArray(pointsCdReversed, Cl);
     const aoa = linearInterpolationArray(pointsClMonotonic, Cl);
     locked !== "Coefficient of Lift" &&
