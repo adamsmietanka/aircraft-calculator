@@ -3,6 +3,7 @@ import {
   linearInterpolation,
 } from "../../../utils/interpolation/binarySearch";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
+import linearRegression from "../../../utils/interpolation/linearRegression";
 import round from "../../../utils/interpolation/round";
 import plate, { plates } from "../data/flatPlate";
 import profiles from "../data/profiles";
@@ -78,15 +79,64 @@ const getCoefficients = (profile: string) => {
   return result;
 };
 
+const getMinMaxData = (coeffs: Record<string, number[][][]>) => {
+  let result: Record<string, number>[] = [];
+  for (let i = 0; i < 3; i++) {
+    const cz = coeffs.cz[i];
+    const cd = coeffs.cd[i];
+
+    const highestCz = cz.reduce((previous, current) =>
+      current[1] > previous[1] ? current : previous
+    );
+    let lowestCz = cz.reduce((previous, current) =>
+      current[1] < previous[1] ? current : previous
+    );
+
+    let lowestCd = cd.reduce((previous, current) =>
+      current[1] < previous[1] ? current : previous
+    );
+
+    const angleOfZeroCl = linearInterpolationArray(
+      cz.slice(20, 80).map(([x, y]) => [y, x]),
+      0
+    );
+
+    const CdOfZeroCl = linearInterpolationArray(cd, 0);
+
+    const slope = (linearRegression(cz.slice(20, 70)) * 180) / Math.PI;
+
+    const info = {
+      maxCz: highestCz[1],
+      angleOfMaxCz: highestCz[0],
+      minCz: lowestCz[1],
+      angleOfMinCz: lowestCz[0],
+      angleOfZeroCl,
+      minCd: lowestCd[1],
+      CdOfZeroCl,
+      czOfMinCd: lowestCd[0],
+      slope,
+      minAngle: cz[0][0],
+      maxAngle: cz[cz.length - 1][0],
+    };
+
+    result.push(info);
+  }
+
+  return result;
+};
+
 const generate_coefficients = () => {
   let newProfiles: Record<
     string,
     Record<string, number[][][] | number | number[]>
   > = {};
+  let table: Record<string, Record<string, number>[]> = {};
   Object.keys(profiles).forEach((profile) => {
-    newProfiles[profile] = getCoefficients(profile);
+    const coeffs = getCoefficients(profile);
+    newProfiles[profile] = coeffs;
+    table[profile] = getMinMaxData(coeffs);
   });
-  console.log(newProfiles);
+  console.log(newProfiles, table);
 };
 
 export const symmetrical_fixer = () => {
