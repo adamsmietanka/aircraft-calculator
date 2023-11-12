@@ -49,7 +49,7 @@ const Wing = ({ opacity }: Props) => {
           />
         </Inputs3D>
         <LineChart
-          width={0.33}
+          width={0.35}
           gridPositionX={0.15}
           opacity={opacity}
           name="Coefficient of Lift"
