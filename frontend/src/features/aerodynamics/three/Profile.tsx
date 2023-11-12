@@ -24,7 +24,7 @@ const Profile = ({ opacity }: Props) => {
         </div>
       </Inputs3D>
       <LineChart
-        width={0.33}
+        width={0.35}
         gridPositionX={0.35}
         opacity={opacity}
         name="Coefficient of Lift"
