@@ -5,7 +5,6 @@ import {
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import linearRegression from "../../../utils/interpolation/linearRegression";
 import round from "../../../utils/interpolation/round";
-import plate, { plates } from "../data/flatPlate";
 import profiles from "../data/profiles";
 import { default as profilesInterpolated } from "../data/profiles_interpolated";
 
@@ -79,6 +78,116 @@ const getCoefficients = (profile: string) => {
   return result;
 };
 
+const isWithin = (x: number, delta: number, target: number) => {
+  return target - delta < x && x < target + delta;
+};
+
+export const getBetterCoefficients = (profile: string) => {
+  let result: Record<string, number[][][]> = { cz: [], cd: [] };
+  for (let i = 1; i <= 3; i++) {
+    const cl = profiles[profile].cz
+      .map((array) => [array[0], array[i]])
+      .filter(
+        ([x, y]) => y !== 0 && y !== null && x !== null && -20 <= x && x <= 20
+      ) as number[][];
+
+    const startX = cl[0][0];
+    const endX = cl[cl.length - 1][0];
+
+    let newCl = generatePoints(startX, endX, cl);
+
+    // get lowest and highest Coefficient of Lift from the generated points
+    const [alphaOfHighestCl, highestCz] = newCl.reduce((previous, current) =>
+      current[1] > previous[1] ? current : previous
+    );
+
+    const [alphaOfLowestCl, lowestCz] = newCl.reduce((previous, current) =>
+      current[1] < previous[1] ? current : previous
+    );
+
+    let cd = profiles[profile].cd
+      .map((array) => [array[0], array[i]])
+      .filter(([x, y]) => y !== 0 && y !== null) as number[][];
+
+    const clRange = highestCz - lowestCz;
+    // const clRangeOfCd = cd[cd.length - 1][0] - cd[0][0];
+
+    const diffs = cd.map(([x, y], index) => [
+      x - (cd[index - 1] || [0, 0])[0],
+      y - (cd[index - 1] || [0, 0])[1],
+    ]);
+    const tangent = diffs.map(([cl, cd]) => cl / cd);
+
+    //add tangent as the last column
+    cd = cd.map(([x, y], index) => [
+      x,
+      y,
+      (x - (cd[index - 1] || [0, 0])[0]) / (y - (cd[index - 1] || [0, 0])[1]),
+    ]);
+
+    let czOfMaxCd = cd[cd.length - 1][0];
+    let maxCd = cd[cd.length - 1][1];
+    const dCz =
+      cd[Math.floor(diffs.length / 2)][0] -
+      cd[Math.floor(diffs.length / 2) - 1][0];
+    const endTangent = [];
+
+    let czOfMinCd = cd[0][0];
+    let minCd = cd[0][1];
+    const startTangent = [];
+
+    // See if the actual cl end (highest/lowest) of cd is inside
+    // and within 5% of the cl range ->
+    // check if Cl series has the stall curve
+    if (!isWithin(endX, 2, alphaOfHighestCl)) {
+      if (isWithin(czOfMaxCd, 0.05 * clRange, highestCz)) {
+        cd = cd.filter(([cl]) => cl < highestCz - 0.05 * clRange);
+        czOfMaxCd = cd[cd.length - 1][0];
+        maxCd = cd[cd.length - 1][1];
+      }
+      // if (czOfMaxCd < highestCz) {
+      let lastCd = maxCd;
+      for (let i = czOfMaxCd + dCz; i <= highestCz - dCz; i += dCz) {
+        // between the last tangent and 0
+        const linearI = (highestCz - i) / (highestCz - czOfMaxCd);
+        const dCd = linearI * cd[cd.length - 1][2];
+        const newCd = dCz / dCd + lastCd;
+        endTangent.push([i, newCd]);
+        lastCd = newCd;
+      }
+      // }
+    }
+
+    if (!isWithin(startX, 2, alphaOfLowestCl)) {
+      if (isWithin(czOfMinCd, 0.05 * clRange, lowestCz)) {
+        cd = cd.filter(([cl]) => lowestCz + 0.05 * clRange < cl);
+        czOfMinCd = cd[0][0];
+        minCd = cd[0][1];
+      }
+      let lastCd = minCd;
+      for (let i = czOfMinCd - dCz; i > lowestCz + dCz; i -= dCz) {
+        // between the last tangent and 0
+        const linearI = -(lowestCz - i) / (lowestCz - czOfMinCd);
+        const dCd = linearI * cd[1][2];
+        const newCd = dCz / dCd + lastCd;
+        startTangent.push([i, newCd]);
+        lastCd = newCd;
+      }
+    }
+
+    let newCd = generatePoints(
+      lowestCz,
+      highestCz,
+      [...startTangent.toReversed(), ...cd, ...endTangent],
+      true
+    );
+    result.cz.push(newCl);
+    result.cd.push(newCd);
+  }
+
+  return result;
+};
+
 const getMinMaxData = (coeffs: Record<string, number[][][]>) => {
   let result: Record<string, number>[] = [];
   for (let i = 0; i < 3; i++) {
@@ -132,7 +241,7 @@ const generate_coefficients = () => {
   > = {};
   let table: Record<string, Record<string, number>[]> = {};
   Object.keys(profiles).forEach((profile) => {
-    const coeffs = getCoefficients(profile);
+    const coeffs = getBetterCoefficients(profile);
     newProfiles[profile] = coeffs;
     table[profile] = getMinMaxData(coeffs);
   });
@@ -168,6 +277,5 @@ export const symmetrical_fixer = () => {
   ]);
   console.log(fixed);
 };
-
 
 export default generate_coefficients;
