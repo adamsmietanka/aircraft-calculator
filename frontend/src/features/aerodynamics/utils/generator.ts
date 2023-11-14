@@ -169,22 +169,5 @@ export const symmetrical_fixer = () => {
   console.log(fixed);
 };
 
-export const plateGenerator = () => {
-  let results: Record<string, Record<string, Array<Array<number | null>>>> = {};
-
-  plates.forEach((p) => {
-    const t = parseFloat(p) / 100;
-    results[p] = {
-      cz: plate.map(([aoa, cz]) => [aoa, cz, cz, cz]),
-      cd: plate.map(([aoa, cz]) => {
-        const cd =
-          cz * Math.sin((aoa * Math.PI) / 180) +
-          0.3 * t * Math.cos((aoa * Math.PI) / 180);
-        return [cz, cd, cd, cd];
-      }),
-    };
-  });
-  console.log(results);
-};
 
 export default generate_coefficients;
