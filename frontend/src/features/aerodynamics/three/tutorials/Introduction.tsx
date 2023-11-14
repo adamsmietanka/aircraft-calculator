@@ -82,7 +82,10 @@ const Introduction = ({ opacity }: Props) => {
             "the force acting on the plate is only horizontal"
           );
 
-          await setAngles(next, [0.1, 0.5, 1, 2, 3, 4, 5]);
+          await setAngles(
+            next,
+            Array.from(Array(16).keys()).map((i) => (i / 15) * (i / 15) * 5)
+          );
           await displaySub(next, "When angled it quickly grows");
           await displaySub(next, "What is the source of this force?");
           set({ showVectors: false });
@@ -135,8 +138,13 @@ const Introduction = ({ opacity }: Props) => {
 
           showSub("However this will create a torque and spin our plate");
           await next({ delay: 500 });
-          await setAngles(next, [5, 4, 3, 2, 1, 0.5, 5], 150);
+          await setAngles(
+            next,
+            Array.from(Array(16).keys()).map((i) => (-i + 15) / 3)
+          );
+          await next({ delay: 500 });
           hideSubs();
+          setChart({ xHover: 5 });
           await next({ delay: 500 });
 
           await displaySub(
