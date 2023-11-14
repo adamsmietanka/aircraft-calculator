@@ -75,7 +75,7 @@ const Profile = ({ opacity }: Props) => {
             ),
             name: "Coefficient of Drag (Cd)",
             min: 0,
-            max: profile.length === 2 ? 0.2 : 0.026,
+            max: profile.length === 2 ? 0.2 : 0.03,
           },
           y: {
             symbol: (
