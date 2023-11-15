@@ -35,8 +35,8 @@ const Tutorials = () => {
         className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
       >
         <li className="menu-title">Tutorials</li>
-        {tutorialSteps.map((step) => (
-          <li>
+        {tutorialSteps.map((step, index) => (
+          <li key={index}>
             <a
               className="flex justify-between"
               onClick={() => handleClick(step)}

@@ -31,9 +31,9 @@ const IntroBernoulli = () => {
     () => ({
       from: {},
       to: async (next) => {
-        showBernoulliPotential && next({ width: "3rem" });
-        next({ opacity: showBernoulliPotential ? 1 : 0 });
-        showBernoulliPotential || next({ width: "0rem", delay: 250 });
+        showBernoulliPotential && (await next({ width: "3rem" }));
+        await next({ opacity: showBernoulliPotential ? 1 : 0 });
+        showBernoulliPotential || (await next({ width: "0rem", delay: 250 }));
       },
     }),
     [showBernoulliPotential]
@@ -41,14 +41,14 @@ const IntroBernoulli = () => {
 
   const [kinetic] = useSpring(
     () => ({
-      "font-size": showBernoulliDiff ? "3rem" : "2rem",
+      fontSize: showBernoulliDiff ? "3rem" : "2rem",
     }),
     [showBernoulliDiff]
   );
 
   const [pressure] = useSpring(
     () => ({
-      "font-size": showBernoulliDiff ? "1.25rem" : "2rem",
+      fontSize: showBernoulliDiff ? "1.25rem" : "2rem",
     }),
     [showBernoulliDiff]
   );
