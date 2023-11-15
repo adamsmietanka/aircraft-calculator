@@ -5,7 +5,10 @@ export interface Step {
   symbol?: string;
   tutorial?: boolean;
 }
-const steps: Step[] = [
+
+export const whitelist = ["/", "aerodynamics", "powerunit"];
+
+const stepsList: Step[] = [
   {
     name: "Home",
     feature: "/",
@@ -115,5 +118,9 @@ const steps: Step[] = [
     path: "hyperbolic",
   },
 ];
+
+const steps: Step[] = import.meta.env.PROD
+  ? stepsList.filter((s) => whitelist.includes(s.feature))
+  : stepsList;
 
 export default steps;

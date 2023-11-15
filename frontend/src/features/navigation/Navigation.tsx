@@ -10,46 +10,50 @@ import React from "react";
 import { Settings } from "..";
 import { NavLink, useLocation } from "react-router-dom";
 import Tutorials from "./Tutorials";
-import steps from "./data/steps";
+import steps, { whitelist } from "./data/steps";
 
-const links = [
-  { to: "/", name: "Home", icon: <Home /> },
+const linkList = [
+  { to: "", name: "Home", icon: <Home /> },
   {
-    to: "/aerodynamics",
+    to: "aerodynamics",
     name: "Aerodynamics",
     icon: <Airplane />,
   },
   {
-    to: "/powerunit",
+    to: "powerunit",
     name: "Power Unit",
     icon: <Propeller />,
   },
   {
-    to: "/performance",
+    to: "performance",
     name: "Performance",
     icon: <Engine />,
   },
   {
-    to: "/weight",
+    to: "weight",
     name: "Mass Distribution",
     icon: <Scales />,
   },
   {
-    to: "/stability",
+    to: "stability",
     name: "Longitudinal Stability",
     icon: <Swing />,
   },
   {
-    to: "/turn",
+    to: "turn",
     name: "Turn Analysis",
     icon: <Curve />,
   },
   {
-    to: "/navigation",
+    to: "navigation",
     name: "Navigation",
     icon: <Compass />,
   },
 ];
+
+const links = import.meta.env.PROD
+  ? linkList.filter((l) => whitelist.includes(l.to))
+  : linkList;
 
 const Navigation = () => {
   const { pathname } = useLocation();
@@ -64,6 +68,7 @@ const Navigation = () => {
     );
   };
   const currentStepIndex = getStepIndex(feature, pathSubRoute);
+  console.log(import.meta.env.PROD);
 
   return (
     <div className="sticky flex flex-col justify-between h-screen top-0 p-2 z-50">
