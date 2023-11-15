@@ -13,7 +13,7 @@ import Tutorials from "./Tutorials";
 import steps, { whitelist } from "./data/steps";
 
 const linkList = [
-  { to: "", name: "Home", icon: <Home /> },
+  { to: "/", name: "Home", icon: <Home /> },
   {
     to: "aerodynamics",
     name: "Aerodynamics",
@@ -68,7 +68,6 @@ const Navigation = () => {
     );
   };
   const currentStepIndex = getStepIndex(feature, pathSubRoute);
-  console.log(import.meta.env.PROD);
 
   return (
     <div className="sticky flex flex-col justify-between h-screen top-0 p-2 z-50">
