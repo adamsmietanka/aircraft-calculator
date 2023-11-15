@@ -9,6 +9,7 @@ import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { SpringValue, animated, config, useSpring } from "@react-spring/three";
 import MomentNew from "../../../common/three/MomentNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
+import { useEffect } from "react";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -20,7 +21,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
   const vectorBottom = useHoverProfileStore((state) => state.vectorBottom);
   const vectorTop = useHoverProfileStore((state) => state.vectorTop);
   const vectorsSide = useHoverProfileStore((state) => state.vectorsSide);
-  const vectorsNet = useHoverProfileStore((state) => state.vectorsNet);
+  const showSum = useHoverProfileStore((state) => state.vectorsNet);
   const moment = useHoverProfileStore((state) => state.moment);
 
   const { scaleProfile } = useWingScale();
@@ -30,14 +31,51 @@ const IntroductionVectors = ({ opacity }: Props) => {
   const left = 0.15;
   const right = 0.1;
 
-  const [spring] = useSpring(
+  const [spring, api] = useSpring(
     () => ({
-      verticalX: vectorsNet ? 0.01 : 0,
-      vectorsNet: +vectorsNet,
       config: config.slow,
+      vertX: !showSum ? 0 : -VECTOR_SPREAD,
+      vertY: !showSum ? -0.03 : 0,
+      downY: !showSum ? -down * VECTOR_SIZE : 0,
+      upY: !showSum ? up * VECTOR_SIZE : down * VECTOR_SIZE,
+      horX: !showSum ? -0.5 : 0,
+      horY: !showSum ? 0 : VECTOR_SPREAD / 2,
+      leftRightY: !showSum ? 0 : (down - up) * VECTOR_SIZE,
+      leftX: !showSum ? -left * VECTOR_SIZE : 0,
+      rightX: !showSum ? right * VECTOR_SIZE : left * VECTOR_SIZE,
     }),
-    [vectorsNet]
+    []
   );
+
+  useEffect(() => {
+    if (!showSum) {
+      // default
+      api.start({
+        vertX: 0,
+        vertY: -0.03,
+        downY: -down * VECTOR_SIZE,
+        upY: up * VECTOR_SIZE,
+        horX: -0.5,
+        horY: 0,
+        leftRightY: 0,
+        leftX: -left * VECTOR_SIZE,
+        rightX: right * VECTOR_SIZE,
+      });
+    } else {
+      // sum
+      api.start({
+        vertX: -VECTOR_SPREAD,
+        vertY: 0,
+        downY: 0,
+        upY: down * VECTOR_SIZE,
+        horX: 0,
+        horY: VECTOR_SPREAD / 2,
+        leftRightY: (down - up) * VECTOR_SIZE,
+        leftX: 0,
+        rightX: left * VECTOR_SIZE,
+      });
+    }
+  }, [showSum]);
 
   return (
     <mesh
@@ -55,108 +93,74 @@ const IntroductionVectors = ({ opacity }: Props) => {
           </MomentNew>
         </mesh>
         <mesh position-x={-0.25}>
-          {/* vertical */}
-          <animated.mesh
-            position-x={spring.vectorsNet.to(
-              (vectorsNet) => 0.5 - vectorsNet * VECTOR_SPREAD
-            )}
-            position-y={spring.vectorsNet.to(
-              (vectorsNet) => (vectorsNet - 1) * 0.03
-            )}
-            scale={1 / scaleProfile}
-          >
+          <mesh position-x={0.5}>
+            {/* down */}
             <animated.mesh
-              position-y={spring.vectorsNet.to(
-                (vectorsNet) => (vectorsNet - 1) * down * VECTOR_SIZE
-              )}
+              position-x={spring.vertX}
+              position-y={spring.vertY}
+              scale={1 / scaleProfile}
             >
-              <VectorNew
-                y={down}
-                show={vectorBottom}
-                opacity={opacity}
-                color="primary"
-              />
+              <animated.mesh position-y={spring.downY}>
+                <VectorNew
+                  y={down}
+                  show={vectorBottom}
+                  opacity={opacity}
+                  color="primary"
+                />
+              </animated.mesh>
             </animated.mesh>
-          </animated.mesh>
-          <animated.mesh
-            position-x={spring.vectorsNet.to(
-              (vectorsNet) => 0.5 + vectorsNet * VECTOR_SPREAD
-            )}
-            position-y={spring.vectorsNet.to(
-              (vectorsNet) => (vectorsNet - 1) * -0.03
-            )}
-            scale={1 / scaleProfile}
-          >
+            {/* up */}
             <animated.mesh
-              position-y={spring.vectorsNet.to(
-                (vectorsNet) =>
-                  (vectorsNet - 1) * -up * VECTOR_SIZE +
-                  vectorsNet * down * VECTOR_SIZE
-              )}
+              position-x={spring.vertX.to((x) => -x)}
+              position-y={spring.vertY.to((y) => -y)}
+              scale={1 / scaleProfile}
             >
-              <VectorNew
-                y={-up}
-                show={vectorTop}
-                opacity={opacity}
-                color="secondary"
-              />
+              <animated.mesh position-y={spring.upY}>
+                <VectorNew
+                  y={-up}
+                  show={vectorTop}
+                  opacity={opacity}
+                  color="secondary"
+                />
+              </animated.mesh>
             </animated.mesh>
-          </animated.mesh>
-          {/* horizontal */}
-          <animated.mesh
-            position-x={spring.vectorsNet.to(
-              (vectorsNet) => 0.5 + (vectorsNet - 1) * 0.5
-            )}
-            position-y={spring.vectorsNet.to(
-              (vectorsNet) => (vectorsNet * VECTOR_SPREAD) / 2
-            )}
-            scale={1 / scaleProfile}
-          >
+            {/* left */}
             <animated.mesh
-              position-y={spring.vectorsNet.to(
-                (vectorsNet) => vectorsNet * (down - up) * VECTOR_SIZE
-              )}
-              position-x={spring.vectorsNet.to(
-                (vectorsNet) => (vectorsNet - 1) * left * VECTOR_SIZE
-              )}
+              position-x={spring.horX}
+              position-y={spring.horY}
+              scale={1 / scaleProfile}
             >
-              <VectorNew
-                x={left}
-                show={vectorsSide}
-                opacity={opacity}
-                color="secondary"
-              />
+              <animated.mesh
+                position-y={spring.leftRightY}
+                position-x={spring.leftX}
+              >
+                <VectorNew
+                  x={left}
+                  show={vectorsSide}
+                  opacity={opacity}
+                  color="secondary"
+                />
+              </animated.mesh>
             </animated.mesh>
-          </animated.mesh>
-          <animated.mesh
-            position-x={spring.vectorsNet.to(
-              (vectorsNet) => 0.5 - (vectorsNet - 1) * 0.5
-            )}
-            position-y={spring.vectorsNet.to(
-              (vectorsNet) => (-vectorsNet * VECTOR_SPREAD) / 2
-            )}
-            scale={1 / scaleProfile}
-          >
+            {/* right */}
             <animated.mesh
-              position-y={spring.vectorsNet.to(
-                (vectorsNet) =>
-                  vectorsNet * (down - up) * VECTOR_SIZE -
-                  vectorsNet * VECTOR_SPREAD
-              )}
-              position-x={spring.vectorsNet.to(
-                (vectorsNet) =>
-                  (vectorsNet - 1) * -right * VECTOR_SIZE +
-                  vectorsNet * left * VECTOR_SIZE
-              )}
+              position-x={spring.horX.to((x) => -x)}
+              position-y={spring.horY.to((y) => -y)}
+              scale={1 / scaleProfile}
             >
-              <VectorNew
-                x={-right}
-                show={vectorsSide}
-                opacity={opacity}
-                color="primary"
-              />
+              <animated.mesh
+                position-y={spring.leftRightY}
+                position-x={spring.rightX}
+              >
+                <VectorNew
+                  x={-right}
+                  show={vectorsSide}
+                  opacity={opacity}
+                  color="primary"
+                />
+              </animated.mesh>
             </animated.mesh>
-          </animated.mesh>
+          </mesh>
           {/* end */}
         </mesh>
       </mesh>
