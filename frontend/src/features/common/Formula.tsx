@@ -12,7 +12,7 @@ interface Props {
   style?: SpringValues<{
     opacity?: number;
     width?: string;
-    "font-size"?: string;
+    fontSize?: string;
     display?: string;
   }>;
 }
