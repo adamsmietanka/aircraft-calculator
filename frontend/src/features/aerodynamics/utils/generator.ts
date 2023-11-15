@@ -116,7 +116,6 @@ export const getBetterCoefficients = (profile: string) => {
       x - (cd[index - 1] || [0, 0])[0],
       y - (cd[index - 1] || [0, 0])[1],
     ]);
-    const tangent = diffs.map(([cl, cd]) => cl / cd);
 
     //add tangent as the last column
     cd = cd.map(([x, y], index) => [
