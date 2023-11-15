@@ -34,22 +34,22 @@ const IntroductionVectors = ({ opacity }: Props) => {
   const [spring, api] = useSpring(
     () => ({
       config: config.slow,
-      vertX: !showSum ? 0 : -VECTOR_SPREAD,
-      vertY: !showSum ? -0.03 : 0,
-      downY: !showSum ? -down * VECTOR_SIZE : 0,
-      upY: !showSum ? up * VECTOR_SIZE : down * VECTOR_SIZE,
-      horX: !showSum ? -0.5 : 0,
-      horY: !showSum ? 0 : VECTOR_SPREAD / 2,
-      leftRightY: !showSum ? 0 : (down - up) * VECTOR_SIZE,
-      leftX: !showSum ? -left * VECTOR_SIZE : 0,
-      rightX: !showSum ? right * VECTOR_SIZE : left * VECTOR_SIZE,
+      vertX: 0,
+      vertY: 0,
+      downY: 0,
+      upY: 0,
+      horX: 0,
+      horY: 0,
+      leftRightY: 0,
+      leftX: 0,
+      rightX: 0,
     }),
     []
   );
 
   useEffect(() => {
     if (!showSum) {
-      // default
+      // default positions
       api.start({
         vertX: 0,
         vertY: -0.03,
@@ -62,7 +62,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
         rightX: right * VECTOR_SIZE,
       });
     } else {
-      // sum
+      // showing sums
       api.start({
         vertX: -VECTOR_SPREAD,
         vertY: 0,
