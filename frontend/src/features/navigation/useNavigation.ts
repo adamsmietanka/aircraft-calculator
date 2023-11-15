@@ -5,6 +5,7 @@ import { persist } from "zustand/middleware";
 interface NavigationState {
   routes: Record<string, string>;
   tutorials: Record<string, boolean>;
+  presentation: boolean;
   setRoute: (route: string, subroute: string) => void;
   setTutorialSeen: (path: string) => void;
 }
@@ -19,6 +20,7 @@ export const useNavigationStore = create<NavigationState>()(
         navigation: "hyperbolic",
       },
       tutorials: {},
+      presentation: false,
       setRoute: (route, subroute) =>
         set(
           produce((state) => {

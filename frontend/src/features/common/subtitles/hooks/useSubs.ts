@@ -1,4 +1,4 @@
-import { PRESENTATION_MODE } from "../../three/config";
+import { useNavigationStore } from "../../../navigation/useNavigation";
 import { useSubtitleStore } from "../stores/useSubtitles";
 import useAwaitClick from "./useAwaitClick";
 
@@ -6,6 +6,8 @@ const useSubs = () => {
   const setSub = useSubtitleStore((state) => state.setSub);
   const show = useSubtitleStore((state) => state.show);
   const hide = useSubtitleStore((state) => state.hide);
+
+  const presentation = useNavigationStore((state) => state.presentation);
 
   const waitUserInput = useAwaitClick();
 
@@ -15,14 +17,18 @@ const useSubs = () => {
     duration = 3000,
     showInPresentation = false
   ) => {
-    if (!PRESENTATION_MODE || showInPresentation) {
+    if (!presentation || showInPresentation) {
       setSub(text);
       show();
       await next({ delay: duration });
       hide();
       await next({ delay: 1000 });
     } else {
+      setSub(text);
       await waitUserInput();
+      show();
+      await waitUserInput();
+      hide();
     }
   };
 
