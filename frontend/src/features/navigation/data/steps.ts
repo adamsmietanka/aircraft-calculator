@@ -6,7 +6,7 @@ export interface Step {
   tutorial?: boolean;
 }
 
-export const whitelist = ["/", "aerodynamics", "powerunit"];
+export const whitelist = ["/", "aerodynamics"];
 
 const stepsList: Step[] = [
   {
