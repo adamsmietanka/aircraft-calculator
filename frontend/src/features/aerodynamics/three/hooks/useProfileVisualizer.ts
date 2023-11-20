@@ -16,6 +16,7 @@ const useProfileVisualizer = () => {
 
   const centerVectors = useHoverProfileStore((state) => state.centerVectors);
   const fallVelocity = useHoverProfileStore((state) => state.fallVelocity);
+  const keepAngle = useHoverProfileStore((state) => state.keepAngle);
 
   const { scale, scaleProfile } = useWingScale();
 
@@ -52,7 +53,10 @@ const useProfileVisualizer = () => {
 
   const [profileSpring, api] = useSpring(
     () => ({
-      angle: showVisuals ? (-x["Coefficient of Lift"] * Math.PI) / 180 : 0,
+      angle:
+        keepAngle || showVisuals
+          ? (-x["Coefficient of Lift"] * Math.PI) / 180
+          : 0,
       scale: getScale(),
       gridX: getPosition(),
       vectorsPosition: centerVectors ? 0.25 : 0,
