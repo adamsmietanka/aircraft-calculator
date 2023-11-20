@@ -3,12 +3,12 @@ import { DRAG_VECTOR_SCALE } from "../../common/three/config";
 
 export interface HoverProfileState {
   splitVectors: boolean;
+  keepAngle: boolean;
   dragMultiplier: number;
   vectorSize: number;
   centerVectors: boolean;
-  vectorBottom: boolean;
-  vectorTop: boolean;
-  vectorsSide: boolean;
+  pressuresShow: boolean;
+  pressuresEqual: boolean;
   vectorsNet: boolean;
   moment: boolean;
   showBernoulli: boolean;
@@ -32,12 +32,12 @@ export interface HoverProfileState {
 
 export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   splitVectors: true,
+  keepAngle: false,
   dragMultiplier: DRAG_VECTOR_SCALE,
   vectorSize: 1,
   centerVectors: false,
-  vectorBottom: false,
-  vectorTop: false,
-  vectorsSide: false,
+  pressuresShow: false,
+  pressuresEqual: true,
   vectorsNet: false,
   moment: false,
   showBernoulli: false,

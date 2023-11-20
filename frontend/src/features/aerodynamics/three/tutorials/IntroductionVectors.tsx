@@ -10,6 +10,7 @@ import { SpringValue, animated, config, useSpring } from "@react-spring/three";
 import MomentNew from "../../../common/three/MomentNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import { useEffect } from "react";
+import useProfileVisualizer from "../hooks/useProfileVisualizer";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -18,18 +19,18 @@ interface Props {
 const VECTOR_SPREAD = 0.01;
 
 const IntroductionVectors = ({ opacity }: Props) => {
-  const vectorBottom = useHoverProfileStore((state) => state.vectorBottom);
-  const vectorTop = useHoverProfileStore((state) => state.vectorTop);
-  const vectorsSide = useHoverProfileStore((state) => state.vectorsSide);
+  const pressuresShow = useHoverProfileStore((state) => state.pressuresShow);
+  const pressuresEqual = useHoverProfileStore((state) => state.pressuresEqual);
   const showSum = useHoverProfileStore((state) => state.vectorsNet);
   const moment = useHoverProfileStore((state) => state.moment);
 
   const { scaleProfile } = useWingScale();
+  const { profileSpring } = useProfileVisualizer();
 
-  const down = 0.9;
-  const up = 0.2;
-  const left = 0.15;
-  const right = 0.1;
+  const down = pressuresEqual ? 0.55 : 0.9;
+  const up = pressuresEqual ? 0.55 : 0.2;
+  const left = pressuresEqual ? 0.05 : 0.07;
+  const right = pressuresEqual ? 0.05 : 0.04;
 
   const [spring, api] = useSpring(
     () => ({
@@ -75,14 +76,15 @@ const IntroductionVectors = ({ opacity }: Props) => {
         rightX: left * VECTOR_SIZE,
       });
     }
-  }, [showSum]);
+  }, [showSum, pressuresEqual]);
 
   return (
     <mesh
       position-x={(PROFILE_POSITION * CANVAS_WIDTH) / 2}
       scale={scaleProfile}
+      position-z={0.01}
     >
-      <mesh position-x={0.25} rotation-z={(-5 * Math.PI) / 180}>
+      <animated.mesh position-x={0.25} rotation-z={profileSpring.angle}>
         <mesh scale={1 / scaleProfile} position-z={0.1}>
           <MomentNew show={moment} opacity={opacity} color="secondary">
             <HoverableFormulaSimple
@@ -103,7 +105,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               <animated.mesh position-y={spring.downY}>
                 <VectorNew
                   y={down}
-                  show={vectorBottom}
+                  show={pressuresShow}
                   opacity={opacity}
                   color="primary"
                 />
@@ -118,7 +120,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               <animated.mesh position-y={spring.upY}>
                 <VectorNew
                   y={-up}
-                  show={vectorTop}
+                  show={pressuresShow}
                   opacity={opacity}
                   color="secondary"
                 />
@@ -136,7 +138,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               >
                 <VectorNew
                   x={left}
-                  show={vectorsSide}
+                  show={pressuresShow}
                   opacity={opacity}
                   color="secondary"
                 />
@@ -154,7 +156,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               >
                 <VectorNew
                   x={-right}
-                  show={vectorsSide}
+                  show={pressuresShow}
                   opacity={opacity}
                   color="primary"
                 />
@@ -163,7 +165,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
           </mesh>
           {/* end */}
         </mesh>
-      </mesh>
+      </animated.mesh>
     </mesh>
   );
 };

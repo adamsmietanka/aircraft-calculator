@@ -88,42 +88,55 @@ const Introduction = ({ opacity }: Props) => {
           );
           await displaySub(next, "When angled it quickly grows");
           await displaySub(next, "What is the source of this force?");
-          set({ showVectors: false });
+          set({ showVectors: false, keepAngle: true });
           await next({ delay: 1000 });
 
+          setChart({ hover: false });
+          await displaySub(next, "Let's stop the flow for a moment");
           await displaySub(
             next,
-            "The lower side of the plate is facing the flow"
+            "Air molecules are constantly pushing on the plate"
+          );
+
+          set({ pressuresShow: true });
+          await displaySub(next, "Without the air flow");
+          await displaySub(
+            next,
+            "The atmospheric pressure acting on our plate cancels out"
+          );
+          set({ vectorsNet: true });
+          await displaySub(next, "Resulting in a zero net force");
+          set({ pressuresShow: false });
+          await next({ delay: 2000 });
+
+          set({ vectorsNet: false });
+          await next({ delay: 1000 });
+          set({ pressuresShow: true });
+
+          setChart({ hover: true });
+          set({ pressuresEqual: false, keepAngle: false });
+
+          await displaySub(next, "When we add back the flow");
+          await displaySub(
+            next,
+            "The lower side of the plate is facing the oncoming air"
           );
           await displaySub(
             next,
             "This means more air molecules smash into it and the pressure goes up"
           );
-          set({ vectorBottom: true });
           await next({ delay: 1000 });
 
           await displaySub(next, "The upper surface is shielded from the flow");
           await displaySub(next, "So actually less particles are hitting it");
-          set({ vectorTop: true });
-          await next({ delay: 1000 });
+          await next({ delay: 1500 });
 
-          await displaySub(
-            next,
-            "In fact the pressure is acting on every side of our plate"
-          );
-          set({ vectorsSide: true });
-          await next({ delay: 1000 });
-
-          await displaySub(next, "When we add them up");
           set({ vectorsNet: true });
           await next({ delay: 1000 });
 
-          await displaySub(next, "We get our net force");
-          set({
-            vectorBottom: false,
-            vectorTop: false,
-            vectorsSide: false,
-          });
+          await displaySub(next, "The net force is the aerodynamic force we saw earlier");
+
+          set({ pressuresShow: false });
           await next({ delay: 200 });
           set({
             showVectors: true,
@@ -291,10 +304,8 @@ const Introduction = ({ opacity }: Props) => {
             hoverC: false,
             hoverPlane: false,
             centerVectors: false,
-            vectorBottom: false,
-            vectorTop: false,
-            vectorsSide: false,
             vectorsNet: false,
+            keepAngle: false,
             moment: false,
             dragMultiplier: DRAG_VECTOR_SCALE,
             splitVectors: true,
