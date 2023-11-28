@@ -15,6 +15,7 @@
     "@types/node": "^20.2.5",
     "@types/plotly.js-dist-min": "^2.3.1",
     "@types/three": "^0.152.1",
+    "colorjs.io": "^0.4.5",
     "daisyui": "^4.1.0",
     "plotly.js": "^2.21.0",
     "plotly.js-dist": "^2.23.2",

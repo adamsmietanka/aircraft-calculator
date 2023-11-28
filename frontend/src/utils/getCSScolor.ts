@@ -1,3 +1,5 @@
+import Color from "colorjs.io";
+
 export const getCSScolor = (variable: string) => {
   const style = getComputedStyle(document.body);
   return style.getPropertyValue(`--${variable}`).replaceAll(" ", ",");
@@ -23,6 +25,7 @@ export const getRGBColorFromCSS = (name: string) => {
 };
 
 export const getHSLColorFromCSS = (name: string) => {
-  const color = getCSScolor(name);
-  return `hsl(${color})`;
+  const colorVar = getCSScolor(name);
+  const color = new Color(`oklch(${colorVar})`).to("hsl");
+  return `hsl(${color.coords[0]},${color.coords[1]}%,${color.coords[2]}%)`;
 };
