@@ -2,22 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.bg-base {
-  background-color: hsla(var(--b1) / var(--tw-bg-opacity, 1));
-}
-
-.bg-base-span {
-  background-color: hsl(var(--b3, var(--b2)));
-}
-
-.text-color {
-  fill: hsl(var(--bc, var(--b2)));
-}
-
-.svg-color {
-  stroke: hsl(var(--bc, var(--b2)));
-}
-
 .input-group-2sm {
   font-size: 0.875rem /* 14px */;
   line-height: 2.5rem /* 40px */;

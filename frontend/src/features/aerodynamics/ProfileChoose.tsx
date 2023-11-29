@@ -21,12 +21,9 @@ const ProfileChoose = () => {
       <label className="label">
         <span className="label-text flex">Profile</span>
       </label>
-      <div className="join h-12 w-full input input-bordered p-0">
-        <div className="dropdown dropdown-hover h-full w-full">
-          <label
-            tabIndex={0}
-            className="flex items-center justify-between p-4 cursor-pointer z-10 w-full h-full"
-          >
+      <div className="join h-12 p-0">
+        <div className="dropdown dropdown-hover border rounded-btn input-bordered w-full join-item">
+          <label tabIndex={0} className="label p-4 h-full">
             {profile.length === 4
               ? `NACA ${profile}`
               : profile === "30"
