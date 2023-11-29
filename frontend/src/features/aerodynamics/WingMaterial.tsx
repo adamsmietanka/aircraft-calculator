@@ -25,18 +25,18 @@ const WingMaterial = () => {
         <div className="w-full flex justify-between mt-2">
           <div className="flex space-x-1 -ml-2">
             <div className="tooltip" data-tip="Wood">
-              <Wood className="w-10 h-8 mt-1 text-color " />
+              <Wood className="w-10 h-8 mt-1 " />
             </div>
             <div className="tooltip" data-tip="Fabric">
-              <Fabric className="w-10 h-8 mt-1 text-color" />
+              <Fabric className="w-10 h-8 mt-1" />
             </div>
           </div>
           <div className="flex space-x-1 -mr-2">
             <div className="tooltip" data-tip="Metal">
-              <Metal className="w-10 h-8 mt-1 text-color " />
+              <Metal className="w-10 h-8 mt-1 " />
             </div>
             <div className="tooltip" data-tip="Composite">
-              <Honeycomb className="w-10 h-8 mt-1 text-color" />
+              <Honeycomb className="w-10 h-8 mt-1" />
             </div>
           </div>
         </div>
