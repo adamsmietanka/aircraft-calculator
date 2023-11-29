@@ -23,6 +23,7 @@ const Home = ({ opacity }: Props) => {
         segments={20} // Number of particles
       />
       <spotLight position={[-10, 10, 70]} intensity={0.5} />
+      <spotLight position={[-10, -40, 70]} intensity={0.1} />
       <Float
         speed={1} // Animation speed, defaults to 1
         rotationIntensity={0.1} // XYZ rotation intensity, defaults to 1
