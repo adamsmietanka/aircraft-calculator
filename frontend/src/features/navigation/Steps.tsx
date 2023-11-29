@@ -112,7 +112,7 @@ const Steps = () => {
           style={props}
           onClick={() => navigateTo(previousStep)}
         >
-          <Arrow className="text-color transform rotate-180" />
+          <Arrow className="transform rotate-180" />
           {previousStep.name}
         </a.button>
         <a.button
@@ -125,7 +125,7 @@ const Steps = () => {
           onClick={() => navigateTo(nextStep)}
         >
           {nextStep.name}
-          <Arrow className="text-color" />
+          <Arrow />
         </a.button>
         <a.button
           className={`btn ${
@@ -135,7 +135,7 @@ const Steps = () => {
           onClick={() => navigateTo(nextStep)}
         >
           Skip
-          <Arrow className="text-color" />
+          <Arrow />
         </a.button>
       </div>
     </>

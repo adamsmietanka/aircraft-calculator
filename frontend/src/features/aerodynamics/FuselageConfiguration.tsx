@@ -29,7 +29,7 @@ const FuselageConfiguration = () => {
             className="flex items-center justify-between p-4 cursor-pointer z-10 w-full h-full"
           >
             {configs[configuration]}
-            <Arrow className="text-color transform rotate-90 ml-2" />
+            <Arrow className="transform rotate-90 ml-2" />
           </label>
           <ul
             tabIndex={0}
