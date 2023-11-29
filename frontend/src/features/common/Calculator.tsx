@@ -12,7 +12,7 @@ const Calculator = ({ calculated, setCalculated }: Props) => {
       onClick={() => setCalculated(!calculated)}
     >
       <div
-        className="tooltip w-5 svg-color text-color z-50"
+        className="tooltip w-5 z-50"
         data-tip={`Click to change to ${calculated ? "manual" : "optimized"}`}
       >
         <CalculatorIcon

@@ -41,7 +41,7 @@ const InputUnits = ({
           {tooltip && <InfoTooltip text={tooltip} />}
         </span>
       </label>
-      <div className="join w-full">
+      <div className="join">
         <input
           className={`join-item input input-bordered w-full ${
             small && "input-2sm"
@@ -55,16 +55,17 @@ const InputUnits = ({
             setter && setter(parseFloat(e.target.value) * multiplier)
           }
         />
-        <div className="dropdown dropdown-hover dropdown-right join-item z-10">
-          <label
+        <div className="dropdown dropdown-hover rounded-btn">
+          <button
             tabIndex={0}
-            className="flex items-center justify-center cursor-pointer bg-base-span z-10 w-16 h-full"
+            className="btn join-item bg-base-300 w-16"
+            onClick={() => (document.activeElement as HTMLElement).blur()}
           >
-            <Formula tex={`${unit}`} />
-          </label>
+            <Formula tex={unit} />
+          </button>
           <ul
             tabIndex={0}
-            className="dropdown-content menu shadow bg-base-200 rounded-box p-0 w-16 [&_li>*]:rounded-2xl"
+            className="dropdown-content menu shadow bg-base-200 rounded-box p-0 w-16 [&_li>*]:rounded-2xl z-50"
           >
             {Object.keys(units).map((u) => (
               <li key={u} onClick={() => handleClick(u)}>

@@ -27,17 +27,17 @@ const PowerUnitPropellerBlades = () => {
         />
         <div className="w-full flex justify-between mt-1">
           <Two
-            className={`w-8 h-8 text-color -ml-2 ${
+            className={`w-8 h-8 -ml-2 ${
               didMount() && blades === 2 && "animate-spin-slow"
             }`}
           />
           <Three
-            className={`w-8 h-8 text-color ${
+            className={`w-8 h-8 ${
               didMount() && blades === 3 && "animate-spin-slow"
             }`}
           />
           <Four
-            className={`w-8 h-8 text-color -mr-2 ${
+            className={`w-8 h-8 -mr-2 ${
               didMount() && blades === 4 && "animate-spin-slow"
             }`}
           />

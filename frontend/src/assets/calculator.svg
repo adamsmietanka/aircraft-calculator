@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
 <svg
-  fill="#000000"
+  fill="currentColor"
+  stroke="currentColor"
   version="1.1"
   id="Layer_1"
   class="calculator"
@@ -12,7 +13,6 @@
 >
   <style>
     .calculator .line {
-      fill: none;
       stroke-linecap: round;
       stroke-miterlimit: 10;
       stroke-dasharray: 600 1200;
@@ -33,7 +33,7 @@
     y1="50"
     x2="500"
     y2="600"
-    stroke="hsl(var(--b3, var(--b2)))"
+    stroke="oklch(var(--b3))"
     stroke-width="150"
   />
   <line
@@ -42,7 +42,6 @@
     y1="50"
     x2="500"
     y2="600"
-    stroke="inherit"
     stroke-width="50"
   />
 </svg>

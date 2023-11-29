@@ -21,7 +21,7 @@ const WingShape = () => {
         <div className="w-full flex justify-between mt-2">
           <div className="flex -ml-3">
             <div className="tooltip" data-tip="Rectangular">
-              <svg className="w-10 h-8 text-color">
+              <svg className="w-10 h-8">
                 <rect
                   x={2}
                   y={10}
@@ -36,7 +36,7 @@ const WingShape = () => {
           </div>
           <div className="flex">
             <div className="tooltip" data-tip="Trapezoidal">
-              <svg className="w-11 h-6 mt-2 text-color">
+              <svg className="w-11 h-6 mt-2">
                 <polyline
                   points="2,5 20,1 38,5 38,12 20,10 2,12 2,5"
                   fill="none"
@@ -48,7 +48,7 @@ const WingShape = () => {
           </div>
           <div className="flex -mr-3">
             <div className="tooltip" data-tip="Elliptical">
-              <svg className="w-11 h-6 mt-2 text-color">
+              <svg className="w-11 h-6 mt-2">
                 <ellipse
                   cx="20"
                   cy="6"

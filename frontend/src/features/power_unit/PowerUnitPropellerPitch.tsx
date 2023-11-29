@@ -26,7 +26,7 @@ const PowerUnitPropellerPitch = () => {
           onClick={() => setVariable(!variable)}
         >
           <div
-            className="tooltip w-9 svg-color text-color z-50"
+            className="tooltip w-9 z-50"
             data-tip={`Click to change to ${variable ? "fixed" : "variable"}`}
           >
             <ProfileIcon className={`profile w-8 ${variable && "variable"}`} />

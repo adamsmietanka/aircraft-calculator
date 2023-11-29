@@ -26,7 +26,7 @@ const Tutorials = () => {
         className="tooltip tooltip-hover tooltip-right z-50"
         data-tip="Tutorials"
       >
-        <label tabIndex={0} className="btn btn-ghost text-color">
+        <label tabIndex={0} className="btn btn-ghost">
           <Info className="w-6" />
         </label>
       </div>
