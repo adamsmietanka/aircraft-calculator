@@ -31,8 +31,9 @@ const useSubs = () => {
     }
   };
 
-  const showSub = (text: string | React.ReactNode) => {
+  const showSub = async (text: string | React.ReactNode) => {
     setSub(text);
+    presentation && await waitUserInput();
     show();
   };
 
