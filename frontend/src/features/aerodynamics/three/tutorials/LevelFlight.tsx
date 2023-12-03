@@ -27,7 +27,7 @@ const LevelFlight = ({ opacity }: Props) => {
 
   const mass = useHoverProfileStore((state) => state.mass);
   const setMass = useHoverProfileStore((state) => state.setMass);
-  
+
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
@@ -46,7 +46,7 @@ const LevelFlight = ({ opacity }: Props) => {
       setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
       const diff =
         Math.min(maxCz, mass / (speed * speed)) * speed * speed - mass;
-      set({ fallVelocity: -diff });
+            set({ fallVelocity: -diff });
     }
   }, [mass, reynolds]);
 
@@ -84,8 +84,7 @@ const LevelFlight = ({ opacity }: Props) => {
               <Formula tex="\: = \:" />
               <Formula className="text-primary" tex="L" />
             </div>,
-            3000,
-            true
+            3000
           );
           await displaySub(
             next,
@@ -94,8 +93,7 @@ const LevelFlight = ({ opacity }: Props) => {
               <Formula tex="\: = \:" />
               <Formula tex="\frac{1}{2} \rho V^2 S C_L" />
             </div>,
-            3000,
-            true
+            3000
           );
           await displaySub(next, "So our coefficient of lift must be equal to");
           await displaySub(
@@ -105,8 +103,7 @@ const LevelFlight = ({ opacity }: Props) => {
               <Formula tex="\: = \:" />
               <Formula tex="\frac {2mg} {\rho V^2 S }" />
             </div>,
-            4000,
-            true
+            4000
           );
           await displaySub(
             next,

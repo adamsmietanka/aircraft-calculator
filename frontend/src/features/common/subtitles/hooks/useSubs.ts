@@ -14,10 +14,9 @@ const useSubs = () => {
   const displaySub = async (
     next: any,
     text: string | React.ReactNode,
-    duration = 3000,
-    showInPresentation = false
+    duration = 3000
   ) => {
-    if (!presentation || showInPresentation) {
+    if (!presentation) {
       setSub(text);
       show();
       await next({ delay: duration });
