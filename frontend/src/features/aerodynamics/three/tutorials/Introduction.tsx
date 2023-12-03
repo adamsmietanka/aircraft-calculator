@@ -76,26 +76,28 @@ const Introduction = ({ opacity }: Props) => {
             2000
           );
           setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
-          await displaySub(next, "When it is not angled", 1500);
-          await displaySub(
-            next,
-            "the force acting on the plate is only horizontal"
-          );
+          await displaySub(next, "When it's parallel to the airflow", 1500);
+          await displaySub(next, "the force acting on the plate is minimal");
 
+          await showSub("When angled it quickly grows");
           await setAngles(
             next,
             Array.from(Array(16).keys()).map((i) => (i / 15) * (i / 15) * 5)
           );
-          await displaySub(next, "When angled it quickly grows");
+          hideSubs();
+
           await displaySub(next, "What is the source of this force?");
           set({ showVectors: false, keepAngle: true });
           await next({ delay: 500 });
 
+          await showSub("Let's stop the flow for a moment");
           setChart({ hover: false });
-          await displaySub(next, "Let's stop the flow for a moment");
+          await next({ delay: 1500 });
+          hideSubs();
+
           await displaySub(
             next,
-            "Air molecules are constantly pushing on the plate"
+            "Air molecules are constantly colliding with the plate"
           );
 
           set({ pressuresShow: true });
@@ -119,8 +121,9 @@ const Introduction = ({ opacity }: Props) => {
           await displaySub(next, "When we add back the flow");
           await displaySub(
             next,
-            "The lower side of the plate is facing the oncoming air"
+            "The exposed lower side of the plate gets more collisions"
           );
+          await displaySub(next, "The pressure goes up");
           await next({ delay: 500 });
 
           await displaySub(next, "The upper surface is shielded from the flow");
@@ -130,7 +133,10 @@ const Introduction = ({ opacity }: Props) => {
           set({ vectorsNet: true });
           await next({ delay: 500 });
 
-          await displaySub(next, "The net force is the aerodynamic force we saw earlier");
+          await displaySub(
+            next,
+            "The net force is the aerodynamic force we saw earlier"
+          );
 
           set({ pressuresShow: false });
           await next({ delay: 200 });
@@ -141,7 +147,7 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(
             next,
-            "Usually the wing rotation axis is not positioned in the center"
+            "Usually the wing rotation axis is not positioned at the center"
           );
           await displaySub(next, "but at 25% of length");
 
