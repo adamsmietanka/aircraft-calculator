@@ -279,8 +279,10 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 750 });
           await showSub("max thickness");
           await showDimension(next, ["4415", "4418", "4421", "4424", "4415"]);
-          set({ hoverC: false });
           hideSubs();
+          await next({ delay: 500 });
+          await displaySub(next, "The max thickness is at 30% of chord");
+          set({ hoverC: false });
 
           set({ hoverPlane: false, vectorSize: 1 });
           await next({ delay: 500 });
