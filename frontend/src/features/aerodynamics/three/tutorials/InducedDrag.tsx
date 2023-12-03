@@ -185,8 +185,7 @@ const InducedDrag = ({ opacity }: Props) => {
               <Formula className="text-primary mt-1" tex="\: L \:" /> is called
               &nbsp;<p className="text-error">induced drag</p>
             </p>,
-            4000,
-            true
+            4000
           );
           await displaySub(
             next,
@@ -203,8 +202,7 @@ const InducedDrag = ({ opacity }: Props) => {
               <Formula className="text-primary mt-1" tex="\: L \:" /> is the
               &nbsp;<p className="text-secondary">effective lift</p>
             </p>,
-            4000,
-            true
+            4000
           );
           await displaySub(next, "Due to the downwash it's slightly smaller");
           await displaySub(
