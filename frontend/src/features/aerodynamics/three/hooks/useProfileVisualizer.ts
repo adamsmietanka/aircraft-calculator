@@ -51,8 +51,36 @@ const useProfileVisualizer = () => {
     }
   };
 
-  const [profileSpring, api] = useSpring(
-    () => ({
+  const [profileSpring, api] = useSpring(() => ({
+    angle:
+      keepAngle || showVisuals
+        ? (-x["Coefficient of Lift"] * Math.PI) / 180
+        : 0,
+    scale: getScale(),
+    gridX: getPosition(),
+    vectorsPosition: centerVectors ? 0.25 : 0,
+    positionZ: 0,
+  }));
+
+  useEffect(() => {
+    if (fallVelocity > 0 && pathname === "/aerodynamics/levelFlight") {
+              api.start({
+          positionZ: -15,
+          config: {
+            duration: 10000 / Math.sqrt(fallVelocity),
+            easing: (x) => x * x,
+          },
+        });
+      } else {
+        api.start({
+          positionZ: 0,
+          config: config.slow,
+        });
+          }
+  }, [fallVelocity, pathname]);
+
+  useEffect(() => {
+    api.start({
       angle:
         keepAngle || showVisuals
           ? (-x["Coefficient of Lift"] * Math.PI) / 180
@@ -60,27 +88,8 @@ const useProfileVisualizer = () => {
       scale: getScale(),
       gridX: getPosition(),
       vectorsPosition: centerVectors ? 0.25 : 0,
-      positionZ: 0,
-    }),
-    [x, scale, chord, showVisuals, pathname, centerVectors]
-  );
-
-  useEffect(() => {
-    if (fallVelocity > 0 && pathname === "/aerodynamics/levelFlight") {
-      api.start({
-        positionZ: -15,
-        config: {
-          duration: 10000 / Math.sqrt(fallVelocity),
-          easing: (x) => x * x,
-        },
-      });
-    } else {
-      api.start({
-        positionZ: 0,
-        config: config.slow,
-      });
-    }
-  }, [fallVelocity, pathname]);
+    });
+  }, [x, scale, chord, showVisuals, pathname, centerVectors]);
 
   return { profileSpring, showVisuals };
 };
