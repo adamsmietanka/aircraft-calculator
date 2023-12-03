@@ -149,7 +149,7 @@ const Introduction = ({ opacity }: Props) => {
           );
           await displaySub(next, "but at 25% of length");
 
-          showSub("However this will create a torque and spin our plate");
+          await showSub("However this will create a torque and spin our plate");
           await next({ delay: 500 });
           await setAngles(
             next,
@@ -252,7 +252,7 @@ const Introduction = ({ opacity }: Props) => {
           set({ hoverPlane: true });
           set({ hoverA: true });
           await next({ delay: 750 });
-          showSub("max camber");
+          await showSub("max camber");
           await showDimension(next, [
             "1412",
             "2412",
@@ -268,7 +268,7 @@ const Introduction = ({ opacity }: Props) => {
 
           set({ hoverB: true });
           await next({ delay: 750 });
-          showSub("position of max camber");
+          await showSub("position of max camber");
           await showDimension(next, [
             "4312",
             "4412",
@@ -283,7 +283,7 @@ const Introduction = ({ opacity }: Props) => {
 
           set({ hoverC: true });
           await next({ delay: 750 });
-          showSub("max thickness");
+          await showSub("max thickness");
           await showDimension(next, ["4415", "4418", "4421", "4424", "4415"]);
           set({ hoverC: false });
           hideSubs();
