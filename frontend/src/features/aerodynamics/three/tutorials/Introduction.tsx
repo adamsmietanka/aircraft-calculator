@@ -223,16 +223,11 @@ const Introduction = ({ opacity }: Props) => {
           setChart({ hover: false, locked: "" });
           set({ showChord: false });
           await displaySub(next, "The components of an airfoil:");
-          await displaySub(
-            next,
-            <>
-              This profile has an&nbsp;<p className="text-primary">outline</p>
-            </>
-          );
+          await displaySub(next, <p className="text-primary">outline</p>);
           set({ showChord: true });
           await displaySub(
             next,
-            <p style={{ color: "hsl(var(--bc))" }}>chord line</p>
+            <p className="text-base-content">chord line</p>
           );
           set({ showCamber: true });
           await displaySub(next, <p className="text-secondary">camber line</p>);
