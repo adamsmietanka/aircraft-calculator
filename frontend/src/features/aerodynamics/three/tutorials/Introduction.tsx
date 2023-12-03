@@ -89,7 +89,7 @@ const Introduction = ({ opacity }: Props) => {
           await displaySub(next, "When angled it quickly grows");
           await displaySub(next, "What is the source of this force?");
           set({ showVectors: false, keepAngle: true });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
 
           setChart({ hover: false });
           await displaySub(next, "Let's stop the flow for a moment");
@@ -107,10 +107,10 @@ const Introduction = ({ opacity }: Props) => {
           set({ vectorsNet: true });
           await displaySub(next, "Resulting in a zero net force");
           set({ pressuresShow: false });
-          await next({ delay: 2000 });
+          await next({ delay: 500 });
 
           set({ vectorsNet: false });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
           set({ pressuresShow: true });
 
           setChart({ hover: true });
@@ -121,18 +121,14 @@ const Introduction = ({ opacity }: Props) => {
             next,
             "The lower side of the plate is facing the oncoming air"
           );
-          await displaySub(
-            next,
-            "This means more air molecules smash into it and the pressure goes up"
-          );
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
 
           await displaySub(next, "The upper surface is shielded from the flow");
           await displaySub(next, "So actually less particles are hitting it");
-          await next({ delay: 1500 });
+          await next({ delay: 500 });
 
           set({ vectorsNet: true });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
 
           await displaySub(next, "The net force is the aerodynamic force we saw earlier");
 
@@ -141,7 +137,7 @@ const Introduction = ({ opacity }: Props) => {
           set({
             showVectors: true,
           });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
 
           await displaySub(
             next,
@@ -165,17 +161,16 @@ const Introduction = ({ opacity }: Props) => {
             "so we actually need a moment to counteract it"
           );
           set({ moment: true });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
           set({ centerVectors: false });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
 
           await displaySub(
             next,
             "Nearly every profile has some pitching moment"
           );
-          await displaySub(next, "But we'll skip it for a moment");
           set({ moment: false });
-          await next({ delay: 1000 });
+          await displaySub(next, "But we'll skip it for a moment");
 
           await displaySub(
             next,
@@ -185,16 +180,15 @@ const Introduction = ({ opacity }: Props) => {
           await displaySub(next, "We can explain the change in velocity");
           await displaySub(next, "using the Bernoulli's principle");
           set({ showBernoulli: true });
-          await next({ delay: 2000 });
+          await next({ delay: 500 });
 
           await displaySub(next, "The height difference is negligible");
-          await displaySub(next, "so we can hide the second term");
           set({ showBernoulliPotential: false });
-          await next({ delay: 2000 });
+          await displaySub(next, "so we can hide the second term");
 
           await displaySub(next, "Now when we decrease the pressure");
           set({ showBernoulliDiff: true });
-          await next({ delay: 2000 });
+          await next({ delay: 500 });
 
           await displaySub(next, "The speed will increase");
           set({ showBernoulli: false });
