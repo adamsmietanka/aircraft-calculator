@@ -13,6 +13,7 @@ interface Props {
     opacity?: number;
     width?: string;
     fontSize?: string;
+    marginTop?: string;
     display?: string;
   }>;
 }

@@ -201,21 +201,47 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(
             next,
-            "There is another explanation using Newton's 3rd Law"
+            "There is another explanation using Newton's Laws"
           );
-          await displaySub(next, "In order to deflect the air downwards");
-          await displaySub(next, "the plate must exert a force on the flow");
-          await displaySub(
-            next,
-            "so we should have a force acting on the plate.",
-            4000
-          );
-          set({ splitVectors: true });
 
           await displaySub(
             next,
+            "The airflow gets deflected downwards by the plate"
+          );
+          set({ showNewton: true, showNewtonVelocity: true });
+          await displaySub(
+            next,
+            "and the flow velocity vector changes direction"
+          );
+
+          await showSub("According to Newton's 2nd Law");
+          set({ showNewtonForce: true });
+          await next({ delay: 1500 });
+          hideSubs();
+
+          await displaySub(
+            next,
+            "this requires a force acting on the flow by the plate",
+            4000
+          );
+
+          set({ showNewtonVelocity: false });
+          await next({ delay: 600 });
+          set({ showNewtonAccel: true });
+          await displaySub(
+            next,
+            "By Newton's 3rd Law we should have a force acting on the plate",
+            4000
+          );
+          set({ showNewton: false });
+
+          await showSub(
             "We can split it into vertical and horizontal components."
           );
+          set({ splitVectors: true });
+          await next({ delay: 2000 });
+          hideSubs();
+
           await displaySub(next, "Even a simple plate can produce lift.");
           await displaySub(next, "There are however better shapes");
 
