@@ -17,12 +17,14 @@ import LevelFlight from "../aerodynamics/three/tutorials/LevelFlight";
 import Subtitle from "../common/subtitles/Subtitle";
 import NavigationHyperbolic from "../compass/NavigationHyperbolic";
 import IntroBernoulli from "../aerodynamics/three/tutorials/IntroBernoulli";
+import IntroNewton2nd from "../aerodynamics/three/tutorials/IntroNewton2nd";
 
 const PlaneBuilder = () => {
   return (
     <div className="fixed top-0 left-0 h-screen w-screen">
       <ProfileModal />
       <IntroBernoulli />
+      <IntroNewton2nd />
       <Subtitle />
       <Canvas
         flat

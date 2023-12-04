@@ -14,6 +14,10 @@ export interface HoverProfileState {
   showBernoulli: boolean;
   showBernoulliPotential: boolean;
   showBernoulliDiff: boolean;
+  showNewton: boolean;
+  showNewtonVelocity: boolean;
+  showNewtonAccel: boolean;
+  showNewtonForce: boolean;
   showVectors: boolean;
   showWeight: boolean;
   hoverPlane: boolean;
@@ -43,6 +47,10 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   showBernoulli: false,
   showBernoulliPotential: true,
   showBernoulliDiff: false,
+  showNewton: false,
+  showNewtonVelocity: false,
+  showNewtonAccel: false,
+  showNewtonForce: false,
   showVectors: true,
   showWeight: false,
   showChord: true,
