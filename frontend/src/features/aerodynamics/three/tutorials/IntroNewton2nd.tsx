@@ -3,16 +3,10 @@ import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import Formula from "../../../common/Formula";
 
 const IntroNewton2nd = () => {
-  const showNewton = useHoverProfileStore((state) => state.showNewton);
-  const showNewtonVelocity = useHoverProfileStore(
-    (state) => state.showNewtonVelocity
-  );
-  const showNewtonAccel = useHoverProfileStore(
-    (state) => state.showNewtonAccel
-  );
-  const showNewtonForce = useHoverProfileStore(
-    (state) => state.showNewtonForce
-  );
+  const show = useHoverProfileStore((state) => state.showNewton);
+  const velocity = useHoverProfileStore((state) => state.showNewtonVelocity);
+  const acceleration = useHoverProfileStore((state) => state.showNewtonAccel);
+  const force = useHoverProfileStore((state) => state.showNewtonForce);
 
   const [eqn] = useSpring(
     () => ({
@@ -21,48 +15,48 @@ const IntroNewton2nd = () => {
         display: "none",
       },
       to: async (next) => {
-        showNewton && (await next({ display: "flex" }));
-        await next({ opacity: showNewton ? 1 : 0 });
-        showNewton || (await next({ display: "none" }));
+        show && (await next({ display: "flex" }));
+        await next({ opacity: show ? 1 : 0 });
+        show || (await next({ display: "none" }));
       },
     }),
-    [showNewton]
+    [show]
   );
 
   const [dV] = useSpring(
     () => ({
       from: {},
       to: async (next) => {
-        showNewtonVelocity && next({ width: "1.5rem" });
-        await next({ opacity: showNewtonVelocity ? 1 : 0 });
-        showNewtonVelocity || (await next({ width: "0rem" }));
+        velocity && next({ width: "1.5rem" });
+        await next({ opacity: velocity ? 1 : 0 });
+        velocity || (await next({ width: "0rem" }));
       },
     }),
-    [showNewtonVelocity]
+    [velocity]
   );
 
-  const [force] = useSpring(
+  const [F] = useSpring(
     () => ({
       from: {},
       to: async (next) => {
-        showNewtonForce && next({ width: "8rem" });
-        await next({ opacity: showNewtonForce ? 1 : 0, delay: 250 });
-        showNewtonForce || (await next({ width: "0rem", delay: 250 }));
+        force && next({ width: "8rem" });
+        await next({ opacity: force ? 1 : 0, delay: 250 });
+        force || (await next({ width: "0rem", delay: 250 }));
       },
     }),
-    [showNewtonForce]
+    [force]
   );
 
   const [acc] = useSpring(
     () => ({
-      from: {marginTop: "5px"},
+      from: { marginTop: "5px" },
       to: async (next) => {
-        showNewtonAccel && next({ width: "1.5rem" });
-        await next({ opacity: showNewtonAccel ? 1 : 0, delay: 250 });
-        showNewtonAccel || (await next({ width: "0rem", delay: 250 }));
+        acceleration && next({ width: "1.5rem" });
+        await next({ opacity: acceleration ? 1 : 0, delay: 250 });
+        acceleration || (await next({ width: "0rem", delay: 250 }));
       },
     }),
-    [showNewtonAccel]
+    [acceleration]
   );
 
   return (
@@ -70,7 +64,7 @@ const IntroNewton2nd = () => {
       className="fixed w-full h-full flex justify-center items-center translate-y-1/4 text-4xl"
       style={eqn}
     >
-      <Formula style={force} tex="\vec{F} = m" />
+      <Formula style={F} tex="\vec{F} = m" />
       <Formula style={dV} tex="\frac {d \vec{V} } {dt}" />
       <Formula style={acc} tex="\vec{a}" />
     </animated.div>
