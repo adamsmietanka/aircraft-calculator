@@ -13,7 +13,10 @@ interface Props {
     opacity?: number;
     width?: string;
     fontSize?: string;
+    left?: string;
+    top?: string;
     marginTop?: string;
+    marginRight?: string;
     display?: string;
   }>;
 }
@@ -25,6 +28,16 @@ const Formula = ({ tex = "", className = "", style }: Props) => {
       window.MathJax.typeset();
     }
   }, [tex]);
+
+  useEffect(() => {
+    if (typeof window?.MathJax !== "undefined") {
+      window.MathJax = {
+        ...window.MathJax,
+        loader: { load: ["[tex]/ams", "[tex]/soul"] },
+        tex: { packages: { "[+]": ["ams", "soul"] } },
+      };
+    }
+  }, []);
 
   return (
     <animated.p
