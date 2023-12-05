@@ -70,14 +70,17 @@ const Introduction = ({ opacity }: Props) => {
             vectorSize: 1.5,
           });
           setChart({ xHover: 0.01 });
+          await displaySub(next, "How do airplanes fly?", 2000);
+          setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
           await displaySub(
             next,
-            "Let's start with a simple rectangular plate",
-            2000
+            "Imagine a simple rectangular plate in a strong wind"
           );
-          setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
-          await displaySub(next, "When it's parallel to the airflow", 1500);
-          await displaySub(next, "the force acting on the plate is minimal");
+          await displaySub(next, "There's a force acting on it");
+          await displaySub(
+            next,
+            "When it's parallel to the airflow that force is minimal"
+          );
 
           await showSub("When angled it quickly grows");
           await setAngles(
@@ -97,23 +100,22 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(
             next,
-            "Air molecules are constantly colliding with the plate"
+            "Air molecules are constantly colliding and pushing on the plate"
           );
 
+          await displaySub(next, "This is pressure", 1500);
+
           set({ pressuresShow: true });
-          await displaySub(next, "Without the air flow");
+          await displaySub(next, "Without the air flow", 1500);
           await displaySub(
             next,
             "The atmospheric pressure acting on our plate cancels out"
           );
           set({ vectorsNet: true });
           await displaySub(next, "Resulting in a zero net force");
-          set({ pressuresShow: false });
-          await next({ delay: 500 });
 
           set({ vectorsNet: false });
           await next({ delay: 500 });
-          set({ pressuresShow: true });
 
           setChart({ hover: true });
           set({ pressuresEqual: false, keepAngle: false });
@@ -128,6 +130,7 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(next, "The upper surface is shielded from the flow");
           await displaySub(next, "So actually less particles are hitting it");
+          await displaySub(next, "The same applies to the shorter sides");
           await next({ delay: 500 });
 
           set({ vectorsNet: true });
@@ -143,7 +146,7 @@ const Introduction = ({ opacity }: Props) => {
           set({
             showVectors: true,
           });
-          await next({ delay: 500 });
+          await next({ delay: 300 });
 
           await displaySub(
             next,
@@ -160,31 +163,29 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 500 });
           hideSubs();
           setChart({ xHover: 5 });
-          await next({ delay: 500 });
+          await next({ delay: 250 });
 
           await displaySub(
             next,
             "so we actually need a moment to counteract it"
           );
-          set({ moment: true });
-          await next({ delay: 500 });
-          set({ centerVectors: false });
+          set({ moment: true, centerVectors: false });
           await next({ delay: 500 });
 
-          await displaySub(
-            next,
-            "Nearly every profile has some pitching moment"
-          );
+          await displaySub(next, "This is the pitching moment");
           set({ moment: false });
-          await displaySub(next, "But we'll skip it for a moment");
+          await displaySub(next, "We'll skip it for now for simplification");
 
           await displaySub(
             next,
             "The pressure difference affects the flow around the plate",
             3500
           );
-          await displaySub(next, "We can explain the change in velocity");
-          await displaySub(next, "using the Bernoulli's principle");
+          await displaySub(next, "Air is actually moving faster on the top");
+          await displaySub(
+            next,
+            "We can explain this change using the Bernoulli's principle"
+          );
           set({ showBernoulli: true });
           await next({ delay: 500 });
 
@@ -194,7 +195,6 @@ const Introduction = ({ opacity }: Props) => {
 
           await displaySub(next, "Now when we decrease the pressure");
           set({ showBernoulliDiff: true });
-          await next({ delay: 500 });
 
           await displaySub(next, "The speed will increase");
           set({ showBernoulli: false });
@@ -204,19 +204,15 @@ const Introduction = ({ opacity }: Props) => {
             "There is another explanation using Newton's Laws"
           );
 
-          await displaySub(
-            next,
-            "The airflow gets deflected downwards by the plate"
-          );
           set({ showNewton: true, showNewtonVelocity: true });
           await displaySub(
             next,
-            "and the flow velocity vector changes direction"
+            "The flow changes direction because of the plate"
           );
 
           await showSub("According to Newton's 2nd Law");
           set({ showNewtonForce: true });
-          await next({ delay: 1500 });
+          await next({ delay: 1250 });
           hideSubs();
 
           await displaySub(
@@ -236,13 +232,13 @@ const Introduction = ({ opacity }: Props) => {
           set({ showNewton: false });
 
           await showSub(
-            "We can split it into vertical and horizontal components."
+            "We can split it into vertical and horizontal components"
           );
           set({ splitVectors: true });
-          await next({ delay: 2000 });
+          await next({ delay: 4000 });
           hideSubs();
 
-          await displaySub(next, "Even a simple plate can produce lift.");
+          await displaySub(next, "Even a simple plate can produce lift");
           await displaySub(next, "There are however better shapes");
 
           setProfile("2412");
@@ -258,7 +254,6 @@ const Introduction = ({ opacity }: Props) => {
             "There is a common misconception regarding lift"
           );
 
-          setProfile("2412");
           await showSub("We assume that air particles require equal time");
           set({ misconception: true });
           await next({ delay: 2500 });
@@ -275,18 +270,21 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 500 });
 
           await displaySub(next, "This forces the air above to speed up");
-          await next({ delay: 500 });
-
           set({ misconceptionBigger: true });
           await next({ delay: 500 });
+          set({ flattenOutline: true });
 
           await showSub(
             "because it has a longer way to go along the upper side"
           );
-          await next({ delay: 1000 });
           set({ flattenOutline: true });
-          await next({ delay: 1000 });
+          await next({ delay: 2500 });
           hideSubs();
+
+          await displaySub(
+            next,
+            "Speed difference → pressure difference → lift"
+          );
 
           await displaySub(next, "But here is a catch");
           set({ misconceptionError: true });
@@ -297,7 +295,7 @@ const Introduction = ({ opacity }: Props) => {
           set({ misconception: false, flattenOutline: false });
           await next({ delay: 1000 });
           setProfile("06");
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
           set({ flattenOutline: true });
           await displaySub(
             next,
@@ -316,20 +314,32 @@ const Introduction = ({ opacity }: Props) => {
           setChart({ hover: false, locked: "" });
           set({ showChord: false });
           await displaySub(next, "The components of an airfoil:");
+
           await displaySub(next, <p className="text-primary">outline</p>);
+
+          await showSub(<p className="text-base-content">chord line</p>);
           set({ showChord: true });
-          await displaySub(
-            next,
-            <p className="text-base-content">chord line</p>
-          );
+          await next({ delay: 2000 });
+          hideSubs();
+          await next({ delay: 500 });
+
+          await showSub(<p className="text-secondary">camber line</p>);
           set({ showCamber: true });
-          await displaySub(next, <p className="text-secondary">camber line</p>);
+          await next({ delay: 2000 });
+          hideSubs();
+          await next({ delay: 500 });
+
           await displaySub(
             next,
             <>
               it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
             </>
           );
+          await displaySub(
+            next,
+            "It belongs to the NACA 4-digit series family"
+          );
+          await displaySub(next, "This name is a simple mathematical relation");
 
           set({ hoverPlane: true });
           set({ hoverA: true });
