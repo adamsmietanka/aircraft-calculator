@@ -18,6 +18,7 @@ import Subtitle from "../common/subtitles/Subtitle";
 import NavigationHyperbolic from "../compass/NavigationHyperbolic";
 import IntroBernoulli from "../aerodynamics/three/tutorials/IntroBernoulli";
 import IntroNewton2nd from "../aerodynamics/three/tutorials/IntroNewton2nd";
+import IntroMisconception from "../aerodynamics/three/tutorials/IntroMisconception";
 
 const PlaneBuilder = () => {
   return (
@@ -25,6 +26,7 @@ const PlaneBuilder = () => {
       <ProfileModal />
       <IntroBernoulli />
       <IntroNewton2nd />
+      <IntroMisconception />
       <Subtitle />
       <Canvas
         flat

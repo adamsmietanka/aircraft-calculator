@@ -252,6 +252,67 @@ const Introduction = ({ opacity }: Props) => {
           set({ dragMultiplier: 10 });
           await displaySub(next, "that we have to scale it 10x");
 
+          // MISCONCEPTION
+          await displaySub(
+            next,
+            "There is a common misconception regarding lift"
+          );
+
+          setProfile("2412");
+          await showSub("We assume that air particles require equal time");
+          set({ misconception: true });
+          await next({ delay: 2500 });
+          set({ misconceptionSwap: true });
+          await next({ delay: 500 });
+          hideSubs();
+
+          await displaySub(
+            next,
+            "to travel along the upper and lower surfaces"
+          );
+
+          set({ misconceptionConst: true });
+          await next({ delay: 500 });
+
+          await displaySub(next, "This forces the air above to speed up");
+          await next({ delay: 500 });
+
+          set({ misconceptionBigger: true });
+          await next({ delay: 500 });
+
+          await showSub(
+            "because it has a longer way to go along the upper side"
+          );
+          await next({ delay: 1000 });
+          set({ flattenOutline: true });
+          await next({ delay: 1000 });
+          hideSubs();
+
+          await displaySub(next, "But here is a catch");
+          set({ misconceptionError: true });
+          await next({ delay: 1000 });
+
+          await displaySub(next, "That's physically impossible");
+
+          set({ misconception: false, flattenOutline: false });
+          await next({ delay: 1000 });
+          setProfile("06");
+          await next({ delay: 1000 });
+          set({ flattenOutline: true });
+          await displaySub(
+            next,
+            "A plate would generate no lift because it's symmetrical"
+          );
+          set({ flattenOutline: false });
+
+          setProfile("2412");
+          set({
+            misconceptionSwap: false,
+            misconceptionConst: false,
+            misconceptionBigger: false,
+            misconceptionError: false,
+          });
+
           setChart({ hover: false, locked: "" });
           set({ showChord: false });
           await displaySub(next, "The components of an airfoil:");
@@ -339,6 +400,16 @@ const Introduction = ({ opacity }: Props) => {
             showBernoulli: false,
             showBernoulliPotential: true,
             showBernoulliDiff: false,
+            showNewton: false,
+            showNewtonVelocity: false,
+            showNewtonForce: false,
+            showNewtonAccel: false,
+            misconception: false,
+            misconceptionSwap: false,
+            misconceptionConst: false,
+            misconceptionBigger: false,
+            misconceptionError: false,
+            flattenOutline: false,
           });
           setChart({
             hover: false,

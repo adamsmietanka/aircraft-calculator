@@ -34,31 +34,50 @@ const useProfile = () => {
   const [maxThickness, setMaxThickness] = useState(0);
   const [lowestPoint, setLowestPoint] = useState(0);
   const [highestPoint, setHighestPoint] = useState(0);
+  const [upperFlat, setUpperFlat] = useState<number[][]>([]);
+  const [lowerFlat, setLowerFlat] = useState<number[][]>([]);
 
   const { M, P, T, F } = useProfileCamber();
 
   useEffect(() => {
-    if (profile.length === 2) {
-      const { upper, lower, chord, max } = useProfileFlat(T);
+    const { upper, lower, chord, max } =
+      profile.length === 2 ? useProfileFlat(T) : useNACA4series(M, P, T, F);
+    setUpperPoints(upper);
+    setLowerPoints(lower);
+    setProfilePoints([...upper, ...lower.toReversed()]);
+    setChordPoints(chord);
+    setMaxThickness(max[1][1] - max[0][1]);
+    setLowestPoint(max[0][1]);
+    setHighestPoint(max[1][1]);
 
-      setUpperPoints(upper);
-      setLowerPoints(lower);
-      setProfilePoints([...upper, ...lower.toReversed()]);
-      setChordPoints(chord);
-      setMaxThickness(max[1][1] - max[0][1]);
-      setLowestPoint(max[0][1]);
-      setHighestPoint(max[1][1]);
-    } else {
-      const { upper, lower, chord, max } = useNACA4series(M, P, T, F);
+    const low = [0];
+    const high = [0];
 
-      setUpperPoints(upper);
-      setLowerPoints(lower);
-      setProfilePoints([...upper, ...lower.toReversed()]);
-      setChordPoints(chord);
-      setMaxThickness(max[1][1] - max[0][1]);
-      setLowestPoint(max[0][1]);
-      setHighestPoint(max[1][1]);
-    }
+    let sum = 0;
+    upper.forEach((p, index, arr) => {
+      if (index > 0) {
+        const dist = Math.hypot(
+          p[0] - arr[index - 1][0],
+          p[1] - arr[index - 1][1]
+        );
+        sum += dist;
+        high.push(sum);
+      }
+    });
+
+    sum = 0;
+    lower.forEach((p, index, arr) => {
+      if (index > 0) {
+        const dist = Math.hypot(
+          p[0] - arr[index - 1][0],
+          p[1] - arr[index - 1][1]
+        );
+        sum += dist;
+        low.push(sum);
+      }
+    });
+    setUpperFlat(high.map((x) => [x, 0.02, 0]));
+    setLowerFlat(low.map((x) => [x, -0.02, 0]));
   }, [profile]);
 
   return {
@@ -66,6 +85,8 @@ const useProfile = () => {
     upperPoints,
     lowerPoints,
     chordPoints,
+    upperFlat,
+    lowerFlat,
     maxThickness,
     lowestPoint,
     highestPoint,

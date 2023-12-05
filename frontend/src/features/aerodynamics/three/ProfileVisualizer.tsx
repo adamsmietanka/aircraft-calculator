@@ -16,12 +16,15 @@ interface Props {
 const ProfileVisualizer = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
 
-  const { profilePoints, chordPoints } = useProfile();
+  const { chordPoints, lowerPoints, upperPoints, lowerFlat, upperFlat } =
+    useProfile();
   const { profileSpring, showVisuals } = useProfileVisualizer();
 
   const showChord = useHoverProfileStore((state) => state.showChord);
   const showCamber = useHoverProfileStore((state) => state.showCamber);
   const showVectors = useHoverProfileStore((state) => state.showVectors);
+
+  const flatten = useHoverProfileStore((state) => state.flattenOutline);
 
   return (
     <animated.mesh
@@ -31,7 +34,16 @@ const ProfileVisualizer = ({ opacity }: Props) => {
     >
       <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
         <mesh position-x={-0.25}>
-          <AnimatedLine points={profilePoints} width={2} opacity={opacity} />
+          <AnimatedLine
+            points={flatten ? upperFlat : upperPoints}
+            width={2}
+            opacity={opacity}
+          />
+          <AnimatedLine
+            points={flatten ? lowerFlat : lowerPoints}
+            width={2}
+            opacity={opacity}
+          />
           <AnimatedLine
             points={chordPoints}
             width={1.5}
