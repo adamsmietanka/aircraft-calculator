@@ -76,8 +76,8 @@ const useProfile = () => {
         low.push(sum);
       }
     });
-    setUpperFlat(high.map((x) => [x, 0.02, 0]));
-    setLowerFlat(low.map((x) => [x, -0.02, 0]));
+    setUpperFlat(high.map((x) => [x, 0.01, 0]));
+    setLowerFlat(low.map((x) => [x, -0.01, 0]));
   }, [profile]);
 
   return {
