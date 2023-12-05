@@ -40,7 +40,7 @@ const Introduction = ({ opacity }: Props) => {
       setChart({ xHover: a });
       await next({ delay });
     }
-    await next({ delay: 1000 });
+    await next({ delay: 750 });
   };
 
   const { displaySub, hideSubs, showSub } = useSubs();
@@ -88,24 +88,23 @@ const Introduction = ({ opacity }: Props) => {
             Array.from(Array(16).keys()).map((i) => (i / 15) * (i / 15) * 5)
           );
           hideSubs();
+          await next({ delay: 500 });
 
           await displaySub(next, "What is the source of this force?");
           set({ showVectors: false, keepAngle: true });
           await next({ delay: 500 });
 
-          await showSub("Let's stop the flow for a moment");
           setChart({ hover: false });
-          await next({ delay: 1500 });
-          hideSubs();
+          await displaySub(next, "Let's stop the flow for a moment");
 
           await displaySub(
             next,
             "Air molecules are constantly colliding and pushing on the plate"
           );
 
-          await displaySub(next, "This is pressure", 1500);
-
           set({ pressuresShow: true });
+
+          await displaySub(next, "This is pressure", 1500);
           await displaySub(next, "Without the air flow", 1500);
           await displaySub(
             next,
@@ -126,7 +125,6 @@ const Introduction = ({ opacity }: Props) => {
             "The exposed lower side of the plate gets more collisions"
           );
           await displaySub(next, "The pressure goes up");
-          await next({ delay: 500 });
 
           await displaySub(next, "The upper surface is shielded from the flow");
           await displaySub(next, "So actually less particles are hitting it");
@@ -160,7 +158,6 @@ const Introduction = ({ opacity }: Props) => {
             next,
             Array.from(Array(16).keys()).map((i) => (-i + 15) / 3)
           );
-          await next({ delay: 500 });
           hideSubs();
           setChart({ xHover: 5 });
           await next({ delay: 250 });
@@ -210,11 +207,8 @@ const Introduction = ({ opacity }: Props) => {
             "The flow changes direction because of the plate"
           );
 
-          await showSub("According to Newton's 2nd Law");
           set({ showNewtonForce: true });
-          await next({ delay: 1250 });
-          hideSubs();
-
+          await displaySub(next, "According to Newton's 2nd Law", 2000);
           await displaySub(
             next,
             "this requires a force acting on the flow by the plate",
@@ -231,12 +225,11 @@ const Introduction = ({ opacity }: Props) => {
           );
           set({ showNewton: false });
 
-          await showSub(
+          set({ splitVectors: true });
+          await displaySub(
+            next,
             "We can split it into vertical and horizontal components"
           );
-          set({ splitVectors: true });
-          await next({ delay: 4000 });
-          hideSubs();
 
           await displaySub(next, "Even a simple plate can produce lift");
           await displaySub(next, "There are however better shapes");
@@ -247,6 +240,8 @@ const Introduction = ({ opacity }: Props) => {
 
           set({ dragMultiplier: 10 });
           await displaySub(next, "that we have to scale it 10x");
+
+          setChart({ hover: false, locked: "" });
 
           // MISCONCEPTION
           await displaySub(
@@ -274,12 +269,10 @@ const Introduction = ({ opacity }: Props) => {
           await next({ delay: 500 });
           set({ flattenOutline: true });
 
-          await showSub(
+          await displaySub(
+            next,
             "because it has a longer way to go along the upper side"
           );
-          set({ flattenOutline: true });
-          await next({ delay: 2500 });
-          hideSubs();
 
           await displaySub(
             next,
@@ -311,7 +304,6 @@ const Introduction = ({ opacity }: Props) => {
             misconceptionError: false,
           });
 
-          setChart({ hover: false, locked: "" });
           set({ showChord: false });
           await displaySub(next, "The components of an airfoil:");
 
@@ -376,9 +368,10 @@ const Introduction = ({ opacity }: Props) => {
           set({ hoverC: true });
           await next({ delay: 750 });
           await showSub("max thickness");
-          await showDimension(next, ["4415", "4418", "4421", "4424", "4415"]);
+          await showDimension(next, ["4415", "4418", "4421", "4424", "4412"]);
           hideSubs();
           await next({ delay: 500 });
+
           await displaySub(next, "The max thickness is at 30% of chord");
           set({ hoverC: false });
 
