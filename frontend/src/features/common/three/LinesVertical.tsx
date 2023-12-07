@@ -20,11 +20,7 @@ import { useLocation } from "react-router-dom";
 import { checkVisible } from "./checkVisible";
 import AnimatedHtml from "./AnimatedHtml";
 import { Object3D } from "three/src/core/Object3D";
-import {
-  CylinderGeometry,
-  InstancedMesh,
-  Vector3,
-} from "three";
+import { CylinderGeometry, InstancedMesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 
 interface AxisProps {
@@ -86,11 +82,12 @@ const LinesVertical = ({
     [...new Array(15)].map(() => new Object3D())
   );
 
-  const vec = new Vector3(1, 1, 1);
+  const vec = useMemo(() => new Vector3(1, 1, 1), []);
 
   useFrame(() => {
     let id = 0;
     const s = stepOpacity.get();
+    console.log(stepOpacity.animation.to);
     for (let i = 0; i < 15; i += 1) {
       instancedMeshRef.current.getMatrixAt(id, objects[id].matrix);
       objects[id].position.set(ticks[i] * scale[0], 0, 0);
@@ -100,7 +97,11 @@ const LinesVertical = ({
 
       // show all ticks below maximum
       if (ticks[i] <= max.x / scale[0])
-        objects[id].scale.lerp(vec.setY(s), 0.2 - id / 16 / 3);
+        objects[id].scale.lerp(
+          vec.setY(s),
+          // hide all at the same time or trail
+          stepOpacity.animation.to === 0 ? 0.5 : 0.2 - id / 16 / 3
+        );
       else {
         objects[id].scale.lerp(vec.setY(0.001), 0.2 + id / 16 / 3);
       }

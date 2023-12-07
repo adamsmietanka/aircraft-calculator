@@ -84,7 +84,7 @@ const LinesHorizontal = ({
     [...new Array(15)].map(() => new Object3D())
   );
 
-  const vec = new Vector3(1, 1, 1);
+  const vec = useMemo(() => new Vector3(1, 1, 1), []);
 
   useFrame(() => {
     let id = 0;
@@ -98,7 +98,11 @@ const LinesHorizontal = ({
 
       // show all ticks below maximum
       if (ticks[i] <= max.y / scale[1])
-        objects[id].scale.lerp(vec.setX(s), 0.2 - id / 16 / 3);
+        objects[id].scale.lerp(
+          vec.setX(s),
+          // hide all at the same time or trail
+          stepOpacity.animation.to === 0 ? 0.5 : 0.2 - id / 16 / 3
+        );
       else {
         objects[id].scale.lerp(vec.setX(0.001), 0.2 + id / 16 / 3);
       }
