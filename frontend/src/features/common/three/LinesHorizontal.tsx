@@ -124,7 +124,7 @@ const LinesHorizontal = ({
             <AnimatedHtml
               className="text-xs"
               show={show}
-              delayVisible={1000}
+              delayVisible={800}
               position={[
                 min.x - 1.25 * NUMBERS_PADDING,
                 ticks[i] * scale[1],
@@ -138,7 +138,7 @@ const LinesHorizontal = ({
       {axis.symbol ? (
         <AnimatedHtml
           show={show}
-          delayVisible={1600}
+          delayVisible={1000}
           position={[min.x - TITLE_PADDING, mid + 0.25, 0.5]}
         >
           {axis.symbol}
