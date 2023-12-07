@@ -6,7 +6,7 @@ import Wing from "../aerodynamics/three/Wing";
 import Fuselage from "../aerodynamics/three/Fuselage";
 import Home from "./Home";
 import Camera from "../common/three/Camera";
-import { Perf } from "r3f-perf";
+import { Perf, PerfHeadless, usePerf } from "r3f-perf";
 import { checkVisible } from "../common/three/checkVisible";
 import InducedDrag from "../aerodynamics/three/tutorials/InducedDrag";
 import { OrbitControls } from "@react-three/drei";
@@ -19,6 +19,9 @@ import NavigationHyperbolic from "../compass/NavigationHyperbolic";
 import IntroBernoulli from "../aerodynamics/three/tutorials/IntroBernoulli";
 import IntroNewton2nd from "../aerodynamics/three/tutorials/IntroNewton2nd";
 import IntroMisconception from "../aerodynamics/three/tutorials/IntroMisconception";
+import DebugHeadless from "./Perf";
+
+
 
 const PlaneBuilder = () => {
   return (
@@ -28,6 +31,7 @@ const PlaneBuilder = () => {
       <IntroNewton2nd />
       <IntroMisconception />
       <Subtitle />
+      {/* <DebugHeadless /> */}
       <Canvas
         flat
         camera={{ position: [0, -200, 200], fov: 60 }}
