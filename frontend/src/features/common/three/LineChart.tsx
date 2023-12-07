@@ -83,7 +83,7 @@ const LineChart = ({
           ticks={ticks.x}
           scale={scale}
           mid={mid.x}
-          min={min.y}
+          min={min}
           max={max}
           stepOpacity={opacity}
         />
@@ -93,8 +93,9 @@ const LineChart = ({
           ticks={ticks.y}
           scale={scale}
           mid={mid.y}
-          min={min.x}
+          min={min}
           max={max}
+          width={width}
           stepOpacity={opacity}
         />
         <animated.mesh

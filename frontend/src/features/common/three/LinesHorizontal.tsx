@@ -1,29 +1,36 @@
 import { Text } from "@react-three/drei";
-import { FONT_SIZE, TITLE_PADDING, useCSSColors } from "./config";
+import {
+  CANVAS_WIDTH,
+  FONT_SIZE,
+  NUMBERS_PADDING,
+  TITLE_PADDING,
+  useCSSColors,
+} from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import AnimatedHorizontalMarker from "./AnimatedHorizontalMarker";
 import {
   SpringValue,
   animated,
   config,
   to,
   useSpring,
-  useTrail,
 } from "@react-spring/three";
 import { Axis } from "./LineChart";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { checkVisible } from "./checkVisible";
 import { useLocation } from "react-router-dom";
 import AnimatedHtml from "./AnimatedHtml";
+import { CylinderGeometry, InstancedMesh, Object3D, Vector3 } from "three";
+import { useFrame } from "@react-three/fiber";
 
 interface AxisProps {
   show: boolean;
   ticks: number[];
   axis: Axis;
   scale: number[];
-  min: number;
+  min: Record<string, number>;
   max: Record<string, number>;
   mid: number;
+  width: number;
   stepOpacity?: SpringValue<number>;
 }
 
@@ -35,6 +42,7 @@ const LinesHorizontal = ({
   min,
   max,
   mid,
+  width,
   stepOpacity = new SpringValue(1),
 }: AxisProps) => {
   const AnimatedText = animated(Text);
@@ -42,14 +50,6 @@ const LinesHorizontal = ({
 
   const meshRef = useRef<THREE.Mesh>(null!);
   const { pathname } = useLocation();
-
-  const [opacityTrail, trailApi] = useTrail(
-    ticks.length,
-    () => ({
-      opacity: 0,
-    }),
-    []
-  );
 
   const [title, titleApi] = useSpring(
     () => ({
@@ -62,41 +62,90 @@ const LinesHorizontal = ({
   useEffect(() => {
     const vis = show && checkVisible(meshRef.current);
     if (vis) {
-      trailApi.start({ opacity: 1, delay: 800 });
       titleApi.start({ opacity: 1, delay: 1600 });
     } else {
-      trailApi.start({ opacity: 0, delay: 0 });
       titleApi.start({ opacity: 0, delay: 0 });
     }
   }, [pathname, show]);
 
   const { unit } = useChartUnits(axis.type as string);
 
+  const instancedMeshRef = useRef<InstancedMesh>(null!);
+
+  const geom = useMemo(() => {
+    const height = width * CANVAS_WIDTH - 3;
+    const cylinder = new CylinderGeometry(0.005, 0.005, height, 4);
+    cylinder.translate(0, height / 2, 0);
+    cylinder.rotateZ(-Math.PI / 2);
+    return cylinder;
+  }, []);
+
+  const [objects] = useState(() =>
+    [...new Array(15)].map(() => new Object3D())
+  );
+
+  const vec = new Vector3(1, 1, 1);
+
+  useFrame(() => {
+    let id = 0;
+    const s = stepOpacity.get();
+    for (let i = 0; i < 15; i += 1) {
+      instancedMeshRef.current.getMatrixAt(id, objects[id].matrix);
+      objects[id].position.set(0, ticks[i] * scale[1], 0);
+
+      // highlight zeros
+      if (ticks[i] === 0) objects[id].scale.setY(3);
+
+      // show all ticks below maximum
+      if (ticks[i] <= max.y / scale[1])
+        objects[id].scale.lerp(vec.setX(s), 0.2 - id / 16 / 3);
+      else {
+        objects[id].scale.lerp(vec.setX(0.001), 0.2 + id / 16 / 3);
+      }
+      objects[id].updateMatrix();
+      instancedMeshRef.current.setMatrixAt(id, objects[id++].matrix);
+    }
+    instancedMeshRef.current.instanceMatrix.needsUpdate = true;
+  });
+
   return (
     <mesh ref={meshRef}>
-      {opacityTrail.map((i, index) => (
-        <AnimatedHorizontalMarker
-          key={index}
-          y={ticks[index]}
-          min={min}
-          max={max}
-          type={axis.type}
-          opacity={i.opacity}
-          stepOpacity={stepOpacity}
-          scale={scale}
-        />
-      ))}
+      <instancedMesh
+        ref={instancedMeshRef}
+        args={[geom, undefined, 15]}
+        position-x={min.x}
+      >
+        <meshBasicMaterial color={gridColor} transparent opacity={0.5} />
+      </instancedMesh>
+
+      {ticks.map(
+        (t, i) =>
+          ticks[i] <= max.y / scale[1] && (
+            <AnimatedHtml
+              className="text-xs"
+              show={show}
+              delayVisible={1000}
+              position={[
+                min.x - 1.25 * NUMBERS_PADDING,
+                ticks[i] * scale[1],
+                0,
+              ]}
+            >
+              {t}
+            </AnimatedHtml>
+          )
+      )}
       {axis.symbol ? (
         <AnimatedHtml
           show={show}
           delayVisible={1600}
-          position={[min - TITLE_PADDING, mid + 0.25, 0.5]}
+          position={[min.x - TITLE_PADDING, mid + 0.25, 0.5]}
         >
           {axis.symbol}
         </AnimatedHtml>
       ) : (
         <AnimatedText
-          position={[min - 1.2 * TITLE_PADDING, mid + 1, 0.5]}
+          position={[min.x - 1.2 * TITLE_PADDING, mid + 1, 0.5]}
           rotation-z={Math.PI / 2}
           fontSize={0.6 * FONT_SIZE}
           color={gridColor}
