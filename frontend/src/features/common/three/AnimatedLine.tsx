@@ -51,14 +51,14 @@ const AnimatedLine = ({
     [points, opacity, width, worldScale]
   );
 
-  useFrame(() => {
+  useFrame((state,delta) => {
     worldScale.setFromMatrixScale(lineRef.current.matrixWorld);
     lineRef.current.geometry.setPositions(lineSpring.points.get());
     computeLineDistancesScaled(lineRef.current.geometry, worldScale);
 
     lineRef.current.material.opacity = lineSpring.opacity.get();
     lineRef.current.material.linewidth = lineSpring.width.get();
-    lineRef.current.material.dashOffset -= offset;
+    lineRef.current.material.dashOffset -= offset * delta * 60;
   });
 
   const _start = useMemo(() => new Vector3(), []);
