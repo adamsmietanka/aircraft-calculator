@@ -1,7 +1,6 @@
-import { SpringValue, animated, to, useSpring } from "@react-spring/three";
-import { FONT_SIZE, NUMBERS_PADDING, useCSSColors } from "./config";
+import { SpringValue, to, useSpring } from "@react-spring/three";
+import { NUMBERS_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
-import { Text } from "@react-three/drei";
 import { StoreApi, UseBoundStore } from "zustand";
 import { Axis } from "./LineChart";
 import round from "../../../utils/interpolation/round";
@@ -15,6 +14,7 @@ import AnimatedLine from "./AnimatedLine";
 import { useMemo, useRef } from "react";
 import { Mesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
+import AnimatedHtml from "./AnimatedHtml";
 
 interface Props {
   name: string;
@@ -38,29 +38,14 @@ const HoverMarker = ({
   opacity,
 }: Props) => {
   const meshRef = useRef<Mesh>(null!);
-  const textRef = useRef<Mesh>(null!);
-  const textRef2 = useRef<Mesh>(null!);
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
-  const { primaryColor, backgroundColor } = useCSSColors();
 
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
 
   useFrame(() => {
     worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
-    textRef.current.scale.set(
-      1 / worldScale.getComponent(0),
-      1 / worldScale.getComponent(1),
-      1 / worldScale.getComponent(2)
-    );
-    textRef2.current.scale.set(
-      1 / worldScale.getComponent(0),
-      1 / worldScale.getComponent(1),
-      1 / worldScale.getComponent(2)
-    );
   });
-
-  const AnimatedText = animated(Text);
 
   const locked = store((state) => state.locked);
   const hover = store((state) => state.hover);
@@ -107,50 +92,28 @@ const HoverMarker = ({
         dashScale={3}
         color="grid"
       />
-      <AnimatedText
-        ref={textRef}
-        fontSize={0.65 * FONT_SIZE}
+      <AnimatedHtml
+        className="text-base text-primary bg-base-100 p-1"
+        show={!!locked || hover}
         position={hoverSpring.x.to((x) => [
           x,
-          (min.y - NUMBERS_PADDING) / worldScale.y,
+          (min.y - 0.75 * NUMBERS_PADDING) / worldScale.y,
           0.375,
         ])}
-        color={primaryColor}
-        fillOpacity={to(
-          [hoverSpring.opacity, opacity],
-          (opacity, stepOpacity) => opacity * stepOpacity
-        )}
-        outlineWidth={0.2}
-        outlineColor={backgroundColor}
-        outlineOpacity={to(
-          [hoverSpring.opacity, opacity],
-          (opacity, stepOpacity) => opacity * stepOpacity
-        )}
       >
         {displayX}
-      </AnimatedText>
-      <AnimatedText
-        ref={textRef2}
-        fontSize={0.65 * FONT_SIZE}
+      </AnimatedHtml>
+      <AnimatedHtml
+        className="text-base text-primary bg-base-100"
+        show={!!locked || hover}
         position={to([hoverSpring.y, hoverSpring.scale], (y, scale) => [
           (min.x - 1.5 * NUMBERS_PADDING) / scale,
           y,
           0.375,
         ])}
-        color={primaryColor}
-        fillOpacity={to(
-          [hoverSpring.opacity, opacity],
-          (opacity, stepOpacity) => opacity * stepOpacity
-        )}
-        outlineWidth={0.2}
-        outlineColor={backgroundColor}
-        outlineOpacity={to(
-          [hoverSpring.opacity, opacity],
-          (opacity, stepOpacity) => opacity * stepOpacity
-        )}
       >
         {displayY}
-      </AnimatedText>
+      </AnimatedHtml>
     </mesh>
   );
 };
