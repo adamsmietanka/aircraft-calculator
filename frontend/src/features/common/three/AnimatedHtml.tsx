@@ -16,6 +16,7 @@ type Props = {
   scale?: Interpolation<number> | number;
   show?: boolean;
   delayVisible?: number;
+  className?: string;
   children: React.ReactNode;
 };
 
@@ -23,12 +24,13 @@ const AnimatedHtml = ({
   children,
   show = true,
   delayVisible = 0,
+  className,
   ...rest
 }: Props) => {
   const htmlRef = useRef<Mesh>(null!);
   const childRef = useRef<Mesh>(null!);
 
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   const Anim = animatedWeb(Html);
 
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
@@ -38,7 +40,9 @@ const AnimatedHtml = ({
       from: { opacity: 0, display: "none" },
       to: async (next) => {
         const vis = htmlRef.current && checkVisible(htmlRef.current);
-        vis && show && (await next({ display: "block", delay: ROUTE_DELAY + delayVisible }));
+        vis &&
+          show &&
+          (await next({ display: "block", delay: ROUTE_DELAY + delayVisible }));
         await next({ opacity: vis && show ? 1 : 0 });
         (vis && show) || (await next({ display: "none" }));
       },
@@ -69,7 +73,7 @@ const AnimatedHtml = ({
   return (
     <animated.mesh {...rest} ref={htmlRef}>
       <mesh ref={childRef}>
-        <Anim className={`select-none `} style={props} transform>
+        <Anim className={`select-none ${className}`} style={props} transform>
           <div>{children}</div>
         </Anim>
       </mesh>
