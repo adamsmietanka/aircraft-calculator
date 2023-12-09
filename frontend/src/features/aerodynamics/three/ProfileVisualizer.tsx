@@ -2,12 +2,13 @@ import { CANVAS_WIDTH } from "../../common/three/config";
 import { SpringValue, animated } from "@react-spring/three";
 import useProfileVisualizer from "./hooks/useProfileVisualizer";
 import ProfileAirstreams from "./ProfileAirstreams";
-import useProfile from "../hooks/useProfile";
+import useProfilePoints from "../hooks/useProfilePoints";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import ProfileVectors from "./ProfileVectors";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import ProfileFlowSpeed from "./ProfileFlowSpeed";
 import { useWingStore } from "../stores/useWing";
+import { useProfileStore } from "../stores/useProfile";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -16,8 +17,12 @@ interface Props {
 const ProfileVisualizer = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
 
-  const { chordPoints, lowerPoints, upperPoints, lowerFlat, upperFlat } =
-    useProfile();
+  useProfilePoints();
+  const upperFlat = useProfileStore((state) => state.upperFlat);
+  const lowerFlat = useProfileStore((state) => state.lowerFlat);
+  const upperPoints = useProfileStore((state) => state.upper);
+  const lowerPoints = useProfileStore((state) => state.lower);
+  const chordPoints = useProfileStore((state) => state.chord);
   const { profileSpring, showVisuals } = useProfileVisualizer();
 
   const showChord = useHoverProfileStore((state) => state.showChord);

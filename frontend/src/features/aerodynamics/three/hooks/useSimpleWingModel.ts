@@ -1,15 +1,15 @@
 import { useMemo } from "react";
-import useProfile from "../../hooks/useProfile";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import { useLocation } from "react-router-dom";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
+import { useProfileStore } from "../../stores/useProfile";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
 const useSimpleWingModel = () => {
   const { pathname } = useLocation();
 
-  const { profilePoints } = useProfile();
+  const profilePoints = useProfileStore((state) => state.profile);
 
   const tipGeometry = useMemo(() => {
     const shape = new Shape();

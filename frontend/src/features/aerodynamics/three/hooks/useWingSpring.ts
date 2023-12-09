@@ -1,7 +1,7 @@
 import { useSpring } from "@react-spring/three";
 import { useWingStore } from "../../stores/useWing";
-import { useProfileCamber } from "../../hooks/useProfile";
 import useWingScale from "../../hooks/useWingScale";
+import useProfileCamber from "../../hooks/useProfileCamber";
 
 export const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;

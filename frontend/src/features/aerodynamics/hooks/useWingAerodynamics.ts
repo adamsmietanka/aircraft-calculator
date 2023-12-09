@@ -1,6 +1,6 @@
 import { getReynolds } from "../data/profiles";
 import { useWingStore } from "../stores/useWing";
-import { useProfileCamber } from "./useProfile";
+import useProfileCamber from "./useProfileCamber";
 import useProfileData from "./useProfileData";
 import useProfileTable, { Row } from "./useProfileTable";
 

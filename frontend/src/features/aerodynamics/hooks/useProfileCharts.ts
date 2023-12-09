@@ -4,8 +4,7 @@ import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import { MarkersStore } from "../../common/three/Hover";
 import useProfileData from "./useProfileData";
-import { useProfileCamber } from "./useProfile";
-import useProfileTable from "./useProfileTable";
+import useProfileCamber from "./useProfileCamber";
 import clamp from "../../../utils/interpolation/clamp";
 import useProfileInfo from "./useProfileInfo";
 

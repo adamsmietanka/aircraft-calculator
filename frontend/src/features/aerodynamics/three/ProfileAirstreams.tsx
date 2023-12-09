@@ -1,9 +1,9 @@
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { useWingStore } from "../stores/useWing";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
-import useProfile from "../hooks/useProfile";
 import { SpringValue } from "@react-spring/three";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
+import { useProfileStore } from "../stores/useProfile";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -11,7 +11,8 @@ interface Props {
 }
 
 const ProfileAirstreams = ({ opacity, show }: Props) => {
-  const { upperPoints, lowerPoints } = useProfile();
+  const upperPoints = useProfileStore((state) => state.upper);
+  const lowerPoints = useProfileStore((state) => state.lower);
 
   const reynolds = useWingStore((state) => state.reynolds);
 

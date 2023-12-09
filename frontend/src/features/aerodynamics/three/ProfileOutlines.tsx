@@ -1,8 +1,9 @@
 import { SpringValue, animated, useSpring } from "@react-spring/three";
-import useProfile, { useProfileCamber } from "../hooks/useProfile";
 import { useWingStore } from "../stores/useWing";
 import { getXTip } from "./hooks/useWingSpring";
 import AnimatedLine from "../../common/three/AnimatedLine";
+import { useProfileStore } from "../stores/useProfile";
+import useProfileCamber from "../hooks/useProfileCamber";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -15,7 +16,7 @@ const ProfileOutlines = ({ opacity }: Props) => {
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
 
-  const { profilePoints } = useProfile();
+  const profilePoints = useProfileStore((state) => state.profile);
   const { F } = useProfileCamber();
 
   const [profileSpring] = useSpring(() => {

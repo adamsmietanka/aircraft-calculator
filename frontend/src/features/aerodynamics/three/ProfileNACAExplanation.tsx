@@ -1,6 +1,5 @@
 import { Plane } from "@react-three/drei";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
-import useProfile, { useProfileCamber } from "../hooks/useProfile";
 import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
 import Formula from "../../common/Formula";
 import HoverableFormulaColor from "../../common/HoverableFormulaColor";
@@ -12,6 +11,8 @@ import useProfileVisualizer from "./hooks/useProfileVisualizer";
 import { CANVAS_WIDTH } from "../../common/three/config";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import { useLocation } from "react-router-dom";
+import { useProfileStore } from "../stores/useProfile";
+import useProfileCamber from "../hooks/useProfileCamber";
 
 interface Props {
   opacity?: SpringValue<number>;
@@ -35,7 +36,9 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
   const { scaleProfile } = useWingScale();
 
   const { M, P, T, F } = useProfileCamber();
-  const { maxThickness, lowestPoint, highestPoint } = useProfile();
+  const maxThickness = useProfileStore((state) => state.maxThickness);
+  const lowestPoint = useProfileStore((state) => state.lowestPoint);
+  const highestPoint = useProfileStore((state) => state.highestPoint);
 
   const { profileSpring } = useProfileVisualizer();
 
