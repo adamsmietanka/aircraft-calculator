@@ -4,8 +4,8 @@ import { useWingStore } from "../../stores/useWing";
 import { getXTip } from "./useWingSpring";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import useWingOutline from "../../hooks/useWingOutline";
-import { useLocation } from "react-router-dom";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
+import { useProfileStore } from "../../stores/useProfile";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
@@ -13,7 +13,7 @@ const useWingModel = (customShape?: number) => {
   const wing = useWingStore();
   const {pathname} = useLocation();
 
-  const { profilePoints } = useProfile();
+  const profilePoints = useProfileStore((state) => state.profile);
   const { modelPoints } = useWingOutline();
 
   const xTip = getXTip(wing.angle, wing.span);
@@ -61,7 +61,7 @@ const useWingModel = (customShape?: number) => {
       geometry.translate(0, 0, tip[0][2]);
       return geometry;
     }
-  }, [profilePoints, pathname]);
+  }, [profilePoints]);
 
   const geometry = useMemo(() => {
     const geom = new BufferGeometry();
@@ -97,7 +97,7 @@ const useWingModel = (customShape?: number) => {
       geom.computeVertexNormals();
       return geom;
     }
-  }, [profilePoints, pathname]);
+  }, [profilePoints]);
   return { geometry, tipGeometry };
 };
 export default useWingModel;

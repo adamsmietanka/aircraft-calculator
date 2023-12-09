@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { getXTip } from "../three/hooks/useWingSpring";
 import { useWingStore } from "../stores/useWing";
-import { useProfileCamber } from "./useProfile";
+import useProfileCamber from "./useProfileCamber";
 
 const NUM_OF_SEGMENTS = 30;
 
