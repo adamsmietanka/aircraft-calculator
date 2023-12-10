@@ -45,8 +45,10 @@ const PlaneBuilder = () => {
         {/* <Perf /> */}
         {/* <gridHelper rotation-x={Math.PI / 2} position-x={-5}/> */}
         <OrbitControls enabled={false} />
-        <ambientLight intensity={0.25} />
-        <pointLight position={[0, 10, 0]} intensity={0.5} />
+        <ambientLight intensity={0.1} />
+        <pointLight position={[-10, 10, 0]} intensity={100} />
+        <spotLight position={[-10, -40, 70]} intensity={1000} />
+        <spotLight position={[-10, 10, 70]} intensity={1000} />
 
         <Camera />
 
