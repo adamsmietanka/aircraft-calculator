@@ -101,7 +101,9 @@ const LinesHorizontal = ({
         objects[id].scale.lerp(
           vec.setX(s),
           // hide all at the same time or trail
-          stepOpacity.animation.to === 0 ? 0.5 : 0.2 - id / 16 / 3
+          stepOpacity.animation.to === 0
+            ? 0.2 - (5 - id) / 16 / 3
+            : 0.2 - id / 16 / 3
         );
       else {
         objects[id].scale.lerp(vec.setX(0.001), 0.2 + id / 16 / 3);
