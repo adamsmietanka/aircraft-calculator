@@ -41,7 +41,7 @@ const PlaneBuilder = () => {
         }}
       >
         {/* <StatsGl className="ml-20" /> */}
-        <Perf />
+        {/* <Perf /> */}
         {/* <gridHelper rotation-x={Math.PI / 2} position-x={-5}/> */}
         <OrbitControls enabled={false} />
         <ambientLight intensity={0.1} />
