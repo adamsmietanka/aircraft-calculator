@@ -9,7 +9,7 @@ import Camera from "../common/three/Camera";
 import { Perf, PerfHeadless, usePerf } from "r3f-perf";
 import { checkVisible } from "../common/three/checkVisible";
 import InducedDrag from "../aerodynamics/three/tutorials/InducedDrag";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, StatsGl } from "@react-three/drei";
 import ProfileNACAExplanation from "../aerodynamics/three/ProfileNACAExplanation";
 import Introduction from "../aerodynamics/three/tutorials/Introduction";
 import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
@@ -20,8 +20,6 @@ import IntroBernoulli from "../aerodynamics/three/tutorials/IntroBernoulli";
 import IntroNewton2nd from "../aerodynamics/three/tutorials/IntroNewton2nd";
 import IntroMisconception from "../aerodynamics/three/tutorials/IntroMisconception";
 import DebugHeadless from "./Perf";
-
-
 
 const PlaneBuilder = () => {
   return (
@@ -42,7 +40,8 @@ const PlaneBuilder = () => {
           });
         }}
       >
-        {/* <Perf /> */}
+        {/* <StatsGl className="ml-20" /> */}
+        <Perf />
         {/* <gridHelper rotation-x={Math.PI / 2} position-x={-5}/> */}
         <OrbitControls enabled={false} />
         <ambientLight intensity={0.1} />
