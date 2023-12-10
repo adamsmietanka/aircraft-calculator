@@ -1,9 +1,15 @@
-import React from "react";
-import { Center, Cloud, Cylinder, Float, Text3D } from "@react-three/drei";
+import {
+  Center,
+  Cloud,
+  Clouds,
+  Float,
+  Text3D,
+  Instances,
+  Instance,
+} from "@react-three/drei";
 import WingModel from "../aerodynamics/three/WingModel";
 import { SpringValue } from "@react-spring/three";
 import FuseModel from "../aerodynamics/three/FuseModel";
-import { DoubleSide } from "three";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -15,15 +21,15 @@ const Home = ({ opacity }: Props) => {
   return (
     <mesh receiveShadow>
       <Clouds>
-      <Cloud
+        <Cloud
           seed={3}
           position={[0, 0, 40]}
-        opacity={0.25}
+          opacity={0.25}
           speed={0.1} // Rotation speed
           bounds={[20, 6, 1]}
           volume={30}
           segments={10} // Number of particles
-      />
+        />
       </Clouds>
 
       <Float
@@ -35,7 +41,6 @@ const Home = ({ opacity }: Props) => {
           <Text3D
             font="/fonts/Roboto Medium_Regular.json"
             lineHeight={0.75}
-            // letterSpacing={-0.025}
             size={1.75}
             height={0.25}
             curveSegments={32}
@@ -44,7 +49,7 @@ const Home = ({ opacity }: Props) => {
             bevelThickness={0.1}
           >
             {"Book \n   of\nFlight"}
-            <meshPhongMaterial></meshPhongMaterial>
+            <meshPhongMaterial />
           </Text3D>
         </Center>
       </Float>
@@ -56,45 +61,14 @@ const Home = ({ opacity }: Props) => {
         speed={1.75}
       >
         <mesh position={[0, 0, 45]} receiveShadow>
-          <mesh position-y={1.25 / 2} position-x={0.1}>
-            {/* <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]} /> */}
-            <mesh position-z={2.75} position-x={0.2}>
-              <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
-                <meshStandardMaterial
-                  color={"lightgray"}
-                  side={DoubleSide}
-                  metalness={1}
-                />
-              </Cylinder>
-              <mesh position-x={1.2}>
-                <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
-                  <meshStandardMaterial
-                    color={"lightgray"}
-                    side={DoubleSide}
-                    metalness={1}
-                  />
-                </Cylinder>
-              </mesh>
-            </mesh>
-            <mesh position-z={-2.75} position-x={0.2}>
-              <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
-                <meshStandardMaterial
-                  color={"lightgray"}
-                  side={DoubleSide}
-                  metalness={1}
-                />
-              </Cylinder>
-              <mesh position-x={1.2}>
-                <Cylinder args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]}>
-                  <meshStandardMaterial
-                    color={"lightgray"}
-                    side={DoubleSide}
-                    metalness={1}
-                  />
-                </Cylinder>
-              </mesh>
-            </mesh>
-          </mesh>
+          <Instances limit={4} position-y={1.25 / 2} position-x={0.1}>
+            <cylinderGeometry args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]} />
+            <meshStandardMaterial color={"white"} metalness={0.5} />
+            <Instance position={[0.2, 0, -2.75]} />
+            <Instance position={[1.2, 0, -2.75]} />
+            <Instance position={[0.2, 0, 2.75]} />
+            <Instance position={[1.2, 0, 2.75]} />
+          </Instances>
           <mesh scale-z={0.5}>
             <WingModel opacity={opacity} shape={0} />
           </mesh>
