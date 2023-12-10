@@ -1,6 +1,5 @@
 import { SpringValue, animated } from "@react-spring/three";
 import { useLoader } from "@react-three/fiber";
-import { DoubleSide } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 interface Props {
@@ -19,9 +18,9 @@ const FuseModel = ({ opacity }: Props) => {
       position-x={-1}
     >
       <animated.meshStandardMaterial
-        color={"lightgray"}
-        side={DoubleSide}
-        metalness={1}
+        color={"white"}
+        // side={DoubleSide}
+        metalness={0.5}
         transparent
         opacity={opacity}
       />

@@ -12,8 +12,8 @@ const WingModel = ({ opacity, shape }: Props) => {
   return (
     <mesh geometry={geom}>
       <animated.meshStandardMaterial
-        color={"lightgray"}
-        metalness={1}
+        color={"white"}
+        metalness={0.5}
         transparent
         opacity={opacity}
       />
