@@ -32,6 +32,8 @@ interface AxisProps {
   max: Record<string, number>;
   mid: number;
   stepOpacity: SpringValue<number>;
+  scaleX: SpringValue<number>;
+  scaleY: SpringValue<number>;
 }
 
 const LinesVertical = ({
@@ -43,6 +45,8 @@ const LinesVertical = ({
   max,
   mid,
   stepOpacity,
+  scaleX,
+  scaleY,
 }: AxisProps) => {
   const AnimatedText = animated(Text);
   const { gridColor } = useCSSColors();
@@ -87,15 +91,16 @@ const LinesVertical = ({
   useFrame(() => {
     let id = 0;
     const s = stepOpacity.get();
+    const scaleInterpolated = scaleX.get();
     for (let i = 0; i < 15; i += 1) {
       instancedMeshRef.current.getMatrixAt(id, objects[id].matrix);
-      objects[id].position.set(ticks[i] * scale[0], 0, 0);
+      objects[id].position.set(ticks[i] * scaleInterpolated, 0, 0);
 
       // highlight zeros
       if (ticks[i] === 0) objects[id].scale.setX(3);
 
       // show all ticks below maximum
-      if (ticks[i] <= max.x / scale[0])
+      if (ticks[i] <= max.x / scaleInterpolated)
         objects[id].scale.lerp(
           vec.setY(s),
           // hide all at the same time or trail
@@ -129,7 +134,11 @@ const LinesVertical = ({
               className="text-xs"
               show={show}
               delayVisible={800}
-              position={[ticks[i] * scale[0], min.y - NUMBERS_PADDING, 0]}
+              position={scaleX.to((s) => [
+                s * ticks[i],
+                min.y - NUMBERS_PADDING,
+                0,
+              ])}
             >
               {t}
             </AnimatedHtml>
