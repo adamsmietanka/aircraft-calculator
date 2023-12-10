@@ -87,7 +87,6 @@ const LinesVertical = ({
   useFrame(() => {
     let id = 0;
     const s = stepOpacity.get();
-    console.log(stepOpacity.animation.to);
     for (let i = 0; i < 15; i += 1) {
       instancedMeshRef.current.getMatrixAt(id, objects[id].matrix);
       objects[id].position.set(ticks[i] * scale[0], 0, 0);
@@ -100,7 +99,9 @@ const LinesVertical = ({
         objects[id].scale.lerp(
           vec.setY(s),
           // hide all at the same time or trail
-          stepOpacity.animation.to === 0 ? 0.5 : 0.2 - id / 16 / 3
+          stepOpacity.animation.to === 0
+            ? 0.2 - (5 - id) / 16 / 3
+            : 0.2 - id / 16 / 3
         );
       else {
         objects[id].scale.lerp(vec.setY(0.001), 0.2 + id / 16 / 3);
