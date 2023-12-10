@@ -14,16 +14,18 @@ const SPAR_DIAMETER = 0.03;
 const Home = ({ opacity }: Props) => {
   return (
     <mesh receiveShadow>
+      <Clouds>
       <Cloud
-        position={[0, 0, 50]}
+          seed={3}
+          position={[0, 0, 40]}
         opacity={0.25}
-        speed={0.4} // Rotation speed
-        width={7.5} // Width of the full cloud
-        depth={1.5} // Z-dir depth
-        segments={20} // Number of particles
+          speed={0.1} // Rotation speed
+          bounds={[20, 6, 1]}
+          volume={30}
+          segments={10} // Number of particles
       />
-      <spotLight position={[-10, 10, 70]} intensity={0.5} />
-      <spotLight position={[-10, -40, 70]} intensity={0.1} />
+      </Clouds>
+
       <Float
         speed={1} // Animation speed, defaults to 1
         rotationIntensity={0.1} // XYZ rotation intensity, defaults to 1
