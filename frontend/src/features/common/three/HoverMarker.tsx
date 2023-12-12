@@ -26,6 +26,7 @@ interface Props {
   min: Record<string, number>;
   step: Record<string, number>;
   opacity: SpringValue<number>;
+  show: boolean;
 }
 
 const HoverMarker = ({
@@ -36,6 +37,7 @@ const HoverMarker = ({
   min,
   step,
   opacity,
+  show,
 }: Props) => {
   const meshRef = useRef<Mesh>(null!);
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
@@ -94,7 +96,7 @@ const HoverMarker = ({
       />
       <AnimatedHtml
         className="text-base text-primary bg-base-100 p-1"
-        show={!!locked || hover}
+        show={show && (!!locked || hover)}
         position={hoverSpring.x.to((x) => [
           x,
           (min.y - 0.75 * NUMBERS_PADDING) / worldScale.y,
@@ -105,7 +107,7 @@ const HoverMarker = ({
       </AnimatedHtml>
       <AnimatedHtml
         className="text-base text-primary bg-base-100"
-        show={!!locked || hover}
+        show={show && (!!locked || hover)}
         position={to([hoverSpring.y, hoverSpring.scale], (y, scale) => [
           (min.x - 1.5 * NUMBERS_PADDING) / scale,
           y,

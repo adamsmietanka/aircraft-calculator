@@ -127,6 +127,7 @@ const LineChart = ({
               store={store}
               yHover={yHover}
               opacity={opacity}
+              show={show}
             />
           )}
         </animated.mesh>
