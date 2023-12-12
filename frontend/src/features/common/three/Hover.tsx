@@ -47,6 +47,7 @@ interface HoverProps {
   >;
   yHover: boolean;
   opacity: SpringValue<number>;
+  show: boolean;
 }
 const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
@@ -63,6 +64,7 @@ const Hover = ({
   store,
   yHover,
   opacity,
+  show,
 }: HoverProps) => {
   const meshRef = useRef<Mesh>(null!);
 
@@ -111,6 +113,7 @@ const Hover = ({
         axes={axes}
         min={min}
         opacity={opacity}
+        show={show}
       />
     </mesh>
   );
