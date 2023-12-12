@@ -75,8 +75,10 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           scale={profileSpring.scale.to((scale) => 1 / scale)}
         >
           <ProfileVectors opacity={opacity} show={showVectors && showVisuals} />
-          <ProfileFlowSpeed opacity={opacity} show={showVisuals} />
         </animated.mesh>
+      </animated.mesh>
+      <animated.mesh scale={profileSpring.scale.to((s) => 1 / s)}>
+        <ProfileFlowSpeed opacity={opacity} show={showVisuals} />
       </animated.mesh>
     </animated.mesh>
   );

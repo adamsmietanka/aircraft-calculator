@@ -21,8 +21,8 @@ const ProfileFlowSpeed = ({ show, opacity }: Props) => {
       position:
         pathname === "/aerodynamics/inducedDrag" ||
         pathname === "/aerodynamics/introduction"
-          ? 4.5
-          : 3.5,
+          ? 2.5
+          : 1.5,
     }),
     [reynolds]
   );
