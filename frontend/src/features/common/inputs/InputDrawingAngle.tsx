@@ -4,15 +4,11 @@ interface Props {
   setter?: (value: number) => void;
 }
 
-const InputDrawingAngle = ({
-  small = false,
-  value,
-  setter,
-}: Props) => {
+const InputDrawingAngle = ({ small = false, value, setter }: Props) => {
   return (
     <div className="flex">
       <input
-        className={`input w-28 text-center bg-transparent focus:outline-none pl-8 z-50 ${
+        className={`input w-28 text-center bg-transparent focus:outline-none focus:border-transparent pl-8 z-50 ${
           small && "input-2sm"
         }`}
         type="number"

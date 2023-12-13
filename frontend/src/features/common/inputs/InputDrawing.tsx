@@ -12,7 +12,7 @@ const InputDrawing = ({ small = false, value, min = 0, setter }: Props) => {
 
   return (
     <input
-      className={`input w-28 text-center bg-transparent focus:outline-none pl-8 ${
+      className={`input w-28 text-center bg-transparent focus:border-transparent focus:outline-none pl-8 ${
         small && "input-2sm"
       }`}
       type="number"
