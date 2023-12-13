@@ -1,21 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
 import { useWingStore } from "../../stores/useWing";
 import { getXTip } from "./useWingSpring";
-import {
-  BufferAttribute,
-  BufferGeometry,
-  Shape,
-  ShapeGeometry,
-} from "three";
+import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import useWingOutline from "../../hooks/useWingOutline";
 import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { useProfileStore } from "../../stores/useProfile";
+import { useLocation } from "react-router-dom";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
 
 const useWingModel = (customShape?: number) => {
   const wing = useWingStore();
+  const { pathname } = useLocation();
 
   const profilePoints = useProfileStore((state) => state.profile);
   const { modelPoints } = useWingOutline();
@@ -54,7 +51,10 @@ const useWingModel = (customShape?: number) => {
     const { xOutline, yOutline } = getOutline();
     const shape = new Shape();
     let merged;
-    if (profilePoints.length) {
+    if (
+      profilePoints.length &&
+      (pathname === "/aerodynamics/fuselage" || pathname === "/")
+    ) {
       let arr = [];
 
       for (let j = 1; j < yOutline.length; j++) {
@@ -98,9 +98,8 @@ const useWingModel = (customShape?: number) => {
       tipGeometry.translate(0, 0, 2 * yOutline[0]);
       merged = BufferGeometryUtils.mergeGeometries([merged, tipGeometry]);
       setGeom(merged);
-      console.log("created");
     }
-  }, [profilePoints]);
+  }, [profilePoints, pathname]);
   return { geom };
 };
 export default useWingModel;

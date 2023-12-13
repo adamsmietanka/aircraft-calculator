@@ -1,4 +1,4 @@
-import { PresentationControls } from "@react-three/drei";
+import { Instance, Instances, PresentationControls } from "@react-three/drei";
 import { SpringValue, animated, useSpring } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import FuselageConfiguration from "../FuselageConfiguration";
@@ -18,21 +18,24 @@ interface Props {
 const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
   const span = useWingStore((state) => state.span);
+  const shape = useWingStore((state) => state.shape);
 
   const { wingCd, fuseCd, cl, cd } = usePlaneAerodynamics();
 
   const [planeSpring] = useSpring(
     () => ({
       wingY: configuration === 1 || configuration === 3 ? 1 : 0,
+      cylinders:
+        shape === 0 && (configuration === 1 || configuration === 3) ? 1 : 0,
       fuseZ: configuration === 2 || configuration === 3 ? span / 6 : 0,
     }),
-    [configuration]
+    [configuration, shape]
   );
 
   return (
     <mesh position-x={0}>
       <mesh rotation={[(-20 * Math.PI) / 180, (-45 * Math.PI) / 180, 0, "YXZ"]}>
-        <Inputs3D gridPositionX={-1}>
+        <Inputs3D gridPositionX={-1.2}>
           <FuselageConfiguration />
         </Inputs3D>
         <LineChart
@@ -107,6 +110,21 @@ const Fuselage = ({ opacity }: Props) => {
             <WingModel opacity={opacity} />
             <animated.mesh position-y={planeSpring.wingY}>
               <WingModel opacity={opacity} />
+            </animated.mesh>
+            <animated.mesh scale={planeSpring.cylinders}>
+              <Instances limit={4} position-y={1.25 / 2} position-x={0.1}>
+                <cylinderGeometry args={[0.03, 0.03, 1, 32]} />
+                <animated.meshStandardMaterial
+                  color={"white"}
+                  metalness={0.5}
+                  transparent
+                  opacity={opacity}
+                />
+                <Instance position={[0.2, 0, (-0.95 * span) / 2]} />
+                <Instance position={[1.2, 0, (-0.95 * span) / 2]} />
+                <Instance position={[0.2, 0, (0.95 * span) / 2]} />
+                <Instance position={[1.2, 0, (0.95 * span) / 2]} />
+              </Instances>
             </animated.mesh>
           </mesh>
         </PresentationControls>
