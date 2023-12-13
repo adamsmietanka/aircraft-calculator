@@ -20,7 +20,9 @@ const InputDrawing = ({ small = false, value, min = 0, setter }: Props) => {
       value={displayValue}
       min={min}
       onChange={(e) =>
-        setter && setter(parseFloat(e.target.value) * multiplier)
+        setter &&
+        parseFloat(e.target.value) &&
+        setter(parseFloat(e.target.value) * multiplier)
       }
     />
   );

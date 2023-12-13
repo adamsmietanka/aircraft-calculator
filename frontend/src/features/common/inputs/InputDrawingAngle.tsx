@@ -15,7 +15,11 @@ const InputDrawingAngle = ({ small = false, value, setter }: Props) => {
         value={value}
         min={0}
         max={45}
-        onChange={(e) => setter && setter(parseFloat(e.target.value))}
+        onChange={(e) =>
+          setter &&
+          parseFloat(e.target.value) &&
+          setter(parseFloat(e.target.value))
+        }
       />
       <div className="absolute top-0 left-0 bottom-0 h-12 ml-8 w-14 flex items-center justify-center text-center z-1">
         <span className="invisible" id="hiddenValue">
