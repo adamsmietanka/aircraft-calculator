@@ -54,13 +54,13 @@ const Home = ({ opacity }: Props) => {
         </Center>
       </Float>
       <Float
-        position={[1, 0, 0]}
+        position={[-5, 0, 0]}
         rotation={[0, Math.PI / 8, Math.PI / 16]}
         rotationIntensity={1}
         floatIntensity={10}
         speed={1.75}
       >
-        <mesh position={[0, 0, 45]} receiveShadow>
+        <mesh position={[0, 0, 50]} receiveShadow>
           <Instances limit={4} position-y={1.25 / 2} position-x={0.1}>
             <cylinderGeometry args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]} />
             <meshStandardMaterial color={"white"} metalness={0.5} />
@@ -80,12 +80,12 @@ const Home = ({ opacity }: Props) => {
       </Float>
       <Float
         position={[1, 1.1, -0.5]}
-        rotation={[0, 0, 0]}
-        rotationIntensity={3}
+        rotation={[0, 0, Math.PI / 32]}
+        rotationIntensity={2}
         floatIntensity={2}
         speed={1.25}
       >
-        <mesh position={[-30, 0, 25]} receiveShadow scale-x={-1}>
+        <mesh position={[-22, 0, 35]} receiveShadow scale-x={-1}>
           <mesh scale-z={1.5}>
             <WingModel opacity={opacity} shape={1} />
           </mesh>
