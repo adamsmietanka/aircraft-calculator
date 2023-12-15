@@ -135,7 +135,7 @@ const InducedDrag = ({ opacity }: Props) => {
             4000
           );
           setCamera({ spherical: [20, 70, 40] });
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
           setMass(1);
           await displaySub(
             next,
@@ -143,9 +143,9 @@ const InducedDrag = ({ opacity }: Props) => {
             4000
           );
           setMass(0.5);
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
           setReynolds(1.25 * 6);
-          await next({ delay: 1000 });
+          await next({ delay: 500 });
           await displaySub(
             next,
             "Increasing speed makes the vortex smaller",
