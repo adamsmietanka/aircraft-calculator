@@ -13,6 +13,7 @@ import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
+import { useLevelFlightStore } from "./stores/useLevelFlight";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -28,6 +29,7 @@ const LevelFlight = ({ opacity }: Props) => {
   const mass = useHoverProfileStore((state) => state.mass);
   const setMass = useHoverProfileStore((state) => state.setMass);
 
+  const setFormula = useLevelFlightStore((state) => state.set);
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
@@ -46,7 +48,7 @@ const LevelFlight = ({ opacity }: Props) => {
       setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
       const diff =
         Math.min(maxCz, mass / (speed * speed)) * speed * speed - mass;
-            set({ fallVelocity: -diff });
+      set({ fallVelocity: -diff });
     }
   }, [mass, reynolds]);
 
@@ -70,47 +72,25 @@ const LevelFlight = ({ opacity }: Props) => {
           await next({ delay: 2000 });
           setChart({ yHover: 0.5 });
           setChart({ hover: true, locked: "Coefficient of Drag" });
+          set({ showWeight: true });
           await displaySub(next, "When we want to maintain level flight", 2000);
+          setFormula({ show: true });
           await displaySub(
             next,
             "The forces acting in the vertical direction must be equal",
             1500
           );
-          set({ showWeight: true });
-          await displaySub(
-            next,
-            <div className="flex text-4xl">
-              <Formula className=" text-error" tex="W" />
-              <Formula tex="\: = \:" />
-              <Formula className="text-primary" tex="L" />
-            </div>,
-            3000
-          );
-          await displaySub(
-            next,
-            <div className="flex items-center h-20 text-4xl">
-              <Formula tex="mg" className="mt-4" />
-              <Formula tex="\: = \:" />
-              <Formula tex="\frac{1}{2} \rho V^2 S C_L" />
-            </div>,
-            3000
-          );
-          await displaySub(next, "So our coefficient of lift must be equal to");
-          await displaySub(
-            next,
-            <div className="flex items-center h-20 text-4xl">
-              <Formula className=" text-primary" tex="C_L" />
-              <Formula tex="\: = \:" />
-              <Formula tex="\frac {2mg} {\rho V^2 S }" />
-            </div>,
-            4000
-          );
+          setFormula({ expand: true });
+          await displaySub(next, "In order not to fall down");
+          setFormula({ rearrange: true });
+          await displaySub(next, "We need to keep a specific coefficient");
           await displaySub(
             next,
             <p className="flex">
               Drag is proportional to <Formula tex="\: V^2" />
             </p>
           );
+          setFormula({ show: false });
           setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/levelFlight") {
@@ -121,6 +101,7 @@ const LevelFlight = ({ opacity }: Props) => {
             xHover: savedAngle.current,
             locked: savedLock.current,
           });
+          setFormula({ show: false, expand: false, rearrange: false });
           setProfile(savedProfile.current ? savedProfile.current : profile);
           setShowLayout(false);
         }
