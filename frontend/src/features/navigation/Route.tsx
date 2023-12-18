@@ -3,8 +3,9 @@ import { useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { ROUTE_DELAY } from "../common/three/config";
 
-interface ElementProps {
+export interface ElementProps {
   opacity: SpringValue<number>;
+  visible: boolean;
 }
 
 interface Props {
@@ -38,7 +39,7 @@ const Route = ({ path, paths, Element }: Props) => {
       ref={meshRef}
       userData={{ hide: !isVisible, pathsArray }}
     >
-      <Element opacity={props.opacity} />
+      <Element opacity={props.opacity} visible={isVisible} />
     </animated.mesh>
   );
 };

@@ -1,6 +1,4 @@
-import { useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { SpringValue, useSpring } from "@react-spring/three";
+import { useState, useEffect } from "react";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import useProfileCharts from "../../hooks/useProfileCharts";
@@ -14,16 +12,13 @@ import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
 import { useLevelFlightStore } from "./stores/useLevelFlight";
+import { ElementProps } from "../../../navigation/Route";
+import useAnimation from "../../../common/subtitles/hooks/useAnimation";
 
-interface Props {
-  opacity: SpringValue<number>;
-}
-
-const LevelFlight = ({ opacity }: Props) => {
+const LevelFlight = ({ opacity, visible }: ElementProps) => {
   const profile = useWingStore((state) => state.profile);
   const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
 
-  const setProfile = useWingStore((state) => state.setProfile);
   const reynolds = useWingStore((state) => state.reynolds);
 
   const mass = useHoverProfileStore((state) => state.mass);
@@ -33,16 +28,11 @@ const LevelFlight = ({ opacity }: Props) => {
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
-  const chart = useProfileChartsStore();
-
-  const savedProfile = useRef("");
-  const savedAngle = useRef(0);
-  const savedLock = useRef<string | boolean>("");
 
   const { maxCz } = useProfileTable(1, profile) as Row;
 
   useEffect(() => {
-    if (pathname === "/aerodynamics/levelFlight") {
+    if (visible) {
       // Cause default reynolds is 6
       const speed = reynolds / 6;
       setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
@@ -50,23 +40,14 @@ const LevelFlight = ({ opacity }: Props) => {
         Math.min(maxCz, mass / (speed * speed)) * speed * speed - mass;
       set({ fallVelocity: -diff });
     }
-  }, [mass, reynolds]);
+  }, [mass, reynolds, visible]);
 
   const [showLayout, setShowLayout] = useState(false);
 
-  const { pathname, state } = useLocation();
-
-  const { hideSubs, waitForClick: wait, subtitle, setInAnimation } = useSubs();
+  const { subtitle } = useSubs();
 
   const animation = async () => {
-    savedProfile.current = profile;
-    savedAngle.current = chart.xHover;
-    savedLock.current = chart.locked;
-
-    await wait(2000);
-    setInAnimation(true);
-    setChart({ yHover: 0.5 });
-    setChart({ hover: true, locked: "Coefficient of Drag" });
+    setChart({ hover: true, yHover: 0.5, locked: "Coefficient of Drag" });
     set({ showWeight: true });
     await subtitle("When we want to maintain level flight");
     setFormula({ show: true });
@@ -86,28 +67,12 @@ const LevelFlight = ({ opacity }: Props) => {
   };
 
   const cleanup = () => {
-    hideSubs();
     set({ showWeight: false, mass: 0.5, speed: 1 });
-    setChart({
-      hover: false,
-      xHover: savedAngle.current,
-      locked: savedLock.current,
-    });
     setFormula({ show: false, expand: false, rearrange: false });
-    setProfile(savedProfile.current ? savedProfile.current : profile);
     setShowLayout(false);
   };
-
-  useEffect(() => {
-    if (pathname === "/aerodynamics/levelFlight") {
-      try {
-        animation();
-      } catch {}
-    } else if (state.previousPath === "/aerodynamics/levelFlight") {
-      setInAnimation(false);
-      cleanup();
-    }
-  }, [pathname]);
+  
+  useAnimation(animation, cleanup, visible);
 
   return (
     <>
