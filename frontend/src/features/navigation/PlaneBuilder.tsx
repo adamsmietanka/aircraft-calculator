@@ -20,6 +20,7 @@ import IntroBernoulli from "../aerodynamics/three/tutorials/IntroBernoulli";
 import IntroNewton2nd from "../aerodynamics/three/tutorials/IntroNewton2nd";
 import IntroMisconception from "../aerodynamics/three/tutorials/IntroMisconception";
 import DebugHeadless from "./Perf";
+import LevelFlightFormula from "../aerodynamics/three/tutorials/LevelFlightFormula";
 
 const PlaneBuilder = () => {
   return (
@@ -28,6 +29,7 @@ const PlaneBuilder = () => {
       <IntroBernoulli />
       <IntroNewton2nd />
       <IntroMisconception />
+      <LevelFlightFormula />
       <Subtitle />
       {/* <DebugHeadless /> */}
       <Canvas

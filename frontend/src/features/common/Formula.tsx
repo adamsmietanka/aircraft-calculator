@@ -14,10 +14,12 @@ interface Props {
     width?: string;
     fontSize?: string;
     left?: string;
+    right?: string;
     top?: string;
     marginTop?: string;
     marginRight?: string;
     display?: string;
+    color?: string;
   }>;
 }
 
