@@ -56,59 +56,58 @@ const LevelFlight = ({ opacity }: Props) => {
 
   const { pathname, state } = useLocation();
 
-  const { displaySub, hideSubs } = useSubs();
+  const { hideSubs, waitForClick: wait, subtitle, setInAnimation } = useSubs();
 
-  useSpring(
-    () => ({
-      from: {
-        debug: true,
-      },
-      to: async (next) => {
-        if (pathname === "/aerodynamics/levelFlight") {
-          savedProfile.current = profile;
-          savedAngle.current = chart.xHover;
-          savedLock.current = chart.locked;
+  const animation = async () => {
+    savedProfile.current = profile;
+    savedAngle.current = chart.xHover;
+    savedLock.current = chart.locked;
 
-          await next({ delay: 2000 });
-          setChart({ yHover: 0.5 });
-          setChart({ hover: true, locked: "Coefficient of Drag" });
-          set({ showWeight: true });
-          await displaySub(next, "When we want to maintain level flight", 2000);
-          setFormula({ show: true });
-          await displaySub(
-            next,
-            "The forces acting in the vertical direction must be equal",
-            1500
-          );
-          setFormula({ expand: true });
-          await displaySub(next, "In order not to fall down");
-          setFormula({ rearrange: true });
-          await displaySub(next, "We need to keep a specific coefficient");
-          await displaySub(
-            next,
-            <p className="flex">
-              Drag is proportional to <Formula tex="\: V^2" />
-            </p>
-          );
-          setFormula({ show: false });
-          setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
-          setShowLayout(true);
-        } else if (state.previousPath === "/aerodynamics/levelFlight") {
-          hideSubs();
-          set({ showWeight: false, mass: 0.5, speed: 1 });
-          setChart({
-            hover: false,
-            xHover: savedAngle.current,
-            locked: savedLock.current,
-          });
-          setFormula({ show: false, expand: false, rearrange: false });
-          setProfile(savedProfile.current ? savedProfile.current : profile);
-          setShowLayout(false);
-        }
-      },
-    }),
-    [pathname]
-  );
+    await wait(2000);
+    setInAnimation(true);
+    setChart({ yHover: 0.5 });
+    setChart({ hover: true, locked: "Coefficient of Drag" });
+    set({ showWeight: true });
+    await subtitle("When we want to maintain level flight");
+    setFormula({ show: true });
+    await subtitle("The forces acting in the vertical direction must be equal");
+    setFormula({ expand: true });
+    await subtitle("In order not to fall down");
+    setFormula({ rearrange: true });
+    await subtitle("We need to keep a specific coefficient");
+    await subtitle(
+      <p className="flex">
+        Drag is proportional to <Formula tex="\: V^2" />
+      </p>
+    );
+    setFormula({ show: false });
+    setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
+    setShowLayout(true);
+  };
+
+  const cleanup = () => {
+    hideSubs();
+    set({ showWeight: false, mass: 0.5, speed: 1 });
+    setChart({
+      hover: false,
+      xHover: savedAngle.current,
+      locked: savedLock.current,
+    });
+    setFormula({ show: false, expand: false, rearrange: false });
+    setProfile(savedProfile.current ? savedProfile.current : profile);
+    setShowLayout(false);
+  };
+
+  useEffect(() => {
+    if (pathname === "/aerodynamics/levelFlight") {
+      try {
+        animation();
+      } catch {}
+    } else if (state.previousPath === "/aerodynamics/levelFlight") {
+      setInAnimation(false);
+      cleanup();
+    }
+  }, [pathname]);
 
   return (
     <>
