@@ -7,9 +7,16 @@ function App() {
   const continueAnimation = useAwaitClickStore(
     (state) => state.continueAnimation
   );
+  const increaseCounter = useAwaitClickStore((state) => state.increaseCounter);
 
   return (
-    <div className="flex" onClick={() => continueAnimation()}>
+    <div
+      className="flex"
+      onClick={() => {
+        continueAnimation();
+        increaseCounter();
+      }}
+    >
       <Navigation />
       <div className="flex flex-col w-full">
         <Steps />

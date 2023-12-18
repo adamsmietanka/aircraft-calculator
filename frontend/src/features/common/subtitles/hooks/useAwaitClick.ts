@@ -23,10 +23,22 @@ const useAwaitClick = () => {
     }
   }
 
+  async function waitForClick(duration = 500) {
+    const start = useAwaitClickStore.getState().counter;
+    if (duration === 0) {
+      while (start === useAwaitClickStore.getState().counter) await timeout(50);
+    } else {
+      for (let i = 0; i < duration / 50; i++) {
+        await timeout(50);
+        if (start !== useAwaitClickStore.getState().counter) break;
+      }
+    }
+  }
+
   useEffect(() => {
     if (localWait.current && next) localNext.current = next;
   }, [next]);
-  return waitUserInput;
+  return { waitUserInput, waitForClick };
 };
 
 export default useAwaitClick;
