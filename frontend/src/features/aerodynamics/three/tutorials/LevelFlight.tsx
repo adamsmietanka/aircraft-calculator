@@ -48,18 +48,21 @@ const LevelFlight = ({ opacity, visible }: ElementProps) => {
 
   const animation = async () => {
     setChart({ hover: true, yHover: 0.5, locked: "Coefficient of Drag" });
-    set({ showWeight: true });
     await sub("When we want to maintain level flight");
-    setFormula({ show: true });
-    await sub("The forces acting in the vertical direction must be equal");
-    setFormula({ expand: true });
-    await sub("In order not to fall down");
-    setFormula({ rearrange: true });
-    await sub("We need to keep a specific coefficient");
     await sub(
-      <p className="flex">
-        Drag is proportional to <Formula tex="\: V^2" />
-      </p>
+      "The forces acting in the vertical direction must be equal",
+      () => {
+        set({ showWeight: true });
+        setFormula({ show: true });
+      }
+    );
+    await sub("In order not to fall down", () => setFormula({ expand: true }));
+    await sub(
+      <>
+        We need to keep a specific &nbsp;
+        <p className="text-primary">coefficient of lift</p>
+      </>,
+      () => setFormula({ rearrange: true })
     );
     setFormula({ show: false });
     setCamera({ center: [0, 0, 0], spherical: [20, 90, 0] });
