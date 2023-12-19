@@ -9,9 +9,7 @@ import Inputs3D from "../../../common/three/Inputs3D";
 import MassSlider from "./MassSlider";
 import SpeedSlider from "./SpeedSlider";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
-import { DoubleSide } from "three";
 import useWingScale from "../../hooks/useWingScale";
-import useSimpleWingModel from "../hooks/useSimpleWingModel";
 import AnimatedLine from "../../../common/three/AnimatedLine";
 import useInduced from "./hooks/useInduced";
 import useProfileVisualizer from "../hooks/useProfileVisualizer";
@@ -23,14 +21,13 @@ import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles"
 import useSubs from "../../../common/subtitles/hooks/useSubs";
 import InducedDragTunnel from "./InducedDragTunnel";
 import { useInducedDragStore } from "./stores/useInducedDrag";
+import InducedDragWing from "./InducedDragWing";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const InducedDrag = ({ opacity }: Props) => {
-  const { geometry, tipGeometry } = useSimpleWingModel();
-
   const profile = useWingStore((state) => state.profile);
   const reynolds = useWingStore((state) => state.reynolds);
   const setReynolds = useWingStore((state) => state.setReynolds);
@@ -71,9 +68,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const [animationSpring, animationSpringApi] = useSpring(
     () => ({
       from: {
-        wingLength: 10,
-        wingOpacity: 0,
-        wingVisible: false,
         spanVisible: false,
         spanOpacity: 0,
         streamOpacity: 0,
@@ -98,22 +92,22 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           setCamera({ center: [-5, 0, 0], spherical: [20, 80, -80] });
           await next({ delay: 500 });
-          await next({ wingVisible: true });
-          await next({ wingOpacity: 1 });
+          setInduced({ wing: true });
           await displaySub(
             next,
             "Which happen to be the same for a wing with an infinite span",
             4000
           );
           set({ showWeight: true });
-          await next({ wingLength: 0.5 });
+          setInduced({ span: 0.5 });
+          await next({ delay: 500 });
           setInduced({ tunnel: true });
           await displaySub(next, "Or one inside of a wind tunnel", 2000);
           setInduced({ tunnel: false });
           await next({ delay: 500 });
-          
+
           setCamera({ spherical: [20, 70, 40] });
-          await next({ wingLength: 1 });
+          setInduced({ span: 1 });
           await next({ streamOpacity: 3 });
           await displaySub(
             next,
@@ -312,35 +306,7 @@ const InducedDrag = ({ opacity }: Props) => {
                 </mesh>
               </animated.mesh>
             </animated.mesh>
-            <animated.mesh
-              scale-z={animationSpring.wingLength}
-              visible={animationSpring.wingVisible}
-            >
-              <mesh geometry={geometry}>
-                <animated.meshStandardMaterial
-                  color={"lightgray"}
-                  side={DoubleSide}
-                  metalness={1}
-                  transparent
-                  opacity={to(
-                    [opacity, animationSpring.wingOpacity],
-                    (o, wingOpacity) => o * wingOpacity
-                  )}
-                />
-              </mesh>
-              <mesh geometry={tipGeometry}>
-                <animated.meshStandardMaterial
-                  color={"lightgray"}
-                  side={DoubleSide}
-                  metalness={1}
-                  transparent
-                  opacity={to(
-                    [opacity, animationSpring.wingOpacity],
-                    (o, wingOpacity) => o * wingOpacity
-                  )}
-                />
-              </mesh>
-            </animated.mesh>
+            <InducedDragWing opacity={opacity} />
             <animated.mesh
               position-x={1}
               position-z={1}
