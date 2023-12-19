@@ -4,8 +4,8 @@ import useAwaitClick from "./useAwaitClick";
 
 const useSubs = () => {
   const setSub = useSubtitleStore((state) => state.setSub);
-  const show = useSubtitleStore((state) => state.show);
-  const hide = useSubtitleStore((state) => state.hide);
+  const showSub = useSubtitleStore((state) => state.show);
+  const hideSub = useSubtitleStore((state) => state.hide);
   const setInAnimation = useSubtitleStore((state) => state.setInAnimation);
 
   const presentation = useNavigationStore((state) => state.presentation);
@@ -19,16 +19,16 @@ const useSubs = () => {
   ) => {
     if (!presentation) {
       setSub(text);
-      show();
+      showSub();
       await next({ delay: duration });
-      hide();
+      hideSub();
       await next({ delay: 500 });
     } else {
       setSub(text);
       await waitUserInput();
-      show();
+      showSub();
       await waitUserInput();
-      hide();
+      hideSub();
     }
   };
 
@@ -48,44 +48,44 @@ const useSubs = () => {
   const prolongShorter = (scale: number) =>
     scale < 1 ? Math.pow(scale, 0.4) : scale;
 
-  const subtitle = async (
+  const sub = async (
     text: string | JSX.Element,
     sideEffect = () => {},
     duration = 3000
   ) => {
     if (!useSubtitleStore.getState().inAnimation) throw "done";
-    duration *= prolongShorter(subLength(text) / 60);
+    duration *= prolongShorter(subLength(text) / 100);
     if (!presentation) {
       setSub(text);
-      show();
+      showSub();
       await sideEffect();
       await waitForClick(duration);
-      hide();
+      hideSub();
       await waitForClick(750);
       if (!useSubtitleStore.getState().inAnimation) throw "done";
     } else {
       setSub(text);
       await waitForClick(0);
-      show();
+      showSub();
       await sideEffect();
       await waitForClick(0);
-      hide();
+      hideSub();
     }
   };
 
-  const showSub = async (text: string | React.ReactNode) => {
+  const show = async (text: string | React.ReactNode) => {
     if (!useSubtitleStore.getState().inAnimation) throw "done";
     setSub(text);
     presentation && (await waitUserInput());
-    show();
+    showSub();
   };
 
   return {
     displaySub,
-    hideSubs: hide,
-    showSub,
+    hide: hideSub,
+    show,
     waitForClick,
-    subtitle,
+    sub,
     setInAnimation,
   };
 };

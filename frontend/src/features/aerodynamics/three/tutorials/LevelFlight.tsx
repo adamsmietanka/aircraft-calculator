@@ -44,19 +44,19 @@ const LevelFlight = ({ opacity, visible }: ElementProps) => {
 
   const [showLayout, setShowLayout] = useState(false);
 
-  const { subtitle } = useSubs();
+  const { sub } = useSubs();
 
   const animation = async () => {
     setChart({ hover: true, yHover: 0.5, locked: "Coefficient of Drag" });
     set({ showWeight: true });
-    await subtitle("When we want to maintain level flight");
+    await sub("When we want to maintain level flight");
     setFormula({ show: true });
-    await subtitle("The forces acting in the vertical direction must be equal");
+    await sub("The forces acting in the vertical direction must be equal");
     setFormula({ expand: true });
-    await subtitle("In order not to fall down");
+    await sub("In order not to fall down");
     setFormula({ rearrange: true });
-    await subtitle("We need to keep a specific coefficient");
-    await subtitle(
+    await sub("We need to keep a specific coefficient");
+    await sub(
       <p className="flex">
         Drag is proportional to <Formula tex="\: V^2" />
       </p>
