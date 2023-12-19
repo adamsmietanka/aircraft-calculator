@@ -13,7 +13,7 @@ import { DoubleSide } from "three";
 import useWingScale from "../../hooks/useWingScale";
 import useSimpleWingModel from "../hooks/useSimpleWingModel";
 import AnimatedLine from "../../../common/three/AnimatedLine";
-import useInduced from "./useInduced";
+import useInduced from "./hooks/useInduced";
 import useProfileVisualizer from "../hooks/useProfileVisualizer";
 import VectorNew from "../../../common/three/VectorNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
