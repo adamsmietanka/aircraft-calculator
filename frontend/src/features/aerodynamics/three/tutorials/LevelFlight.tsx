@@ -71,8 +71,8 @@ const LevelFlight = ({ opacity, visible }: ElementProps) => {
     setFormula({ show: false, expand: false, rearrange: false });
     setShowLayout(false);
   };
-  
-  useAnimation(animation, cleanup, visible);
+
+  useAnimation(animation, cleanup, () => {}, visible);
 
   return (
     <>

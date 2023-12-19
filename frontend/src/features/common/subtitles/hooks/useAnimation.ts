@@ -6,6 +6,7 @@ import { useWingStore } from "../../../aerodynamics/stores/useWing";
 const useAnimation = (
   animation: () => void,
   cleanup: () => void,
+  setup: () => void,
   visible: boolean
 ) => {
   const chart = useProfileChartsStore();
@@ -19,6 +20,7 @@ const useAnimation = (
   const savedLock = useRef<string | boolean>("");
 
   const animationWrapper = async () => {
+    setup();
     await wait(1500);
     setInAnimation(true);
     try {
