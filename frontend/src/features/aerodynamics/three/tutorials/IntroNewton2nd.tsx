@@ -1,12 +1,12 @@
-import { animated, useSpring } from "@react-spring/web";
-import { useHoverProfileStore } from "../../stores/useHoverProfile";
+import { animated, easings, useSpring } from "@react-spring/web";
 import Formula from "../../../common/Formula";
+import { useNewtonStore } from "./stores/useNewton";
 
 const IntroNewton2nd = () => {
-  const show = useHoverProfileStore((state) => state.showNewton);
-  const velocity = useHoverProfileStore((state) => state.showNewtonVelocity);
-  const acceleration = useHoverProfileStore((state) => state.showNewtonAccel);
-  const force = useHoverProfileStore((state) => state.showNewtonForce);
+  const show = useNewtonStore((state) => state.show);
+  const velocity = useNewtonStore((state) => state.velocity);
+  const acceleration = useNewtonStore((state) => state.acceleration);
+  const force = useNewtonStore((state) => state.force);
 
   const [eqn] = useSpring(
     () => ({
@@ -23,40 +23,20 @@ const IntroNewton2nd = () => {
     [show]
   );
 
-  const [dV] = useSpring(
+  const [spring, api] = useSpring(
     () => ({
-      from: {},
-      to: async (next) => {
-        velocity && next({ width: "1.5rem" });
-        await next({ opacity: velocity ? 1 : 0 });
-        velocity || (await next({ width: "0rem" }));
+      fontV: velocity ? "2.25rem" : "0rem",
+      opacityV: velocity ? 1 : 0,
+      fontF: force ? "2.25rem" : "0rem",
+      opacityF: force ? 1 : 0,
+      fontA: acceleration ? "2.25rem" : "0rem",
+      opacityA: acceleration ? 1 : 0,
+      config: {
+        duration: 1000,
+        easing: easings.easeInOutQuad,
       },
     }),
-    [velocity]
-  );
-
-  const [F] = useSpring(
-    () => ({
-      from: {},
-      to: async (next) => {
-        force && next({ width: "8rem" });
-        await next({ opacity: force ? 1 : 0, delay: 250 });
-        force || (await next({ width: "0rem", delay: 250 }));
-      },
-    }),
-    [force]
-  );
-
-  const [acc] = useSpring(
-    () => ({
-      from: { marginTop: "5px" },
-      to: async (next) => {
-        acceleration && next({ width: "1.5rem" });
-        await next({ opacity: acceleration ? 1 : 0, delay: 250 });
-        acceleration || (await next({ width: "0rem", delay: 250 }));
-      },
-    }),
-    [acceleration]
+    [show, force, velocity, acceleration]
   );
 
   return (
@@ -64,9 +44,18 @@ const IntroNewton2nd = () => {
       className="fixed w-full h-full flex justify-center items-center translate-y-1/4 text-4xl"
       style={eqn}
     >
-      <Formula style={F} tex="\vec{F} = m" />
-      <Formula style={dV} tex="\frac {d \vec{V} } {dt}" />
-      <Formula style={acc} tex="\vec{a}" />
+      <Formula
+        style={{ opacity: spring.opacityF, fontSize: spring.fontF }}
+        tex="\vec{F} = m"
+      />
+      <Formula
+        style={{ opacity: spring.opacityV, fontSize: spring.fontV }}
+        tex="\vphantom {\vec{F} = m} \, \frac {d \vec{V} } {dt}"
+      />
+      <Formula
+        style={{ opacity: spring.opacityA, fontSize: spring.fontA }}
+        tex="\vphantom {\vec{F} = m} \, \vec{a}"
+      />
     </animated.div>
   );
 };
