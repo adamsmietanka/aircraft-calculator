@@ -1,6 +1,6 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { animated, to, useSpring } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import useProfileCharts from "../../hooks/useProfileCharts";
@@ -8,10 +8,7 @@ import { useCameraStore } from "../../../common/three/stores/useCamera";
 import Inputs3D from "../../../common/three/Inputs3D";
 import MassSlider from "./MassSlider";
 import SpeedSlider from "./SpeedSlider";
-import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import useWingScale from "../../hooks/useWingScale";
-import AnimatedLine from "../../../common/three/AnimatedLine";
-import useInduced from "./hooks/useInduced";
 import useProfileVisualizer from "../hooks/useProfileVisualizer";
 import Formula from "../../../common/Formula";
 import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles";
@@ -23,10 +20,10 @@ import { Props } from "../../../common/types/three";
 import InducedDragSpan from "./InducedDragSpan";
 import InducedDragForces from "./InducedDragForces";
 import InducedDragVelocities from "./InducedDragVelocities";
+import InducedDragVortex from "./InducedDragVortex";
 
 const InducedDrag = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
-  const reynolds = useWingStore((state) => state.reynolds);
   const setReynolds = useWingStore((state) => state.setReynolds);
 
   const { useProfileChartsStore } = useProfileCharts();
@@ -36,7 +33,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const setProfile = useWingStore((state) => state.setProfile);
   const set = useHoverProfileStore((state) => state.set);
   const setInduced = useInducedDragStore((state) => state.set);
-  const isWing = useInducedDragStore((state) => state.isWing);
 
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
@@ -45,8 +41,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const savedProfile = useRef("");
   const savedAngle = useRef(0);
   const savedLock = useRef<string | boolean>("");
-
-  const { maxCz } = useProfileTable(1, profile) as Row;
 
   const [showLayout, setShowLayout] = useState(false);
 
@@ -59,12 +53,8 @@ const InducedDrag = ({ opacity }: Props) => {
 
   const [animationSpring, animationSpringApi] = useSpring(
     () => ({
-      from: {
-        vortexVisible: false,
-        vortexOpacity: 0,
-        speed: 1,
-      },
-      to: async (next) => {
+      from: { debug: true },
+      to: async (next: any) => {
         if (pathname === "/aerodynamics/inducedDrag") {
           savedProfile.current = profile;
           savedAngle.current = chart.xHover;
@@ -109,8 +99,7 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           setInduced({ span: false, airstreamOpacity: 0 });
           await next({ delay: 500 });
-          await next({ vortexVisible: true });
-          await next({ vortexOpacity: 1 });
+          setInduced({ vortex: true });
           await displaySub(
             next,
             "This combined with the speed of the freeflow creates a vortex at the wingtip",
@@ -143,15 +132,14 @@ const InducedDrag = ({ opacity }: Props) => {
           await displaySub(next, "This is called downwash");
           setCamera({ center: [-5, 0, 0], spherical: [20, 90, 0] });
           await next({ delay: 500 });
-          await next({ vortexOpacity: 0 });
-          await next({ vortexVisible: false });
+          setInduced({ vortex: false });
+          await next({ delay: 500 });
           setInduced({ lift: true, direction: true });
           await displaySub(next, "In a 2D world lift is always vertical");
           setInduced({ velocities: true });
           await displaySub(next, "An airfoil produces no downwash");
           setInduced({ isWing: true });
-          await next({ vortexVisible: true });
-          await next({ vortexOpacity: 1 });
+          setInduced({ vortex: true });
           await displaySub(
             next,
             "The downwash angles the relative airflow backwards",
@@ -194,6 +182,21 @@ const InducedDrag = ({ opacity }: Props) => {
           setShowLayout(true);
         } else if (state.previousPath === "/aerodynamics/inducedDrag") {
           set({ showWeight: false, mass: 1, speed: 1, showVectors: true });
+          setInduced({
+            tunnel: false,
+            wing: false,
+            wingspan: 10,
+            span: false,
+            spanSpeed: 1,
+            airstreamOpacity: 0,
+            vortex: false,
+            isWing: false,
+            lift: false,
+            direction: false,
+            velocities: false,
+            drag: false,
+            effLift: false,
+          });
           setChart({
             hover: false,
             xHover: savedAngle.current,
@@ -207,20 +210,7 @@ const InducedDrag = ({ opacity }: Props) => {
     }),
     [pathname]
   );
-  const { vortex } = useInduced();
   const { profileSpring } = useProfileVisualizer();
-
-  const speed = reynolds / 6;
-  const spanWiseSpeed = 0.2 * chart.yHover * speed;
-  const vortexSpeed =
-    5 * Math.sqrt(spanWiseSpeed * spanWiseSpeed + 0.01 * speed * speed);
-
-  useEffect(() => {
-    if (pathname === "/aerodynamics/inducedDrag") {
-      setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
-      animationSpringApi.start({ speed });
-    }
-  }, [mass, speed, isWing, spanWiseSpeed]);
 
   return (
     <>
@@ -234,41 +224,7 @@ const InducedDrag = ({ opacity }: Props) => {
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
           <InducedDragSpan opacity={opacity} />
           <mesh position-x={-0.25}>
-            <animated.mesh
-              position-x={0.25}
-              position-z={1}
-              visible={animationSpring.vortexVisible}
-            >
-              <animated.mesh
-                scale-x={animationSpring.speed}
-                rotation-z={profileSpring.angle.to(
-                  (a) => -a - (3 * Math.PI) / 180
-                )}
-              >
-                <AnimatedLine
-                  points={vortex}
-                  style="vortex"
-                  color="grid"
-                  offset={vortexSpeed}
-                  opacity={to(
-                    [opacity, animationSpring.vortexOpacity],
-                    (opacity, vortexOpacity) => opacity * vortexOpacity
-                  )}
-                />
-                <mesh rotation-x={Math.PI}>
-                  <AnimatedLine
-                    points={vortex}
-                    style="vortex"
-                    color="grid"
-                    offset={vortexSpeed}
-                    opacity={to(
-                      [opacity, animationSpring.vortexOpacity],
-                      (opacity, vortexOpacity) => opacity * vortexOpacity
-                    )}
-                  />
-                </mesh>
-              </animated.mesh>
-            </animated.mesh>
+            <InducedDragVortex opacity={opacity} />
             <InducedDragWing opacity={opacity} />
             <InducedDragVelocities opacity={opacity} />
           </mesh>
