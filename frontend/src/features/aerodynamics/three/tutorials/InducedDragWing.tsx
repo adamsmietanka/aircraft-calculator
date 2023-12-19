@@ -7,13 +7,13 @@ import { useEffect } from "react";
 
 const InducedDragWing = ({ opacity }: Props) => {
   const show = useInducedDragStore((state) => state.wing);
-  const span = useInducedDragStore((state) => state.span);
+  const wingspan = useInducedDragStore((state) => state.wingspan);
 
   const { geom } = useSimpleWingModel();
 
   const [spring, api] = useSpring(
     () => ({
-      from: { opacity: 0, visible: false, span: 1 },
+      from: { opacity: 0, visible: false, wingspan: 1 },
       to: async (next) => {
         show && (await next({ visible: true }));
         await next({ opacity: show ? 1 : 0 });
@@ -24,13 +24,10 @@ const InducedDragWing = ({ opacity }: Props) => {
   );
 
   useEffect(() => {
-    api.start({ span });
-  }, [span]);
+    api.start({ wingspan });
+  }, [wingspan]);
   return (
-    <animated.mesh
-      visible={spring.visible}
-      scale-z={spring.span}
-    >
+    <animated.mesh visible={spring.visible} scale-z={spring.wingspan}>
       <mesh geometry={geom}>
         <animated.meshStandardMaterial
           color={"lightgray"}

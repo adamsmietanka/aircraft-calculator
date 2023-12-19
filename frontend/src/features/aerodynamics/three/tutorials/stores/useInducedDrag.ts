@@ -3,8 +3,11 @@ import { create } from "zustand";
 export interface InducedDragState {
   tunnel: boolean;
   wing: boolean;
-  span: number;
-  potential: boolean;
+  wingspan: number;
+  span: boolean;
+  spanSpeed: number;
+  airstreamOpacity: number;
+  isWing: boolean;
   speedUp: boolean;
   set: (value: Partial<InducedDragState>) => void;
 }
@@ -12,8 +15,11 @@ export interface InducedDragState {
 export const useInducedDragStore = create<InducedDragState>()((set) => ({
   tunnel: false,
   wing: false,
-  span: 10,
-  potential: true,
+  wingspan: 10,
+  span: false,
+  spanSpeed: 1,
+  airstreamOpacity: 0,
+  isWing: true,
   speedUp: false,
   set: (value) => set(value),
 }));

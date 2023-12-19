@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { SpringValue, animated, to, useSpring } from "@react-spring/three";
+import { animated, to, useSpring } from "@react-spring/three";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
 import useProfileCharts from "../../hooks/useProfileCharts";
@@ -16,16 +16,13 @@ import useProfileVisualizer from "../hooks/useProfileVisualizer";
 import VectorNew from "../../../common/three/VectorNew";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
-import ProfileAirstreams from "../ProfileAirstreams";
 import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
 import InducedDragTunnel from "./InducedDragTunnel";
 import { useInducedDragStore } from "./stores/useInducedDrag";
 import InducedDragWing from "./InducedDragWing";
-
-interface Props {
-  opacity: SpringValue<number>;
-}
+import { Props } from "../../../common/types/three";
+import InducedDragSpan from "./InducedDragSpan";
 
 const InducedDrag = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
@@ -39,6 +36,7 @@ const InducedDrag = ({ opacity }: Props) => {
   const setProfile = useWingStore((state) => state.setProfile);
   const set = useHoverProfileStore((state) => state.set);
   const setInduced = useInducedDragStore((state) => state.set);
+  const isWing = useInducedDragStore((state) => state.isWing);
 
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
@@ -54,7 +52,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const [showVelocities, setShowVelocities] = useState(false);
   const [showLift, setShowLift] = useState(false);
   const [showEffectiveLift, setShowEffectiveLift] = useState(false);
-  const [isWing, setIsWing] = useState(false);
   const [showDirection, setShowDirection] = useState(false);
   const [showDrag, setShowDrag] = useState(false);
 
@@ -68,9 +65,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const [animationSpring, animationSpringApi] = useSpring(
     () => ({
       from: {
-        spanVisible: false,
-        spanOpacity: 0,
-        streamOpacity: 0,
         vortexVisible: false,
         vortexOpacity: 0,
         speed: 1,
@@ -99,7 +93,7 @@ const InducedDrag = ({ opacity }: Props) => {
             4000
           );
           set({ showWeight: true });
-          setInduced({ span: 0.5 });
+          setInduced({ wingspan: 0.5 });
           await next({ delay: 500 });
           setInduced({ tunnel: true });
           await displaySub(next, "Or one inside of a wind tunnel", 2000);
@@ -107,21 +101,21 @@ const InducedDrag = ({ opacity }: Props) => {
           await next({ delay: 500 });
 
           setCamera({ spherical: [20, 70, 40] });
-          setInduced({ span: 1 });
-          await next({ streamOpacity: 3 });
+          setInduced({ wingspan: 1 });
+          await next({ delay: 500 });
+          setInduced({ airstreamOpacity: 3 });
           await displaySub(
             next,
             "Airflow speeds up along the upper surface creating an area of low pressure"
           );
-          await next({ spanVisible: true });
-          await next({ spanOpacity: 1 });
+          setInduced({ span: true });
           await displaySub(
             next,
             "This creates a flow from the lower wing surface to the upper around the wingtip",
             4000
           );
-          await next({ streamOpacity: 0, spanOpacity: 0 });
-          await next({ spanVisible: false });
+          setInduced({ span: false, airstreamOpacity: 0 });
+          await next({ delay: 500 });
           await next({ vortexVisible: true });
           await next({ vortexOpacity: 1 });
           await displaySub(
@@ -163,7 +157,7 @@ const InducedDrag = ({ opacity }: Props) => {
           await displaySub(next, "In a 2D world lift is always vertical");
           setShowVelocities(true);
           await displaySub(next, "An airfoil produces no downwash");
-          setIsWing(true);
+          setInduced({ isWing: true });
           await next({ vortexVisible: true });
           await next({ vortexOpacity: 1 });
           await displaySub(
@@ -221,7 +215,7 @@ const InducedDrag = ({ opacity }: Props) => {
     }),
     [pathname]
   );
-  const { spanwise, vortex } = useInduced();
+  const { vortex } = useInduced();
   const { profileSpring } = useProfileVisualizer();
 
   const speed = reynolds / 6;
@@ -252,25 +246,8 @@ const InducedDrag = ({ opacity }: Props) => {
       <mesh position-x={-8} scale={scaleProfile}>
         <InducedDragTunnel opacity={opacity} />
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
+          <InducedDragSpan opacity={opacity} />
           <mesh position-x={-0.25}>
-            <animated.mesh visible={animationSpring.spanVisible}>
-              <AnimatedLine
-                points={spanwise}
-                style="dotted"
-                color="grid"
-                offset={spanWiseSpeed}
-                opacity={to(
-                  [opacity, animationSpring.spanOpacity],
-                  (opacity, spanOpacity) => opacity * spanOpacity
-                )}
-              />
-            </animated.mesh>
-            <mesh position-z={0.95}>
-              <ProfileAirstreams
-                opacity={animationSpring.streamOpacity}
-                show={true}
-              />
-            </mesh>
             <animated.mesh
               position-x={0.25}
               position-z={1}
