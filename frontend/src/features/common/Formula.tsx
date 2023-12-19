@@ -16,6 +16,7 @@ interface Props {
     left?: string;
     right?: string;
     top?: string;
+    bottom?: string;
     marginTop?: string;
     marginRight?: string;
     display?: string;

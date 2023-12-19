@@ -9,6 +9,7 @@ import { ElementProps } from "../../../navigation/Route";
 import useAnimation from "../../../common/subtitles/hooks/useAnimation";
 import { useBernoulliStore } from "./stores/useBernoulli";
 import { useNewtonStore } from "./stores/useNewton";
+import { useMisconceptionStore } from "./stores/useMisconception";
 
 const Introduction = ({ opacity, visible }: ElementProps) => {
   const setProfile = useWingStore((state) => state.setProfile);
@@ -17,6 +18,8 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   const set = useHoverProfileStore((state) => state.set);
   const setBernoulli = useBernoulliStore((state) => state.set);
   const setNewton = useNewtonStore((state) => state.set);
+  const setMisconception = useMisconceptionStore((state) => state.set);
+
   const setChart = useProfileChartsStore((state) => state.set);
 
   const navigate = useNavigate();
@@ -200,17 +203,17 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await subtitle(
       "We assume that air particles require equal time",
       async () => {
-        set({ misconception: true });
+        setMisconception({ show: true });
+        await wait(750);
+        setMisconception({ swap: true });
         await wait(1000);
-        set({ misconceptionSwap: true });
-        await wait(1000);
-        set({ misconceptionConst: true });
+        setMisconception({ constant: true });
       },
       50
     );
     await subtitle("to travel along the upper and lower surfaces");
     await subtitle("This forces the air above to speed up", async () => {
-      set({ misconceptionBigger: true });
+      setMisconception({ bigger: true });
       await wait(1000);
     });
     await subtitle(
@@ -220,13 +223,14 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await subtitle("Speed difference → pressure difference → lift");
     await subtitle("But here is a catch");
     await subtitle("That's physically impossible", () =>
-      set({ misconceptionError: true })
+      setMisconception({ error: true })
     );
 
     await subtitle(
       "A plate would generate no lift because it's symmetrical",
       async () => {
-        set({ misconception: false, flattenOutline: false });
+        setMisconception({ show: false });
+        set({ flattenOutline: false });
         setProfile("06");
         await wait(1500);
         set({ flattenOutline: true });
@@ -293,6 +297,13 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       force: false,
       acceleration: false,
     });
+    setMisconception({
+      show: false,
+      swap: false,
+      constant: false,
+      bigger: false,
+      error: false,
+    });
     set({
       hoverA: false,
       hoverB: false,
@@ -308,11 +319,6 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       vectorSize: 1,
       showChord: true,
       showCamber: true,
-      misconception: false,
-      misconceptionSwap: false,
-      misconceptionConst: false,
-      misconceptionBigger: false,
-      misconceptionError: false,
       flattenOutline: false,
     });
   };

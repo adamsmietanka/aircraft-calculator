@@ -13,11 +13,6 @@ export interface HoverProfileState {
   moment: boolean;
   showVectors: boolean;
   flattenOutline: boolean;
-  misconception: boolean;
-  misconceptionSwap: boolean;
-  misconceptionConst: boolean;
-  misconceptionBigger: boolean;
-  misconceptionError: boolean;
   showWeight: boolean;
   hoverPlane: boolean;
   showChord: boolean;
@@ -45,11 +40,6 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   moment: false,
   showVectors: true,
   flattenOutline: false,
-  misconception: false,
-  misconceptionSwap: false,
-  misconceptionConst: false,
-  misconceptionBigger: false,
-  misconceptionError: false,
   showWeight: false,
   showChord: true,
   showCamber: true,
