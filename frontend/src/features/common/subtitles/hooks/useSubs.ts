@@ -53,7 +53,7 @@ const useSubs = () => {
     sideEffect = () => {},
     duration = 3000
   ) => {
-    if (!useSubtitleStore.getState().inAnimation) throw Error();
+    if (!useSubtitleStore.getState().inAnimation) throw "done";
     duration *= prolongShorter(subLength(text) / 60);
     if (!presentation) {
       setSub(text);
@@ -62,7 +62,7 @@ const useSubs = () => {
       await waitForClick(duration);
       hide();
       await waitForClick(750);
-      if (!useSubtitleStore.getState().inAnimation) throw Error();
+      if (!useSubtitleStore.getState().inAnimation) throw "done";
     } else {
       setSub(text);
       await waitForClick(0);

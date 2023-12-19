@@ -21,7 +21,9 @@ const useAnimation = (
   const animationWrapper = async () => {
     await wait(1500);
     setInAnimation(true);
-    animation();
+    try {
+      await animation();
+    } catch {}
   };
 
   useEffect(() => {
@@ -30,9 +32,7 @@ const useAnimation = (
       savedAngle.current = chart.xHover;
       savedLock.current = chart.locked;
 
-      try {
-        animationWrapper();
-      } catch {}
+      animationWrapper();
     } else {
       setInAnimation(false);
       hideSubs();
