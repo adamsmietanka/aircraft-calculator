@@ -7,12 +7,14 @@ import useSubs from "../../../common/subtitles/hooks/useSubs";
 import IntroductionVectors from "./IntroductionVectors";
 import { ElementProps } from "../../../navigation/Route";
 import useAnimation from "../../../common/subtitles/hooks/useAnimation";
+import { useBernoulliStore } from "./stores/useBernoulli";
 
 const Introduction = ({ opacity, visible }: ElementProps) => {
   const setProfile = useWingStore((state) => state.setProfile);
   const setReynolds = useWingStore((state) => state.setReynolds);
 
   const set = useHoverProfileStore((state) => state.set);
+  const setBernoulli = useBernoulliStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
 
   const navigate = useNavigate();
@@ -145,20 +147,21 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await subtitle("The pressure difference affects the flow around the plate");
     await subtitle("Air is actually moving faster on the top");
     await subtitle(
-      "We can explain this change using the Bernoulli's principle"
+      "We can explain this change using the Bernoulli's principle",
+      () => setBernoulli({ show: true })
     );
-    set({ showBernoulli: true });
-    await wait(500);
 
     await subtitle("The height difference is negligible");
-    set({ showBernoulliPotential: false });
-    await subtitle("so we can hide the second term");
+    await subtitle("so we can hide the second term", () =>
+      setBernoulli({ potential: false })
+    );
 
     await subtitle("Now when we decrease the pressure");
-    set({ showBernoulliDiff: true });
-
-    await subtitle("The speed will increase");
-    set({ showBernoulli: false });
+    await subtitle("The speed will increase", () =>
+      setBernoulli({ speedUp: true })
+    );
+    setBernoulli({ show: false });
+    await wait(500);
 
     await subtitle("There is another explanation using Newton's Laws");
 
@@ -307,6 +310,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   };
 
   const cleanup = () => {
+    setBernoulli({ show: false, potential: true, speedUp: false });
     set({
       hoverA: false,
       hoverB: false,
@@ -322,9 +326,6 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       vectorSize: 1,
       showChord: true,
       showCamber: true,
-      showBernoulli: false,
-      showBernoulliPotential: true,
-      showBernoulliDiff: false,
       showNewton: false,
       showNewtonVelocity: false,
       showNewtonForce: false,

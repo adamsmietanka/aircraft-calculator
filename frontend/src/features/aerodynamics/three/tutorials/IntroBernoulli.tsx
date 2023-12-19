@@ -1,16 +1,11 @@
-import { animated, useSpring } from "@react-spring/web";
-import { useEffect } from "react";
-import { useHoverProfileStore } from "../../stores/useHoverProfile";
+import { animated, easings, useSpring } from "@react-spring/web";
 import Formula from "../../../common/Formula";
+import { useBernoulliStore } from "./stores/useBernoulli";
 
 const IntroBernoulli = () => {
-  const showBernoulli = useHoverProfileStore((state) => state.showBernoulli);
-  const showBernoulliPotential = useHoverProfileStore(
-    (state) => state.showBernoulliPotential
-  );
-  const showBernoulliDiff = useHoverProfileStore(
-    (state) => state.showBernoulliDiff
-  );
+  const show = useBernoulliStore((state) => state.show);
+  const potential = useBernoulliStore((state) => state.potential);
+  const speedUp = useBernoulliStore((state) => state.speedUp);
 
   const [eqn] = useSpring(
     () => ({
@@ -19,38 +14,26 @@ const IntroBernoulli = () => {
         display: "none",
       },
       to: async (next) => {
-        showBernoulli && (await next({ display: "flex" }));
-        await next({ opacity: showBernoulli ? 1 : 0 });
-        showBernoulli || (await next({ display: "none" }));
+        show && (await next({ display: "flex" }));
+        await next({ opacity: show ? 1 : 0 });
+        show || (await next({ display: "none" }));
       },
     }),
-    [showBernoulli]
+    [show]
   );
 
-  const [potential] = useSpring(
+  const [spring, api] = useSpring(
     () => ({
-      from: {},
-      to: async (next) => {
-        showBernoulliPotential && (await next({ width: "3rem" }));
-        await next({ opacity: showBernoulliPotential ? 1 : 0 });
-        showBernoulliPotential || (await next({ width: "0rem", delay: 250 }));
+      fontPotential: potential ? "2.25rem" : "0rem",
+      opacityPotential: potential ? 1 : 0,
+      fontKinetic: speedUp ? "3rem" : "2rem",
+      fontPressure: speedUp ? "1.25rem" : "2rem",
+      config: {
+        duration: 1000,
+        easing: easings.easeInOutQuad,
       },
     }),
-    [showBernoulliPotential]
-  );
-
-  const [kinetic] = useSpring(
-    () => ({
-      fontSize: showBernoulliDiff ? "3rem" : "2rem",
-    }),
-    [showBernoulliDiff]
-  );
-
-  const [pressure] = useSpring(
-    () => ({
-      fontSize: showBernoulliDiff ? "1.25rem" : "2rem",
-    }),
-    [showBernoulliDiff]
+    [show, potential, speedUp]
   );
 
   return (
@@ -58,13 +41,21 @@ const IntroBernoulli = () => {
       className="fixed w-full h-full flex justify-center items-center translate-y-1/4 text-4xl"
       style={eqn}
     >
-      <Formula style={kinetic} tex="\frac {V^2} {2}" />
-      <Formula style={potential} tex="\: + \:" />
-      <Formula style={potential} tex="gh" />
+      <Formula style={{ fontSize: spring.fontKinetic }} tex="\frac {V^2} {2}" />
+      <Formula
+        style={{
+          fontSize: spring.fontPotential,
+          opacity: spring.opacityPotential,
+        }}
+        tex="\: + \: gh"
+      />
       <Formula tex="\: + \:" />
-      <Formula className="mt-2" style={pressure} tex="\frac {p} {\rho}" />
-      <Formula tex="\: = \:" />
-      <Formula tex="constant" />
+      <Formula
+        className="mt-2"
+        style={{ fontSize: spring.fontPressure }}
+        tex="\frac {p} {\rho}"
+      />
+      <Formula tex="\: = constant" />
     </animated.div>
   );
 };
