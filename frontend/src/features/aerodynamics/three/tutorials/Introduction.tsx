@@ -41,15 +41,16 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await wait(250);
   };
 
-  const animation = async () => {
+  const setup = () => {
     setProfile("06");
     setReynolds(6);
     set({
       showChord: true,
       showCamber: false,
     });
+  };
 
-    await wait(2000);
+  const animation = async () => {
     set({
       centerVectors: true,
       splitVectors: false,
@@ -234,8 +235,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         setProfile("06");
         await wait(1500);
         set({ flattenOutline: true });
-      },
-      50
+      }
     );
 
     await subtitle("The components of an airfoil:", () => {
@@ -323,7 +323,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     });
   };
 
-  useAnimation(animation, cleanup, visible);
+  useAnimation(animation, cleanup, setup, visible);
 
   return <IntroductionVectors opacity={opacity} />;
 };
