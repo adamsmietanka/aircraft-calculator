@@ -1,14 +1,14 @@
-import { animated, useSpring } from "@react-spring/web";
-import { useHoverProfileStore } from "../../stores/useHoverProfile";
+import { animated, easings, useSpring } from "@react-spring/web";
 import Formula from "../../../common/Formula";
 import { useEffect } from "react";
+import { useMisconceptionStore } from "./stores/useMisconception";
 
 const IntroMisconception = () => {
-  const show = useHoverProfileStore((state) => state.misconception);
-  const swap = useHoverProfileStore((state) => state.misconceptionSwap);
-  const showConst = useHoverProfileStore((state) => state.misconceptionConst);
-  const bigger = useHoverProfileStore((state) => state.misconceptionBigger);
-  const error = useHoverProfileStore((state) => state.misconceptionError);
+  const show = useMisconceptionStore((state) => state.show);
+  const swap = useMisconceptionStore((state) => state.swap);
+  const constant = useMisconceptionStore((state) => state.constant);
+  const bigger = useMisconceptionStore((state) => state.bigger);
+  const error = useMisconceptionStore((state) => state.error);
 
   const [eqn] = useSpring(
     () => ({
@@ -25,75 +25,84 @@ const IntroMisconception = () => {
     [show]
   );
 
-  const [constant] = useSpring(
-    () => ({
-      from: {
-        marginRight: "-20px",
-      },
-      to: async (next) => {
-        showConst && next({ width: "10rem" });
-        await next({ opacity: showConst ? 1 : 0 });
-        showConst || (await next({ width: "0rem" }));
-      },
-    }),
-    [showConst]
-  );
+  const initial = {
+    widthV: "32px",
+    fontV: "2.25rem",
+    leftV: "0px",
+    topV: "0px",
+    // time
+    widthT: "0px",
+    fontT: "1.5rem",
+    rightT: "25px",
+    topT: "20px",
+    // distance
+    fontD: "1.5rem",
+    rightD: "26px",
+    bottomD: "15px",
+    // constant
+    opacityC: 0,
+    fontC: "0.1rem",
+    // fraction
+    fontF: "2.25rem",
+    // cross/error
+    opacityE: 0,
+    // fontE: "0.1rem",
+    leftE: "-11px",
+    topE: "-20px",
+    delay: 1000,
+    config: {
+      duration: 1000,
+      easing: easings.easeInOutQuad,
+    },
+  };
 
-  const [cross] = useSpring(
-    () => ({
-      from: {
-        position: "absolute",
-        left: "-0.5rem",
-        top: "-1.5rem",
-      },
-      to: async (next) => {
-        error && next({ width: "10rem" });
-        await next({ opacity: error ? 1 : 0 });
-        error || (await next({ width: "0rem" }));
-      },
-    }),
-    [error]
-  );
-
-  const [V, vApi] = useSpring(
-    () => ({
-      position: "relative",
-      width: "1.5rem",
-      left: swap ? "82px" : "0px",
-      top: swap ? "20px" : "0px",
-      fontSize: swap ? "1.5rem" : "2.25rem",
-    }),
-    [swap]
-  );
+  const [spring, api] = useSpring(() => initial, [show]);
 
   useEffect(() => {
-    bigger && vApi.start({ fontSize: "2.25rem", top: "28px" });
+    swap &&
+      api.start({
+        widthV: "0px",
+        fontV: "1.5rem",
+        leftV: "64px",
+        topV: "17px",
+        // time
+        widthT: "15px",
+        fontT: "2.25rem",
+        rightT: "105px",
+        topT: "0px",
+        // distance
+        rightD: "42px",
+      });
+  }, [swap]);
+
+  useEffect(() => {
+    constant &&
+      api.start({
+        fontT: "0rem",
+        // constant
+        opacityC: 1,
+        fontC: "2.25rem",
+      });
+  }, [constant]);
+
+  useEffect(() => {
+    bigger &&
+      api.start({
+        fontV: "2.25rem",
+        leftV: "69px",
+        topV: "25px",
+        // distance
+        fontD: "2.25rem",
+        rightD: "56px",
+        bottomD: "23px",
+        // fraction
+        fontF: "3.375rem",
+      });
   }, [bigger]);
 
-  const [time, timeApi] = useSpring(
-    () => ({
-      position: "relative",
-      width: "1rem",
-      right: swap ? "105px" : "23px",
-      top: swap ? "0px" : "20px",
-      fontSize: swap ? "2.25rem" : "1.5rem",
-    }),
-    [swap]
-  );
-
   useEffect(() => {
-    showConst && timeApi.start({ fontSize: "0rem" });
-  }, [showConst]);
-
-  const [dist] = useSpring(
-    () => ({
-      position: "relative",
-      right: "40px",
-      bottom: bigger ? "23px" : "15px",
-      fontSize: bigger ? "2.25rem" : "1.5rem",
-    }),
-    [bigger]
-  );
+    error && api.start({ opacityE: 1 });
+  }, [error]);
 
   return (
     <animated.div
@@ -102,15 +111,55 @@ const IntroMisconception = () => {
     >
       <div className="relative">
         <Formula
-          style={cross}
+          className="absolute z-10"
+          style={{
+            opacity: spring.opacityE,
+            // fontSize: spring.fontE,
+            left: spring.leftE,
+            top: spring.topE,
+          }}
           tex="\cancel{\phantom {constant}} \vphantom{ = \frac {d} {t} } "
         />
       </div>
-      <Formula style={constant} tex="constant \vphantom{ = \frac {d} {t} } " />
-      <Formula style={V} tex="V \vphantom{ = \frac {d} {t} } " />
-      <Formula tex="\vphantom{ V } = \frac {\phantom d} {\phantom t}" />
-      <Formula style={time} tex="t \vphantom{ = \frac {d} {t} }" />
-      <Formula style={dist} tex="d" />
+      <Formula
+        className="relative"
+        style={{ opacity: spring.opacityC, fontSize: spring.fontC }}
+        tex="constant \vphantom{ = \frac {d} {t} } "
+      />
+      <Formula
+        className="relative"
+        style={{
+          width: spring.widthV,
+          fontSize: spring.fontV,
+          left: spring.leftV,
+          top: spring.topV,
+        }}
+        tex="V \vphantom{ = \frac {d} {t} } "
+      />
+      <Formula tex="\vphantom{ V } = \vphantom{ \frac {d} {V} }" />
+      <Formula
+        style={{ fontSize: spring.fontF }}
+        tex="\vphantom{ V =} \frac {\phantom d} {\phantom V}"
+      />
+      <Formula
+        className="relative"
+        style={{
+          width: spring.widthT,
+          fontSize: spring.fontT,
+          right: spring.rightT,
+          top: spring.topT,
+        }}
+        tex="t \vphantom{ = \frac {d} {t} }"
+      />
+      <Formula
+        className="relative"
+        style={{
+          fontSize: spring.fontD,
+          right: spring.rightD,
+          bottom: spring.bottomD,
+        }}
+        tex="d"
+      />
     </animated.div>
   );
 };
