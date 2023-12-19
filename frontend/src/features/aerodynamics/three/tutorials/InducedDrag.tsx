@@ -13,8 +13,6 @@ import useWingScale from "../../hooks/useWingScale";
 import AnimatedLine from "../../../common/three/AnimatedLine";
 import useInduced from "./hooks/useInduced";
 import useProfileVisualizer from "../hooks/useProfileVisualizer";
-import VectorNew from "../../../common/three/VectorNew";
-import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
 import Formula from "../../../common/Formula";
 import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
@@ -24,6 +22,7 @@ import InducedDragWing from "./InducedDragWing";
 import { Props } from "../../../common/types/three";
 import InducedDragSpan from "./InducedDragSpan";
 import InducedDragForces from "./InducedDragForces";
+import InducedDragVelocities from "./InducedDragVelocities";
 
 const InducedDrag = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
@@ -50,8 +49,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const { maxCz } = useProfileTable(1, profile) as Row;
 
   const [showLayout, setShowLayout] = useState(false);
-  const [showVelocities, setShowVelocities] = useState(false);
-  const [showDirection, setShowDirection] = useState(false);
 
   const { pathname, state } = useLocation();
 
@@ -66,8 +63,6 @@ const InducedDrag = ({ opacity }: Props) => {
         vortexVisible: false,
         vortexOpacity: 0,
         speed: 1,
-        epsilon: 0,
-        downwashX: 0,
       },
       to: async (next) => {
         if (pathname === "/aerodynamics/inducedDrag") {
@@ -150,10 +145,9 @@ const InducedDrag = ({ opacity }: Props) => {
           await next({ delay: 500 });
           await next({ vortexOpacity: 0 });
           await next({ vortexVisible: false });
-          setInduced({ lift: true });
-          setShowDirection(true);
+          setInduced({ lift: true, direction: true });
           await displaySub(next, "In a 2D world lift is always vertical");
-          setShowVelocities(true);
+          setInduced({ velocities: true });
           await displaySub(next, "An airfoil produces no downwash");
           setInduced({ isWing: true });
           await next({ vortexVisible: true });
@@ -224,11 +218,7 @@ const InducedDrag = ({ opacity }: Props) => {
   useEffect(() => {
     if (pathname === "/aerodynamics/inducedDrag") {
       setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
-      animationSpringApi.start({
-        speed,
-        epsilon: isWing ? Math.atan(spanWiseSpeed / speed) : 0,
-        downwashX: speed,
-      });
+      animationSpringApi.start({ speed });
     }
   }, [mass, speed, isWing, spanWiseSpeed]);
 
@@ -280,44 +270,7 @@ const InducedDrag = ({ opacity }: Props) => {
               </animated.mesh>
             </animated.mesh>
             <InducedDragWing opacity={opacity} />
-            <animated.mesh
-              position-x={1}
-              position-z={1}
-              rotation-z={profileSpring.angle.to((a) => -a)}
-            >
-              <mesh scale={1 / scaleProfile}>
-                <VectorNew
-                  x={speed / 3.5}
-                  show={showVelocities}
-                  opacity={opacity}
-                  color="primary"
-                >
-                  <HoverableFormulaSimple name="Freeflow speed" tex="V" />
-                </VectorNew>
-                <animated.mesh position-x={animationSpring.downwashX}>
-                  <VectorNew
-                    x={0}
-                    y={isWing ? -spanWiseSpeed / 3.5 : 0}
-                    show={showVelocities}
-                    opacity={opacity}
-                    color="error"
-                  >
-                    <HoverableFormulaSimple name="Downwash" tex="w" />
-                  </VectorNew>
-                </animated.mesh>
-              </mesh>
-              <animated.mesh rotation-z={animationSpring.epsilon.to((e) => -e)}>
-                <AnimatedLine
-                  points={[
-                    [-1, 0, 0.01],
-                    [1, 0, 0.01],
-                  ]}
-                  style="dotted"
-                  color="grid"
-                  opacity={opacity.to((o) => (showDirection ? o * 0.25 : 0))}
-                />
-              </animated.mesh>
-            </animated.mesh>
+            <InducedDragVelocities opacity={opacity} />
           </mesh>
         </animated.mesh>
         <InducedDragForces opacity={opacity} />
