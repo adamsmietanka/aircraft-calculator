@@ -51,11 +51,11 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     });
     setChart({ xHover: 0.01 });
     await subtitle("How do airplanes fly?");
-    setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 });
-    await subtitle("Imagine a simple rectangular plate in a strong wind");
+    await subtitle("Imagine a simple rectangular plate in a strong wind", () =>
+      setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 })
+    );
     await subtitle("There's a force acting on it");
     await subtitle("When it's parallel to the airflow that force is minimal");
-
     await subtitle(
       "When angled it quickly grows",
       async () =>
@@ -64,33 +64,38 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         ),
       50
     );
-
     await subtitle("What is the source of this force?");
-    set({ showVectors: false, keepAngle: true });
-    await wait(500);
 
-    await subtitle("Let's stop the flow for a moment", async () =>
-      setChart({ hover: false })
-    );
+    await subtitle("Let's stop the flow for a moment", async () => {
+    set({ showVectors: false, keepAngle: true });
+      setChart({ hover: false });
+    });
 
     await subtitle(
-      "Air molecules are constantly colliding and pushing on the plate"
+      "Air molecules are constantly colliding and pushing on the plate",
+      async () => set({ pressuresShow: true })
     );
-
-    set({ pressuresShow: true });
 
     await subtitle("This is pressure");
     await subtitle("Without the air flow");
-    await subtitle("The atmospheric pressure acting on our plate cancels out");
-    set({ vectorsNet: true });
-    await subtitle("Resulting in a zero net force");
+    await subtitle(
+      "The atmospheric pressure acting on our plate cancels out",
+      async () => set({ vectorsNet: true })
+    );
+    await subtitle("Resulting in a zero net force", async () =>
+      set({ pressuresShow: false })
+    );
 
     set({ vectorsNet: false });
     await wait(500);
 
     await subtitle("When we add back the flow", async () => {
       setChart({ hover: true });
-      set({ pressuresEqual: false, keepAngle: false });
+      set({
+        pressuresShow: true,
+        pressuresEqual: false,
+        keepAngle: false,
+      });
     });
     await subtitle("The exposed lower side of the plate gets more collisions");
     await subtitle("The pressure goes up");
@@ -98,19 +103,20 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await subtitle("The upper surface is shielded from the flow");
     await subtitle("So actually less particles are hitting it");
     await subtitle("The same applies to the shorter sides");
-    await wait(500);
 
+    await subtitle(
+      "The net force is the aerodynamic force we saw earlier",
+      async () => {
+    await wait(500);
     set({ vectorsNet: true });
-    await wait(500);
-
-    await subtitle("The net force is the aerodynamic force we saw earlier");
-
+        await wait(600);
     set({ pressuresShow: false });
-    await wait(200);
+        await wait(250);
     set({
       showVectors: true,
     });
-    await wait(300);
+      }
+    );
 
     await subtitle(
       "Usually the wing rotation axis is not positioned at the center"
@@ -127,13 +133,14 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       50
     );
 
-    await subtitle("so we actually need a moment to counteract it");
-    set({ moment: true, centerVectors: false });
-    await wait(500);
+    await subtitle("so we actually need a moment to counteract it", () =>
+      set({ moment: true, centerVectors: false })
+    );
 
     await subtitle("This is the pitching moment");
-    set({ moment: false });
-    await subtitle("We'll skip it for now for simplification");
+    await subtitle("We'll skip it for now for simplification", () =>
+      set({ moment: false })
+    );
 
     await subtitle("The pressure difference affects the flow around the plate");
     await subtitle("Air is actually moving faster on the top");
