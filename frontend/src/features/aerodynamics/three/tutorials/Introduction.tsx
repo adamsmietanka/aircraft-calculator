@@ -8,6 +8,7 @@ import IntroductionVectors from "./IntroductionVectors";
 import { ElementProps } from "../../../navigation/Route";
 import useAnimation from "../../../common/subtitles/hooks/useAnimation";
 import { useBernoulliStore } from "./stores/useBernoulli";
+import { useNewtonStore } from "./stores/useNewton";
 
 const Introduction = ({ opacity, visible }: ElementProps) => {
   const setProfile = useWingStore((state) => state.setProfile);
@@ -15,6 +16,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
   const set = useHoverProfileStore((state) => state.set);
   const setBernoulli = useBernoulliStore((state) => state.set);
+  const setNewton = useNewtonStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
 
   const navigate = useNavigate();
@@ -69,7 +71,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await subtitle("What is the source of this force?");
 
     await subtitle("Let's stop the flow for a moment", async () => {
-    set({ showVectors: false, keepAngle: true });
+      set({ showVectors: false, keepAngle: true });
       setChart({ hover: false });
     });
 
@@ -109,14 +111,14 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await subtitle(
       "The net force is the aerodynamic force we saw earlier",
       async () => {
-    await wait(500);
-    set({ vectorsNet: true });
+        await wait(500);
+        set({ vectorsNet: true });
         await wait(600);
-    set({ pressuresShow: false });
+        set({ pressuresShow: false });
         await wait(250);
-    set({
-      showVectors: true,
-    });
+        set({
+          showVectors: true,
+        });
       }
     );
 
@@ -164,21 +166,20 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await wait(500);
 
     await subtitle("There is another explanation using Newton's Laws");
-
-    set({ showNewton: true, showNewtonVelocity: true });
-    await subtitle("The flow changes direction because of the plate");
-
-    set({ showNewtonForce: true });
-    await subtitle("According to Newton's 2nd Law");
-    await subtitle("this requires a force acting on the flow by the plate");
-
-    set({ showNewtonVelocity: false });
-    await wait(600);
-    set({ showNewtonAccel: true });
+    await subtitle("The flow changes direction because of the plate", () =>
+      setNewton({ show: true })
+    );
+    await subtitle("According to Newton's 2nd Law", () =>
+      setNewton({ force: true })
+    );
+    await subtitle(
+      "this requires a force acting on the flow by the plate",
+      () => setNewton({ velocity: false, acceleration: true })
+    );
     await subtitle(
       "By Newton's 3rd Law we should have a force acting on the plate"
     );
-    set({ showNewton: false });
+    setNewton({ show: false });
 
     set({ splitVectors: true });
     await subtitle("We can split it into vertical and horizontal components");
@@ -311,6 +312,12 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
   const cleanup = () => {
     setBernoulli({ show: false, potential: true, speedUp: false });
+    setNewton({
+      show: false,
+      velocity: true,
+      force: false,
+      acceleration: false,
+    });
     set({
       hoverA: false,
       hoverB: false,
@@ -326,10 +333,6 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       vectorSize: 1,
       showChord: true,
       showCamber: true,
-      showNewton: false,
-      showNewtonVelocity: false,
-      showNewtonForce: false,
-      showNewtonAccel: false,
       misconception: false,
       misconceptionSwap: false,
       misconceptionConst: false,
