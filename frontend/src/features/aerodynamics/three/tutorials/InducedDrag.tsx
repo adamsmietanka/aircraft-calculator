@@ -21,6 +21,8 @@ import Formula from "../../../common/Formula";
 import ProfileAirstreams from "../ProfileAirstreams";
 import { useSubtitleStore } from "../../../common/subtitles/stores/useSubtitles";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
+import InducedDragTunnel from "./InducedDragTunnel";
+import { useInducedDragStore } from "./stores/useInducedDrag";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -39,6 +41,8 @@ const InducedDrag = ({ opacity }: Props) => {
 
   const setProfile = useWingStore((state) => state.setProfile);
   const set = useHoverProfileStore((state) => state.set);
+  const setInduced = useInducedDragStore((state) => state.set);
+
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
   const chart = useProfileChartsStore();
@@ -67,12 +71,9 @@ const InducedDrag = ({ opacity }: Props) => {
   const [animationSpring, animationSpringApi] = useSpring(
     () => ({
       from: {
-        debug: true,
         wingLength: 10,
         wingOpacity: 0,
         wingVisible: false,
-        tunnelVisible: false,
-        tunnelOpacity: 0,
         spanVisible: false,
         spanOpacity: 0,
         streamOpacity: 0,
@@ -106,11 +107,11 @@ const InducedDrag = ({ opacity }: Props) => {
           );
           set({ showWeight: true });
           await next({ wingLength: 0.5 });
-          await next({ tunnelVisible: true });
-          await next({ tunnelOpacity: 0.5 });
+          setInduced({ tunnel: true });
           await displaySub(next, "Or one inside of a wind tunnel", 2000);
-          await next({ tunnelOpacity: 0 });
-          await next({ tunnelVisible: false });
+          setInduced({ tunnel: false });
+          await next({ delay: 500 });
+          
           setCamera({ spherical: [20, 70, 40] });
           await next({ wingLength: 1 });
           await next({ streamOpacity: 3 });
@@ -255,25 +256,9 @@ const InducedDrag = ({ opacity }: Props) => {
       </Inputs3D>
       <spotLight position={[-15, -2, 20]} intensity={0.3} />
       <mesh position-x={-8} scale={scaleProfile}>
+        <InducedDragTunnel opacity={opacity} />
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
           <mesh position-x={-0.25}>
-            <animated.mesh
-              position-x={0.4}
-              rotation-z={Math.PI / 2}
-              visible={animationSpring.tunnelVisible}
-            >
-              <cylinderGeometry args={[0.5, 0.5, 1.1, 32, 1, true]} />
-              <animated.meshStandardMaterial
-                color={"lightgray"}
-                side={DoubleSide}
-                metalness={1}
-                transparent
-                opacity={to(
-                  [opacity, animationSpring.tunnelOpacity],
-                  (o, tunnelOpacity) => o * tunnelOpacity
-                )}
-              />
-            </animated.mesh>
             <animated.mesh visible={animationSpring.spanVisible}>
               <AnimatedLine
                 points={spanwise}
