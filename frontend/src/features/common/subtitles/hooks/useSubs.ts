@@ -74,6 +74,7 @@ const useSubs = () => {
   };
 
   const showSub = async (text: string | React.ReactNode) => {
+    if (!useSubtitleStore.getState().inAnimation) throw "done";
     setSub(text);
     presentation && (await waitUserInput());
     show();
