@@ -135,7 +135,6 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
       wing: false,
       wingspan: 10,
       span: false,
-      spanSpeed: 1,
       airstreamOpacity: 0,
       vortex: false,
       isWing: false,
@@ -171,8 +170,8 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
       <mesh position-x={-8} scale={scaleProfile}>
         <InducedDragTunnel opacity={opacity} />
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
-          <InducedDragSpan opacity={opacity} />
           <mesh position-x={-0.25}>
+            <InducedDragSpan opacity={opacity} />
             <InducedDragVortex opacity={opacity} />
             <InducedDragWing opacity={opacity} />
             <InducedDragVelocities opacity={opacity} />

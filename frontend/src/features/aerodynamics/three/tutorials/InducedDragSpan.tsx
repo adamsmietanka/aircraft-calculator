@@ -12,14 +12,13 @@ import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import useInduced from "./hooks/useInduced";
 
 const InducedDragSpan = ({ opacity }: Props) => {
-  const setInduced = useInducedDragStore((state) => state.set);
   const show = useInducedDragStore((state) => state.span);
   const airstreamOpacity = useInducedDragStore(
     (state) => state.airstreamOpacity
   );
   const profile = useWingStore((state) => state.profile);
   const { maxCz } = useProfileTable(1, profile) as Row;
-  const { spanwise, vortex } = useInduced();
+  const { spanwise } = useInduced();
 
   const reynolds = useWingStore((state) => state.reynolds);
   const { pathname } = useLocation();
@@ -29,18 +28,10 @@ const InducedDragSpan = ({ opacity }: Props) => {
 
   const speed = reynolds / 6;
   const spanWiseSpeed = 0.2 * chart.yHover * speed;
-  const vortexSpeed =
-    5 * Math.sqrt(spanWiseSpeed * spanWiseSpeed + 0.01 * speed * speed);
 
   useEffect(() => {
     if (pathname === "/aerodynamics/inducedDrag") {
       setChart({ yHover: Math.min(maxCz, mass / (speed * speed)) });
-      setInduced({ spanSpeed: 0.2 * chart.yHover * speed });
-      // animationSpringApi.start({
-      //   speed,
-      //   epsilon: isWing ? Math.atan(spanWiseSpeed / speed) : 0,
-      //   downwashX: speed,
-      // });
     }
   }, [mass, speed, spanWiseSpeed]);
 
@@ -60,7 +51,7 @@ const InducedDragSpan = ({ opacity }: Props) => {
     api.start({ airstreamOpacity });
   }, [airstreamOpacity]);
   return (
-    <mesh position-x={-0.25}>
+    <>
       <animated.mesh visible={spring.visible}>
         <AnimatedLine
           points={spanwise}
@@ -73,7 +64,7 @@ const InducedDragSpan = ({ opacity }: Props) => {
       <mesh position-z={0.95}>
         <ProfileAirstreams opacity={spring.airstreamOpacity} show={true} />
       </mesh>
-    </mesh>
+    </>
   );
 };
 
