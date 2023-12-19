@@ -7,8 +7,11 @@ export interface InducedDragState {
   span: boolean;
   spanSpeed: number;
   airstreamOpacity: number;
+  vortex: boolean;
   isWing: boolean;
-  speedUp: boolean;
+  lift: boolean;
+  drag: boolean;
+  effLift: boolean;
   set: (value: Partial<InducedDragState>) => void;
 }
 
@@ -19,7 +22,10 @@ export const useInducedDragStore = create<InducedDragState>()((set) => ({
   span: false,
   spanSpeed: 1,
   airstreamOpacity: 0,
+  vortex: false,
   isWing: true,
-  speedUp: false,
+  lift: false,
+  drag: false,
+  effLift: false,
   set: (value) => set(value),
 }));

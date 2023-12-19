@@ -23,6 +23,7 @@ import { useInducedDragStore } from "./stores/useInducedDrag";
 import InducedDragWing from "./InducedDragWing";
 import { Props } from "../../../common/types/three";
 import InducedDragSpan from "./InducedDragSpan";
+import InducedDragForces from "./InducedDragForces";
 
 const InducedDrag = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
@@ -50,10 +51,7 @@ const InducedDrag = ({ opacity }: Props) => {
 
   const [showLayout, setShowLayout] = useState(false);
   const [showVelocities, setShowVelocities] = useState(false);
-  const [showLift, setShowLift] = useState(false);
-  const [showEffectiveLift, setShowEffectiveLift] = useState(false);
   const [showDirection, setShowDirection] = useState(false);
-  const [showDrag, setShowDrag] = useState(false);
 
   const { pathname, state } = useLocation();
 
@@ -152,7 +150,7 @@ const InducedDrag = ({ opacity }: Props) => {
           await next({ delay: 500 });
           await next({ vortexOpacity: 0 });
           await next({ vortexVisible: false });
-          setShowLift(true);
+          setInduced({ lift: true });
           setShowDirection(true);
           await displaySub(next, "In a 2D world lift is always vertical");
           setShowVelocities(true);
@@ -166,7 +164,7 @@ const InducedDrag = ({ opacity }: Props) => {
             4000
           );
           await displaySub(next, "Lift is always perpendicular to the airflow");
-          setShowDrag(true);
+          setInduced({ drag: true });
           await displaySub(
             next,
             <p className="flex">
@@ -183,7 +181,7 @@ const InducedDrag = ({ opacity }: Props) => {
             </p>,
             4000
           );
-          setShowEffectiveLift(true);
+          setInduced({ effLift: true });
           await displaySub(
             next,
             <p className="flex">
@@ -222,8 +220,6 @@ const InducedDrag = ({ opacity }: Props) => {
   const spanWiseSpeed = 0.2 * chart.yHover * speed;
   const vortexSpeed =
     5 * Math.sqrt(spanWiseSpeed * spanWiseSpeed + 0.01 * speed * speed);
-  const downWashAngle = Math.atan(spanWiseSpeed / speed);
-  const lift = chart.yHover * speed * speed * 1.25;
 
   useEffect(() => {
     if (pathname === "/aerodynamics/inducedDrag") {
@@ -324,35 +320,7 @@ const InducedDrag = ({ opacity }: Props) => {
             </animated.mesh>
           </mesh>
         </animated.mesh>
-        <mesh scale={1 / scaleProfile} position-x={0.25} position-z={1}>
-          <VectorNew
-            x={isWing ? lift * Math.sin(downWashAngle) : 0}
-            y={isWing ? lift * Math.cos(downWashAngle) : lift}
-            show={showLift}
-            opacity={opacity}
-            color="primary"
-          >
-            <HoverableFormulaSimple name="Lift" tex="L" />
-          </VectorNew>
-          <VectorNew
-            x={lift * Math.sin(downWashAngle)}
-            show={showDrag}
-            opacity={opacity}
-            color="error"
-          >
-            <HoverableFormulaSimple name="Induced Drag" tex="D_i" />
-          </VectorNew>
-          <VectorNew
-            y={lift * Math.cos(downWashAngle)}
-            show={showEffectiveLift}
-            opacity={opacity}
-            color="secondary"
-          >
-            <div className="mr-16 mt-10">
-              <HoverableFormulaSimple name="Effective Lift" tex="L_{eff}" />
-            </div>
-          </VectorNew>
-        </mesh>
+        <InducedDragForces opacity={opacity} />
       </mesh>
     </>
   );
