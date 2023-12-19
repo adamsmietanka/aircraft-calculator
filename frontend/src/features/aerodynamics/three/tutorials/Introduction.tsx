@@ -24,7 +24,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
   const navigate = useNavigate();
 
-  const { subtitle, waitForClick: wait, showSub, hideSubs } = useSubs();
+  const { sub, waitForClick: wait, show, hide } = useSubs();
 
   const showDimension = async (profiles: string[]) => {
     for (const p of profiles) {
@@ -58,13 +58,13 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       vectorSize: 1.5,
     });
     setChart({ xHover: 0.01 });
-    await subtitle("How do airplanes fly?");
-    await subtitle("Imagine a simple rectangular plate in a strong wind", () =>
+    await sub("How do airplanes fly?");
+    await sub("Imagine a simple rectangular plate in a strong wind", () =>
       setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 })
     );
-    await subtitle("There's a force acting on it");
-    await subtitle("When it's parallel to the airflow that force is minimal");
-    await subtitle(
+    await sub("There's a force acting on it");
+    await sub("When it's parallel to the airflow that force is minimal");
+    await sub(
       "When angled it quickly grows",
       async () =>
         await setAngles(
@@ -72,32 +72,32 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         ),
       50
     );
-    await subtitle("What is the source of this force?");
+    await sub("What is the source of this force?");
 
-    await subtitle("Let's stop the flow for a moment", async () => {
+    await sub("Let's stop the flow for a moment", async () => {
       set({ showVectors: false, keepAngle: true });
       setChart({ hover: false });
     });
 
-    await subtitle(
+    await sub(
       "Air molecules are constantly colliding and pushing on the plate",
       async () => set({ pressuresShow: true })
     );
 
-    await subtitle("This is pressure");
-    await subtitle("Without the air flow");
-    await subtitle(
+    await sub("This is pressure");
+    await sub("Without the air flow");
+    await sub(
       "The atmospheric pressure acting on our plate cancels out",
       async () => set({ vectorsNet: true })
     );
-    await subtitle("Resulting in a zero net force", async () =>
+    await sub("Resulting in a zero net force", async () =>
       set({ pressuresShow: false })
     );
 
     set({ vectorsNet: false });
     await wait(500);
 
-    await subtitle("When we add back the flow", async () => {
+    await sub("When we add back the flow", async () => {
       setChart({ hover: true });
       set({
         pressuresShow: true,
@@ -105,14 +105,14 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         keepAngle: false,
       });
     });
-    await subtitle("The exposed lower side of the plate gets more collisions");
-    await subtitle("The pressure goes up");
+    await sub("The exposed lower side of the plate gets more collisions");
+    await sub("The pressure goes up");
 
-    await subtitle("The upper surface is shielded from the flow");
-    await subtitle("So actually less particles are hitting it");
-    await subtitle("The same applies to the shorter sides");
+    await sub("The upper surface is shielded from the flow");
+    await sub("So actually less particles are hitting it");
+    await sub("The same applies to the shorter sides");
 
-    await subtitle(
+    await sub(
       "The net force is the aerodynamic force we saw earlier",
       async () => {
         await wait(500);
@@ -126,12 +126,10 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       }
     );
 
-    await subtitle(
-      "Usually the wing rotation axis is not positioned at the center"
-    );
-    await subtitle("but at 25% of length");
+    await sub("Usually the wing rotation axis is not positioned at the center");
+    await sub("but at 25% of length");
 
-    await subtitle(
+    await sub(
       "However this will create a torque and spin our plate",
       async () => {
         await wait(500);
@@ -141,67 +139,61 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       50
     );
 
-    await subtitle("so we actually need a moment to counteract it", () =>
+    await sub("so we actually need a moment to counteract it", () =>
       set({ moment: true, centerVectors: false })
     );
 
-    await subtitle("This is the pitching moment");
-    await subtitle("We'll skip it for now for simplification", () =>
+    await sub("This is the pitching moment");
+    await sub("We'll skip it for now for simplification", () =>
       set({ moment: false })
     );
 
-    await subtitle("The pressure difference affects the flow around the plate");
-    await subtitle("Air is actually moving faster on the top");
-    await subtitle(
+    await sub("The pressure difference affects the flow around the plate");
+    await sub("Air is actually moving faster on the top");
+    await sub(
       "We can explain this change using the Bernoulli's principle",
       () => setBernoulli({ show: true })
     );
 
-    await subtitle("The height difference is negligible");
-    await subtitle("so we can hide the second term", () =>
+    await sub("The height difference is negligible");
+    await sub("so we can hide the second term", () =>
       setBernoulli({ potential: false })
     );
 
-    await subtitle("Now when we decrease the pressure");
-    await subtitle("The speed will increase", () =>
-      setBernoulli({ speedUp: true })
-    );
+    await sub("Now when we decrease the pressure");
+    await sub("The speed will increase", () => setBernoulli({ speedUp: true }));
     setBernoulli({ show: false });
     await wait(500);
 
-    await subtitle("There is another explanation using Newton's Laws");
-    await subtitle("The flow changes direction because of the plate", () =>
+    await sub("There is another explanation using Newton's Laws");
+    await sub("The flow changes direction because of the plate", () =>
       setNewton({ show: true })
     );
-    await subtitle("According to Newton's 2nd Law", () =>
+    await sub("According to Newton's 2nd Law", () =>
       setNewton({ force: true })
     );
-    await subtitle(
-      "this requires a force acting on the flow by the plate",
-      () => setNewton({ velocity: false, acceleration: true })
+    await sub("this requires a force acting on the flow by the plate", () =>
+      setNewton({ velocity: false, acceleration: true })
     );
     setNewton({ show: false });
-    await subtitle(
-      "By Newton's 3rd Law we should have a force acting on the plate"
-    );
-    await subtitle(
-      "We can split it into vertical and horizontal components",
-      () => set({ splitVectors: true })
+    await sub("By Newton's 3rd Law we should have a force acting on the plate");
+    await sub("We can split it into vertical and horizontal components", () =>
+      set({ splitVectors: true })
     );
 
-    await subtitle("Even a simple plate can produce lift");
-    await subtitle("But the drag is very high");
-    await subtitle("There are however better shapes");
-    await subtitle("Like this aerodynamic profile", () => setProfile("2412"));
-    await subtitle("It produces so much less drag");
-    await subtitle("that we have to scale it 10x", () =>
+    await sub("Even a simple plate can produce lift");
+    await sub("But the drag is very high");
+    await sub("There are however better shapes");
+    await sub("Like this aerodynamic profile", () => setProfile("2412"));
+    await sub("It produces so much less drag");
+    await sub("that we have to scale it 10x", () =>
       set({ dragMultiplier: 10 })
     );
 
-    await subtitle("There is a common misconception regarding lift", () =>
+    await sub("There is a common misconception regarding lift", () =>
       setChart({ hover: false, locked: "" })
     );
-    await subtitle(
+    await sub(
       "We assume that air particles require equal time",
       async () => {
         setMisconception({ show: true });
@@ -212,22 +204,21 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       },
       50
     );
-    await subtitle("to travel along the upper and lower surfaces");
-    await subtitle("This forces the air above to speed up", async () => {
+    await sub("to travel along the upper and lower surfaces");
+    await sub("This forces the air above to speed up", async () => {
       setMisconception({ bigger: true });
       await wait(1000);
     });
-    await subtitle(
-      "because it has a longer way to go along the upper side",
-      () => set({ flattenOutline: true })
+    await sub("because it has a longer way to go along the upper side", () =>
+      set({ flattenOutline: true })
     );
-    await subtitle("Speed difference → pressure difference → lift");
-    await subtitle("But here is a catch");
-    await subtitle("That's physically impossible", () =>
+    await sub("Speed difference → pressure difference → lift");
+    await sub("But here is a catch");
+    await sub("That's physically impossible", () =>
       setMisconception({ error: true })
     );
 
-    await subtitle(
+    await sub(
       "A plate would generate no lift because it's symmetrical",
       async () => {
         setMisconception({ show: false });
@@ -238,49 +229,49 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       }
     );
 
-    await subtitle("The components of an airfoil:", () => {
+    await sub("The components of an airfoil:", () => {
       set({ flattenOutline: false, showChord: false });
       setProfile("2412");
     });
-    await subtitle(<p className="text-primary">outline</p>);
-    await subtitle(<p className="text-base-content">chord line</p>, () =>
+    await sub(<p className="text-primary">outline</p>);
+    await sub(<p className="text-base-content">chord line</p>, () =>
       set({ showChord: true })
     );
-    await subtitle(<p className="text-secondary">camber line</p>, () =>
+    await sub(<p className="text-secondary">camber line</p>, () =>
       set({ showCamber: true })
     );
-    await subtitle(
+    await sub(
       <>
         it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
       </>
     );
-    await subtitle("It belongs to the NACA 4-digit series family");
-    await subtitle("This name is a simple mathematical relation", () =>
+    await sub("It belongs to the NACA 4-digit series family");
+    await sub("This name is a simple mathematical relation", () =>
       set({ hoverPlane: true })
     );
     set({ hoverA: true });
     await wait(750);
-    await showSub("max camber");
+    await show("max camber");
     await showDimension(["1412", "2412", "3412", "4412", "5412", "4412"]);
     set({ hoverA: false });
-    hideSubs();
+    hide();
     await wait(1000);
 
     set({ hoverB: true });
     await wait(750);
-    await showSub("position of max camber");
+    await show("position of max camber");
     await showDimension(["4312", "4412", "4512", "4612", "4512", "4412"]);
     set({ hoverB: false });
-    hideSubs();
+    hide();
     await wait(1000);
 
     set({ hoverC: true });
     await wait(750);
-    await showSub("position of max camber");
+    await show("position of max camber");
     await showDimension(["4415", "4418", "4421", "4424", "4412"]);
-    await subtitle("The max thickness is at 30% of chord");
+    await sub("The max thickness is at 30% of chord");
     set({ hoverC: false });
-    hideSubs();
+    hide();
     await wait(1000);
 
     set({ hoverPlane: false, vectorSize: 1 });

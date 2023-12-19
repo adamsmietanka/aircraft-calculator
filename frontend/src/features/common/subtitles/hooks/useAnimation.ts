@@ -11,7 +11,7 @@ const useAnimation = (
 ) => {
   const chart = useProfileChartsStore();
   const profile = useWingStore((state) => state.profile);
-  const { hideSubs, waitForClick: wait, subtitle, setInAnimation } = useSubs();
+  const { hide, waitForClick: wait, setInAnimation } = useSubs();
   const setChart = useProfileChartsStore((state) => state.set);
   const setProfile = useWingStore((state) => state.setProfile);
 
@@ -37,7 +37,7 @@ const useAnimation = (
       animationWrapper();
     } else {
       setInAnimation(false);
-      hideSubs();
+      hide();
       cleanup();
       setChart({
         hover: false,
