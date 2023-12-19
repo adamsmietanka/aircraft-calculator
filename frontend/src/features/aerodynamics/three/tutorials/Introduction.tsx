@@ -21,7 +21,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
   const navigate = useNavigate();
 
-  const { subtitle, waitForClick: wait } = useSubs();
+  const { subtitle, waitForClick: wait, showSub, hideSubs } = useSubs();
 
   const showDimension = async (profiles: string[]) => {
     for (const p of profiles) {
@@ -176,133 +176,108 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       "this requires a force acting on the flow by the plate",
       () => setNewton({ velocity: false, acceleration: true })
     );
+    setNewton({ show: false });
     await subtitle(
       "By Newton's 3rd Law we should have a force acting on the plate"
     );
-    setNewton({ show: false });
-
-    set({ splitVectors: true });
-    await subtitle("We can split it into vertical and horizontal components");
+    await subtitle(
+      "We can split it into vertical and horizontal components",
+      () => set({ splitVectors: true })
+    );
 
     await subtitle("Even a simple plate can produce lift");
+    await subtitle("But the drag is very high");
     await subtitle("There are however better shapes");
-
-    setProfile("2412");
-    await subtitle("Like this aerodynamic profile");
+    await subtitle("Like this aerodynamic profile", () => setProfile("2412"));
     await subtitle("It produces so much less drag");
+    await subtitle("that we have to scale it 10x", () =>
+      set({ dragMultiplier: 10 })
+    );
 
-    set({ dragMultiplier: 10 });
-    await subtitle("that we have to scale it 10x");
-
-    setChart({ hover: false, locked: "" });
-
-    // MISCONCEPTION
-    await subtitle("There is a common misconception regarding lift");
-
+    await subtitle("There is a common misconception regarding lift", () =>
+      setChart({ hover: false, locked: "" })
+    );
     await subtitle(
       "We assume that air particles require equal time",
       async () => {
         set({ misconception: true });
-        await wait(2500);
+        await wait(1000);
         set({ misconceptionSwap: true });
-        await wait(500);
+        await wait(1000);
+        set({ misconceptionConst: true });
+      },
+      50
+    );
+    await subtitle("to travel along the upper and lower surfaces");
+    await subtitle("This forces the air above to speed up", async () => {
+      set({ misconceptionBigger: true });
+      await wait(1000);
+    });
+    await subtitle(
+      "because it has a longer way to go along the upper side",
+      () => set({ flattenOutline: true })
+    );
+    await subtitle("Speed difference → pressure difference → lift");
+    await subtitle("But here is a catch");
+    await subtitle("That's physically impossible", () =>
+      set({ misconceptionError: true })
+    );
+
+    await subtitle(
+      "A plate would generate no lift because it's symmetrical",
+      async () => {
+        set({ misconception: false, flattenOutline: false });
+        setProfile("06");
+        await wait(1500);
+        set({ flattenOutline: true });
       },
       50
     );
 
-    await subtitle("to travel along the upper and lower surfaces");
-
-    set({ misconceptionConst: true });
-    await wait(500);
-
-    await subtitle("This forces the air above to speed up");
-    set({ misconceptionBigger: true });
-    await wait(500);
-    set({ flattenOutline: true });
-
-    await subtitle("because it has a longer way to go along the upper side");
-
-    await subtitle("Speed difference → pressure difference → lift");
-
-    await subtitle("But here is a catch");
-    set({ misconceptionError: true });
-    await wait(1000);
-
-    await subtitle("That's physically impossible");
-
-    set({ misconception: false, flattenOutline: false });
-    await wait(1000);
-    setProfile("06");
-    await wait(500);
-    set({ flattenOutline: true });
-    await subtitle("A plate would generate no lift because it's symmetrical");
-    set({ flattenOutline: false });
-
-    setProfile("2412");
-    set({
-      misconceptionSwap: false,
-      misconceptionConst: false,
-      misconceptionBigger: false,
-      misconceptionError: false,
+    await subtitle("The components of an airfoil:", () => {
+      set({ flattenOutline: false, showChord: false });
+      setProfile("2412");
     });
-
-    set({ showChord: false });
-    await subtitle("The components of an airfoil:");
-
     await subtitle(<p className="text-primary">outline</p>);
-
-    await subtitle(<p className="text-base-content">chord line</p>, async () =>
+    await subtitle(<p className="text-base-content">chord line</p>, () =>
       set({ showChord: true })
     );
-
-    await subtitle(<p className="text-secondary">camber line</p>, async () =>
+    await subtitle(<p className="text-secondary">camber line</p>, () =>
       set({ showCamber: true })
     );
-
     await subtitle(
       <>
         it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
       </>
     );
     await subtitle("It belongs to the NACA 4-digit series family");
-    await subtitle("This name is a simple mathematical relation");
-
-    set({ hoverPlane: true });
-    await subtitle(
-      "max camber",
-      async () => {
-        set({ hoverA: true });
-        await wait(750);
-        await showDimension(["1412", "2412", "3412", "4412", "5412", "4412"]);
-        set({ hoverA: false });
-      },
-      50
+    await subtitle("This name is a simple mathematical relation", () =>
+      set({ hoverPlane: true })
     );
+    set({ hoverA: true });
+    await wait(750);
+    await showSub("max camber");
+    await showDimension(["1412", "2412", "3412", "4412", "5412", "4412"]);
+    set({ hoverA: false });
+    hideSubs();
+    await wait(1000);
 
-    await subtitle(
-      "position of max camber",
-      async () => {
-        set({ hoverB: true });
-        await wait(750);
-        await showDimension(["4312", "4412", "4512", "4612", "4512", "4412"]);
-        set({ hoverB: false });
-      },
-      50
-    );
+    set({ hoverB: true });
+    await wait(750);
+    await showSub("position of max camber");
+    await showDimension(["4312", "4412", "4512", "4612", "4512", "4412"]);
+    set({ hoverB: false });
+    hideSubs();
+    await wait(1000);
 
-    await subtitle(
-      "max thickness",
-      async () => {
-        set({ hoverC: true });
-        await wait(750);
-        await showDimension(["4415", "4418", "4421", "4424", "4412"]);
-        set({ hoverC: false });
-      },
-      50
-    );
-
+    set({ hoverC: true });
+    await wait(750);
+    await showSub("position of max camber");
+    await showDimension(["4415", "4418", "4421", "4424", "4412"]);
     await subtitle("The max thickness is at 30% of chord");
     set({ hoverC: false });
+    hideSubs();
+    await wait(1000);
 
     set({ hoverPlane: false, vectorSize: 1 });
     await wait(500);
