@@ -1,17 +1,24 @@
 import { SpringValue, animated } from "@react-spring/three";
-import { CANVAS_WIDTH, useCSSColors } from "../../common/three/config";
-import { Text } from "@react-three/drei";
+import { CANVAS_WIDTH } from "../../common/three/config";
 import AnimatedLine from "./AnimatedLine";
+import { StoreApi, UseBoundStore } from "zustand";
+import {
+  MarkersStore,
+  SimpleMarkerStore,
+  SynchronizedXMarkersStore,
+} from "./Hover";
+import AnimatedHtml from "./AnimatedHtml";
 
 interface Props {
   gridPositionX: number;
   items: Array<Record<string, string>>;
   opacity: SpringValue<number>;
+  store?: UseBoundStore<
+    StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
+  >;
 }
 
-const Legend = ({ gridPositionX, items, opacity }: Props) => {
-  const { gridColor } = useCSSColors();
-  const AnimatedText = animated(Text);
+const Legend = ({ gridPositionX, items, opacity, store }: Props) => {
   return (
     <animated.mesh
       position-x={(gridPositionX * CANVAS_WIDTH) / 2}
@@ -28,15 +35,16 @@ const Legend = ({ gridPositionX, items, opacity }: Props) => {
             color={i.color}
             opacity={opacity}
           />
-          <AnimatedText
-            fontSize={0.4}
-            position={[1, -index, 0]}
-            anchorX="left"
-            color={gridColor}
-            fillOpacity={opacity}
-          >
-            {i.name}
-          </AnimatedText>
+          <AnimatedHtml position={[2, -index, 0]} className="w-20">
+            <div
+              className={`${store && "cursor-pointer"} ${
+                i.name === store?.getState().legend && "font-bold"
+              }`}
+              onClick={() => store && store.setState({ legend: i.name })}
+            >
+              {i.name}
+            </div>
+          </AnimatedHtml>
         </mesh>
       ))}
     </animated.mesh>
