@@ -9,7 +9,7 @@ import { Mesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 
 type Props = {
-  position?: Interpolation<number[]>;
+  position?: Interpolation<number[]> | [x: number, y: number, z: number];
   "position-x"?: Interpolation<number> | number;
   "position-y"?: Interpolation<number> | SpringValue<number> | number;
   "rotation-z"?: Interpolation<number> | SpringValue<number> | number;
@@ -74,7 +74,7 @@ const AnimatedHtml = ({
     <animated.mesh {...rest} ref={htmlRef}>
       <mesh ref={childRef}>
         <Anim className={`select-none ${className}`} style={props} transform>
-          <div>{children}</div>
+          {children}
         </Anim>
       </mesh>
     </animated.mesh>

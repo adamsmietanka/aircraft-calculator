@@ -12,6 +12,7 @@ export interface SimpleMarkerStore {
   y: number;
   hover: boolean;
   locked: boolean;
+  legend?: string;
   set: (value: Partial<SimpleMarkerStore>) => void;
 }
 
@@ -20,6 +21,7 @@ export interface SynchronizedXMarkersStore {
   y: number | Record<string, number>;
   hover: boolean;
   locked: boolean;
+  legend?: string;
   set: (value: Partial<SynchronizedXMarkersStore>) => void;
 }
 
@@ -30,6 +32,7 @@ export interface MarkersStore {
   yHover: number;
   hover: boolean;
   locked: string | boolean;
+  legend?: string;
   set: (value: Partial<MarkersStore>) => void;
 }
 
