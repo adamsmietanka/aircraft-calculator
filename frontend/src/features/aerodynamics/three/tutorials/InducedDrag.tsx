@@ -22,6 +22,7 @@ import InducedDragVelocities from "./InducedDragVelocities";
 import InducedDragVortex from "./InducedDragVortex";
 import useAnimation from "../../../common/subtitles/hooks/useAnimation";
 import { ElementProps } from "../../../navigation/Route";
+import InducedDragSigns from "./InducedDragSigns";
 
 const InducedDrag = ({ opacity, visible }: ElementProps) => {
   const setReynolds = useWingStore((state) => state.setReynolds);
@@ -57,15 +58,19 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
     setCamera({ spherical: [20, 70, 40] });
     setInduced({ wingspan: 1 });
     await wait(500);
-    setInduced({ airstreamOpacity: 3 });
     await sub(
-      "Airflow speeds up along the upper surface creating an area of low pressure"
+      "Airflow speeds up along the upper surface creating an area of low pressure",
+      () => {
+        setInduced({ airstreamOpacity: 2, signs: true });
+      }
     );
-    setInduced({ span: true });
     await sub(
-      "This creates a flow from the lower wing surface to the upper around the wingtip"
+      "This creates a flow from the lower wing surface to the upper around the wingtip",
+      () => {
+        setInduced({ span: true, moveSigns: true });
+      }
     );
-    setInduced({ span: false, airstreamOpacity: 0 });
+    setInduced({ span: false, signs: false, airstreamOpacity: 0 });
     await wait(500);
     setInduced({ vortex: true });
     await sub(
@@ -172,6 +177,7 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
         <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
           <mesh position-x={-0.25}>
             <InducedDragSpan opacity={opacity} />
+            <InducedDragSigns opacity={opacity} />
             <InducedDragVortex opacity={opacity} />
             <InducedDragWing opacity={opacity} />
             <InducedDragVelocities opacity={opacity} />
