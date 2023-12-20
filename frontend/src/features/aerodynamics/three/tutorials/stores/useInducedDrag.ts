@@ -5,6 +5,8 @@ export interface InducedDragState {
   wing: boolean;
   wingspan: number;
   span: boolean;
+  signs: boolean;
+  moveSigns: boolean;
   airstreamOpacity: number;
   vortex: boolean;
   isWing: boolean;
@@ -21,6 +23,8 @@ export const useInducedDragStore = create<InducedDragState>()((set) => ({
   wing: false,
   wingspan: 10,
   span: false,
+  signs: false,
+  moveSigns: false,
   airstreamOpacity: 0,
   vortex: false,
   isWing: false,

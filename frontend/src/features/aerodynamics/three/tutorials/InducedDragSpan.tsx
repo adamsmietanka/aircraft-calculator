@@ -40,7 +40,7 @@ const InducedDragSpan = ({ opacity }: Props) => {
       from: { opacity: 0, visible: false, airstreamOpacity: 0 },
       to: async (next) => {
         show && (await next({ visible: true }));
-        await next({ opacity: show ? 1 : 0 });
+        await next({ opacity: show ? 0.5 : 0 });
         show || (await next({ visible: false }));
       },
     }),
