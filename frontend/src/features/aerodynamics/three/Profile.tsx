@@ -12,7 +12,7 @@ interface Props {
 }
 
 const Profile = ({ opacity }: Props) => {
-  const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const { profileCl, profileCd, useProfileChartsStore } = useProfileCharts();
   const profile = useWingStore((state) => state.profile);
 
   return (
@@ -28,7 +28,7 @@ const Profile = ({ opacity }: Props) => {
         gridPositionX={0.35}
         opacity={opacity}
         name="Coefficient of Lift"
-        traces={[{ name: "Power", points: pointsCl }]}
+        traces={[{ name: "Power", points: profileCl }]}
         axes={{
           x: {
             symbol: (
@@ -63,7 +63,7 @@ const Profile = ({ opacity }: Props) => {
         gridPositionX={1.2}
         opacity={opacity}
         name="Coefficient of Drag"
-        traces={[{ name: "Power", points: pointsCd }]}
+        traces={[{ name: "Power", points: profileCd }]}
         axes={{
           x: {
             symbol: (

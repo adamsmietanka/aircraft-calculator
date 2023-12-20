@@ -17,7 +17,7 @@ import useAnimation from "../../../common/subtitles/hooks/useAnimation";
 
 const LevelFlight = ({ opacity, visible }: ElementProps) => {
   const profile = useWingStore((state) => state.profile);
-  const { pointsCl, pointsCd, useProfileChartsStore } = useProfileCharts();
+  const { profileCl, profileCd, useProfileChartsStore } = useProfileCharts();
 
   const reynolds = useWingStore((state) => state.reynolds);
 
@@ -91,7 +91,7 @@ const LevelFlight = ({ opacity, visible }: ElementProps) => {
           gridPositionX={0.25}
           opacity={opacity}
           name="Coefficient of Lift"
-          traces={[{ name: "Power", points: pointsCl }]}
+          traces={[{ name: "Power", points: profileCl }]}
           axes={{
             x: {
               symbol: (
@@ -128,7 +128,7 @@ const LevelFlight = ({ opacity, visible }: ElementProps) => {
           gridPositionX={1.1}
           opacity={opacity}
           name="Coefficient of Drag"
-          traces={[{ name: "Power", points: pointsCd }]}
+          traces={[{ name: "Power", points: profileCd }]}
           axes={{
             x: {
               symbol: (

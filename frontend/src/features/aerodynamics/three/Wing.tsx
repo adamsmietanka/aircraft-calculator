@@ -20,7 +20,7 @@ interface Props {
 
 const Wing = ({ opacity }: Props) => {
   const wing = useWingStore();
-  const { stallReynolds, cl, cd, inducedCd, wingCl, wingCd } =
+  const { stallReynolds, profileCl, profileCd, inducedCd, wingCl, wingCd } =
     useWingAerodynamics();
 
   const { useWingChartsStore } = useWingCharts();
@@ -55,7 +55,7 @@ const Wing = ({ opacity }: Props) => {
           name="Coefficient of Lift"
           traces={[
             { name: "Wing", points: wingCl },
-            { name: "Profile", points: cl, style: "dotted" },
+            { name: "Profile", points: profileCl, style: "dotted" },
           ]}
           axes={{
             x: {
@@ -94,7 +94,7 @@ const Wing = ({ opacity }: Props) => {
           traces={[
             { name: "Wing", points: wingCd },
             { name: "Induced", points: inducedCd, style: "thinDashed" },
-            { name: "Profile", points: cd, style: "dotted" },
+            { name: "Profile", points: profileCd, style: "dotted" },
           ]}
           axes={{
             x: {
@@ -132,6 +132,7 @@ const Wing = ({ opacity }: Props) => {
             { name: "Profile", style: "dotted" },
           ]}
           opacity={opacity}
+          store={useWingChartsStore}
         />
       </mesh>
     </>
