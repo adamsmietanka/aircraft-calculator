@@ -29,14 +29,14 @@ const useProfileCharts = () => {
   const locked = useProfileChartsStore((state) => state.locked);
   const setCharts = useProfileChartsStore((state) => state.set);
 
-  const { pointsCl, pointsCd, pointsClMonotonic, pointsCdReversed } =
+  const { profileCl, profileCd, profileClMonotonic, profileCdReversed } =
     useProfileData(wing.reynoldsIndex);
 
   const { M } = useProfileCamber();
 
   const getCl = (aoa: number) => {
     if (M === 0 && aoa === 0) return 0;
-    return linearInterpolationArray(pointsCl, aoa);
+    return linearInterpolationArray(profileCl, aoa);
   };
 
   useEffect(() => {
@@ -46,15 +46,15 @@ const useProfileCharts = () => {
     if (aoa < table.angleOfMinCz) {
       const delta = table.angleOfMinCz - aoa;
       Cd =
-        linearInterpolationArray(pointsCdReversed, table.angleOfMinCz) +
+        linearInterpolationArray(profileCdReversed, table.angleOfMinCz) +
         0.01 * delta;
     } else if (table.angleOfMaxCz < aoa) {
       const delta = aoa - table.angleOfMaxCz;
       Cd =
-        linearInterpolationArray(pointsCdReversed, table.angleOfMaxCz) +
+        linearInterpolationArray(profileCdReversed, table.angleOfMaxCz) +
         0.01 * delta;
     } else {
-      Cd = linearInterpolationArray(pointsCdReversed, Cl);
+      Cd = linearInterpolationArray(profileCdReversed, Cl);
     }
     locked !== "Coefficient of Drag" &&
       setCharts({
@@ -65,8 +65,8 @@ const useProfileCharts = () => {
 
   useEffect(() => {
     const Cl = clamp(yHover, table.minCz, table.maxCz);
-    const Cd = linearInterpolationArray(pointsCdReversed, Cl);
-    const aoa = linearInterpolationArray(pointsClMonotonic, Cl);
+    const Cd = linearInterpolationArray(profileCdReversed, Cl);
+    const aoa = linearInterpolationArray(profileClMonotonic, Cl);
     locked !== "Coefficient of Lift" &&
       setCharts({
         x: { "Coefficient of Lift": aoa, "Coefficient of Drag": Cd },
@@ -74,7 +74,7 @@ const useProfileCharts = () => {
       });
   }, [wing.profile, wing.reynoldsIndex, yHover]);
 
-  return { pointsCl, pointsCd, useProfileChartsStore };
+  return { profileCl, profileCd, useProfileChartsStore };
 };
 
 export default useProfileCharts;

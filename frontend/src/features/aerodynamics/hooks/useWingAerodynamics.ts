@@ -77,7 +77,7 @@ const useWingAerodynamics = () => {
     (stallVelocity * meanAerodynamicChord) / KINEMATIC_VISCOSITY;
 
   const closestIndex = useClosestReynolds(stallReynolds);
-  const { pointsCl, pointsCd } = useProfileData(closestIndex);
+  const { profileCl, profileCd } = useProfileData(closestIndex);
 
   const { maxCz, CdOfZeroCl, slope } = useProfileTable(
     closestIndex,
@@ -154,11 +154,11 @@ const useWingAerodynamics = () => {
     meanAerodynamicChord,
     MACposition,
     stallReynolds,
-    cl: pointsCl,
-    cd: pointsCd,
-    inducedCd: pointsCd.map(([y, x, z]) => [getCdInduced(x), x, z]),
-    wingCl: pointsCl.map(([x, y, z]) => [x + getAlphaInduced(y), y, z]),
-    wingCd: pointsCd.map(([y, x, z]) => [getCdWing(x, y), x, z]),
+    profileCl,
+    profileCd,
+    inducedCd: profileCd.map(([y, x, z]) => [getCdInduced(x), x, z]),
+    wingCl: profileCl.map(([x, y, z]) => [x + getAlphaInduced(y), y, z]),
+    wingCd: profileCd.map(([y, x, z]) => [getCdWing(x, y), x, z]),
   };
 };
 
