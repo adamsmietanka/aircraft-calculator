@@ -33,7 +33,7 @@ const Profile = ({ opacity }: Props) => {
           x: {
             symbol: (
               <HoverableFormulaSimple
-                className="text-lg"
+                className="text-lg tooltip-right"
                 name="Angle of attack"
                 tex="\alpha"
                 texHover="\alpha \: [\degree]"
@@ -68,7 +68,7 @@ const Profile = ({ opacity }: Props) => {
           x: {
             symbol: (
               <HoverableFormulaSimple
-                className="text-lg"
+                className="text-lg tooltip-right"
                 name="Coefficient of Drag"
                 tex="C_D"
               />
