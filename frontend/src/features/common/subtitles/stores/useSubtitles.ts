@@ -3,6 +3,7 @@ import { create } from "zustand";
 export interface SubtitleState {
   subtitle: string | React.ReactNode;
   visible: boolean;
+  slowdown: boolean;
   inAnimation: boolean;
   setSub: (value: string | React.ReactNode) => void;
   setInAnimation: (value: boolean) => void;
@@ -14,6 +15,7 @@ export interface SubtitleState {
 export const useSubtitleStore = create<SubtitleState>()((set) => ({
   subtitle: null,
   visible: false,
+  slowdown: false,
   inAnimation: false,
   setSub: (value) => set({ subtitle: value }),
   setInAnimation: (value) => set({ inAnimation: value }),

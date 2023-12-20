@@ -6,6 +6,7 @@ import { useWingStore } from "../../stores/useWing";
 import { PROFILE_POSITION, WING_POSITION } from "../../../common/three/config";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useEffect } from "react";
+import useConfig from "../../../common/subtitles/hooks/useConfig";
 
 const useProfileVisualizer = () => {
   const x = useProfileChartsStore((state) => state.x);
@@ -62,21 +63,23 @@ const useProfileVisualizer = () => {
     positionZ: 0,
   }));
 
+  const { customConfig } = useConfig();
+
   useEffect(() => {
     if (fallVelocity > 0 && pathname === "/aerodynamics/levelFlight") {
-              api.start({
-          positionZ: -15,
-          config: {
-            duration: 10000 / Math.sqrt(fallVelocity),
-            easing: (x) => x * x,
-          },
-        });
-      } else {
-        api.start({
-          positionZ: 0,
-          config: config.slow,
-        });
-          }
+      api.start({
+        positionZ: -15,
+        config: {
+          duration: 10000 / Math.sqrt(fallVelocity),
+          easing: (x) => x * x,
+        },
+      });
+    } else {
+      api.start({
+        positionZ: 0,
+        config: config.slow,
+      });
+    }
   }, [fallVelocity, pathname]);
 
   useEffect(() => {
@@ -88,6 +91,7 @@ const useProfileVisualizer = () => {
       scale: getScale(),
       gridX: getPosition(),
       vectorsPosition: centerVectors ? 0.25 : 0,
+      config: customConfig,
     });
   }, [x, scale, chord, showVisuals, pathname, centerVectors]);
 

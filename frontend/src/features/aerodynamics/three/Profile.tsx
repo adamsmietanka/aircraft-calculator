@@ -1,19 +1,57 @@
 import ProfileReynolds from "../ProfileReynolds";
-import { SpringValue, animated } from "@react-spring/three";
+import { animated } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
 import LineChart from "../../common/three/LineChart";
 import useProfileCharts from "../hooks/useProfileCharts";
 import { useWingStore } from "../stores/useWing";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
+import { ElementProps } from "../../navigation/Route";
+import useSubs from "../../common/subtitles/hooks/useSubs";
+import { useLevelFlightStore } from "./tutorials/stores/useLevelFlight";
+import { useHoverProfileStore } from "../stores/useHoverProfile";
+import useAnimation from "../../common/subtitles/hooks/useAnimation";
+import { useNavigationStore } from "../../navigation/useNavigation";
+import { useSubtitleStore } from "../../common/subtitles/stores/useSubtitles";
 
-interface Props {
-  opacity: SpringValue<number>;
-}
-
-const Profile = ({ opacity }: Props) => {
+const Profile = ({ opacity, visible }: ElementProps) => {
   const { profileCl, profileCd, useProfileChartsStore } = useProfileCharts();
   const profile = useWingStore((state) => state.profile);
+  const presentation = useNavigationStore((state) => state.presentation);
+  const setAnimation = useSubtitleStore((state) => state.set);
+
+  const { waitForClick: wait } = useSubs();
+  const setFormula = useLevelFlightStore((state) => state.set);
+  const set = useHoverProfileStore((state) => state.set);
+  const setChart = useProfileChartsStore((state) => state.set);
+
+  const setProfile = useWingStore((state) => state.setProfile);
+
+  const animation = async () => {
+    await wait(0);
+    await wait(0);
+    setAnimation({ slowdown: true });
+    setProfile("4412");
+    await wait(0);
+    setProfile("2412");
+    await wait(2500);
+    setChart({
+      yHover: useProfileChartsStore.getState().y["Coefficient of Lift"],
+      locked: "Coefficient of Drag",
+    });
+    setProfile("4412");
+    await wait(0);
+    setProfile("2412");
+    await wait(2000);
+    setAnimation({ slowdown: false });
+  };
+
+  const cleanup = () => {
+    set({ showWeight: false, mass: 0.5, speed: 1 });
+    setFormula({ show: false, expand: false, rearrange: false });
+  };
+
+  presentation && useAnimation(animation, cleanup, () => {}, visible);
 
   return (
     <animated.mesh position-z={0}>

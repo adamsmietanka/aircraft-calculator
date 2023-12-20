@@ -12,6 +12,7 @@ import {
   InterleavedBufferAttribute,
   Vector3,
 } from "three";
+import useConfig from "../subtitles/hooks/useConfig";
 
 type Props = {
   points: number[][];
@@ -41,12 +42,15 @@ const AnimatedLine = ({
 
   const worldScale = useMemo(() => new Vector3(), []);
 
+  const { customConfig } = useConfig();
+
   const [lineSpring] = useSpring(
     () => ({
       points: points.flat(),
       opacity,
       width: styles[style]?.width || width,
       offset: styles[style]?.offset || 0,
+      config: customConfig,
     }),
     [points, opacity, width, worldScale]
   );

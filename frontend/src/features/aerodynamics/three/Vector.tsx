@@ -3,6 +3,7 @@ import { Cone, Cylinder } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
 import { ReactNode, useEffect } from "react";
+import useConfig from "../../common/subtitles/hooks/useConfig";
 
 const VECTOR_WIDTH = 0.05;
 const VECTOR_TIP_LENGTH = 0.5;
@@ -31,6 +32,7 @@ const Vector = ({
   const AnimatedCone = animated(Cone);
 
   const { colors } = useCSSColors();
+  const { customConfig } = useConfig();
 
   const [spring, springApi] = useSpring(
     () => ({
@@ -40,6 +42,7 @@ const Vector = ({
       otherDirection: otherValue ? Math.sign(otherValue) : 0,
       opacity: show && value !== 0 ? 1 : 0,
       visible: show,
+      config: customConfig,
     }),
     [value, otherValue]
   );

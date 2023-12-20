@@ -1,4 +1,5 @@
 import { SpringValue, to, useSpring } from "@react-spring/three";
+import { animated, useSpring as useSpringWeb } from "@react-spring/web";
 import { NUMBERS_PADDING } from "./config";
 import useChartUnits from "../../settings/hooks/useChartUnits";
 import { StoreApi, UseBoundStore } from "zustand";
@@ -15,6 +16,8 @@ import { useMemo, useRef } from "react";
 import { Mesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import AnimatedHtml from "./AnimatedHtml";
+import useConfig from "../subtitles/hooks/useConfig";
+import { useSubtitleStore } from "../subtitles/stores/useSubtitles";
 
 interface Props {
   name: string;
@@ -43,6 +46,8 @@ const HoverMarker = ({
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
 
+  const slowdown = useSubtitleStore((state) => state.slowdown);
+
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
 
   useFrame(() => {
@@ -65,17 +70,27 @@ const HoverMarker = ({
     [x, min.y / worldScale.y, 0.05],
   ];
 
+  const { customConfig } = useConfig();
+
   const [hoverSpring] = useSpring(
     () => ({
       x: x,
       y: y,
       opacity: !!locked || hover ? 1 : 0,
       scale: scale[0],
+      config: customConfig,
     }),
     [x, y, scale, locked, hover]
   );
 
-  const width = !!locked ? 2 : 1;
+  const [values] = useSpringWeb(
+    () => ({
+      x,
+      y,
+      config: customConfig,
+    }),
+    [x, y]
+  );
 
   const displayX = round(x / xMultiplier, step.x / 100);
   const displayY = round(y / yMultiplier, step.y / 100);
@@ -88,7 +103,7 @@ const HoverMarker = ({
           [hoverSpring.opacity, opacity],
           (opacity, stepOpacity) => opacity * stepOpacity
         )}
-        width={width}
+        width={!!locked ? 2 : 1}
         dashSize={0.25}
         gapSize={0.75}
         dashScale={3}
@@ -103,7 +118,11 @@ const HoverMarker = ({
           0.375,
         ])}
       >
-        {displayX}
+        <animated.div>
+          {slowdown
+            ? values.x.to((x) => round(x / xMultiplier, step.x / 100))
+            : displayX}
+        </animated.div>
       </AnimatedHtml>
       <AnimatedHtml
         className="text-base text-primary bg-base-100"
@@ -114,7 +133,11 @@ const HoverMarker = ({
           0.375,
         ])}
       >
-        {displayY}
+        <animated.div>
+          {slowdown
+            ? values.y.to((y) => round(y / yMultiplier, step.y / 100))
+            : displayY}
+        </animated.div>
       </AnimatedHtml>
     </mesh>
   );
