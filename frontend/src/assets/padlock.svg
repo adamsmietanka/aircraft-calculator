@@ -8,7 +8,7 @@
        id="style2">
       .lock .lock-top{
         fill: none;
-        stroke: inherit;
+        stroke: currentColor;
         stroke-width: 6;
         stroke-linecap: round;
         stroke-miterlimit: 10;
@@ -17,7 +17,7 @@
         transition: all 300ms ease-out;
       }
       .lock .lock-body {
-        fill: inherit;
+        fill: currentColor;
         opacity: 1;
         transition: all 300ms ease-out;
       }

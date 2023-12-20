@@ -117,6 +117,7 @@ const Hover = ({
         min={min}
         opacity={opacity}
         show={show}
+        disable={disable}
       />
     </mesh>
   );
