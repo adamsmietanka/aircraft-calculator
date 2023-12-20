@@ -10,7 +10,6 @@ import {
   SimpleMarkerStore,
   SynchronizedXMarkersStore,
 } from "./Hover";
-
 import AnimatedLine from "./AnimatedLine";
 import { useMemo, useRef } from "react";
 import { Mesh, Vector3 } from "three";
@@ -18,6 +17,7 @@ import { useFrame } from "@react-three/fiber";
 import AnimatedHtml from "./AnimatedHtml";
 import useConfig from "../subtitles/hooks/useConfig";
 import { useSubtitleStore } from "../subtitles/stores/useSubtitles";
+import { ReactComponent as PadlockIcon } from "../../../assets/padlock.svg";
 
 interface Props {
   name: string;
@@ -30,6 +30,7 @@ interface Props {
   step: Record<string, number>;
   opacity: SpringValue<number>;
   show: boolean;
+  disable: boolean;
 }
 
 const HoverMarker = ({
@@ -41,6 +42,7 @@ const HoverMarker = ({
   step,
   opacity,
   show,
+  disable,
 }: Props) => {
   const meshRef = useRef<Mesh>(null!);
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
@@ -112,6 +114,21 @@ const HoverMarker = ({
       <AnimatedHtml
         className="text-base text-primary bg-base-100 p-1"
         show={show && (!!locked || hover)}
+        position={to([hoverSpring.y, hoverSpring.scale], (y, scale) => [
+          (min.x - 1.5 * NUMBERS_PADDING) / scale,
+          y,
+          0.375,
+        ])}
+      >
+        <animated.div>
+          {slowdown
+            ? values.y.to((y) => round(y / yMultiplier, step.y / 100))
+            : displayY}
+        </animated.div>
+      </AnimatedHtml>
+      <AnimatedHtml
+        className="text-base text-primary bg-base-100 p-1"
+        show={show && (!!locked || hover)}
         position={hoverSpring.x.to((x) => [
           x,
           (min.y - 0.75 * NUMBERS_PADDING) / worldScale.y,
@@ -124,20 +141,28 @@ const HoverMarker = ({
             : displayX}
         </animated.div>
       </AnimatedHtml>
+
+      {/* padlocks */}
       <AnimatedHtml
-        className="text-base text-primary bg-base-100"
-        show={show && (!!locked || hover)}
+        show={show && !disable && locked === "Coefficient of Drag"}
         position={to([hoverSpring.y, hoverSpring.scale], (y, scale) => [
-          (min.x - 1.5 * NUMBERS_PADDING) / scale,
+          min.x / scale,
           y,
-          0.375,
+          0.1,
         ])}
       >
-        <animated.div>
-          {slowdown
-            ? values.y.to((y) => round(y / yMultiplier, step.y / 100))
-            : displayY}
-        </animated.div>
+        <PadlockIcon className="relative left-2 bottom-4 lock locked" />
+      </AnimatedHtml>
+      <AnimatedHtml
+        show={
+          show &&
+          !disable &&
+          locked === "Coefficient of Lift" &&
+          name === "Coefficient of Lift"
+        }
+        position={hoverSpring.x.to((x) => [x, min.y / worldScale.y, 0.1])}
+      >
+        <PadlockIcon className="relative left-4 bottom-4 lock locked" />
       </AnimatedHtml>
     </mesh>
   );
