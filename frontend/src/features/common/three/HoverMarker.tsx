@@ -151,7 +151,11 @@ const HoverMarker = ({
           0.1,
         ])}
       >
-        <PadlockIcon className="relative left-2 bottom-4 lock locked" />
+        <PadlockIcon
+          className={`w-4 relative left-2 bottom-4 lock ${
+            locked === "Coefficient of Drag" && "locked"
+          }`}
+        />
       </AnimatedHtml>
       <AnimatedHtml
         show={
@@ -162,7 +166,11 @@ const HoverMarker = ({
         }
         position={hoverSpring.x.to((x) => [x, min.y / worldScale.y, 0.1])}
       >
-        <PadlockIcon className="relative left-4 bottom-4 lock locked" />
+        <PadlockIcon
+          className={`w-4 relative left-4 bottom-4 lock ${
+            locked === "Coefficient of Lift" && "locked"
+          }`}
+        />
       </AnimatedHtml>
     </mesh>
   );
