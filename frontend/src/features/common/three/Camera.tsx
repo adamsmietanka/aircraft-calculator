@@ -59,7 +59,7 @@ const Camera = () => {
       },
       config: {
         duration: 1500,
-        easing: easings.easeInOutQuad,
+        easing: easings.easeOutQuad,
       },
     }),
     [pathname]
