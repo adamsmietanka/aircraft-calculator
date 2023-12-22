@@ -1,6 +1,6 @@
 import useAnimation from "../../../../common/subtitles/hooks/useAnimation";
 import useSubs from "../../../../common/subtitles/hooks/useSubs";
-import { useSubtitleStore } from "../../../../common/subtitles/stores/useSubtitles";
+import { useAnimationStore } from "../../../../common/subtitles/stores/useAnimation";
 import { useNavigationStore } from "../../../../navigation/useNavigation";
 import { useProfileChartsStore } from "../../../hooks/useProfileCharts";
 import { useHoverProfileStore } from "../../../stores/useHoverProfile";
@@ -14,9 +14,9 @@ import { useLevelFlightStore } from "../stores/useLevelFlight";
 const useProfileAnimation = (visible: boolean) => {
   const setReynoldsIndex = useWingStore((state) => state.setReynoldsIndex);
   const presentation = useNavigationStore((state) => state.presentation);
-  const setAnimation = useSubtitleStore((state) => state.set);
+  const setAnimation = useAnimationStore((state) => state.set);
 
-  const { waitForClick: wait } = useSubs();
+  const { pause } = useSubs();
   const setFormula = useLevelFlightStore((state) => state.set);
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
@@ -27,17 +27,17 @@ const useProfileAnimation = (visible: boolean) => {
     start + (end - start) * ratio;
 
   const animation = async () => {
-    await wait(0);
-    await wait(500);
+    await pause(0);
+    await pause(500);
     setAnimation({ slowdown: true });
     // manually set to 4412
-    await wait(0);
+    await pause(0);
     setChart({ hover: true });
-    await wait(0);
+    await pause(0);
     setProfile("2412");
-    await wait(2000);
+    await pause(2000);
     setChart({ locked: "" });
-    await wait(500);
+    await pause(500);
     setChart({
       yHover: useProfileChartsStore.getState().y["Coefficient of Lift"],
       locked: "Coefficient of Drag",
@@ -45,75 +45,76 @@ const useProfileAnimation = (visible: boolean) => {
     setProfile("4412");
 
     // stall
-    await wait(0);
+    await pause(0);
     setProfile("2412");
-    await wait(2000);
+    await pause(2000);
     setChart({
       xHover: interpolate(useProfileChartsStore.getState().xHover, 15.8, 0.66),
       locked: "",
     });
-    await wait(2000);
+    await pause(2000);
     setChart({
       xHover: interpolate(useProfileChartsStore.getState().xHover, 15.8, 0.66),
     });
-    await wait(2000);
+    await pause(2000);
     setChart({
       xHover: 15.8,
     });
-    await wait(0);
+    await pause(0);
     setChart({ xHover: 18 });
-    await wait(0);
+    await pause(0);
     setAnimation({ duration: 1 });
     set({ dragMultiplier: 1 });
-    await wait(1200);
+    await pause(1200);
     set({ dragMultiplier: 10 });
 
     // symmetrical airfoil
-    await wait(0);
+    await pause(0);
     setAnimation({ slowdown: false, duration: 2 });
     setProfile("0009");
-    await wait(100);
+    await pause(100);
     setChart({ xHover: 10 });
-    await wait(0);
+    await pause(0);
     setChart({ xHover: 0 });
-    await wait(0);
+    await pause(0);
     setChart({ xHover: -5 });
-    await wait(1000);
+    await pause(1000);
     setChart({ xHover: 5 });
-    await wait(1000);
+    await pause(1000);
     setChart({ xHover: 0 });
 
     // reynolds
-    await wait(0);
+    await pause(0);
     setProfile("2412");
-    await wait(100);
+    await pause(100);
     setChart({ yHover: 1.7 });
-    await wait(1000);
+    await pause(1000);
     setAnimation({ slowdown: true });
     // manually Re = 3
-    await wait(0);
-    await wait(0);
+    await pause(0);
+    await pause(0);
     setReynoldsIndex(1);
-    await wait(0);
+    await pause(0);
     setReynoldsIndex(2);
 
     // other profiles
-    await wait(0);
+    await pause(0);
     setAnimation({ slowdown: false });
     setProfile("1408");
-    await wait(0);
+    await pause(0);
     setProfile("2421");
-    await wait(0);
+    await pause(0);
     setProfile("09");
-    await wait(0);
+    await pause(0);
     setProfile("30");
-    await wait(0);
+    await pause(0);
     setProfile("2412");
     setReynoldsIndex(1);
   };
 
   const cleanup = () => {
     set({ showWeight: false, mass: 0.5, speed: 1 });
+    setAnimation({ slowdown: false, duration: 2 });
     setFormula({ show: false, expand: false, rearrange: false });
   };
 

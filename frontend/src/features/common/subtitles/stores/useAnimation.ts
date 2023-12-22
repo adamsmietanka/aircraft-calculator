@@ -1,24 +1,28 @@
 import { create } from "zustand";
 
-export interface SubtitleState {
+export interface AnimationState {
+  counter: number;
   subtitle: string | React.ReactNode;
   visible: boolean;
   slowdown: boolean;
   duration: number;
   inAnimation: boolean;
+  increaseCounter: () => void;
   setSub: (value: string | React.ReactNode) => void;
   setInAnimation: (value: boolean) => void;
   show: () => void;
   hide: () => void;
-  set: (value: Partial<SubtitleState>) => void;
+  set: (value: Partial<AnimationState>) => void;
 }
 
-export const useSubtitleStore = create<SubtitleState>()((set) => ({
+export const useAnimationStore = create<AnimationState>()((set) => ({
+  counter: 0,
   subtitle: null,
   visible: false,
   slowdown: false,
   duration: 2,
   inAnimation: false,
+  increaseCounter: () => set((state) => ({ counter: state.counter + 1 })),
   setSub: (value) => set({ subtitle: value }),
   setInAnimation: (value) => set({ inAnimation: value }),
   show: () => set({ visible: true }),

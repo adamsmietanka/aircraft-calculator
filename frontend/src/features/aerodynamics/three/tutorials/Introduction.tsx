@@ -26,11 +26,11 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
   const navigate = useNavigate();
 
-  const { sub, waitForClick: wait, show, hide } = useSubs();
+  const { sub, pause, show, hide } = useSubs();
 
   const showDimension = async (profiles: string[]) => {
     for (const p of profiles) {
-      await wait(600);
+      await pause(600);
       setProfile(p);
     }
   };
@@ -38,9 +38,9 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   const setAngles = async (angles: number[], delay = 100) => {
     for (const a of angles) {
       setChart({ xHover: a });
-      await wait(delay);
+      await pause(delay);
     }
-    await wait(250);
+    await pause(250);
   };
 
   const setup = () => {
@@ -74,56 +74,70 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         ),
       50
     );
-    await sub("What is the source of this force?");
+    // await sub("What is the source of this force?");
 
-    await sub("Let's stop the flow for a moment", async () => {
-      set({ showVectors: false, keepAngle: true });
-      setChart({ hover: false });
-    });
+    // await sub("Let's stop the flow for a moment", async () => {
+    //   set({ showVectors: false, keepAngle: true });
+    //   setChart({ hover: false });
+    // });
 
-    await sub(
-      "Air molecules are constantly colliding and pushing on the plate",
-      async () => set({ pressuresShow: true })
-    );
+    // await sub(
+    //   "Air molecules are constantly colliding and pushing on the plate",
+    //   async () => set({ pressuresShow: true })
+    // );
 
-    await sub("This is pressure");
-    await sub("Without the air flow");
-    await sub(
-      "The atmospheric pressure acting on our plate cancels out",
-      async () => set({ vectorsNet: true })
-    );
-    await sub("Resulting in a zero net force", async () =>
-      set({ pressuresShow: false })
-    );
+    // await sub("This is pressure");
+    // await sub("Without the air flow");
+    // await sub(
+    //   "The atmospheric pressure acting on our plate cancels out",
+    //   async () => set({ vectorsNet: true })
+    // );
+    // await sub("Resulting in a zero net force", async () =>
+    //   set({ pressuresShow: false })
+    // );
 
-    set({ vectorsNet: false });
-    await wait(500);
+    // set({ vectorsNet: false });
+    // await wait(500);
 
-    await sub("When we add back the flow", async () => {
-      setChart({ hover: true });
-      set({
-        pressuresShow: true,
-        pressuresEqual: false,
-        keepAngle: false,
-      });
-    });
-    await sub("The exposed lower side of the plate gets more collisions");
-    await sub("The pressure goes up");
+    // await sub("When we add back the flow", async () => {
+    //   setChart({ hover: true });
+    //   set({
+    //     pressuresShow: true,
+    //     pressuresEqual: false,
+    //     keepAngle: false,
+    //   });
+    // });
+    // await sub("The exposed lower side of the plate gets more collisions");
+    // await sub("The pressure goes up");
 
-    await sub("The upper surface is shielded from the flow");
-    await sub("So actually less particles are hitting it");
-    await sub("The same applies to the shorter sides");
+    // await sub("The upper surface is shielded from the flow");
+    // await sub("So actually less particles are hitting it");
+    // await sub("The same applies to the shorter sides");
+
+    // await sub(
+    //   "The net force is the aerodynamic force we saw earlier",
+    //   async () => {
+    //     await wait(500);
+    //     set({ vectorsNet: true });
+    //     await wait(600);
+    //     set({ pressuresShow: false });
+    //     await wait(250);
+    //     set({
+    //       showVectors: true,
+    //     });
+    //   }
+    // );
 
     await sub(
       "Usually the wing rotation axis is not positioned at the center",
       async () => {
         set({ axis: true });
         setCamera({ center: [-4, 0, 0], spherical: [10, 90, 10] });
-        await wait(1000);
+        await pause(1000);
         setChart({ xHover: 4.5 });
-        await wait(250);
+        await pause(250);
         setChart({ xHover: 5.5 });
-        await wait(250);
+        await pause(250);
         setChart({ xHover: 5 });
       }
     );
@@ -135,7 +149,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub(
       "However this will create a torque and spin our plate",
       async () => {
-        await wait(500);
+        await pause(500);
         await setAngles(Array.from(Array(16).keys()).map((i) => (-i + 15) / 3));
         setChart({ xHover: 5 });
       },
@@ -166,7 +180,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub("Now when we decrease the pressure");
     await sub("The speed will increase", () => setBernoulli({ speedUp: true }));
     setBernoulli({ show: false });
-    await wait(500);
+    await pause(500);
 
     await sub("There is another explanation using Newton's Laws");
     await sub("The flow changes direction because of the plate", () =>
@@ -200,9 +214,9 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       "We assume that air particles require equal time",
       async () => {
         setMisconception({ show: true });
-        await wait(750);
+        await pause(750);
         setMisconception({ swap: true });
-        await wait(1000);
+        await pause(1000);
         setMisconception({ constant: true });
       },
       50
@@ -210,7 +224,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub("to travel along the upper and lower surfaces");
     await sub("This forces the air above to speed up", async () => {
       setMisconception({ bigger: true });
-      await wait(1000);
+      await pause(1000);
     });
     await sub("because it has a longer way to go along the upper side", () =>
       set({ flattenOutline: true })
@@ -227,7 +241,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         setMisconception({ show: false });
         set({ flattenOutline: false });
         setProfile("06");
-        await wait(1500);
+        await pause(1500);
         set({ flattenOutline: true });
       }
     );
@@ -253,32 +267,32 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       set({ hoverPlane: true })
     );
     set({ hoverA: true });
-    await wait(750);
+    await pause(750);
     await show("max camber");
     await showDimension(["1412", "2412", "3412", "4412", "5412", "4412"]);
     set({ hoverA: false });
     hide();
-    await wait(1000);
+    await pause(1000);
 
     set({ hoverB: true });
-    await wait(750);
+    await pause(750);
     await show("position of max camber");
     await showDimension(["4312", "4412", "4512", "4612", "4512", "4412"]);
     set({ hoverB: false });
     hide();
-    await wait(1000);
+    await pause(1000);
 
     set({ hoverC: true });
-    await wait(750);
+    await pause(750);
     await show("position of max camber");
     await showDimension(["4415", "4418", "4421", "4424", "4412"]);
     await sub("The max thickness is at 30% of chord");
     set({ hoverC: false });
     hide();
-    await wait(1000);
+    await pause(1000);
 
     set({ hoverPlane: false, vectorSize: 1 });
-    await wait(500);
+    await pause(500);
 
     navigate("/aerodynamics/profile");
   };
@@ -305,6 +319,8 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       hoverPlane: false,
       centerVectors: false,
       vectorsNet: false,
+      axis: false,
+      axisCenter: true,
       keepAngle: false,
       moment: false,
       dragMultiplier: DRAG_VECTOR_SCALE,

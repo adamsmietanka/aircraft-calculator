@@ -1,8 +1,8 @@
-import { useSubtitleStore } from "./stores/useSubtitles";
+import { useAnimationStore } from "./stores/useAnimation";
 
 const Subtitle = () => {
-  const subtitle = useSubtitleStore((state) => state.subtitle);
-  const visible = useSubtitleStore((state) => state.visible);
+  const subtitle = useAnimationStore((state) => state.subtitle);
+  const visible = useAnimationStore((state) => state.visible);
 
   return (
     <div

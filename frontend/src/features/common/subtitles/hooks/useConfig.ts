@@ -1,9 +1,9 @@
 import { config, easings } from "@react-spring/three";
-import { useSubtitleStore } from "../stores/useSubtitles";
+import { useAnimationStore } from "../stores/useAnimation";
 
 const useConfig = () => {
-  const slowdown = useSubtitleStore((state) => state.slowdown);
-  const duration = useSubtitleStore((state) => state.duration);
+  const slowdown = useAnimationStore((state) => state.slowdown);
+  const duration = useAnimationStore((state) => state.duration);
 
   return {
     customConfig: slowdown

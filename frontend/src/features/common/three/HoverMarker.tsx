@@ -16,7 +16,7 @@ import { Mesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import AnimatedHtml from "./AnimatedHtml";
 import useConfig from "../subtitles/hooks/useConfig";
-import { useSubtitleStore } from "../subtitles/stores/useSubtitles";
+import { useAnimationStore } from "../subtitles/stores/useAnimation";
 import { ReactComponent as PadlockIcon } from "../../../assets/padlock.svg";
 
 interface Props {
@@ -48,7 +48,7 @@ const HoverMarker = ({
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
   const { valueMultiplier: xMultiplier } = useChartUnits(axes.x.type);
 
-  const slowdown = useSubtitleStore((state) => state.slowdown);
+  const slowdown = useAnimationStore((state) => state.slowdown);
 
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
 

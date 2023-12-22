@@ -11,7 +11,7 @@ const useAnimation = (
 ) => {
   const chart = useProfileChartsStore();
   const profile = useWingStore((state) => state.profile);
-  const { hide, waitForClick: wait, setInAnimation } = useSubs();
+  const { hide, pause, setInAnimation } = useSubs();
   const setChart = useProfileChartsStore((state) => state.set);
   const setProfile = useWingStore((state) => state.setProfile);
 
@@ -21,7 +21,7 @@ const useAnimation = (
 
   const animationWrapper = async () => {
     setup();
-    await wait(1500);
+    await pause(1500);
     setInAnimation(true);
     try {
       await animation();
