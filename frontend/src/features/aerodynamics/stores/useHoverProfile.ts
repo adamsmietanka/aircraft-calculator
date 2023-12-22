@@ -10,6 +10,8 @@ export interface HoverProfileState {
   pressuresShow: boolean;
   pressuresEqual: boolean;
   vectorsNet: boolean;
+  axis: boolean;
+  axisCenter: boolean;
   moment: boolean;
   showVectors: boolean;
   flattenOutline: boolean;
@@ -37,6 +39,8 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   pressuresShow: false,
   pressuresEqual: true,
   vectorsNet: false,
+  axis: false,
+  axisCenter: true,
   moment: false,
   showVectors: true,
   flattenOutline: false,
