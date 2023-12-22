@@ -1,4 +1,4 @@
-import { useSpring } from "@react-spring/three";
+import { easings, useSpring } from "@react-spring/three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useLocation } from "react-router-dom";
 import { CAMERA_DELAY } from "./config";
@@ -58,9 +58,8 @@ const Camera = () => {
         delay: CAMERA_DELAY,
       },
       config: {
-        mass: 20,
-        tension: 400,
-        friction: 170,
+        duration: 1500,
+        easing: easings.easeInOutQuad,
       },
     }),
     [pathname]

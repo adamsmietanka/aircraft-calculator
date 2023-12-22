@@ -1,34 +1,29 @@
 import { useNavigationStore } from "../../../navigation/useNavigation";
-import { useSubtitleStore } from "../stores/useSubtitles";
-import useAwaitClick from "./useAwaitClick";
+import timeout from "../../utils/timeout";
+import { useAnimationStore } from "../stores/useAnimation";
 
 const useSubs = () => {
-  const setSub = useSubtitleStore((state) => state.setSub);
-  const showSub = useSubtitleStore((state) => state.show);
-  const hideSub = useSubtitleStore((state) => state.hide);
-  const setInAnimation = useSubtitleStore((state) => state.setInAnimation);
+  const setSub = useAnimationStore((state) => state.setSub);
+  const showSub = useAnimationStore((state) => state.show);
+  const hideSub = useAnimationStore((state) => state.hide);
+  const setInAnimation = useAnimationStore((state) => state.setInAnimation);
 
   const presentation = useNavigationStore((state) => state.presentation);
 
-  const { waitUserInput, waitForClick } = useAwaitClick();
-
-  const displaySub = async (
-    next: any,
-    text: string | React.ReactNode,
-    duration = 3000
-  ) => {
-    if (!presentation) {
-      setSub(text);
-      showSub();
-      await next({ delay: duration });
-      hideSub();
-      await next({ delay: 500 });
+  /**
+   * Wait until some time has passed or user has clicked
+   * @param duration the time (ms) to wait, 0 - wait for click indefinitely
+   */
+  const pause = async (duration = 500) => {
+    const start = useAnimationStore.getState().counter;
+    if (duration === 0) {
+      if (!useAnimationStore.getState().inAnimation) throw "done";
+      while (start === useAnimationStore.getState().counter) await timeout(50);
     } else {
-      setSub(text);
-      await waitUserInput();
-      showSub();
-      await waitUserInput();
-      hideSub();
+      for (let i = 0; i < duration / 50; i++) {
+        await timeout(50);
+        if (start !== useAnimationStore.getState().counter) break;
+      }
     }
   };
 
@@ -48,43 +43,52 @@ const useSubs = () => {
   const prolongShorter = (scale: number) =>
     scale < 1 ? Math.pow(scale, 0.4) : scale;
 
+  /**
+   * Display a subtitle inside of an animation
+   * @param text string or JSX to be displayed
+   * @param sideEffect function called just after the sub is shown
+   * @param duration used when the sideEffects are too long, otherwise let subLength do the lifting
+   */
   const sub = async (
     text: string | JSX.Element,
     sideEffect = () => {},
     duration = 3000
   ) => {
-    if (!useSubtitleStore.getState().inAnimation) throw "done";
+    if (!useAnimationStore.getState().inAnimation) throw "done";
     duration *= prolongShorter(subLength(text) / 100);
     if (!presentation) {
       setSub(text);
       showSub();
       await sideEffect();
-      await waitForClick(duration);
+      await pause(duration);
       hideSub();
-      await waitForClick(750);
-      if (!useSubtitleStore.getState().inAnimation) throw "done";
+      await pause(750);
+      if (!useAnimationStore.getState().inAnimation) throw "done";
     } else {
       setSub(text);
-      await waitForClick(0);
+      await pause(0);
       showSub();
       await sideEffect();
-      await waitForClick(0);
+      await pause(0);
       hideSub();
     }
   };
 
+  /**
+   * Straight up show the text, no added logic. Remember to hide it manually!
+   * @param text string or JSX to be displayed
+   */
   const show = async (text: string | React.ReactNode) => {
-    if (!useSubtitleStore.getState().inAnimation) throw "done";
+    if (!useAnimationStore.getState().inAnimation) throw "done";
     setSub(text);
-    presentation && (await waitUserInput());
+    presentation && (await pause(0));
     showSub();
   };
 
   return {
-    displaySub,
     hide: hideSub,
     show,
-    waitForClick,
+    pause: pause,
     sub,
     setInAnimation,
   };

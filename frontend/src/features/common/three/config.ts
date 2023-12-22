@@ -33,7 +33,7 @@ export const VECTOR_SIZE = 3.5;
 
 //Camera and route animation
 export const ROUTE_DELAY = 600;
-export const CAMERA_DELAY = 100;
+export const CAMERA_DELAY = 0;
 
 // Chart Animations
 export const POSITION_ANIMATION_DURATION = 0.5;

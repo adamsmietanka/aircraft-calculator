@@ -37,7 +37,7 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
 
   const [showLayout, setShowLayout] = useState(false);
 
-  const { sub, waitForClick: wait } = useSubs();
+  const { sub, pause } = useSubs();
 
   const animation = async () => {
     await sub("We have studied the aerodynamics of a 2D airfoil");
@@ -45,21 +45,21 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
       "Which happen to be the same for a wing with an infinite span",
       async () => {
         setCamera({ center: [-5, 0, 0], spherical: [20, 80, -80] });
-        await wait(500);
+        await pause(500);
         setInduced({ wing: true });
       }
     );
     await sub("Or one inside of a wind tunnel", async () => {
       setInduced({ wingspan: 0.5 });
-      await wait(500);
+      await pause(500);
       setInduced({ tunnel: true });
     });
     setInduced({ tunnel: false });
-    await wait(500);
+    await pause(500);
 
     setCamera({ spherical: [20, 70, 40] });
     setInduced({ wingspan: 1 });
-    await wait(500);
+    await pause(500);
     await sub(
       "Airflow creates an area of low pressure on the upper surface",
       () => {
@@ -89,23 +89,23 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
       () => setMass(1)
     );
     setMass(0.5);
-    await wait(500);
+    await pause(500);
     await sub("Increasing speed makes the vortex smaller", () =>
       setReynolds(1.5 * 6)
     );
     setReynolds(1 * 6);
-    await wait(500);
+    await pause(500);
     await sub(
       "The vortex deflects the airflow behind the trailing edge downwards",
       () => setCamera({ center: [-5, -1, 7.5], spherical: [20, 90, 90] })
     );
     await sub("This is called downwash");
-    await wait(500);
+    await pause(500);
     await sub("In a 2D world lift is always vertical", async () => {
       setCamera({ center: [-5, 0, 0], spherical: [20, 90, 0] });
-      await wait(500);
+      await pause(500);
       setInduced({ vortex: false });
-      await wait(500);
+      await pause(500);
       setInduced({ lift: true, direction: true });
     });
     await sub("An airfoil produces no downwash", () =>
