@@ -1,13 +1,9 @@
-import { getReynolds } from "./data/profiles";
 import { useWingStore } from "./stores/useWing";
 import InfoTooltip from "../common/InfoTooltip";
 import Formula from "../common/Formula";
 
 const ProfileReynolds = () => {
-  const profile = useWingStore((state) => state.profile);
-
   const reynolds = useWingStore((state) => state.reynolds);
-  const setReynolds = useWingStore((state) => state.setReynolds);
   const reynoldsIndex = useWingStore((state) => state.reynoldsIndex);
   const setReynoldsIndex = useWingStore((state) => state.setReynoldsIndex);
 
@@ -15,7 +11,7 @@ const ProfileReynolds = () => {
     <div className="form-control">
       <label className="label">
         <span className="label-text flex">
-          Reynolds Number{" "}
+          Reynolds Number
           <InfoTooltip
             text={
               "The Reynolds number represents the ratio of inertial forces to viscous forces in a fluid. Directly proportional to velocity"
@@ -32,7 +28,6 @@ const ProfileReynolds = () => {
           onChange={(e) => {
             const index = parseFloat(e.target.value);
             setReynoldsIndex(index);
-            setReynolds(getReynolds(profile)[index]);
           }}
           className="range range-xs join-item pr-2"
         />

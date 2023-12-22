@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { getReynolds } from "../data/profiles";
 
 export interface WingState {
   chord: number;
@@ -30,7 +31,7 @@ export interface WingState {
 
 export const useWingStore = create<WingState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       chord: 2,
       chordTip: 1.14,
       tipX: 0.5,
@@ -48,8 +49,16 @@ export const useWingStore = create<WingState>()(
       setTipX: (value) => set({ tipX: value }),
       setSpan: (value) => set({ span: value }),
       setAngle: (value) => set({ angle: value }),
-      setProfile: (value) => set({ profile: value }),
-      setReynoldsIndex: (value) => set({ reynoldsIndex: value }),
+      setProfile: (value) =>
+        set({
+          profile: value,
+          reynolds: getReynolds(value)[get().reynoldsIndex],
+        }),
+      setReynoldsIndex: (value) =>
+        set({
+          reynoldsIndex: value,
+          reynolds: getReynolds(get().profile)[value],
+        }),
       setReynolds: (value) => set({ reynolds: value }),
       setStallVelocity: (value) => set({ stallVelocity: value }),
       setMaterial: (value) => set({ material: value }),
