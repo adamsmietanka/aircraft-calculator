@@ -10,6 +10,7 @@ import useAnimation from "../../../common/subtitles/hooks/useAnimation";
 import { useBernoulliStore } from "./stores/useBernoulli";
 import { useNewtonStore } from "./stores/useNewton";
 import { useMisconceptionStore } from "./stores/useMisconception";
+import { useCameraStore } from "../../../common/three/stores/useCamera";
 
 const Introduction = ({ opacity, visible }: ElementProps) => {
   const setProfile = useWingStore((state) => state.setProfile);
@@ -21,6 +22,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   const setMisconception = useMisconceptionStore((state) => state.set);
 
   const setChart = useProfileChartsStore((state) => state.set);
+  const setCamera = useCameraStore((state) => state.set);
 
   const navigate = useNavigate();
 
@@ -113,21 +115,22 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub("The same applies to the shorter sides");
 
     await sub(
-      "The net force is the aerodynamic force we saw earlier",
+      "Usually the wing rotation axis is not positioned at the center",
       async () => {
-        await wait(500);
-        set({ vectorsNet: true });
-        await wait(600);
-        set({ pressuresShow: false });
+        set({ axis: true });
+        setCamera({ center: [-4, 0, 0], spherical: [10, 90, 10] });
+        await wait(1000);
+        setChart({ xHover: 4.5 });
         await wait(250);
-        set({
-          showVectors: true,
-        });
+        setChart({ xHover: 5.5 });
+        await wait(250);
+        setChart({ xHover: 5 });
       }
     );
-
-    await sub("Usually the wing rotation axis is not positioned at the center");
-    await sub("but at 25% of length");
+    await sub("but at 25% of length", async () => {
+      set({ axisCenter: false });
+      setCamera({ spherical: [10, 90, 0] });
+    });
 
     await sub(
       "However this will create a torque and spin our plate",
@@ -145,7 +148,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
     await sub("This is the pitching moment");
     await sub("We'll skip it for now for simplification", () =>
-      set({ moment: false })
+      set({ moment: false, axis: false })
     );
 
     await sub("The pressure difference affects the flow around the plate");

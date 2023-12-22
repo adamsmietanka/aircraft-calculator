@@ -9,6 +9,7 @@ import { useHoverProfileStore } from "../stores/useHoverProfile";
 import ProfileFlowSpeed from "./ProfileFlowSpeed";
 import { useWingStore } from "../stores/useWing";
 import { useProfileStore } from "../stores/useProfile";
+import ProfileAxis from "./tutorials/ProfileAxis";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -69,6 +70,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           <ProfileAirstreams opacity={opacity} show={showVisuals} />
         </mesh>
 
+          <ProfileAxis opacity={opacity} />
         <animated.mesh
           position-x={profileSpring.vectorsPosition}
           rotation-z={profileSpring.angle.to((a) => -a)}
