@@ -74,65 +74,66 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         ),
       50
     );
-    // await sub("What is the source of this force?");
+    await sub("What is the source of this force?");
 
-    // await sub("Let's stop the flow for a moment", async () => {
-    //   set({ showVectors: false, keepAngle: true });
-    //   setChart({ hover: false });
-    // });
+    await sub("Let's stop the flow for a moment", async () => {
+      set({ showVectors: false, keepAngle: true });
+      setChart({ hover: false });
+    });
 
-    // await sub(
-    //   "Air molecules are constantly colliding and pushing on the plate",
-    //   async () => set({ pressuresShow: true })
-    // );
+    await sub(
+      "Air molecules are constantly colliding and pushing on the plate",
+      async () => set({ pressuresShow: true })
+    );
 
-    // await sub("This is pressure");
-    // await sub("Without the air flow");
-    // await sub(
-    //   "The atmospheric pressure acting on our plate cancels out",
-    //   async () => set({ vectorsNet: true })
-    // );
-    // await sub("Resulting in a zero net force", async () =>
-    //   set({ pressuresShow: false })
-    // );
+    await sub("This is pressure");
+    await sub("Without the air flow");
+    await sub(
+      "The atmospheric pressure acting on our plate cancels out",
+      async () => set({ vectorsNet: true })
+    );
+    await sub("Resulting in a zero net force", async () =>
+      set({ pressuresShow: false })
+    );
 
-    // set({ vectorsNet: false });
-    // await wait(500);
+    set({ vectorsNet: false });
+    await pause(500);
 
-    // await sub("When we add back the flow", async () => {
-    //   setChart({ hover: true });
-    //   set({
-    //     pressuresShow: true,
-    //     pressuresEqual: false,
-    //     keepAngle: false,
-    //   });
-    // });
-    // await sub("The exposed lower side of the plate gets more collisions");
-    // await sub("The pressure goes up");
+    await sub("When we add back the flow", async () => {
+      setChart({ hover: true });
+      set({
+        pressuresShow: true,
+        pressuresEqual: false,
+        keepAngle: false,
+      });
+    });
+    await sub("The exposed lower side of the plate gets more collisions");
+    await sub("The pressure goes up");
 
-    // await sub("The upper surface is shielded from the flow");
-    // await sub("So actually less particles are hitting it");
-    // await sub("The same applies to the shorter sides");
+    await sub("The upper surface is shielded from the flow");
+    await sub("So actually less particles are hitting it");
+    await sub("The same applies to the shorter sides");
 
-    // await sub(
-    //   "The net force is the aerodynamic force we saw earlier",
-    //   async () => {
-    //     await wait(500);
-    //     set({ vectorsNet: true });
-    //     await wait(600);
-    //     set({ pressuresShow: false });
-    //     await wait(250);
-    //     set({
-    //       showVectors: true,
-    //     });
-    //   }
-    // );
+    await sub(
+      "The net force is the aerodynamic force we saw earlier",
+      async () => {
+        await pause(500);
+        set({ vectorsNet: true });
+        await pause(600);
+        set({ pressuresShow: false });
+        await pause(250);
+        set({
+          showVectors: true,
+        });
+      }
+    );
 
     await sub(
       "Usually the wing rotation axis is not positioned at the center",
       async () => {
-        set({ axis: true });
         setCamera({ center: [-4, 0, 0], spherical: [10, 90, 10] });
+        await pause(250);
+        set({ axis: true });
         await pause(1000);
         setChart({ xHover: 4.5 });
         await pause(250);

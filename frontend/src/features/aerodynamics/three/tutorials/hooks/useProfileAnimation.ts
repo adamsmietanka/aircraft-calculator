@@ -5,7 +5,6 @@ import { useNavigationStore } from "../../../../navigation/useNavigation";
 import { useProfileChartsStore } from "../../../hooks/useProfileCharts";
 import { useHoverProfileStore } from "../../../stores/useHoverProfile";
 import { useWingStore } from "../../../stores/useWing";
-import { useLevelFlightStore } from "../stores/useLevelFlight";
 
 /**
  * Used for animating the Profile view in Presentation mode
@@ -17,7 +16,6 @@ const useProfileAnimation = (visible: boolean) => {
   const setAnimation = useAnimationStore((state) => state.set);
 
   const { pause } = useSubs();
-  const setFormula = useLevelFlightStore((state) => state.set);
   const set = useHoverProfileStore((state) => state.set);
   const setChart = useProfileChartsStore((state) => state.set);
 
@@ -27,6 +25,7 @@ const useProfileAnimation = (visible: boolean) => {
     start + (end - start) * ratio;
 
   const animation = async () => {
+    await pause(0);
     await pause(0);
     await pause(500);
     setAnimation({ slowdown: true });
@@ -113,9 +112,7 @@ const useProfileAnimation = (visible: boolean) => {
   };
 
   const cleanup = () => {
-    set({ showWeight: false, mass: 0.5, speed: 1 });
     setAnimation({ slowdown: false, duration: 2 });
-    setFormula({ show: false, expand: false, rearrange: false });
   };
 
   presentation && useAnimation(animation, cleanup, () => {}, visible);
