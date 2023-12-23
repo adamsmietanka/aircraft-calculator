@@ -61,14 +61,13 @@ const IntroMisconception = () => {
   useEffect(() => {
     swap &&
       api.start({
-        widthV: "0px",
         fontV: "1.5rem",
-        leftV: "64px",
+        leftV: "96px",
         topV: "17px",
         // time
         widthT: "15px",
         fontT: "2.25rem",
-        rightT: "105px",
+        rightT: "114px",
         topT: "0px",
         // distance
         rightD: "42px",
@@ -78,6 +77,8 @@ const IntroMisconception = () => {
   useEffect(() => {
     constant &&
       api.start({
+        widthV: "0px",
+        leftV: "64px",
         fontT: "0rem",
         // constant
         opacityC: 1,
