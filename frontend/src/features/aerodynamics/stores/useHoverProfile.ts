@@ -6,6 +6,7 @@ export interface HoverProfileState {
   keepAngle: boolean;
   dragMultiplier: number;
   vectorSize: number;
+  vector3rdNewton: boolean;
   centerVectors: boolean;
   pressuresShow: boolean;
   pressuresEqual: boolean;
@@ -35,6 +36,7 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   keepAngle: false,
   dragMultiplier: DRAG_VECTOR_SCALE,
   vectorSize: 1,
+  vector3rdNewton: false,
   centerVectors: false,
   pressuresShow: false,
   pressuresEqual: true,
