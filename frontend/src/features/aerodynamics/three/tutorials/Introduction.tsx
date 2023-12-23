@@ -183,18 +183,27 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     setBernoulli({ show: false });
     await pause(500);
 
-    await sub("There is another explanation using Newton's Laws");
-    await sub("The flow changes direction because of the plate", () =>
-      setNewton({ show: true })
+    await sub("There is another explanation using Newton's Laws", () =>
+      set({ showVectors: false, keepAngle: true })
     );
+    await sub("The flow changes direction because of the plate", () => {
+      setNewton({ show: true });
+      set({ vectorSize: -1.5, vector3rdNewton: true });
+    });
     await sub("According to Newton's 2nd Law", () =>
       setNewton({ force: true })
     );
-    await sub("this requires a force acting on the flow by the plate", () =>
-      setNewton({ velocity: false, acceleration: true })
-    );
+    await sub("this requires a force acting on the flow by the plate", () => {
+      setNewton({ velocity: false, acceleration: true });
+      set({ showVectors: true, keepAngle: false });
+    });
     setNewton({ show: false });
-    await sub("By Newton's 3rd Law we should have a force acting on the plate");
+    await sub(
+      "By Newton's 3rd Law we should have a force acting on the plate",
+      () => {
+        set({ vectorSize: 1.5, vector3rdNewton: false });
+      }
+    );
     await sub("We can split it into vertical and horizontal components", () =>
       set({ splitVectors: true })
     );

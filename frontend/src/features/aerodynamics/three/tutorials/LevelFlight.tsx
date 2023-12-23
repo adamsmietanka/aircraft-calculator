@@ -9,7 +9,6 @@ import SpeedSlider from "./SpeedSlider";
 import LineChart from "../../../common/three/LineChart";
 import useProfileTable, { Row } from "../../hooks/useProfileTable";
 import HoverableFormulaSimple from "../../../common/HoverableFormulaSimple";
-import Formula from "../../../common/Formula";
 import useSubs from "../../../common/subtitles/hooks/useSubs";
 import { useLevelFlightStore } from "./stores/useLevelFlight";
 import { ElementProps } from "../../../navigation/Route";

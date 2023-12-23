@@ -70,9 +70,10 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           <ProfileAirstreams opacity={opacity} show={showVisuals} />
         </mesh>
 
-          <ProfileAxis opacity={opacity} />
+        <ProfileAxis opacity={opacity} />
         <animated.mesh
           position-x={profileSpring.vectorsPosition}
+          position-y={profileSpring.vectorY}
           rotation-z={profileSpring.angle.to((a) => -a)}
           scale={profileSpring.scale.to((scale) => 1 / scale)}
         >

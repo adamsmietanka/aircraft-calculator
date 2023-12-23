@@ -16,6 +16,9 @@ const useProfileVisualizer = () => {
   const chord = useWingStore((state) => state.chord);
 
   const centerVectors = useHoverProfileStore((state) => state.centerVectors);
+  const vector3rdNewton = useHoverProfileStore(
+    (state) => state.vector3rdNewton
+  );
   const fallVelocity = useHoverProfileStore((state) => state.fallVelocity);
   const keepAngle = useHoverProfileStore((state) => state.keepAngle);
 
@@ -60,6 +63,7 @@ const useProfileVisualizer = () => {
     scale: getScale(),
     gridX: getPosition(),
     vectorsPosition: centerVectors ? 0.25 : 0,
+    vectorY: 0,
     positionZ: 0,
   }));
 
@@ -91,9 +95,10 @@ const useProfileVisualizer = () => {
       scale: getScale(),
       gridX: getPosition(),
       vectorsPosition: centerVectors ? 0.25 : 0,
+      vectorY: vector3rdNewton ? -0.03 : 0,
       config: customConfig,
     });
-  }, [x, scale, chord, showVisuals, pathname, centerVectors]);
+  }, [x, scale, chord, showVisuals, pathname, centerVectors, vector3rdNewton]);
 
   return { profileSpring, showVisuals };
 };
