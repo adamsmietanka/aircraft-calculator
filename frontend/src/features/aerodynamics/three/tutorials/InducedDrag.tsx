@@ -145,7 +145,7 @@ const InducedDrag = ({ opacity, visible }: ElementProps) => {
   };
 
   const cleanup = () => {
-    set({ showWeight: false, mass: 1, speed: 1, showVectors: true });
+    set({ showWeight: false, mass: 0.5, speed: 1, showVectors: true });
     setInduced({
       tunnel: false,
       wing: false,
