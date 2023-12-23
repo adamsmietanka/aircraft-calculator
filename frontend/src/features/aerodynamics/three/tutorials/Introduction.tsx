@@ -111,7 +111,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub("The pressure goes up");
 
     await sub("The upper surface is shielded from the flow");
-    await sub("So actually less particles are hitting it");
+    await sub("Fewer collisions result in a lower pressure");
     await sub("The same applies to the shorter sides");
 
     await sub(
@@ -204,11 +204,23 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         set({ vectorSize: 1.5, vector3rdNewton: false });
       }
     );
-    await sub("We can split it into vertical and horizontal components", () =>
+    await sub("We can split it into two components", () =>
       set({ splitVectors: true })
     );
+    await sub(
+      <>
+        The vertical -
+        <span className="text-primary mx-1">lift</span>
+      </>
+    );
+    await sub(
+      <>
+        And the horizontal -
+        <span className="text-error mx-1">drag</span>
+      </>
+    );
 
-    await sub("Even a simple plate can produce lift");
+    await sub("Even a simple plate can generate lift");
     await sub("But the drag is very high");
     await sub("There are however better shapes");
     await sub("Like this aerodynamic profile", () => setProfile("2412"));
@@ -296,10 +308,10 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await pause(750);
     await show("position of max camber");
     await showDimension(["4415", "4418", "4421", "4424", "4412"]);
+    hide();
+    await pause(500);
     await sub("The max thickness is at 30% of chord");
     set({ hoverC: false });
-    hide();
-    await pause(1000);
 
     set({ hoverPlane: false, vectorSize: 1 });
     await pause(500);

@@ -36,17 +36,17 @@ const useProfileAnimation = (visible: boolean) => {
     setProfile("2412");
     await pause(2000);
     setChart({ locked: "" });
-    await pause(500);
+    await pause(0);
     setChart({
       yHover: useProfileChartsStore.getState().y["Coefficient of Lift"],
       locked: "Coefficient of Drag",
     });
     setProfile("4412");
+    await pause(0);
+    setProfile("2412");
 
     // stall
     await pause(0);
-    setProfile("2412");
-    await pause(2000);
     setChart({
       xHover: interpolate(useProfileChartsStore.getState().xHover, 15.8, 0.66),
       locked: "",
