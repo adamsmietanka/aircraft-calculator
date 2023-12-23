@@ -74,7 +74,7 @@ const useProfileVisualizer = () => {
       api.start({
         positionZ: -15,
         config: {
-          duration: 10000 / Math.sqrt(fallVelocity),
+          duration: 15000 / Math.sqrt(fallVelocity),
           easing: (x) => x * x,
         },
       });
