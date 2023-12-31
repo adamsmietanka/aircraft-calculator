@@ -11,6 +11,8 @@ interface Props {
   opacity: SpringValue<number>;
 }
 
+const HYPER_POINTS = 50;
+
 const NavigationHyperbolic = ({ opacity }: Props) => {
   const [active, setActive] = useState<THREE.Object3D>(null!);
   const [gizmoSpring] = useSpring(
@@ -58,9 +60,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     second: Record<string, number>,
     delta: number
   ) => {
-    const distance = Math.sqrt(
-      Math.pow(second.x - first.x, 2) + Math.pow(second.y - first.y, 2)
-    );
+    const distance = Math.hypot(second.x - first.x, second.y - first.y);
     const e = distance / delta;
     const p = (distance / 2) * (1 - 1 / (e * e));
     return { distance, e, p };
@@ -87,38 +87,82 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     ]);
     return hyper;
   };
-  // const deltaRadius = 0.1;
+
+  const arrayOpen = (from: number, to: number, size: number) =>
+    Array.from(Array(size - 1).keys()).map(
+      (i) => ((i + 1) / size) * (to - from) + from
+    );
+
+  const createHyperbolaNew = (
+    first: Record<string, number>,
+    second: Record<string, number>,
+    delta: number
+  ) => {
+    const { e, p } = getHyperbolaCoeffs(first, second, delta);
+
+    const radius = (p: number, e: number, phi: number) =>
+      p / (1 / e + Math.cos(phi));
+
+    const phiLim = Math.acos(-1 / e);
+
+    const hyper = arrayOpen(-phiLim, phiLim, HYPER_POINTS).map((phi) => {
+      const r = radius(p, e, phi);
+      return [r * Math.cos(phi), r * Math.sin(phi), 0];
+    });
+
+    const hyper2 = arrayOpen(phiLim, 2 * Math.PI - phiLim, HYPER_POINTS).map(
+      (phi) => {
+        const r = radius(p, e, phi);
+        return [r * Math.cos(phi), r * Math.sin(phi), 0];
+      }
+    );
+
+    return [hyper, hyper2];
+  };
 
   const hyper = createHyperbola(A, B, (2 * timedelta) / 10);
   const hyper2 = createHyperbola(A, C, (2 * ACdelta) / 10);
+  const [hyper3, hyper4] = createHyperbolaNew(A, C, (2 * ACdelta) / 10);
 
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
   const alphaAC = Math.atan2(C.y - A.y, C.x - A.x);
 
+  const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
+
   const calculateIntersection = () => {
     const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 10);
     const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 10);
-    const a = p1 * Math.cos(alphaAC) - p2 * Math.cos(alphaAB);
-    const b = p1 * Math.sin(alphaAC) - p2 * Math.sin(alphaAB);
+    const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
+    const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
     const d = b * Math.sqrt(a * a + b * b - c * c);
     const u1 = (a * c + d) / (a * a + b * b);
     const u2 = (a * c - d) / (a * a + b * b);
-    // console.log(u1, u2);
+    const s1 = Math.sqrt(1 - u1 * u1);
+    const s2 = Math.sqrt(1 - u2 * u2);
 
-    const getR = (p: number, e: number, u: number, alpha: number) => {
+    const getR = (
+      p: number,
+      e: number,
+      u: number,
+      s: number,
+      alpha: number
+    ) => {
       const cos = Math.cos(alpha);
       const sin = Math.sin(alpha);
-      // const r11 = p / (1 / e - Math.sqrt(1 - u1 * u1) * cos + u1 * sin);
-      // const r12 = p / (1 / e - Math.sqrt(1 - u1 * u1) * cos - u1 * sin);
-      // const r21 = p / (1 / e - Math.sqrt(1 - u2 * u2) * cos + u2 * sin);
-      // const r22 = p / (1 / e - Math.sqrt(1 - u2 * u2) * cos - u2 * sin);
-      const r11 = p / (1 / e - u1 * cos - Math.sqrt(1 - u1 * u1) * sin);
-      const r12 = p / (1 / e - u1 * cos + Math.sqrt(1 - u1 * u1) * sin);
-      const r21 = p / (1 / e - u2 * cos - Math.sqrt(1 - u2 * u2) * sin);
-      const r22 = p / (1 / e - u2 * cos + Math.sqrt(1 - u2 * u2) * sin);
-      return { r11, r12, r21, r22 };
+      return p / (1 / e + u * cos + s * sin);
     };
+
+    const r11 = getR(p1, e1, u1, s1, alphaAB);
+    const r12 = getR(p1, e1, u1, -s1, alphaAB);
+    const r13 = getR(p1, e1, u2, s2, alphaAB);
+    const r14 = getR(p1, e1, u2, -s2, alphaAB);
+
+    const r21 = getR(p2, e2, u1, s1, alphaAC);
+    const r22 = getR(p2, e2, u1, -s1, alphaAC);
+    const r23 = getR(p2, e2, u2, s2, alphaAC);
+    const r24 = getR(p2, e2, u2, -s2, alphaAC);
+
     // console.log(
     //   {
     //     p1,
@@ -135,12 +179,47 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     //   {
     //     u1angle: (Math.acos(u1) * 180) / Math.PI,
     //     u2angle: (Math.acos(u2) * 180) / Math.PI,
-    //   },
+    //   }
     // );
-    // console.table([getR(p1, e1, u1, alphaAB), getR(p2, e2, u2, alphaAC)]);
-    const { r22 } = getR(p1, e1, u1, alphaAB);
-    return { x: r22 * u2, y: r22 * Math.sqrt(1 - u2 * u2), u1, u2 };
+    console.table([
+      {
+        u: u1,
+        s: s1,
+        alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
+        r1: r11,
+        r2: r21,
+        c: a * u1 + b * s1,
+        delta: Math.abs((r21 - r11) / r21),
+      },
+      {
+        u: u1,
+        s: -s1,
+        alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
+        r1: r12,
+        r2: r22,
+        c: a * u1 - b * s1,
+      },
+      {
+        u: u2,
+        s: s2,
+        alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
+        r1: r13,
+        r2: r23,
+        c: a * u2 + b * s2,
+      },
+      {
+        u: u2,
+        s: -s2,
+        alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
+        r1: r14,
+        r2: r24,
+        c: a * u2 - b * s2,
+      },
+    ]);
+    if (areEqual(r11, r21)) return { x: r11 * u1, y: r11 * s1, u1, u2 };
+    return { x: r12 * u1, y: r12 * -s1, u1, u2 };
   };
+
   const { x, y, u1, u2 } = calculateIntersection();
 
   const [towerSpring] = useSpring(
@@ -258,11 +337,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             C
           </Text>
         </group>
-        <Sphere
-          args={[0.1, 32, 32]}
-          position-x={x + B.x}
-          position-y={y + B.y}
-        />
         <mesh position-x={A.x} position-y={A.y}>
           <mesh rotation-z={Math.acos(u1)}>
             <AnimatedLine
@@ -284,11 +358,17 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
                 [2, 0, 0],
               ]}
               style="thin"
-              color="grid"
+              color="red"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
+            <AnimatedHtml position-x={2.2} rotation-z={Math.acos(u2)}>
+              u2
+            </AnimatedHtml>
           </mesh>
         </mesh>
+        <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
+          <Sphere args={[0.1, 32, 32]} position-x={x} position-y={y} />
+        </animated.mesh>
         <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
           <animated.mesh rotation-z={towerSpring.rotationAB}>
             <animated.mesh
@@ -315,6 +395,18 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
                 opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
               />
             </animated.mesh>
+            {/* <AnimatedLine
+              points={hyper3}
+              style="airstream"
+              color="red"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            />
+            <AnimatedLine
+              points={hyper4}
+              style="airstream"
+              color="orange"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            /> */}
           </animated.mesh>
         </animated.mesh>
         {/* <animated.mesh position-x={-1} scale={1 + delta12 / 2 + deltaRadius}>
