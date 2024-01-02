@@ -117,6 +117,11 @@ const stepsList: Step[] = [
     feature: "navigation",
     path: "hyperbolic",
   },
+  {
+    name: "Elliptical navigation",
+    feature: "navigation",
+    path: "elliptic",
+  },
 ];
 
 const steps: Step[] = import.meta.env.PROD
