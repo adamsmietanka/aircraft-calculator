@@ -5,7 +5,10 @@ import { useEllipseStore } from "./stores/useEllipse";
 import InputSlider from "../common/inputs/InputSlider";
 import AnimatedLine from "../common/three/AnimatedLine";
 import AnimatedHtml from "../common/three/AnimatedHtml";
-import Formula from "../common/Formula";
+import Helpers from "./Helpers";
+import Inputs3D from "../common/three/Inputs3D";
+import InputToggle from "../common/inputs/InputToggle";
+import { CANVAS_WIDTH } from "../common/three/config";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -31,9 +34,12 @@ const NavigationElliptic = ({ opacity }: Props) => {
   const A = useEllipseStore((state) => state.A);
   const B = useEllipseStore((state) => state.B);
   const C = useEllipseStore((state) => state.C);
+  const helpers = useEllipseStore((state) => state.helpers);
+
   const set = useEllipseStore((state) => state.set);
   const setTimedelta = useEllipseStore((state) => state.setTimedelta);
   const setACdelta = useEllipseStore((state) => state.setACdelta);
+  const setHelpers = useEllipseStore((state) => state.setHelpers);
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
@@ -78,7 +84,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
     const radius = (p: number, e: number, phi: number) =>
       p / (1 / e + Math.cos(phi));
 
-    const ellipse = Array.from(Array(HYPER_POINTS).keys()).map((i) => {
+    const ellipse = Array.from(Array(HYPER_POINTS + 1).keys()).map((i) => {
       const phi = (i / HYPER_POINTS) * 2 * Math.PI;
       const r = radius(p, e, phi);
       return [r * Math.cos(phi), r * Math.sin(phi), 0];
@@ -166,7 +172,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
     ]);
 
     // extract phi angles of solutions
-    let phiAngles = {};
+    let phiAngles = { phi1: 0, phi2: 0 };
     if (areEqual(r11, r21))
       phiAngles = { ...phiAngles, phi1: Math.atan2(s1, u1) };
     if (areEqual(r12, r22))
@@ -212,12 +218,12 @@ const NavigationElliptic = ({ opacity }: Props) => {
           space="local"
         />
       )}
-      <animated.mesh
-        // scale={wingSpring.scale}
-        // position-x={(gridPositionX * CANVAS_WIDTH) / 2}
-        // rotation-x={-Math.PI / 2}
-        scale={3}
-      >
+      <Inputs3D gridPositionX={-1.4}>
+        <div className="w-48 space-y-2 -mt-8">
+          <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
+        </div>
+      </Inputs3D>
+      <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3}>
         <AnimatedHtml
           position-x={spring.ABx}
           position-y={spring.ABy}
@@ -299,51 +305,20 @@ const NavigationElliptic = ({ opacity }: Props) => {
             C
           </Text>
         </group>
-        <mesh position-x={A.x} position-y={A.y}>
-          <mesh rotation-z={phi1}>
-            <AnimatedLine
-              points={[
-                [-1.5, 0, 0],
-                [2, 0, 0],
-              ]}
-              style="thin"
-              color="grid"
-              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
-            <AnimatedHtml position-x={2.2} rotation-z={-phi1}>
-              <Formula tex="\phi_1" />
-            </AnimatedHtml>
-          </mesh>
-        </mesh>
-        <mesh position-x={A.x} position-y={A.y}>
-          <mesh rotation-z={phi2}>
-            <AnimatedLine
-              points={[
-                [-2, 0, 0],
-                [2, 0, 0],
-              ]}
-              style="thin"
-              color="grid"
-              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
-            <AnimatedHtml position-x={2.2} rotation-z={-phi2}>
-              <Formula tex="\phi_2" />
-            </AnimatedHtml>
-          </mesh>
-        </mesh>
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <ASphere
             args={[0.1, 32, 32]}
             position-x={spring.x}
             position-y={spring.y}
           />
+          <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
         </animated.mesh>
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
             <AnimatedLine
               points={ellipse1}
               style="airstream"
-              color="red"
+              color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
           </animated.mesh>
@@ -351,27 +326,11 @@ const NavigationElliptic = ({ opacity }: Props) => {
             <AnimatedLine
               points={ellipse2}
               style="airstream"
-              color="red"
+              color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
           </animated.mesh>
         </animated.mesh>
-        {/* <animated.mesh position-x={-1} scale={1 + delta12 / 2 + deltaRadius}>
-          <AnimatedLine
-            points={circle}
-            style="thin"
-            color="grid"
-            opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-          />
-        </animated.mesh>
-        <animated.mesh position-x={1} scale={1 - delta12 / 2 + deltaRadius}>
-          <AnimatedLine
-            points={circle}
-            style="thin"
-            color="grid"
-            opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-          />
-        </animated.mesh> */}
       </animated.mesh>
     </>
   );

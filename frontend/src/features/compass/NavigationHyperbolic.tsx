@@ -6,6 +6,9 @@ import { useCompassStore } from "./stores/useCompass";
 import InputSlider from "../common/inputs/InputSlider";
 import AnimatedLine from "../common/three/AnimatedLine";
 import AnimatedHtml from "../common/three/AnimatedHtml";
+import Helpers from "./Helpers";
+import { CANVAS_WIDTH } from "../common/three/config";
+import InputToggle from "../common/inputs/InputToggle";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -29,9 +32,12 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const A = useCompassStore((state) => state.A);
   const B = useCompassStore((state) => state.B);
   const C = useCompassStore((state) => state.C);
+  const helpers = useCompassStore((state) => state.helpers);
+
   const set = useCompassStore((state) => state.set);
   const setTimedelta = useCompassStore((state) => state.setTimedelta);
   const setACdelta = useCompassStore((state) => state.setACdelta);
+  const setHelpers = useCompassStore((state) => state.setHelpers);
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
@@ -163,24 +169,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     const r23 = getR(p2, e2, u2, s2, alphaAC);
     const r24 = getR(p2, e2, u2, -s2, alphaAC);
 
-    // console.log(
-    //   {
-    //     p1,
-    //     p2,
-    //   },
-    //   {
-    //     e1,
-    //     e2,
-    //   },
-    //   {
-    //     u1,
-    //     u2,
-    //   },
-    //   {
-    //     u1angle: (Math.acos(u1) * 180) / Math.PI,
-    //     u2angle: (Math.acos(u2) * 180) / Math.PI,
-    //   }
-    // );
     console.table([
       {
         u: u1,
@@ -216,11 +204,23 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
         c: a * u2 - b * s2,
       },
     ]);
-    if (areEqual(r11, r21)) return { x: r11 * u1, y: r11 * s1, u1, u2 };
-    return { x: r12 * u1, y: r12 * -s1, u1, u2 };
+
+    // extract phi angles of solutions
+    let phiAngles = { phi1: 0, phi2: 0 };
+    if (areEqual(r11, r21))
+      phiAngles = { ...phiAngles, phi1: Math.atan2(s1, u1) };
+    if (areEqual(r12, r22))
+      phiAngles = { ...phiAngles, phi1: Math.atan2(-s1, u1) };
+    if (areEqual(r13, r23))
+      phiAngles = { ...phiAngles, phi2: Math.atan2(s2, u2) };
+    if (areEqual(r14, r24))
+      phiAngles = { ...phiAngles, phi2: Math.atan2(-s2, u2) };
+
+    if (areEqual(r11, r21)) return { x: r11 * u1, y: r11 * s1, ...phiAngles };
+    return { x: r12 * u1, y: r12 * -s1, ...phiAngles };
   };
 
-  const { x, y, u1, u2 } = calculateIntersection();
+  const { x, y, phi1, phi2 } = calculateIntersection();
 
   const [towerSpring] = useSpring(
     () => ({
@@ -250,12 +250,12 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           space="local"
         />
       )}
-      <animated.mesh
-        // scale={wingSpring.scale}
-        // position-x={(gridPositionX * CANVAS_WIDTH) / 2}
-        // rotation-x={-Math.PI / 2}
-        scale={3}
-      >
+      <Inputs3D gridPositionX={-1.4}>
+        <div className="w-48 space-y-2 -mt-8">
+          <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
+        </div>
+      </Inputs3D>
+      <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3}>
         <AnimatedHtml
           position-x={towerSpring.ABx}
           position-y={towerSpring.ABy}
@@ -337,37 +337,9 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             C
           </Text>
         </group>
-        <mesh position-x={A.x} position-y={A.y}>
-          <mesh rotation-z={Math.acos(u1)}>
-            <AnimatedLine
-              points={[
-                [0, 0, 0],
-                [2.5, 0, 0],
-              ]}
-              style="thin"
-              color="grid"
-              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
-          </mesh>
-        </mesh>
-        <mesh position-x={A.x} position-y={A.y}>
-          <mesh rotation-z={-Math.acos(u2)}>
-            <AnimatedLine
-              points={[
-                [0, 0, 0],
-                [2, 0, 0],
-              ]}
-              style="thin"
-              color="red"
-              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
-            <AnimatedHtml position-x={2.2} rotation-z={Math.acos(u2)}>
-              u2
-            </AnimatedHtml>
-          </mesh>
-        </mesh>
         <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
           <Sphere args={[0.1, 32, 32]} position-x={x} position-y={y} />
+          <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
         </animated.mesh>
         <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
           <animated.mesh rotation-z={towerSpring.rotationAB}>
