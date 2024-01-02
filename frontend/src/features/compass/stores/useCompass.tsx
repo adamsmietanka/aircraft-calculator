@@ -6,18 +6,22 @@ export interface CompassState {
   A: Record<string, number>;
   B: Record<string, number>;
   C: Record<string, number>;
+  helpers: boolean;
   setTimedelta: (value: number) => void;
   setACdelta: (value: number) => void;
+  setHelpers: (value: boolean) => void;
   set: (value: Partial<CompassState>) => void;
 }
 
 export const useCompassStore = create<CompassState>()((set) => ({
-  timedelta: 0,
-  ACdelta: 0,
+  timedelta: 1,
+  ACdelta: 1,
   A: { x: -1, y: 0 },
   B: { x: 1, y: 0 },
   C: { x: -1, y: 2 },
+  helpers: true,
   setTimedelta: (value) => set({ timedelta: value }),
   setACdelta: (value) => set({ ACdelta: value }),
+  setHelpers: (value) => set({ helpers: value }),
   set: (value) => set(value),
 }));
