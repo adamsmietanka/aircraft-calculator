@@ -14,7 +14,8 @@ interface Props {
   opacity: SpringValue<number>;
 }
 
-const HYPER_POINTS = 50;
+const POLAR_POINTS = 50;
+const POINTS = 60;
 
 const NavigationHyperbolic = ({ opacity }: Props) => {
   const [active, setActive] = useState<THREE.Object3D>(null!);
@@ -25,6 +26,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     [active]
   );
 
+  const ASphere = animated(Sphere);
   const AnimatedTransform = animated(TransformControls);
 
   const timedelta = useCompassStore((state) => state.timedelta);
@@ -86,9 +88,9 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       if (1 / e === 0) return 0;
       return alpha * Math.sqrt(1 + Math.pow(y / beta, 2));
     };
-    const hyper = Array.from(Array(50).keys()).map((i) => [
-      hyperX((i - 25) / 10) + first.x + distance / 2,
-      (i - 25) / 10 + first.y,
+    const hyper = Array.from(Array(POINTS).keys()).map((i) => [
+      hyperX((i - POINTS / 2) / 10) + first.x + distance / 2,
+      (i - POINTS / 2) / 10 + first.y,
       0,
     ]);
     return hyper;
@@ -99,7 +101,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       (i) => ((i + 1) / size) * (to - from) + from
     );
 
-  const createHyperbolaNew = (
+  const createHyperbolaPolar = (
     first: Record<string, number>,
     second: Record<string, number>,
     delta: number
@@ -111,12 +113,12 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
 
     const phiLim = Math.acos(-1 / e);
 
-    const hyper = arrayOpen(-phiLim, phiLim, HYPER_POINTS).map((phi) => {
+    const hyper = arrayOpen(-phiLim, phiLim, POLAR_POINTS).map((phi) => {
       const r = radius(p, e, phi);
       return [r * Math.cos(phi), r * Math.sin(phi), 0];
     });
 
-    const hyper2 = arrayOpen(phiLim, 2 * Math.PI - phiLim, HYPER_POINTS).map(
+    const hyper2 = arrayOpen(phiLim, 2 * Math.PI - phiLim, POLAR_POINTS).map(
       (phi) => {
         const r = radius(p, e, phi);
         return [r * Math.cos(phi), r * Math.sin(phi), 0];
@@ -128,7 +130,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
 
   const hyper = createHyperbola(A, B, (2 * timedelta) / 10);
   const hyper2 = createHyperbola(A, C, (2 * ACdelta) / 10);
-  const [hyper3, hyper4] = createHyperbolaNew(A, C, (2 * ACdelta) / 10);
+  const [hyper3, hyper4] = createHyperbolaPolar(A, C, (2 * ACdelta) / 10);
 
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
   const alphaAC = Math.atan2(C.y - A.y, C.x - A.x);
@@ -222,7 +224,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
 
   const { x, y, phi1, phi2 } = calculateIntersection();
 
-  const [towerSpring] = useSpring(
+  const [spring] = useSpring(
     () => ({
       rotationAB: alphaAB,
       rotationAC: alphaAC,
@@ -232,8 +234,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       ABy: (A.y + B.y) / 2 - 1.5 * Math.cos(alphaAB),
       ACx: (A.x + C.x) / 2 - 1.5 * Math.sin(alphaAC),
       ACy: (A.y + C.y) / 2 + 1.5 * Math.cos(alphaAC),
+      x,
+      y,
     }),
-    [A, B, C]
+    [A, B, C, x, y]
   );
 
   return (
@@ -257,9 +261,9 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       </Inputs3D>
       <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3}>
         <AnimatedHtml
-          position-x={towerSpring.ABx}
-          position-y={towerSpring.ABy}
-          rotation-z={towerSpring.rotationAB}
+          position-x={spring.ABx}
+          position-y={spring.ABy}
+          rotation-z={spring.rotationAB}
         >
           <div className="ml-16">
             <InputSlider
@@ -273,9 +277,9 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           </div>
         </AnimatedHtml>
         <AnimatedHtml
-          position-x={towerSpring.ACx}
-          position-y={towerSpring.ACy}
-          rotation-z={towerSpring.rotationAC}
+          position-x={spring.ACx}
+          position-y={spring.ACy}
+          rotation-z={spring.rotationAC}
         >
           <div className="ml-16">
             <InputSlider
@@ -337,15 +341,19 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             C
           </Text>
         </group>
-        <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
-          <Sphere args={[0.1, 32, 32]} position-x={x} position-y={y} />
+        <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
+          <ASphere
+            args={[0.1, 32, 32]}
+            position-x={spring.x}
+            position-y={spring.y}
+          />
           <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
         </animated.mesh>
-        <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
-          <animated.mesh rotation-z={towerSpring.rotationAB}>
+        <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
+          <animated.mesh rotation-z={spring.rotationAB}>
             <animated.mesh
-              position-x={towerSpring.Ax.to((x) => -x)}
-              position-y={towerSpring.Ay.to((y) => -y)}
+              position-x={spring.Ax.to((x) => -x)}
+              position-y={spring.Ay.to((y) => -y)}
             >
               <AnimatedLine
                 points={hyper}
@@ -355,10 +363,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
               />
             </animated.mesh>
           </animated.mesh>
-          <animated.mesh rotation-z={towerSpring.rotationAC}>
+          <animated.mesh rotation-z={spring.rotationAC}>
             <animated.mesh
-              position-x={towerSpring.Ax.to((x) => -x)}
-              position-y={towerSpring.Ay.to((y) => -y)}
+              position-x={spring.Ax.to((x) => -x)}
+              position-y={spring.Ay.to((y) => -y)}
             >
               <AnimatedLine
                 points={hyper2}
@@ -367,7 +375,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
                 opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
               />
             </animated.mesh>
-            <AnimatedLine
+            {/* <AnimatedLine
               points={hyper3}
               style="airstream"
               color="red"
@@ -378,7 +386,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
               style="airstream"
               color="orange"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
+            /> */}
           </animated.mesh>
         </animated.mesh>
         {/* <animated.mesh position-x={-1} scale={1 + delta12 / 2 + deltaRadius}>
