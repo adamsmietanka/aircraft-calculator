@@ -21,6 +21,7 @@ import IntroNewton2nd from "../aerodynamics/three/tutorials/IntroNewton2nd";
 import IntroMisconception from "../aerodynamics/three/tutorials/IntroMisconception";
 import DebugHeadless from "./Perf";
 import LevelFlightFormula from "../aerodynamics/three/tutorials/LevelFlightFormula";
+import NavigationElliptic from "../compass/NavigationElliptic";
 
 const PlaneBuilder = () => {
   return (
@@ -75,6 +76,7 @@ const PlaneBuilder = () => {
         <Route path="/aerodynamics/wing" Element={Wing} />
         <Route path="/aerodynamics/fuselage" Element={Fuselage} />
         <Route path="/navigation/hyperbolic" Element={NavigationHyperbolic} />
+        <Route path="/navigation/elliptic" Element={NavigationElliptic} />
       </Canvas>
     </div>
   );

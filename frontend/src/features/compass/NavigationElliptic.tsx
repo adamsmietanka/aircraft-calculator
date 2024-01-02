@@ -1,11 +1,11 @@
 import { Text, Sphere, TransformControls } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
 import { useState } from "react";
-import Inputs3D from "../common/three/Inputs3D";
-import { useCompassStore } from "./stores/useCompass";
+import { useEllipseStore } from "./stores/useEllipse";
 import InputSlider from "../common/inputs/InputSlider";
 import AnimatedLine from "../common/three/AnimatedLine";
 import AnimatedHtml from "../common/three/AnimatedHtml";
+import Formula from "../common/Formula";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -13,7 +13,7 @@ interface Props {
 
 const HYPER_POINTS = 50;
 
-const NavigationHyperbolic = ({ opacity }: Props) => {
+const NavigationElliptic = ({ opacity }: Props) => {
   const [active, setActive] = useState<THREE.Object3D>(null!);
   const [gizmoSpring] = useSpring(
     () => ({
@@ -22,16 +22,18 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     [active]
   );
 
+  const ASphere = animated(Sphere);
+
   const AnimatedTransform = animated(TransformControls);
 
-  const timedelta = useCompassStore((state) => state.timedelta);
-  const ACdelta = useCompassStore((state) => state.ACdelta);
-  const A = useCompassStore((state) => state.A);
-  const B = useCompassStore((state) => state.B);
-  const C = useCompassStore((state) => state.C);
-  const set = useCompassStore((state) => state.set);
-  const setTimedelta = useCompassStore((state) => state.setTimedelta);
-  const setACdelta = useCompassStore((state) => state.setACdelta);
+  const timedelta = useEllipseStore((state) => state.timedelta);
+  const ACdelta = useEllipseStore((state) => state.ACdelta);
+  const A = useEllipseStore((state) => state.A);
+  const B = useEllipseStore((state) => state.B);
+  const C = useEllipseStore((state) => state.C);
+  const set = useEllipseStore((state) => state.set);
+  const setTimedelta = useEllipseStore((state) => state.setTimedelta);
+  const setACdelta = useEllipseStore((state) => state.setACdelta);
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
@@ -55,74 +57,38 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     0,
   ]);
 
-  const getHyperbolaCoeffs = (
+  const getEllipseCoeffs = (
     first: Record<string, number>,
     second: Record<string, number>,
     delta: number
   ) => {
     const distance = Math.hypot(second.x - first.x, second.y - first.y);
-    const e = distance / delta;
+    const e = distance / (distance + delta);
     const p = (distance / 2) * (1 - 1 / (e * e));
     return { distance, e, p };
   };
 
-  const createHyperbola = (
+  const createEllipse = (
     first: Record<string, number>,
     second: Record<string, number>,
     delta: number
   ) => {
-    const { distance, e, p } = getHyperbolaCoeffs(first, second, delta);
-
-    const alpha = (e * p) / (e * e - 1);
-    const beta = alpha * Math.sqrt(e * e - 1);
-
-    const hyperX = (y: number) => {
-      if (1 / e === 0) return 0;
-      return alpha * Math.sqrt(1 + Math.pow(y / beta, 2));
-    };
-    const hyper = Array.from(Array(50).keys()).map((i) => [
-      hyperX((i - 25) / 10) + first.x + distance / 2,
-      (i - 25) / 10 + first.y,
-      0,
-    ]);
-    return hyper;
-  };
-
-  const arrayOpen = (from: number, to: number, size: number) =>
-    Array.from(Array(size - 1).keys()).map(
-      (i) => ((i + 1) / size) * (to - from) + from
-    );
-
-  const createHyperbolaNew = (
-    first: Record<string, number>,
-    second: Record<string, number>,
-    delta: number
-  ) => {
-    const { e, p } = getHyperbolaCoeffs(first, second, delta);
+    const { e, p } = getEllipseCoeffs(first, second, delta);
 
     const radius = (p: number, e: number, phi: number) =>
       p / (1 / e + Math.cos(phi));
 
-    const phiLim = Math.acos(-1 / e);
-
-    const hyper = arrayOpen(-phiLim, phiLim, HYPER_POINTS).map((phi) => {
+    const ellipse = Array.from(Array(HYPER_POINTS).keys()).map((i) => {
+      const phi = (i / HYPER_POINTS) * 2 * Math.PI;
       const r = radius(p, e, phi);
       return [r * Math.cos(phi), r * Math.sin(phi), 0];
     });
 
-    const hyper2 = arrayOpen(phiLim, 2 * Math.PI - phiLim, HYPER_POINTS).map(
-      (phi) => {
-        const r = radius(p, e, phi);
-        return [r * Math.cos(phi), r * Math.sin(phi), 0];
-      }
-    );
-
-    return [hyper, hyper2];
+    return ellipse;
   };
 
-  const hyper = createHyperbola(A, B, (2 * timedelta) / 10);
-  const hyper2 = createHyperbola(A, C, (2 * ACdelta) / 10);
-  const [hyper3, hyper4] = createHyperbolaNew(A, C, (2 * ACdelta) / 10);
+  const ellipse1 = createEllipse(A, B, (2 * timedelta) / 10);
+  const ellipse2 = createEllipse(A, C, (2 * ACdelta) / 10);
 
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
   const alphaAC = Math.atan2(C.y - A.y, C.x - A.x);
@@ -130,8 +96,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
 
   const calculateIntersection = () => {
-    const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 10);
-    const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 10);
+    const { e: e1, p: p1 } = getEllipseCoeffs(A, B, (2 * timedelta) / 10);
+    const { e: e2, p: p2 } = getEllipseCoeffs(A, C, (2 * ACdelta) / 10);
     const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
     const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
@@ -163,24 +129,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     const r23 = getR(p2, e2, u2, s2, alphaAC);
     const r24 = getR(p2, e2, u2, -s2, alphaAC);
 
-    // console.log(
-    //   {
-    //     p1,
-    //     p2,
-    //   },
-    //   {
-    //     e1,
-    //     e2,
-    //   },
-    //   {
-    //     u1,
-    //     u2,
-    //   },
-    //   {
-    //     u1angle: (Math.acos(u1) * 180) / Math.PI,
-    //     u2angle: (Math.acos(u2) * 180) / Math.PI,
-    //   }
-    // );
     console.table([
       {
         u: u1,
@@ -216,13 +164,25 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
         c: a * u2 - b * s2,
       },
     ]);
-    if (areEqual(r11, r21)) return { x: r11 * u1, y: r11 * s1, u1, u2 };
-    return { x: r12 * u1, y: r12 * -s1, u1, u2 };
+
+    // extract phi angles of solutions
+    let phiAngles = {};
+    if (areEqual(r11, r21))
+      phiAngles = { ...phiAngles, phi1: Math.atan2(s1, u1) };
+    if (areEqual(r12, r22))
+      phiAngles = { ...phiAngles, phi1: Math.atan2(-s1, u1) };
+    if (areEqual(r13, r23))
+      phiAngles = { ...phiAngles, phi2: Math.atan2(s2, u2) };
+    if (areEqual(r14, r24))
+      phiAngles = { ...phiAngles, phi2: Math.atan2(-s2, u2) };
+
+    if (areEqual(r13, r23)) return { x: r13 * u2, y: r13 * s2, ...phiAngles };
+    return { x: r14 * u2, y: r14 * -s2, ...phiAngles };
   };
 
-  const { x, y, u1, u2 } = calculateIntersection();
+  const { x, y, phi1, phi2 } = calculateIntersection();
 
-  const [towerSpring] = useSpring(
+  const [spring] = useSpring(
     () => ({
       rotationAB: alphaAB,
       rotationAC: alphaAC,
@@ -232,8 +192,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       ABy: (A.y + B.y) / 2 - 1.5 * Math.cos(alphaAB),
       ACx: (A.x + C.x) / 2 - 1.5 * Math.sin(alphaAC),
       ACy: (A.y + C.y) / 2 + 1.5 * Math.cos(alphaAC),
+      x,
+      y,
     }),
-    [A, B, C]
+    [A, B, C, x, y]
   );
 
   return (
@@ -257,32 +219,32 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
         scale={3}
       >
         <AnimatedHtml
-          position-x={towerSpring.ABx}
-          position-y={towerSpring.ABy}
-          rotation-z={towerSpring.rotationAB}
+          position-x={spring.ABx}
+          position-y={spring.ABy}
+          rotation-z={spring.rotationAB}
         >
           <div className="ml-16">
             <InputSlider
               label="AB time diff"
               unit="ms"
               value={timedelta}
-              min={-9}
+              min={1}
               max={9}
               setter={setTimedelta}
             />
           </div>
         </AnimatedHtml>
         <AnimatedHtml
-          position-x={towerSpring.ACx}
-          position-y={towerSpring.ACy}
-          rotation-z={towerSpring.rotationAC}
+          position-x={spring.ACx}
+          position-y={spring.ACy}
+          rotation-z={spring.rotationAC}
         >
           <div className="ml-16">
             <InputSlider
               label=""
               unit="ms"
               value={ACdelta}
-              min={-9}
+              min={1}
               max={9}
               setter={setACdelta}
             />
@@ -297,8 +259,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             position-x={A.x}
           />
           <Text
-            position-x={useCompassStore.getState().A.x}
-            position-y={useCompassStore.getState().A.y + 0.2}
+            position-x={useEllipseStore.getState().A.x}
+            position-y={useEllipseStore.getState().A.y + 0.2}
             fontSize={0.25}
             anchorX="center"
             anchorY="bottom"
@@ -312,8 +274,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             position-x={B.x}
           />
           <Text
-            position-x={useCompassStore.getState().B.x}
-            position-y={useCompassStore.getState().B.y + 0.2}
+            position-x={useEllipseStore.getState().B.x}
+            position-y={useEllipseStore.getState().B.y + 0.2}
             fontSize={0.25}
             anchorX="center"
             anchorY="bottom"
@@ -328,8 +290,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             position-y={C.y}
           />
           <Text
-            position-x={useCompassStore.getState().C.x}
-            position-y={useCompassStore.getState().C.y + 0.2}
+            position-x={useEllipseStore.getState().C.x}
+            position-y={useEllipseStore.getState().C.y + 0.2}
             fontSize={0.25}
             anchorX="center"
             anchorY="bottom"
@@ -338,73 +300,58 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           </Text>
         </group>
         <mesh position-x={A.x} position-y={A.y}>
-          <mesh rotation-z={Math.acos(u1)}>
+          <mesh rotation-z={phi1}>
             <AnimatedLine
               points={[
-                [0, 0, 0],
-                [2.5, 0, 0],
+                [-1.5, 0, 0],
+                [2, 0, 0],
               ]}
               style="thin"
               color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
-          </mesh>
-        </mesh>
-        <mesh position-x={A.x} position-y={A.y}>
-          <mesh rotation-z={-Math.acos(u2)}>
-            <AnimatedLine
-              points={[
-                [0, 0, 0],
-                [2, 0, 0],
-              ]}
-              style="thin"
-              color="red"
-              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
-            <AnimatedHtml position-x={2.2} rotation-z={Math.acos(u2)}>
-              u2
+            <AnimatedHtml position-x={2.2} rotation-z={-phi1}>
+              <Formula tex="\phi_1" />
             </AnimatedHtml>
           </mesh>
         </mesh>
-        <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
-          <Sphere args={[0.1, 32, 32]} position-x={x} position-y={y} />
-        </animated.mesh>
-        <animated.mesh position-x={towerSpring.Ax} position-y={towerSpring.Ay}>
-          <animated.mesh rotation-z={towerSpring.rotationAB}>
-            <animated.mesh
-              position-x={towerSpring.Ax.to((x) => -x)}
-              position-y={towerSpring.Ay.to((y) => -y)}
-            >
-              <AnimatedLine
-                points={hyper}
-                style="airstream"
-                color="grid"
-                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-              />
-            </animated.mesh>
-          </animated.mesh>
-          <animated.mesh rotation-z={towerSpring.rotationAC}>
-            <animated.mesh
-              position-x={towerSpring.Ax.to((x) => -x)}
-              position-y={towerSpring.Ay.to((y) => -y)}
-            >
-              <AnimatedLine
-                points={hyper2}
-                style="airstream"
-                color="grid"
-                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-              />
-            </animated.mesh>
+        <mesh position-x={A.x} position-y={A.y}>
+          <mesh rotation-z={phi2}>
             <AnimatedLine
-              points={hyper3}
+              points={[
+                [-2, 0, 0],
+                [2, 0, 0],
+              ]}
+              style="thin"
+              color="grid"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            />
+            <AnimatedHtml position-x={2.2} rotation-z={-phi2}>
+              <Formula tex="\phi_2" />
+            </AnimatedHtml>
+          </mesh>
+        </mesh>
+        <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
+          <ASphere
+            args={[0.1, 32, 32]}
+            position-x={spring.x}
+            position-y={spring.y}
+          />
+        </animated.mesh>
+        <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
+          <animated.mesh rotation-z={spring.rotationAB}>
+            <AnimatedLine
+              points={ellipse1}
               style="airstream"
               color="red"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
+          </animated.mesh>
+          <animated.mesh rotation-z={spring.rotationAC}>
             <AnimatedLine
-              points={hyper4}
+              points={ellipse2}
               style="airstream"
-              color="orange"
+              color="red"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
           </animated.mesh>
@@ -430,4 +377,4 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   );
 };
 
-export default NavigationHyperbolic;
+export default NavigationElliptic;
