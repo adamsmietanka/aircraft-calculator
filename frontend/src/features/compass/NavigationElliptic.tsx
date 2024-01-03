@@ -74,6 +74,8 @@ const NavigationElliptic = ({ opacity }: Props) => {
     return { distance, e, p };
   };
 
+  const sineSpacing = (x: number) => Math.sin(x * 0.5 * Math.PI);
+
   const createEllipse = (
     first: Record<string, number>,
     second: Record<string, number>,
@@ -85,12 +87,21 @@ const NavigationElliptic = ({ opacity }: Props) => {
       p / (1 / e + Math.cos(phi));
 
     const ellipse = Array.from(Array(HYPER_POINTS + 1).keys()).map((i) => {
-      const phi = (i / HYPER_POINTS) * 2 * Math.PI;
+      const phi = sineSpacing(i / HYPER_POINTS) * Math.PI;
       const r = radius(p, e, phi);
       return [r * Math.cos(phi), r * Math.sin(phi), 0];
     });
 
-    return ellipse;
+    const ellipseBottom = Array.from(Array(HYPER_POINTS + 1).keys()).map(
+      (i) => {
+        const phi = -sineSpacing(i / HYPER_POINTS) * Math.PI;
+        console.log(phi);
+        const r = radius(p, e, phi);
+        return [r * Math.cos(phi), r * Math.sin(phi), 0];
+      }
+    );
+
+    return [...ellipse, ...ellipseBottom.toReversed()];
   };
 
   const ellipse1 = createEllipse(A, B, (2 * timedelta) / 10);
