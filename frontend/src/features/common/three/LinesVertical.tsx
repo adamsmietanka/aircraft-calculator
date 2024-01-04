@@ -131,6 +131,7 @@ const LinesVertical = ({
         (t, i) =>
           ticks[i] <= max.x / scale[0] && (
             <AnimatedHtml
+              key={t}
               className="text-xs"
               show={show}
               delayVisible={800}

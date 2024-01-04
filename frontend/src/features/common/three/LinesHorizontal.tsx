@@ -128,6 +128,7 @@ const LinesHorizontal = ({
         (t, i) =>
           ticks[i] <= max.y / scale[1] && (
             <AnimatedHtml
+              key={t}
               className="text-xs"
               show={show}
               delayVisible={800}
