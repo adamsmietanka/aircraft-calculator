@@ -1,4 +1,4 @@
-import { Text, Sphere, TransformControls } from "@react-three/drei";
+import { Sphere, TransformControls } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
 import { useState } from "react";
 import { useEllipseStore } from "./stores/useEllipse";
@@ -9,15 +9,17 @@ import Helpers from "./Helpers";
 import Inputs3D from "../common/three/Inputs3D";
 import InputToggle from "../common/inputs/InputToggle";
 import { CANVAS_WIDTH } from "../common/three/config";
+import Tower from "./Tower";
+
+const HYPER_POINTS = 50;
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
-const HYPER_POINTS = 50;
-
 const NavigationElliptic = ({ opacity }: Props) => {
-  const [active, setActive] = useState<THREE.Object3D>(null!);
+  const [active, setActive] = useState<THREE.Object3D | undefined>(null!);
+
   const [gizmoSpring] = useSpring(
     () => ({
       size: !!active ? 0.6 : 0,
@@ -43,6 +45,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
+      console.log(e.target.object);
       const { tower } = e.target.object.userData;
       const { x, y } = e.target.object.position;
       if (tower === "A") {
@@ -146,41 +149,41 @@ const NavigationElliptic = ({ opacity }: Props) => {
     const r23 = getR(p2, e2, u2, s2, alphaAC);
     const r24 = getR(p2, e2, u2, -s2, alphaAC);
 
-    console.table([
-      {
-        u: u1,
-        s: s1,
-        alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
-        r1: r11,
-        r2: r21,
-        c: a * u1 + b * s1,
-        delta: Math.abs((r21 - r11) / r21),
-      },
-      {
-        u: u1,
-        s: -s1,
-        alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
-        r1: r12,
-        r2: r22,
-        c: a * u1 - b * s1,
-      },
-      {
-        u: u2,
-        s: s2,
-        alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
-        r1: r13,
-        r2: r23,
-        c: a * u2 + b * s2,
-      },
-      {
-        u: u2,
-        s: -s2,
-        alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
-        r1: r14,
-        r2: r24,
-        c: a * u2 - b * s2,
-      },
-    ]);
+    // console.table([
+    //   {
+    //     u: u1,
+    //     s: s1,
+    //     alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
+    //     r1: r11,
+    //     r2: r21,
+    //     c: a * u1 + b * s1,
+    //     delta: Math.abs((r21 - r11) / r21),
+    //   },
+    //   {
+    //     u: u1,
+    //     s: -s1,
+    //     alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
+    //     r1: r12,
+    //     r2: r22,
+    //     c: a * u1 - b * s1,
+    //   },
+    //   {
+    //     u: u2,
+    //     s: s2,
+    //     alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
+    //     r1: r13,
+    //     r2: r23,
+    //     c: a * u2 + b * s2,
+    //   },
+    //   {
+    //     u: u2,
+    //     s: -s2,
+    //     alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
+    //     r1: r14,
+    //     r2: r24,
+    //     c: a * u2 - b * s2,
+    //   },
+    // ]);
 
     // extract phi angles of solutions
     let phiAngles = { phi1: 0, phi2: 0 };
@@ -267,55 +270,24 @@ const NavigationElliptic = ({ opacity }: Props) => {
             />
           </div>
         </AnimatedHtml>
-        <group>
-          <Sphere
-            args={[0.15, 32, 32]}
-            userData={{ tower: "A" }}
-            onClick={(e) => setActive(e.object)}
-            onPointerMissed={(e) => setActive(null)}
-            position-x={A.x}
-          />
-          <Text
-            position-x={useEllipseStore.getState().A.x}
-            position-y={useEllipseStore.getState().A.y + 0.2}
-            fontSize={0.25}
-            anchorX="center"
-            anchorY="bottom"
-          >
-            A
-          </Text>
-          <Sphere
-            args={[0.15, 32, 32]}
-            userData={{ tower: "B" }}
-            onClick={(e) => setActive(e.object)}
-            position-x={B.x}
-          />
-          <Text
-            position-x={useEllipseStore.getState().B.x}
-            position-y={useEllipseStore.getState().B.y + 0.2}
-            fontSize={0.25}
-            anchorX="center"
-            anchorY="bottom"
-          >
-            B
-          </Text>
-          <Sphere
-            args={[0.15, 32, 32]}
-            userData={{ tower: "C" }}
-            onClick={(e) => setActive(e.object)}
-            position-x={C.x}
-            position-y={C.y}
-          />
-          <Text
-            position-x={useEllipseStore.getState().C.x}
-            position-y={useEllipseStore.getState().C.y + 0.2}
-            fontSize={0.25}
-            anchorX="center"
-            anchorY="bottom"
-          >
-            C
-          </Text>
-        </group>
+        <Tower
+          label="A"
+          position-x={useEllipseStore.getState().A.x}
+          position-y={useEllipseStore.getState().A.y}
+          setter={setActive}
+        />
+        <Tower
+          label="B"
+          position-x={useEllipseStore.getState().B.x}
+          position-y={useEllipseStore.getState().B.y}
+          setter={setActive}
+        />
+        <Tower
+          label="C"
+          position-x={useEllipseStore.getState().C.x}
+          position-y={useEllipseStore.getState().C.y}
+          setter={setActive}
+        />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <ASphere
             args={[0.1, 32, 32]}
