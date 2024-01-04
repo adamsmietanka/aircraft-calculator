@@ -9,6 +9,7 @@ import AnimatedHtml from "../common/three/AnimatedHtml";
 import Helpers from "./Helpers";
 import { CANVAS_WIDTH } from "../common/three/config";
 import InputToggle from "../common/inputs/InputToggle";
+import Tower from "./Tower";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -18,7 +19,7 @@ const POLAR_POINTS = 50;
 const POINTS = 60;
 
 const NavigationHyperbolic = ({ opacity }: Props) => {
-  const [active, setActive] = useState<THREE.Object3D>(null!);
+  const [active, setActive] = useState<THREE.Object3D | undefined>(null!);
   const [gizmoSpring] = useSpring(
     () => ({
       size: !!active ? 0.6 : 0,
@@ -292,55 +293,24 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             />
           </div>
         </AnimatedHtml>
-        <group>
-          <Sphere
-            args={[0.15, 32, 32]}
-            userData={{ tower: "A" }}
-            onClick={(e) => setActive(e.object)}
-            onPointerMissed={(e) => setActive(null)}
-            position-x={A.x}
-          />
-          <Text
-            position-x={useCompassStore.getState().A.x}
-            position-y={useCompassStore.getState().A.y + 0.2}
-            fontSize={0.25}
-            anchorX="center"
-            anchorY="bottom"
-          >
-            A
-          </Text>
-          <Sphere
-            args={[0.15, 32, 32]}
-            userData={{ tower: "B" }}
-            onClick={(e) => setActive(e.object)}
-            position-x={B.x}
-          />
-          <Text
-            position-x={useCompassStore.getState().B.x}
-            position-y={useCompassStore.getState().B.y + 0.2}
-            fontSize={0.25}
-            anchorX="center"
-            anchorY="bottom"
-          >
-            B
-          </Text>
-          <Sphere
-            args={[0.15, 32, 32]}
-            userData={{ tower: "C" }}
-            onClick={(e) => setActive(e.object)}
-            position-x={C.x}
-            position-y={C.y}
-          />
-          <Text
-            position-x={useCompassStore.getState().C.x}
-            position-y={useCompassStore.getState().C.y + 0.2}
-            fontSize={0.25}
-            anchorX="center"
-            anchorY="bottom"
-          >
-            C
-          </Text>
-        </group>
+        <Tower
+          label="A"
+          position-x={useCompassStore.getState().A.x}
+          position-y={useCompassStore.getState().A.y}
+          setter={setActive}
+        />
+        <Tower
+          label="B"
+          position-x={useCompassStore.getState().B.x}
+          position-y={useCompassStore.getState().B.y}
+          setter={setActive}
+        />
+        <Tower
+          label="C"
+          position-x={useCompassStore.getState().C.x}
+          position-y={useCompassStore.getState().C.y}
+          setter={setActive}
+        />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <ASphere
             args={[0.1, 32, 32]}
