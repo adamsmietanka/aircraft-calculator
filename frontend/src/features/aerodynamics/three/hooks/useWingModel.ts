@@ -45,7 +45,7 @@ const useWingModel = (customShape?: number) => {
 
   const wingGeometry = useMemo(() => new BufferGeometry(), []);
 
-  const [geom, setGeom] = useState<BufferGeometry>(null!);
+  const [geom, setGeom] = useState<BufferGeometry>(new BufferGeometry());
   const { xOutline, yOutline } = getOutline();
   const shape = new Shape();
 
@@ -103,7 +103,7 @@ const useWingModel = (customShape?: number) => {
   }, [profilePoints, pathname]);
 
   useEffect(() => {
-    createModel();
+    profilePoints.length && createModel();
   }, []);
   return { geom };
 };
