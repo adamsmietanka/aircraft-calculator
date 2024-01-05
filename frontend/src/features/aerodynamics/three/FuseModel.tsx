@@ -15,7 +15,8 @@ const FuseModel = ({ opacity }: Props) => {
       rotation-x={Math.PI / 2}
       rotation-z={-Math.PI / 2}
       scale={0.1 * 6}
-      position-x={-1}
+      scale-y={0.1 * 8}
+      position-x={-1.5}
     >
       <animated.meshStandardMaterial
         color={"white"}

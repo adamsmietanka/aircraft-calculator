@@ -89,7 +89,7 @@ const Home = ({ opacity }: Props) => {
           <mesh scale-z={1.5}>
             <WingModel opacity={opacity} shape={1} />
           </mesh>
-          <mesh scale-x={1.5}>
+          <mesh scale-x={1.2}>
             <FuseModel opacity={opacity} />
           </mesh>
         </mesh>
