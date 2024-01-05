@@ -56,7 +56,7 @@ const useSimpleWingModel = () => {
   }, [profilePoints, pathname]);
 
   useEffect(() => {
-    createModel();
+    profilePoints.length && createModel();
   }, []);
   return { geom };
 };
