@@ -16,9 +16,9 @@ export interface CompassState {
 export const useCompassStore = create<CompassState>()((set) => ({
   timedelta: 1,
   ACdelta: 1,
-  A: { x: -1, y: 0 },
-  B: { x: 1, y: 0 },
-  C: { x: -1, y: 2 },
+  A: { x: -1, y: -1 },
+  B: { x: 1, y: -1 },
+  C: { x: -1, y: 1 },
   helpers: true,
   setTimedelta: (value) => set({ timedelta: value }),
   setACdelta: (value) => set({ ACdelta: value }),

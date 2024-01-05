@@ -1,4 +1,4 @@
-import { Text, Sphere, TransformControls } from "@react-three/drei";
+import { TransformControls, Resize } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
 import { useState } from "react";
 import Inputs3D from "../common/three/Inputs3D";
@@ -10,6 +10,7 @@ import Helpers from "./Helpers";
 import { CANVAS_WIDTH } from "../common/three/config";
 import InputToggle from "../common/inputs/InputToggle";
 import Tower from "./Tower";
+import PlaneModel from "../aerodynamics/three/PlaneModel";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -27,7 +28,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     [active]
   );
 
-  const ASphere = animated(Sphere);
   const AnimatedTransform = animated(TransformControls);
 
   const timedelta = useCompassStore((state) => state.timedelta);
@@ -172,41 +172,41 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     const r23 = getR(p2, e2, u2, s2, alphaAC);
     const r24 = getR(p2, e2, u2, -s2, alphaAC);
 
-    console.table([
-      {
-        u: u1,
-        s: s1,
-        alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
-        r1: r11,
-        r2: r21,
-        c: a * u1 + b * s1,
-        delta: Math.abs((r21 - r11) / r21),
-      },
-      {
-        u: u1,
-        s: -s1,
-        alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
-        r1: r12,
-        r2: r22,
-        c: a * u1 - b * s1,
-      },
-      {
-        u: u2,
-        s: s2,
-        alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
-        r1: r13,
-        r2: r23,
-        c: a * u2 + b * s2,
-      },
-      {
-        u: u2,
-        s: -s2,
-        alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
-        r1: r14,
-        r2: r24,
-        c: a * u2 - b * s2,
-      },
-    ]);
+    // console.table([
+    //   {
+    //     u: u1,
+    //     s: s1,
+    //     alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
+    //     r1: r11,
+    //     r2: r21,
+    //     c: a * u1 + b * s1,
+    //     delta: Math.abs((r21 - r11) / r21),
+    //   },
+    //   {
+    //     u: u1,
+    //     s: -s1,
+    //     alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
+    //     r1: r12,
+    //     r2: r22,
+    //     c: a * u1 - b * s1,
+    //   },
+    //   {
+    //     u: u2,
+    //     s: s2,
+    //     alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
+    //     r1: r13,
+    //     r2: r23,
+    //     c: a * u2 + b * s2,
+    //   },
+    //   {
+    //     u: u2,
+    //     s: -s2,
+    //     alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
+    //     r1: r14,
+    //     r2: r24,
+    //     c: a * u2 - b * s2,
+    //   },
+    // ]);
 
     // extract phi angles of solutions
     let phiAngles = { phi1: 0, phi2: 0 };
@@ -260,7 +260,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
         </div>
       </Inputs3D>
-      <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3}>
+      <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3.5}>
         <AnimatedHtml
           position-x={spring.ABx}
           position-y={spring.ABy}
@@ -312,14 +312,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           setter={setActive}
         />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
-          <ASphere
-            args={[0.1, 32, 32]}
-            position-x={spring.x}
-            position-y={spring.y}
-          />
-          <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
-        </animated.mesh>
-        <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
             <animated.mesh
               position-x={spring.Ax.to((x) => -x)}
@@ -358,6 +350,12 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             /> */}
           </animated.mesh>
+          <animated.mesh position-x={spring.x} position-y={spring.y}>
+            <Resize rotation={[-Math.PI / 2, 0, 0]} scale={0.25}>
+              <PlaneModel opacity={opacity} />
+            </Resize>
+          </animated.mesh>
+          <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
         </animated.mesh>
         {/* <animated.mesh position-x={-1} scale={1 + delta12 / 2 + deltaRadius}>
           <AnimatedLine
