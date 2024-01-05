@@ -10,6 +10,7 @@ import LineChart from "../../common/three/LineChart";
 import usePlaneAerodynamics from "../hooks/usePlaneAerodynamics";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import Legend from "../../common/three/Legend";
+import FuselageChoose from "../FuselageChoose";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -36,6 +37,7 @@ const Fuselage = ({ opacity }: Props) => {
     <mesh position-x={0}>
       <mesh rotation={[(-20 * Math.PI) / 180, (-45 * Math.PI) / 180, 0, "YXZ"]}>
         <Inputs3D gridPositionX={-1.2}>
+          <FuselageChoose />
           <FuselageConfiguration />
         </Inputs3D>
         <LineChart
