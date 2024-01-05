@@ -1,4 +1,4 @@
-import { Sphere, TransformControls } from "@react-three/drei";
+import { Resize, TransformControls } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
 import { useState } from "react";
 import { useEllipseStore } from "./stores/useEllipse";
@@ -10,6 +10,7 @@ import Inputs3D from "../common/three/Inputs3D";
 import InputToggle from "../common/inputs/InputToggle";
 import { CANVAS_WIDTH } from "../common/three/config";
 import Tower from "./Tower";
+import PlaneModel from "../aerodynamics/three/PlaneModel";
 
 const HYPER_POINTS = 50;
 
@@ -26,8 +27,6 @@ const NavigationElliptic = ({ opacity }: Props) => {
     }),
     [active]
   );
-
-  const ASphere = animated(Sphere);
 
   const AnimatedTransform = animated(TransformControls);
 
@@ -98,7 +97,6 @@ const NavigationElliptic = ({ opacity }: Props) => {
     const ellipseBottom = Array.from(Array(HYPER_POINTS + 1).keys()).map(
       (i) => {
         const phi = -sineSpacing(i / HYPER_POINTS) * Math.PI;
-        console.log(phi);
         const r = radius(p, e, phi);
         return [r * Math.cos(phi), r * Math.sin(phi), 0];
       }
@@ -208,10 +206,10 @@ const NavigationElliptic = ({ opacity }: Props) => {
       rotationAC: alphaAC,
       Ax: A.x,
       Ay: A.y,
-      ABx: (A.x + B.x) / 2 + 1.5 * Math.sin(alphaAB),
-      ABy: (A.y + B.y) / 2 - 1.5 * Math.cos(alphaAB),
-      ACx: (A.x + C.x) / 2 - 1.5 * Math.sin(alphaAC),
-      ACy: (A.y + C.y) / 2 + 1.5 * Math.cos(alphaAC),
+      ABx: (A.x + B.x) / 2 + 0.75 * Math.sin(alphaAB),
+      ABy: (A.y + B.y) / 2 - 0.75 * Math.cos(alphaAB),
+      ACx: (A.x + C.x) / 2 - 0.75 * Math.sin(alphaAC),
+      ACy: (A.y + C.y) / 2 + 0.75 * Math.cos(alphaAC),
       x,
       y,
     }),
@@ -237,7 +235,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
           <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
         </div>
       </Inputs3D>
-      <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3}>
+      <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3.5}>
         <AnimatedHtml
           position-x={spring.ABx}
           position-y={spring.ABy}
@@ -261,7 +259,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
         >
           <div className="ml-16">
             <InputSlider
-              label=""
+              label="AC time diff"
               unit="ms"
               value={ACdelta}
               min={1}
@@ -289,14 +287,6 @@ const NavigationElliptic = ({ opacity }: Props) => {
           setter={setActive}
         />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
-          <ASphere
-            args={[0.1, 32, 32]}
-            position-x={spring.x}
-            position-y={spring.y}
-          />
-          <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
-        </animated.mesh>
-        <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
             <AnimatedLine
               points={ellipse1}
@@ -313,6 +303,12 @@ const NavigationElliptic = ({ opacity }: Props) => {
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
           </animated.mesh>
+          <animated.mesh position-x={spring.x} position-y={spring.y}>
+            <Resize rotation={[-Math.PI / 2, 0, 0]} scale={0.25}>
+              <PlaneModel opacity={opacity} />
+            </Resize>
+          </animated.mesh>
+          <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
         </animated.mesh>
       </animated.mesh>
     </>
