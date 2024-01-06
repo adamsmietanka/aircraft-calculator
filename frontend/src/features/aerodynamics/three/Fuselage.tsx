@@ -14,6 +14,7 @@ import FuselageChoose from "../FuselageChoose";
 import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import InputToggle from "../../common/inputs/InputToggle";
+import usePlaneCharts from "../hooks/usePlaneChart";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -33,6 +34,7 @@ const Fuselage = ({ opacity }: Props) => {
   const setMeasurements = usePlaneStore((state) => state.setMeasurements);
 
   const { wingCd, fuseCd, cl, cd } = usePlaneAerodynamics();
+  const { usePlaneChartStore } = usePlaneCharts();
 
   const [planeSpring] = useSpring(
     () => ({
@@ -93,7 +95,7 @@ const Fuselage = ({ opacity }: Props) => {
             },
           }}
           yHover
-          // store={useWingChartsStore}
+          store={usePlaneChartStore}
         />
         <Legend
           gridPositionX={1.6}
@@ -103,6 +105,7 @@ const Fuselage = ({ opacity }: Props) => {
             { name: "Wing", style: "thinDashed" },
           ]}
           opacity={opacity}
+          store={usePlaneChartStore}
         />
       </mesh>
       <mesh position-x={-4.5}>
