@@ -13,6 +13,7 @@ const FuseModel = ({ opacity }: Props) => {
   const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
+  const wingX = usePlaneStore((state) => state.wingX);
   const fuseLatch = usePlaneStore((state) => state.fuseLatch);
 
   const first = useRef<Mesh>(null!);
@@ -22,8 +23,9 @@ const FuseModel = ({ opacity }: Props) => {
     () => ({
       scaleFirst: fuseLatch ? length : 1,
       scaleSecond: fuseLatch ? 1 : length,
+      wingPosition: -wingX,
     }),
-    [fuselage, fuseLatch, length]
+    [fuselage, fuseLatch, length, wingX]
   );
 
   const setFuselages = () => {
@@ -45,7 +47,7 @@ const FuseModel = ({ opacity }: Props) => {
         ref={first}
         geometry={nodes[2302]?.geometry}
         scale={spring.scaleFirst}
-        position-x={-1.5}
+        position-x={spring.wingPosition}
       >
         <animated.meshStandardMaterial
           color={"white"}
@@ -58,7 +60,7 @@ const FuseModel = ({ opacity }: Props) => {
         ref={second}
         geometry={nodes[2304]?.geometry}
         scale={spring.scaleSecond}
-        position-x={-1.5}
+        position-x={spring.wingPosition}
       >
         <animated.meshStandardMaterial
           color={"white"}

@@ -11,6 +11,8 @@ import usePlaneAerodynamics from "../hooks/usePlaneAerodynamics";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import Legend from "../../common/three/Legend";
 import FuselageChoose from "../FuselageChoose";
+import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
+import InputDrawing from "../../common/inputs/InputDrawing";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -18,8 +20,14 @@ interface Props {
 
 const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
+  const length = usePlaneStore((state) => state.length);
+  const wingX = usePlaneStore((state) => state.wingX);
+
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
+
+  const setLength = usePlaneStore((state) => state.setLength);
+  const setWingX = usePlaneStore((state) => state.setWingX);
 
   const { wingCd, fuseCd, cl, cd } = usePlaneAerodynamics();
 
@@ -29,8 +37,9 @@ const Fuselage = ({ opacity }: Props) => {
       cylinders:
         shape === 0 && (configuration === 1 || configuration === 3) ? 1 : 0,
       fuseZ: configuration === 2 || configuration === 3 ? span / 6 : 0,
+      wingPosition: -wingX,
     }),
-    [configuration, shape]
+    [configuration, shape, wingX]
   );
 
   return (
@@ -108,6 +117,24 @@ const Fuselage = ({ opacity }: Props) => {
             </animated.mesh>
             <animated.mesh position-z={planeSpring.fuseZ}>
               <FuseModel opacity={opacity} />
+              <AnimatedInputTechnical
+                visible={true}
+                distance={2}
+                value={length}
+                startX={-wingX}
+                opacity={opacity.to((o) => 0.75 * o)}
+              >
+                <InputDrawing value={length} setter={setLength} />
+              </AnimatedInputTechnical>
+              <AnimatedInputTechnical
+                visible={true}
+                distance={1.25}
+                value={wingX}
+                startX={-wingX}
+                opacity={opacity.to((o) => 0.75 * o)}
+              >
+                <InputDrawing value={wingX} setter={setWingX} />
+              </AnimatedInputTechnical>
             </animated.mesh>
             <WingModel opacity={opacity} />
             <animated.mesh position-y={planeSpring.wingY}>
