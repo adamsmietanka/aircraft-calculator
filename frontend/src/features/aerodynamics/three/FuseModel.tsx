@@ -12,6 +12,7 @@ interface Props {
 const FuseModel = ({ opacity }: Props) => {
   const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
   const fuselage = usePlaneStore((state) => state.fuselage);
+  const length = usePlaneStore((state) => state.length);
   const fuseLatch = usePlaneStore((state) => state.fuseLatch);
 
   const first = useRef<Mesh>(null!);
@@ -19,10 +20,10 @@ const FuseModel = ({ opacity }: Props) => {
 
   const [spring] = useSpring(
     () => ({
-      scaleFirst: fuseLatch ? 8 : 1,
-      scaleSecond: fuseLatch ? 1 : 8,
+      scaleFirst: fuseLatch ? length : 1,
+      scaleSecond: fuseLatch ? 1 : length,
     }),
-    [fuselage, fuseLatch]
+    [fuselage, fuseLatch, length]
   );
 
   const setFuselages = () => {
