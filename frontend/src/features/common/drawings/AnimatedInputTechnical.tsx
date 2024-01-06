@@ -1,4 +1,10 @@
-import { Interpolation, SpringValue, animated, to, useSpring } from "@react-spring/three";
+import {
+  Interpolation,
+  SpringValue,
+  animated,
+  to,
+  useSpring,
+} from "@react-spring/three";
 import { ReactNode, useMemo, useRef } from "react";
 import AnimatedLine from "../three/AnimatedLine";
 import AnimatedTipNew from "./AnimatedTipNew";
@@ -111,6 +117,7 @@ const AnimatedInputTechnical = ({
         />
 
         <AnimatedHtml
+          show={visible}
           position={to(
             [inputSpring.value, inputSpring.scale],
             (value, scale) => [
