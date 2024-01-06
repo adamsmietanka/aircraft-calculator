@@ -43,7 +43,6 @@ const FuselageChoose = () => {
             {Object.keys(configs).map((c) => (
               <li key={c} className="">
                 <a className="py-4" onClick={() => handleClick(c)}>
-                  {/* {configs[c]} */}
                   {React.cloneElement(configs[c], {
                     className: "w-36",
                   })}
