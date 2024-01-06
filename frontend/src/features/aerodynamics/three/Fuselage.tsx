@@ -13,6 +13,7 @@ import Legend from "../../common/three/Legend";
 import FuselageChoose from "../FuselageChoose";
 import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
 import InputDrawing from "../../common/inputs/InputDrawing";
+import InputToggle from "../../common/inputs/InputToggle";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -22,12 +23,14 @@ const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
+  const measurements = usePlaneStore((state) => state.measurements);
 
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
 
   const setLength = usePlaneStore((state) => state.setLength);
   const setWingX = usePlaneStore((state) => state.setWingX);
+  const setMeasurements = usePlaneStore((state) => state.setMeasurements);
 
   const { wingCd, fuseCd, cl, cd } = usePlaneAerodynamics();
 
@@ -48,6 +51,11 @@ const Fuselage = ({ opacity }: Props) => {
         <Inputs3D gridPositionX={-1.2}>
           <FuselageChoose />
           <FuselageConfiguration />
+          <InputToggle
+            label="Measurements"
+            value={measurements}
+            setter={setMeasurements}
+          />
         </Inputs3D>
         <LineChart
           width={0.5}
@@ -118,7 +126,7 @@ const Fuselage = ({ opacity }: Props) => {
             <animated.mesh position-z={planeSpring.fuseZ}>
               <FuseModel opacity={opacity} />
               <AnimatedInputTechnical
-                visible={true}
+                visible={measurements}
                 distance={2}
                 value={length}
                 startX={-wingX}
@@ -127,7 +135,7 @@ const Fuselage = ({ opacity }: Props) => {
                 <InputDrawing value={length} setter={setLength} />
               </AnimatedInputTechnical>
               <AnimatedInputTechnical
-                visible={true}
+                visible={measurements}
                 distance={1.25}
                 value={wingX}
                 startX={-wingX}
