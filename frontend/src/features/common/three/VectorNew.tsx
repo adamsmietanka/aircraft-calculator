@@ -39,7 +39,7 @@ const VectorNew = ({
   const [spring, springApi] = useSpring(
     () => ({
       value: length,
-      rotationZ: Math.atan(y / x) + (x < 0 ? Math.PI : 0),
+      rotationZ: Math.atan2(y, x),
       textY:
         length * VECTOR_SIZE + (otherValue ? 0.1 : 0.5) * (length < 0 ? -1 : 1),
       otherDirection: otherValue ? Math.sign(otherValue) : 0,
