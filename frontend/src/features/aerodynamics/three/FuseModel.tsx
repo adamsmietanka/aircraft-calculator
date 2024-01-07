@@ -21,8 +21,10 @@ const FuseModel = ({ opacity }: Props) => {
 
   const [spring] = useSpring(
     () => ({
-      scaleFirst: fuseLatch ? length : 1,
-      scaleSecond: fuseLatch ? 1 : length,
+      scaleFirst: fuseLatch ? length : length / 2,
+      posFirst: fuseLatch ? -wingX : 0,
+      scaleSecond: fuseLatch ? length / 2 : length,
+      posSecond: fuseLatch ? 0 : -wingX,
       wingPosition: -wingX,
     }),
     [fuselage, fuseLatch, length, wingX]
@@ -47,7 +49,7 @@ const FuseModel = ({ opacity }: Props) => {
         ref={first}
         geometry={nodes[2302]?.geometry}
         scale={spring.scaleFirst}
-        position-x={spring.wingPosition}
+        position-x={spring.posFirst}
       >
         <animated.meshStandardMaterial
           color={"white"}
@@ -60,7 +62,7 @@ const FuseModel = ({ opacity }: Props) => {
         ref={second}
         geometry={nodes[2304]?.geometry}
         scale={spring.scaleSecond}
-        position-x={spring.wingPosition}
+        position-x={spring.posSecond}
       >
         <animated.meshStandardMaterial
           color={"white"}
