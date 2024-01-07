@@ -1,4 +1,5 @@
 import { ReactComponent as Arrow } from "../../assets/arrow.svg";
+import { ReactComponent as Fuse1 } from "../../assets/fuselages/2301.svg";
 import { ReactComponent as Fuse2 } from "../../assets/fuselages/2302.svg";
 import { ReactComponent as Fuse3 } from "../../assets/fuselages/2303.svg";
 import { ReactComponent as Fuse4 } from "../../assets/fuselages/2304.svg";
@@ -12,6 +13,7 @@ const FuselageChoose = () => {
   };
 
   const configs: Record<string, JSX.Element> = {
+    2301: <Fuse1 />,
     2302: <Fuse2 />,
     2303: <Fuse3 />,
     2304: <Fuse4 />,

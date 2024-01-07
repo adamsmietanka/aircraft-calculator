@@ -13,7 +13,7 @@ export const usePlaneChartStore = create<MarkersStore>()((set) => ({
   yHover: 0,
   hover: false,
   locked: "",
-  legend: "Wing",
+  legend: "Plane",
   set: (value) => set(value),
 }));
 
