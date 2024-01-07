@@ -41,7 +41,7 @@ const MomentNew = ({
   const [spring, springApi] = useSpring(
     () => ({
       value: length,
-      rotationZ: Math.atan(y / x) + (x < 0 ? Math.PI : 0),
+      rotationZ: Math.atan2(y, x),
       otherDirection: otherValue ? Math.sign(otherValue) : 0,
       opacity: +show,
       rotation: 0,
@@ -90,7 +90,12 @@ const MomentNew = ({
           </mesh>
         </animated.mesh>
       </mesh>
-      <AnimatedHtml position-x={-0.75} scale-x={-1} position-y={0.75} show={show}>
+      <AnimatedHtml
+        position-x={-0.75}
+        scale-x={-1}
+        position-y={0.75}
+        show={show}
+      >
         <div className={`text-${color} text-xl`}>{children}</div>
       </AnimatedHtml>
     </animated.mesh>

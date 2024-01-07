@@ -31,10 +31,8 @@ const ProfileVectors = ({ opacity, show }: Props) => {
   const [vectorsSpring] = useSpring(
     () => ({
       rotationWeight: Math.PI,
-      rotationLift: splitVectors ? 0 : -Math.atan(cd / cl),
-      rotationDrag: splitVectors
-        ? -Math.PI / 2
-        : -Math.atan(cd / cl) + (Math.sign(cl) === -1 ? Math.PI : 0),
+      rotationLift: splitVectors ? 0 : -Math.atan2(cd, cl),
+      rotationDrag: splitVectors ? -Math.PI / 2 : -Math.atan2(cd, cl),
     }),
     [splitVectors, x, y]
   );
