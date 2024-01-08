@@ -1,5 +1,6 @@
 import { usePlaneStore } from "../stores/usePlane";
-import useWingAerodynamics from "./useWingAerodynamics";
+import { useWingStore } from "../stores/useWing";
+import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
 
 const table: Record<number, { cd: number; area: number }> = {
   2301: { cd: 0.353, area: 0.0153 },
@@ -9,7 +10,10 @@ const table: Record<number, { cd: number; area: number }> = {
 };
 
 const usePlaneAerodynamics = () => {
-  const { area, wingCl, wingCd } = useWingAerodynamics();
+  const wingCl = useWingCoefficientsStore((state) => state.cl);
+  const wingCd = useWingCoefficientsStore((state) => state.cd);
+
+  const area = useWingStore((state) => state.area);
 
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
@@ -18,7 +22,6 @@ const usePlaneAerodynamics = () => {
   const interference = 0.05;
 
   const getCdFuse = (Cl: number) => {
-    const cdFuse = 0.116;
     const wingArea =
       (configuration === 0 || configuration === 2 ? 1 : 2) * area;
     const fuseArea =

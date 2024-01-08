@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect } from "react";
 import { useWingStore } from "../stores/useWing";
 import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
@@ -43,10 +43,13 @@ const useProfileCharts = () => {
 
   const { M } = useProfileCamber();
 
-  const getCl = (aoa: number) => {
-    if (M === 0 && aoa === 0) return 0;
-    return linearInterpolationArray(profileCl, aoa);
-  };
+  const getCl = useCallback(
+    (aoa: number) => {
+      if (M === 0 && aoa === 0) return 0;
+      return linearInterpolationArray(profileCl, aoa);
+    },
+    [profileCl]
+  );
 
   useEffect(() => {
     const aoa = clamp(xHover, table.minAngle, table.maxAngle);

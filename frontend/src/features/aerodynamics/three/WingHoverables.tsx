@@ -1,6 +1,5 @@
 import { SpringValue } from "@react-spring/three";
 import { useWingStore } from "../stores/useWing";
-import useWingAerodynamics from "../hooks/useWingAerodynamics";
 import { useHoverables, useHoverWingStore } from "../hooks/useHoverables";
 import HoverableFormula from "../../common/HoverableFormula";
 import AnimatedHtml from "../../common/three/AnimatedHtml";
@@ -16,9 +15,6 @@ const WingHoverables = ({ scale }: Props) => {
   const wing = useWingStore();
   const hoverStore = useHoverWingStore();
 
-  const { area, aspectRatio, taperRatio, meanAerodynamicChord, MACposition } =
-    useWingAerodynamics();
-
   const { shape } = useHoverables();
 
   const length = useGlobalUnitsStore((state) => state.types.length);
@@ -30,12 +26,12 @@ const WingHoverables = ({ scale }: Props) => {
         <shapeGeometry args={[shape]} />
         <meshStandardMaterial color="green" transparent opacity={0.5} />
       </mesh>
-      <mesh position-x={MACposition[0]} visible={hoverStore.MAC}>
-        <mesh position-y={MACposition[1]}>
+      <mesh position-x={wing.MACposition[0]} visible={hoverStore.MAC}>
+        <mesh position-y={wing.MACposition[1]}>
           <AnimatedLine
             points={[
               [0, 0, 0],
-              [meanAerodynamicChord, 0, 0],
+              [wing.MAC, 0, 0],
             ]}
             color="gray"
           />
@@ -43,8 +39,8 @@ const WingHoverables = ({ scale }: Props) => {
         <AnimatedLine
           points={[
             [0, wing.span / 2, 0],
-            [meanAerodynamicChord, wing.span / 2, 0],
-            [meanAerodynamicChord, -wing.span / 2, 0],
+            [wing.MAC, wing.span / 2, 0],
+            [wing.MAC, -wing.span / 2, 0],
             [0, -wing.span / 2, 0],
             [0, wing.span / 2, 0],
           ]}
@@ -60,7 +56,7 @@ const WingHoverables = ({ scale }: Props) => {
         <div className="text-2xl space-y-3">
           <HoverableFormula
             name="Aspect Ratio"
-            tex={`AR=${aspectRatio.toFixed(2)}`}
+            tex={`AR=${wing.aspectRatio.toFixed(2)}`}
             texHover="AR=\frac{\color{red}b^2}{\color{green}S}"
             hover={hoverStore.b}
             onEnter={() => hoverStore.set({ surface: true, b: true })}
@@ -69,7 +65,7 @@ const WingHoverables = ({ scale }: Props) => {
           />
           <HoverableFormula
             name="Taper Ratio"
-            tex={`\\large\\lambda\\normalsize=${taperRatio.toFixed(2)}`}
+            tex={`\\large\\lambda\\normalsize=${wing.taperRatio.toFixed(2)}`}
             texHover="\large\lambda \normalsize = \frac {\color{orange} c_t} {\color{green} c}"
             hover={hoverStore.chords}
             onEnter={() => hoverStore.set({ chords: true })}
@@ -77,11 +73,11 @@ const WingHoverables = ({ scale }: Props) => {
           />
           <HoverableFormula
             name="Wing Surface"
-            tex={`S=${(area / unitMultipliers.area[areaUnit]).toFixed(2)}\\, ${
-              unitDisplay.area[areaUnit]
-            }`}
+            tex={`S=${(wing.area / unitMultipliers.area[areaUnit]).toFixed(
+              2
+            )}\\, ${unitDisplay.area[areaUnit]}`}
             texHover={` \\textcolor{green}{S}=${(
-              area / unitMultipliers.area[areaUnit]
+              wing.area / unitMultipliers.area[areaUnit]
             ).toFixed(2)}\\, ${unitDisplay.area[areaUnit]}`}
             hover={hoverStore.surface}
             onEnter={() => hoverStore.set({ surface: true })}
@@ -89,11 +85,11 @@ const WingHoverables = ({ scale }: Props) => {
           />
           <HoverableFormula
             name="Mean Aerodynamic Chord"
-            tex={`MAC=${(
-              meanAerodynamicChord / unitMultipliers.length[length]
-            ).toFixed(2)}\\, ${unitDisplay.length[length]}`}
+            tex={`MAC=${(wing.MAC / unitMultipliers.length[length]).toFixed(
+              2
+            )}\\, ${unitDisplay.length[length]}`}
             texHover={` \\textcolor{gray}{MAC}=${(
-              meanAerodynamicChord / unitMultipliers.length[length]
+              wing.MAC / unitMultipliers.length[length]
             ).toFixed(2)}\\, ${unitDisplay.length[length]}`}
             hover={hoverStore.MAC}
             onEnter={() => hoverStore.set({ MAC: true })}
