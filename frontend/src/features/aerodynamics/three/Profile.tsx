@@ -3,15 +3,21 @@ import { animated } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import ProfileChoose from "../ProfileChoose";
 import LineChart from "../../common/three/LineChart";
-import useProfileCharts from "../hooks/useProfileCharts";
+import useProfileCharts, {
+  useProfileChartsStore,
+} from "../hooks/useProfileCharts";
 import { useWingStore } from "../stores/useWing";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import { ElementProps } from "../../navigation/Route";
 import useProfileAnimation from "./tutorials/hooks/useProfileAnimation";
+import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
 
 const Profile = ({ opacity, visible }: ElementProps) => {
-  const { profileCl, profileCd, useProfileChartsStore } = useProfileCharts();
   const profile = useWingStore((state) => state.profile);
+  const profileCl = useProfileCoefficientsStore((state) => state.cl);
+  const profileCd = useProfileCoefficientsStore((state) => state.cd);
+
+  useProfileCharts();
 
   useProfileAnimation(visible);
 

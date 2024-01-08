@@ -7,6 +7,7 @@ import useProfileData from "./useProfileData";
 import useProfileCamber from "./useProfileCamber";
 import clamp from "../../../utils/interpolation/clamp";
 import useProfileInfo from "./useProfileInfo";
+import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
 
 export const useProfileChartsStore = create<MarkersStore>()((set) => ({
   x: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
@@ -29,8 +30,16 @@ const useProfileCharts = () => {
   const locked = useProfileChartsStore((state) => state.locked);
   const setCharts = useProfileChartsStore((state) => state.set);
 
-  const { profileCl, profileCd, profileClMonotonic, profileCdReversed } =
-    useProfileData(wing.reynoldsIndex);
+  const profileCl = useProfileCoefficientsStore((state) => state.cl);
+  const profileCd = useProfileCoefficientsStore((state) => state.cd);
+  const profileClMonotonic = useProfileCoefficientsStore(
+    (state) => state.monotonic
+  );
+  const profileCdReversed = useProfileCoefficientsStore(
+    (state) => state.reversed
+  );
+
+  useProfileData();
 
   const { M } = useProfileCamber();
 

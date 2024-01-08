@@ -2,7 +2,7 @@ import { useState } from "react";
 import { animated } from "@react-spring/three";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
-import useProfileCharts from "../../hooks/useProfileCharts";
+import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 import { useCameraStore } from "../../../common/three/stores/useCamera";
 import Inputs3D from "../../../common/three/Inputs3D";
 import MassSlider from "./MassSlider";
@@ -25,7 +25,6 @@ import InducedDragSigns from "./InducedDragSigns";
 const InducedDrag = ({ opacity, visible }: ElementProps) => {
   const setReynolds = useWingStore((state) => state.setReynolds);
 
-  const { useProfileChartsStore } = useProfileCharts();
   const mass = useHoverProfileStore((state) => state.mass);
   const setMass = useHoverProfileStore((state) => state.setMass);
 

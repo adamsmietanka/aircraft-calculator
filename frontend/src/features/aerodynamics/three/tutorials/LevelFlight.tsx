@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import { useWingStore } from "../../stores/useWing";
-import useProfileCharts from "../../hooks/useProfileCharts";
+import { useProfileChartsStore } from "../../hooks/useProfileCharts";
 import { useCameraStore } from "../../../common/three/stores/useCamera";
 import Inputs3D from "../../../common/three/Inputs3D";
 import MassSlider from "./MassSlider";
@@ -13,10 +13,13 @@ import useSubs from "../../../common/subtitles/hooks/useSubs";
 import { useLevelFlightStore } from "./stores/useLevelFlight";
 import { ElementProps } from "../../../navigation/Route";
 import useAnimation from "../../../common/subtitles/hooks/useAnimation";
+import { useProfileCoefficientsStore } from "../../stores/useProfileCoefficients";
 
 const LevelFlight = ({ opacity, visible }: ElementProps) => {
   const profile = useWingStore((state) => state.profile);
-  const { profileCl, profileCd, useProfileChartsStore } = useProfileCharts();
+
+  const profileCl = useProfileCoefficientsStore((state) => state.cl);
+  const profileCd = useProfileCoefficientsStore((state) => state.cd);
 
   const reynolds = useWingStore((state) => state.reynolds);
 
