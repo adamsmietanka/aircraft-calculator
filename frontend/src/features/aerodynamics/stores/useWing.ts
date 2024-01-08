@@ -11,10 +11,18 @@ export interface WingState {
   isRectangular: boolean;
   profile: string;
   reynoldsIndex: number;
+  reynoldsClosest: number;
   reynolds: number;
   stallVelocity: number;
   material: number;
   shape: number;
+  //aerodynamics
+  area: number;
+  aspectRatio: number;
+  taperRatio: number;
+  MAC: number;
+  MACposition: number[];
+  stallReynolds: number;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
   setTipX: (value: number) => void;
@@ -40,10 +48,18 @@ export const useWingStore = create<WingState>()(
       isRectangular: true,
       profile: "2412",
       reynoldsIndex: 1,
+      reynoldsClosest: 1,
       reynolds: 3,
       stallVelocity: 30,
       material: 0,
       shape: 1,
+      // aerodynamics
+      area: 0,
+      aspectRatio: 0,
+      taperRatio: 0,
+      MAC: 0,
+      MACposition: [0, 0],
+      stallReynolds: 0,
       setChord: (value) => set({ chord: value }),
       setChordTip: (value) => set({ chordTip: value }),
       setTipX: (value) => set({ tipX: value }),

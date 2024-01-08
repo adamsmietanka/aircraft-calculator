@@ -10,20 +10,30 @@ import { SpringValue } from "@react-spring/three";
 import LineChart from "../../common/three/LineChart";
 import Legend from "../../common/three/Legend";
 import WingShape from "../WingShape";
-import useWingCharts from "../hooks/useWingCharts";
+import useWingCharts, { useWingChartsStore } from "../hooks/useWingCharts";
 import { WING_POSITION } from "../../common/three/config";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
+import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
+import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const Wing = ({ opacity }: Props) => {
-  const wing = useWingStore();
-  const { stallReynolds, profileCl, profileCd, inducedCd, wingCl, wingCd } =
-    useWingAerodynamics();
+  const stallVelocity = useWingStore((state) => state.stallVelocity);
+  const setStallVelocity = useWingStore((state) => state.setStallVelocity);
+  const stallReynolds = useWingStore((state) => state.stallReynolds);
+  
+  useWingAerodynamics();
+  useWingCharts();
 
-  const { useWingChartsStore } = useWingCharts();
+  const profileCl = useProfileCoefficientsStore((state) => state.cl);
+  const profileCd = useProfileCoefficientsStore((state) => state.cd);
+
+  const wingCl = useWingCoefficientsStore((state) => state.cl);
+  const wingCd = useWingCoefficientsStore((state) => state.cd);
+  const inducedCd = useWingCoefficientsStore((state) => state.cdInduced);
 
   return (
     <>
@@ -36,8 +46,8 @@ const Wing = ({ opacity }: Props) => {
           <WingMaterial />
           <InputUnits
             type="speed"
-            value={wing.stallVelocity}
-            setter={wing.setStallVelocity}
+            value={stallVelocity}
+            setter={setStallVelocity}
             min={30}
             label="Stall Velocity"
           />

@@ -14,6 +14,8 @@ export const useProfileCoefficientsStore = create<ProfileState>()(
   (set) => ({
     cl: [
       [0, 0, 0],
+      [0.33, 0.33, 0.33],
+      [0.66, 0.66, 0.66],
       [1, 1, 1],
     ],
     cd: [

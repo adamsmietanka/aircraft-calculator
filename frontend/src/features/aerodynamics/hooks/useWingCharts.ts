@@ -3,8 +3,8 @@ import { useWingStore } from "../stores/useWing";
 import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import { MarkersStore } from "../../common/three/Hover";
-import useWingAerodynamics from "./useWingAerodynamics";
-import useReversedData from "../../common/hooks/useReversedData";
+import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
+import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
 
 export const useWingChartsStore = create<MarkersStore>()((set) => ({
   x: { "Coefficient of Lift": 2, "Coefficient of Drag": 2 },
@@ -27,16 +27,20 @@ const useWingCharts = () => {
   const locked = useWingChartsStore((state) => state.locked);
   const setCharts = useWingChartsStore((state) => state.set);
 
-  const { wingCl, wingCd, profileCl, profileCd, inducedCd } =
-    useWingAerodynamics();
+  const profileCl = useProfileCoefficientsStore((state) => state.cl);
+  const profileClMonotonic = useProfileCoefficientsStore(
+    (state) => state.monotonic
+  );
+  const profileCdReversed = useProfileCoefficientsStore(
+    (state) => state.reversed
+  );
 
-  const { clMonotonic: wingClMonotonic, cdReversed: wingCdReversed } =
-    useReversedData(wingCl, wingCd);
-
-  const { clMonotonic: profileClMonotonic, cdReversed: profileCdReversed } =
-    useReversedData(profileCl, profileCd);
-
-  const { cdReversed: inducedCdReversed } = useReversedData(wingCl, inducedCd);
+  const wingCl = useWingCoefficientsStore((state) => state.cl);
+  const wingClMonotonic = useWingCoefficientsStore((state) => state.monotonic);
+  const wingCdReversed = useWingCoefficientsStore((state) => state.reversed);
+  const inducedCdReversed = useWingCoefficientsStore(
+    (state) => state.reversedInduced
+  );
 
   const cl: Record<string, number[][]> = {
     Profile: profileCl,
@@ -75,8 +79,6 @@ const useWingCharts = () => {
         y: { "Coefficient of Lift": Cl, "Coefficient of Drag": Cl },
       });
   }, [wing, legend, yHover]);
-
-  return { useWingChartsStore };
 };
 
 export default useWingCharts;
