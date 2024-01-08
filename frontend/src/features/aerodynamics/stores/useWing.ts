@@ -31,6 +31,7 @@ export interface WingState {
   setProfile: (value: string) => void;
   setReynoldsIndex: (value: number) => void;
   setReynolds: (value: number) => void;
+  setReynoldsClosest: (value: number) => void;
   setStallVelocity: (value: number) => void;
   setMaterial: (value: number) => void;
   setShape: (value: number) => void;
@@ -76,6 +77,7 @@ export const useWingStore = create<WingState>()(
           reynolds: getReynolds(get().profile)[value],
         }),
       setReynolds: (value) => set({ reynolds: value }),
+      setReynoldsClosest: (value) => set({ reynoldsClosest: value }),
       setStallVelocity: (value) => set({ stallVelocity: value }),
       setMaterial: (value) => set({ material: value }),
       setShape: (value) => set({ shape: value }),

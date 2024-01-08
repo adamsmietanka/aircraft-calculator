@@ -8,11 +8,12 @@ interface ProfileState {
   set: (value: Partial<ProfileState>) => void;
 }
 
-export const useProfileCoefficientsStore = create<ProfileState>()((set) => ({
+/**
+ * The charts require two different Profile points sources, because on Profile tab Reynolds number can be set manually, while it is automatically chosen everywhere else
+ */
+export const useProfileTabCoefficientsStore = create<ProfileState>()((set) => ({
   cl: [
     [0, 0, 0],
-    [0.33, 0.33, 0.33],
-    [0.66, 0.66, 0.66],
     [1, 1, 1],
   ],
   cd: [
