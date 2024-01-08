@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { getReynolds } from "../data/profiles";
 import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
 import { useWingStore } from "../stores/useWing";
-import useProfileTable, { Row } from "./useProfileTable";
 import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
 import useReversedData from "../../common/hooks/useReversedData";
 import { table } from "../data/profiles_interpolated";
@@ -24,7 +23,7 @@ const useWingAerodynamics = () => {
   const profileCl = useProfileCoefficientsStore((state) => state.cl);
   const profileCd = useProfileCoefficientsStore((state) => state.cd);
 
-  const setReynoldsIndex = useWingStore((state) => state.setReynoldsIndex);
+  const setReynoldsClosest = useWingStore((state) => state.setReynoldsClosest);
   const setCoefficients = useWingCoefficientsStore((state) => state.set);
   const set = useWingStore((state) => state.set);
 
@@ -37,7 +36,7 @@ const useWingAerodynamics = () => {
         (index, value, i, array) => (value < array[index] ? i : index),
         0
       );
-      // setReynoldsIndex(closestIndex);
+      setReynoldsClosest(closestIndex);
       return closestIndex;
     };
 
@@ -131,7 +130,7 @@ const useWingAerodynamics = () => {
 
     const stallReynolds = (stallVelocity * MAC) / KINEMATIC_VISCOSITY;
 
-    const closestIndex = 1; //getClosestReynolds(stallReynolds);
+    const closestIndex = getClosestReynolds(stallReynolds);
 
     const { maxCz, CdOfZeroCl, slope } = table[profile][closestIndex];
 

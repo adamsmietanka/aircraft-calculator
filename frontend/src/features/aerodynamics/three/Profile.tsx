@@ -10,12 +10,12 @@ import { useWingStore } from "../stores/useWing";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import { ElementProps } from "../../navigation/Route";
 import useProfileAnimation from "./tutorials/hooks/useProfileAnimation";
-import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
+import { useProfileTabCoefficientsStore } from "../stores/useProfileTabCoefficients";
 
 const Profile = ({ opacity, visible }: ElementProps) => {
   const profile = useWingStore((state) => state.profile);
-  const profileCl = useProfileCoefficientsStore((state) => state.cl);
-  const profileCd = useProfileCoefficientsStore((state) => state.cd);
+  const profileCl = useProfileTabCoefficientsStore((state) => state.cl);
+  const profileCd = useProfileTabCoefficientsStore((state) => state.cd);
 
   useProfileCharts();
 
