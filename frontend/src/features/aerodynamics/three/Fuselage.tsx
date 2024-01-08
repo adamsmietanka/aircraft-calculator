@@ -14,7 +14,9 @@ import FuselageChoose from "../FuselageChoose";
 import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import InputToggle from "../../common/inputs/InputToggle";
-import usePlaneCharts from "../hooks/usePlaneChart";
+import usePlaneCharts, { usePlaneChartStore } from "../hooks/usePlaneChart";
+import { usePlaneCoefficientsStore } from "../stores/usePlaneCoefficients";
+import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -33,8 +35,12 @@ const Fuselage = ({ opacity }: Props) => {
   const setWingX = usePlaneStore((state) => state.setWingX);
   const setMeasurements = usePlaneStore((state) => state.setMeasurements);
 
-  const { wingCd, fuseCd, cl, cd } = usePlaneAerodynamics();
-  const { usePlaneChartStore } = usePlaneCharts();
+  usePlaneAerodynamics();
+  usePlaneCharts();
+
+  const cd = usePlaneCoefficientsStore((state) => state.cd);
+  const cdFuse = usePlaneCoefficientsStore((state) => state.cdFuse);
+  const cdWing = useWingCoefficientsStore((state) => state.cd);
 
   const [planeSpring] = useSpring(
     () => ({
@@ -66,8 +72,8 @@ const Fuselage = ({ opacity }: Props) => {
           name="Coefficient of Drag"
           traces={[
             { name: "Plane", points: cd },
-            { name: "Fuselage", points: fuseCd, style: "dotted" },
-            { name: "Wing", points: wingCd, style: "thinDashed" },
+            { name: "Fuselage", points: cdFuse, style: "dotted" },
+            { name: "Wing", points: cdWing, style: "thinDashed" },
           ]}
           axes={{
             x: {

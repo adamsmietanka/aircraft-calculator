@@ -23,8 +23,8 @@ const useProfileData = () => {
       x,
       0.1,
     ]);
-    const { clMonotonic, cdReversed } = useReversedData(cl, cd);
-    setProfileTab({ cl, cd, monotonic: clMonotonic, reversed: cdReversed });
+    const { monotonic, reversed } = useReversedData(cl, cd);
+    setProfileTab({ cl, cd, monotonic, reversed });
   }, [profile, reynoldsIndex]);
 
   useEffect(() => {
@@ -38,8 +38,8 @@ const useProfileData = () => {
       x,
       0.1,
     ]);
-    const { clMonotonic, cdReversed } = useReversedData(cl, cd);
-    set({ cl, cd, monotonic: clMonotonic, reversed: cdReversed });
+    const { monotonic, reversed } = useReversedData(cl, cd);
+    set({ cl, cd, monotonic, reversed });
   }, [profile, reynoldsClosest]);
 };
 
