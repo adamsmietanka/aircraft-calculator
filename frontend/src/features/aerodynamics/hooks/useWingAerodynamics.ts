@@ -152,8 +152,8 @@ const useWingAerodynamics = () => {
     const cl = profileCl.map(([x, y, z]) => [x + getAlphaInduced(y), y, z]);
     const cd = profileCd.map(([y, x, z]) => [getCdWing(x, y), x, z]);
     const cdInduced = profileCd.map(([y, x, z]) => [getCdInduced(x), x, z]);
-    const { clMonotonic, cdReversed } = useReversedData(cl, cd);
-    const { cdReversed: reversedInduced } = useReversedData(cl, cdInduced);
+    const { monotonic, reversed } = useReversedData(cl, cd);
+    const { reversed: reversedInduced } = useReversedData(cl, cdInduced);
 
     set({
       area,
@@ -167,8 +167,8 @@ const useWingAerodynamics = () => {
     setCoefficients({
       cl,
       cd,
-      monotonic: clMonotonic,
-      reversed: cdReversed,
+      monotonic,
+      reversed,
       cdInduced,
       reversedInduced,
     });
