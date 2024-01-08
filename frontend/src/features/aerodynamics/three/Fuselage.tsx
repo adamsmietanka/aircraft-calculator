@@ -6,17 +6,12 @@ import { usePlaneStore } from "../stores/usePlane";
 import { useWingStore } from "../stores/useWing";
 import WingModel from "./WingModel";
 import FuseModel from "./FuseModel";
-import LineChart from "../../common/three/LineChart";
 import usePlaneAerodynamics from "../hooks/usePlaneAerodynamics";
-import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
-import Legend from "../../common/three/Legend";
 import FuselageChoose from "../FuselageChoose";
 import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import InputToggle from "../../common/inputs/InputToggle";
-import usePlaneCharts, { usePlaneChartStore } from "../hooks/usePlaneChart";
-import { usePlaneCoefficientsStore } from "../stores/usePlaneCoefficients";
-import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
+import FuselageChart from "./FuselageChart";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -36,11 +31,6 @@ const Fuselage = ({ opacity }: Props) => {
   const setMeasurements = usePlaneStore((state) => state.setMeasurements);
 
   usePlaneAerodynamics();
-  usePlaneCharts();
-
-  const cd = usePlaneCoefficientsStore((state) => state.cd);
-  const cdFuse = usePlaneCoefficientsStore((state) => state.cdFuse);
-  const cdWing = useWingCoefficientsStore((state) => state.cd);
 
   const [planeSpring] = useSpring(
     () => ({
@@ -65,54 +55,7 @@ const Fuselage = ({ opacity }: Props) => {
             setter={setMeasurements}
           />
         </Inputs3D>
-        <LineChart
-          width={0.5}
-          gridPositionX={1}
-          opacity={opacity}
-          name="Coefficient of Drag"
-          traces={[
-            { name: "Plane", points: cd },
-            { name: "Fuselage", points: cdFuse, style: "dotted" },
-            { name: "Wing", points: cdWing, style: "thinDashed" },
-          ]}
-          axes={{
-            x: {
-              symbol: (
-                <HoverableFormulaSimple
-                  className="text-lg"
-                  name="Coefficient of Drag"
-                  tex="C_D"
-                />
-              ),
-              name: "Coefficient of Drag (Cd)",
-              min: 0,
-            },
-            y: {
-              symbol: (
-                <HoverableFormulaSimple
-                  className="text-lg"
-                  name="Coefficient of Lift"
-                  tex="C_L"
-                />
-              ),
-              name: "Cl",
-              min: -1.75,
-              max: 1.75,
-            },
-          }}
-          yHover
-          store={usePlaneChartStore}
-        />
-        <Legend
-          gridPositionX={1.6}
-          items={[
-            { name: "Plane" },
-            { name: "Fuselage", style: "dotted" },
-            { name: "Wing", style: "thinDashed" },
-          ]}
-          opacity={opacity}
-          store={usePlaneChartStore}
-        />
+        <FuselageChart opacity={opacity} />
       </mesh>
       <mesh position-x={-4.5}>
         <spotLight position={[-10, 5, 10]} intensity={0.5} />
