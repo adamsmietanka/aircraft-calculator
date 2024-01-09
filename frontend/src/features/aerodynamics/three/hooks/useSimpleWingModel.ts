@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import { useLocation } from "react-router-dom";
-import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
+import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
 import { useProfileStore } from "../../stores/useProfile";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 
-const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
+const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
 const useSimpleWingModel = () => {
   const { pathname } = useLocation();

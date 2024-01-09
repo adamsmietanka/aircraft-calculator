@@ -3,7 +3,7 @@ import { useThemeStore } from "../../settings/stores/useTheme";
 import { useMemo } from "react";
 
 //Profile
-export const NUMBER_OF_AIRFOIL_POINTS = 25;
+export const NUMBER_OF_AIRFOIL_SEGMENTS = 25;
 export const PROFILE_POSITION = -0.8;
 export const PROFILE_WIDTH = 0.4;
 export const WING_POSITION = -0.45;

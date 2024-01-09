@@ -3,12 +3,12 @@ import { useWingStore } from "../../stores/useWing";
 import { getXTip } from "./useWingSpring";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import useWingOutline from "../../hooks/useWingOutline";
-import { NUMBER_OF_AIRFOIL_POINTS } from "../../../common/three/config";
+import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { useProfileStore } from "../../stores/useProfile";
 import { useLocation } from "react-router-dom";
 
-const PANELS = 2 * NUMBER_OF_AIRFOIL_POINTS + 1;
+const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
 const useWingModel = (customShape?: number) => {
   const wing = useWingStore();

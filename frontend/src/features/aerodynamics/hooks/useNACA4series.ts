@@ -1,4 +1,4 @@
-import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
+import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../common/three/config";
 
 const useNACA4series = (M: number, P: number, T: number, F: number) => {
   const getCamberY = (x: number) => {
@@ -51,8 +51,8 @@ const useNACA4series = (M: number, P: number, T: number, F: number) => {
   let lower = [];
   let chord = [];
 
-  for (let i = 0; i <= NUMBER_OF_AIRFOIL_POINTS; i++) {
-    const x = cosineSpacing(i / NUMBER_OF_AIRFOIL_POINTS);
+  for (let i = 0; i <= NUMBER_OF_AIRFOIL_SEGMENTS; i++) {
+    const x = cosineSpacing(i / NUMBER_OF_AIRFOIL_SEGMENTS);
     const y = getCamberY(x);
     const points = getLowerUpper(x);
 
