@@ -1,4 +1,4 @@
-import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
+import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../common/three/config";
 
 const useProfileFlat = (T: number) => {
   let upper = [];
@@ -6,18 +6,19 @@ const useProfileFlat = (T: number) => {
   let chord = [];
 
   const verticalPoints = 2;
-  for (let i = 0; i <= NUMBER_OF_AIRFOIL_POINTS; i++) {
+  for (let i = 0; i <= NUMBER_OF_AIRFOIL_SEGMENTS; i++) {
     let x, y;
     if (i < verticalPoints) {
       x = 0;
       y = ((i / verticalPoints) * T) / 2;
-    } else if (i <= NUMBER_OF_AIRFOIL_POINTS - verticalPoints) {
+    } else if (i <= NUMBER_OF_AIRFOIL_SEGMENTS - verticalPoints) {
       x =
-        (i - verticalPoints) / (NUMBER_OF_AIRFOIL_POINTS - 2 * verticalPoints);
+        (i - verticalPoints) /
+        (NUMBER_OF_AIRFOIL_SEGMENTS - 2 * verticalPoints);
       y = T / 2;
     } else {
       x = 1;
-      y = (((NUMBER_OF_AIRFOIL_POINTS - i) / verticalPoints) * T) / 2;
+      y = (((NUMBER_OF_AIRFOIL_SEGMENTS - i) / verticalPoints) * T) / 2;
     }
 
     lower.push([x, -y, 0]);

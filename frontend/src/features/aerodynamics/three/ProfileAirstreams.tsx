@@ -1,6 +1,6 @@
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { useWingStore } from "../stores/useWing";
-import { NUMBER_OF_AIRFOIL_POINTS } from "../../common/three/config";
+import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../common/three/config";
 import { SpringValue } from "@react-spring/three";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import { useProfileStore } from "../stores/useProfile";
@@ -18,7 +18,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
 
   const speed = 0.03 * reynolds;
 
-  const omittedPoints = Math.floor(NUMBER_OF_AIRFOIL_POINTS * 0.1);
+  const omittedPoints = Math.floor(NUMBER_OF_AIRFOIL_SEGMENTS * 0.1);
 
   const y = useProfileChartsStore((state) => state.y);
   return (
@@ -27,7 +27,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
         <AnimatedLine
           points={upperPoints.slice(
             omittedPoints,
-            NUMBER_OF_AIRFOIL_POINTS - omittedPoints + 1
+            NUMBER_OF_AIRFOIL_SEGMENTS - omittedPoints + 1
           )}
           style="airstream"
           color="grid"
@@ -39,7 +39,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
         <AnimatedLine
           points={lowerPoints.slice(
             omittedPoints,
-            NUMBER_OF_AIRFOIL_POINTS - omittedPoints + 1
+            NUMBER_OF_AIRFOIL_SEGMENTS - omittedPoints + 1
           )}
           style="airstream"
           color="grid"
