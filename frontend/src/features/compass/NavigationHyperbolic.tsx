@@ -1,6 +1,6 @@
 import { TransformControls, Resize } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Inputs3D from "../common/three/Inputs3D";
 import { useCompassStore } from "./stores/useCompass";
 import InputSlider from "../common/inputs/InputSlider";
@@ -129,6 +129,11 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const hyper = createHyperbola(A, B, (2 * timedelta) / 10);
   const hyper2 = createHyperbola(A, C, (2 * ACdelta) / 10);
   const [hyper3, hyper4] = createHyperbolaPolar(A, C, (2 * ACdelta) / 10);
+  const [hyper1Polar, hyper2Polar] = createHyperbolaPolar(
+    A,
+    B,
+    (2 * timedelta) / 10
+  );
 
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
   const alphaAC = Math.atan2(C.y - A.y, C.x - A.x);
@@ -222,6 +227,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
 
   const { x, y, phi1, phi2 } = calculateIntersection();
 
+  useEffect(() => {
+    set(calculateIntersection());
+  }, [A, B, C, timedelta, ACdelta]);
+
   const [spring] = useSpring(
     () => ({
       rotationAB: alphaAB,
@@ -311,10 +320,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           position-y={useCompassStore.getState().C.y}
           setter={setActive}
         />
-        <Signals opacity={opacity} A={A} B={B} C={C} />
+        <Signals opacity={opacity} />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
-            <animated.mesh
+            {/* <animated.mesh
               position-x={spring.Ax.to((x) => -x)}
               position-y={spring.Ay.to((y) => -y)}
             >
@@ -324,10 +333,16 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
                 color="grid"
                 opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
               />
-            </animated.mesh>
+            </animated.mesh> */}
+            <AnimatedLine
+              points={hyper2Polar}
+              style="airstream"
+              color="grid"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            />
           </animated.mesh>
           <animated.mesh rotation-z={spring.rotationAC}>
-            <animated.mesh
+            {/* <animated.mesh
               position-x={spring.Ax.to((x) => -x)}
               position-y={spring.Ay.to((y) => -y)}
             >
@@ -337,19 +352,19 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
                 color="grid"
                 opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
               />
-            </animated.mesh>
+            </animated.mesh> */}
             {/* <AnimatedLine
               points={hyper3}
               style="airstream"
               color="red"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            />
+            /> */}
             <AnimatedLine
               points={hyper4}
               style="airstream"
-              color="orange"
+              color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-            /> */}
+            />
           </animated.mesh>
           <animated.mesh position-x={spring.x} position-y={spring.y}>
             <Resize rotation={[-Math.PI / 2, 0, 0]} scale={0.25}>
@@ -358,22 +373,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           </animated.mesh>
           <Helpers show={helpers} phi1={phi1} phi2={phi2} opacity={opacity} />
         </animated.mesh>
-        {/* <animated.mesh position-x={-1} scale={1 + delta12 / 2 + deltaRadius}>
-          <AnimatedLine
-            points={circle}
-            style="thin"
-            color="grid"
-            opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-          />
-        </animated.mesh>
-        <animated.mesh position-x={1} scale={1 - delta12 / 2 + deltaRadius}>
-          <AnimatedLine
-            points={circle}
-            style="thin"
-            color="grid"
-            opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-          />
-        </animated.mesh> */}
       </animated.mesh>
     </>
   );

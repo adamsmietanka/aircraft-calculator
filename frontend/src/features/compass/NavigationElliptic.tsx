@@ -1,6 +1,6 @@
 import { Resize, TransformControls } from "@react-three/drei";
 import { animated, SpringValue, to, useSpring } from "@react-spring/three";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEllipseStore } from "./stores/useEllipse";
 import InputSlider from "../common/inputs/InputSlider";
 import AnimatedLine from "../common/three/AnimatedLine";
@@ -11,6 +11,8 @@ import InputToggle from "../common/inputs/InputToggle";
 import { CANVAS_WIDTH } from "../common/three/config";
 import Tower from "./Tower";
 import PlaneModel from "../aerodynamics/three/PlaneModel";
+import SignalsElliptic from "./SignalsElliptic";
+import { useCompassStore } from "./stores/useCompass";
 
 const HYPER_POINTS = 50;
 
@@ -37,6 +39,8 @@ const NavigationElliptic = ({ opacity }: Props) => {
   const C = useEllipseStore((state) => state.C);
   const helpers = useEllipseStore((state) => state.helpers);
 
+  const increaseCounter = useCompassStore((state) => state.increaseCounter);
+
   const set = useEllipseStore((state) => state.set);
   const setTimedelta = useEllipseStore((state) => state.setTimedelta);
   const setACdelta = useEllipseStore((state) => state.setACdelta);
@@ -44,7 +48,6 @@ const NavigationElliptic = ({ opacity }: Props) => {
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
-      console.log(e.target.object);
       const { tower } = e.target.object.userData;
       const { x, y } = e.target.object.position;
       if (tower === "A") {
@@ -200,6 +203,10 @@ const NavigationElliptic = ({ opacity }: Props) => {
 
   const { x, y, phi1, phi2 } = calculateIntersection();
 
+  useEffect(() => {
+    set(calculateIntersection());
+  }, [A, B, C, timedelta, ACdelta]);
+
   const [spring] = useSpring(
     () => ({
       rotationAB: alphaAB,
@@ -233,6 +240,9 @@ const NavigationElliptic = ({ opacity }: Props) => {
       <Inputs3D gridPositionX={-1.4}>
         <div className="w-48 space-y-2 -mt-8">
           <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
+          <button className="btn btn-block" onClick={() => increaseCounter()}>
+            Visualize
+          </button>
         </div>
       </Inputs3D>
       <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3.5}>
@@ -286,6 +296,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
           position-y={useEllipseStore.getState().C.y}
           setter={setActive}
         />
+        <SignalsElliptic opacity={opacity} />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
             <AnimatedLine
