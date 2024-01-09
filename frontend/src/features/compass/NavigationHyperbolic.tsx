@@ -11,6 +11,7 @@ import { CANVAS_WIDTH } from "../common/three/config";
 import InputToggle from "../common/inputs/InputToggle";
 import Tower from "./Tower";
 import PlaneModel from "../aerodynamics/three/PlaneModel";
+import Signals from "./Signals";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -36,6 +37,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const B = useCompassStore((state) => state.B);
   const C = useCompassStore((state) => state.C);
   const helpers = useCompassStore((state) => state.helpers);
+  // const counter = useCompassStore((state) => state.counter);
+  const increaseCounter = useCompassStore((state) => state.increaseCounter);
 
   const set = useCompassStore((state) => state.set);
   const setTimedelta = useCompassStore((state) => state.setTimedelta);
@@ -57,12 +60,6 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       }
     }
   };
-
-  const circle = Array.from(Array(41).keys()).map((i) => [
-    Math.cos((i / 20) * Math.PI),
-    Math.sin((i / 20) * Math.PI),
-    0,
-  ]);
 
   const getHyperbolaCoeffs = (
     first: Record<string, number>,
@@ -258,6 +255,9 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       <Inputs3D gridPositionX={-1.4}>
         <div className="w-48 space-y-2 -mt-8">
           <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
+          <button className="btn btn-block" onClick={() => increaseCounter()}>
+            Visualize
+          </button>
         </div>
       </Inputs3D>
       <animated.mesh position-x={(0.25 * CANVAS_WIDTH) / 2} scale={3.5}>
@@ -311,6 +311,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           position-y={useCompassStore.getState().C.y}
           setter={setActive}
         />
+        <Signals opacity={opacity} A={A} B={B} C={C} />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
             <animated.mesh
