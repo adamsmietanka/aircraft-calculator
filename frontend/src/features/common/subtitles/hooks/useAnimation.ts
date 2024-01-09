@@ -21,8 +21,9 @@ const useAnimation = (
 
   const animationWrapper = async () => {
     setup();
-    await pause(1500);
+    await pause(100);
     setInAnimation(true);
+    await pause(600);
     try {
       await animation();
     } catch {}

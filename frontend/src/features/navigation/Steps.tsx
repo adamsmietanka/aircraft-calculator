@@ -79,6 +79,31 @@ const Steps = () => {
     }),
     []
   );
+  const [skipProps, skipApi] = useSpring(
+    () => ({
+      from: { opacity: 0, display: "none" },
+      config: {
+        tension: 280,
+        friction: 120,
+        precision: 0.0001,
+      },
+    }),
+    []
+  );
+
+  const isTutorial = steps[currentStepIndex].tutorial;
+
+  useEffect(() => {
+    skipApi.start({
+      to: async (next) => {
+        await next({ display: "none", opacity: 0, immediate: true });
+
+        isTutorial &&
+          (await next({ display: "inline-flex", opacity: 1, delay: 2500 }));
+        isTutorial || (await next({ display: "none", opacity: 0 }));
+      },
+    });
+  }, [isTutorial, pathname]);
 
   return (
     <>
@@ -128,10 +153,8 @@ const Steps = () => {
           <Arrow />
         </a.button>
         <a.button
-          className={`btn ${
-            !steps[currentStepIndex].tutorial && "hidden"
-          } normal-case `}
-          style={props}
+          className="btn  normal-case"
+          style={skipProps}
           onClick={() => navigateTo(nextStep)}
         >
           Skip
