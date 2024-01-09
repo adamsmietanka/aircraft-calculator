@@ -57,10 +57,13 @@ const useSubs = () => {
     if (!useAnimationStore.getState().inAnimation) throw "done";
     duration *= prolongShorter(subLength(text) / 100);
     if (!presentation) {
+      if (!useAnimationStore.getState().inAnimation) throw "done";
       setSub(text);
       showSub();
+      if (!useAnimationStore.getState().inAnimation) throw "done";
       await sideEffect();
       await pause(duration);
+      if (!useAnimationStore.getState().inAnimation) throw "done";
       hideSub();
       await pause(750);
       if (!useAnimationStore.getState().inAnimation) throw "done";
