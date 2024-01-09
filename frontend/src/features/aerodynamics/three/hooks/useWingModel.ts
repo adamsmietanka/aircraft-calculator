@@ -97,14 +97,10 @@ const useWingModel = (customShape?: number) => {
   };
 
   useEffect(() => {
-    profilePoints.length &&
       (pathname === "/aerodynamics/fuselage" || pathname === "/") &&
       createModel();
   }, [profilePoints, pathname]);
 
-  useEffect(() => {
-    profilePoints.length && createModel();
-  }, []);
   return { geom };
 };
 export default useWingModel;
