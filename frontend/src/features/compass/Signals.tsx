@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import AnimatedLine from "../common/three/AnimatedLine";
 import {
   SpringValue,
@@ -22,52 +22,114 @@ const circle = Array.from(Array(41).keys()).map((i) => [
   0,
 ]);
 
+const SIGNAL_SIZE = 2.5;
+const SIGNAL_VEL = 5e-4;
+const SIGNAL_DURATION = SIGNAL_SIZE / SIGNAL_VEL;
+
 const Signals = ({ A, B, C, opacity, ...props }: SignalsProps) => {
   const counter = useCompassStore((state) => state.counter);
+  const timedelta = useCompassStore((state) => state.timedelta);
+  const ACdelta = useCompassStore((state) => state.ACdelta);
+
+  const [delays, setDelays] = useState({ A: 0, B: 0, C: 0 });
 
   const [spring, api] = useSpring(
     () => ({
-      from: { size: 0, opacity: 1 },
+      from: {
+        sizeA: 0,
+        sizeB: 0,
+        sizeC: 0,
+        opacityA: 1,
+        opacityB: 1,
+        opacityC: 1,
+      },
       config: {
         easing: easings.linear,
-        duration: 5000,
+        duration: SIGNAL_DURATION,
       },
     }),
     []
   );
+
+  useEffect(() => {
+    const deltas = [
+      -timedelta - ACdelta,
+      timedelta - ACdelta,
+      -timedelta + ACdelta,
+    ];
+    console.log(deltas);
+    const firstSignalTime = Math.min(...deltas);
+    setDelays({
+      A: (deltas[0] - firstSignalTime) / (10 * SIGNAL_VEL), //4
+      B: (deltas[1] - firstSignalTime) / (10 * SIGNAL_VEL), //0
+      C: (deltas[2] - firstSignalTime) / (10 * SIGNAL_VEL),
+    });
+  }, [timedelta, ACdelta]);
+
   useEffect(() => {
     api.start({
-      to: async (next) => {
-        await next({ size: 0, opacity: 1, immediate: true });
-        await next({ size: 2, opacity: 0 });
-      },
+      sizeA: 0,
+      sizeB: 0,
+      sizeC: 0,
+      opacityA: 1,
+      opacityB: 1,
+      opacityC: 1,
+      immediate: true,
     });
+    if (counter > 0) {
+      if (counter % 2)
+        api.start({
+          sizeA: SIGNAL_SIZE,
+          sizeB: SIGNAL_SIZE,
+          sizeC: SIGNAL_SIZE,
+          opacityA: 0,
+          opacityB: 0,
+          opacityC: 0,
+        });
+      else {
+        api.start({
+          sizeA: SIGNAL_SIZE,
+          opacityA: 0,
+          delay: delays.A,
+        });
+        api.start({
+          sizeB: SIGNAL_SIZE,
+          opacityB: 0,
+          delay: delays.B,
+        });
+        api.start({
+          sizeC: SIGNAL_SIZE,
+          opacityC: 0,
+          delay: delays.C,
+        });
+      }
+    }
   }, [counter]);
 
   return (
     <>
-      <animated.mesh position-x={A.x} position-y={A.y} scale={spring.size}>
+      <animated.mesh position-x={A.x} position-y={A.y} scale={spring.sizeA}>
         <AnimatedLine
           points={circle}
           style="thin"
           color="grid"
-          opacity={to([opacity, spring.opacity], (o, opacity) => o * opacity)}
+          opacity={to([opacity, spring.opacityA], (o, opacity) => o * opacity)}
         />
       </animated.mesh>
-      <animated.mesh position-x={B.x} position-y={B.y} scale={spring.size}>
+      <animated.mesh position-x={B.x} position-y={B.y} scale={spring.sizeB}>
         <AnimatedLine
           points={circle}
           style="thin"
           color="grid"
-          opacity={to([opacity, spring.opacity], (o, opacity) => o * opacity)}
+          opacity={to([opacity, spring.opacityB], (o, opacity) => o * opacity)}
         />
       </animated.mesh>
-      <animated.mesh position-x={C.x} position-y={C.y} scale={spring.size}>
+      <animated.mesh position-x={C.x} position-y={C.y} scale={spring.sizeC}>
         <AnimatedLine
           points={circle}
           style="thin"
           color="grid"
-          opacity={to([opacity, spring.opacity], (o, opacity) => o * opacity)}
+          opacity={to([opacity, spring.opacityC], (o, opacity) => o * opacity)}
         />
       </animated.mesh>
     </>
