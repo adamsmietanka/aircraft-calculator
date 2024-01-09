@@ -1,20 +1,8 @@
 import { useEffect, useState } from "react";
 import AnimatedLine from "../common/three/AnimatedLine";
-import {
-  SpringValue,
-  animated,
-  easings,
-  to,
-  useSpring,
-} from "@react-spring/three";
+import { animated, easings, to, useSpring } from "@react-spring/three";
 import { useCompassStore } from "./stores/useCompass";
-
-interface SignalsProps {
-  opacity: SpringValue<number>;
-  A: Record<string, number>;
-  B: Record<string, number>;
-  C: Record<string, number>;
-}
+import { Props } from "../common/types/three";
 
 const circle = Array.from(Array(41).keys()).map((i) => [
   Math.cos((i / 20) * Math.PI),
@@ -26,23 +14,24 @@ const SIGNAL_SIZE = 2.5;
 const SIGNAL_VEL = 5e-4;
 const SIGNAL_DURATION = SIGNAL_SIZE / SIGNAL_VEL;
 
-const Signals = ({ A, B, C, opacity, ...props }: SignalsProps) => {
+const Signals = ({ opacity }: Props) => {
   const counter = useCompassStore((state) => state.counter);
   const timedelta = useCompassStore((state) => state.timedelta);
   const ACdelta = useCompassStore((state) => state.ACdelta);
+  const A = useCompassStore((state) => state.A);
+  const B = useCompassStore((state) => state.B);
+  const C = useCompassStore((state) => state.C);
 
   const [delays, setDelays] = useState({ A: 0, B: 0, C: 0 });
 
   const [spring, api] = useSpring(
     () => ({
-      from: {
-        sizeA: 0,
-        sizeB: 0,
-        sizeC: 0,
-        opacityA: 1,
-        opacityB: 1,
-        opacityC: 1,
-      },
+      sizeA: 0,
+      sizeB: 0,
+      sizeC: 0,
+      opacityA: 1,
+      opacityB: 1,
+      opacityC: 1,
       config: {
         easing: easings.linear,
         duration: SIGNAL_DURATION,
