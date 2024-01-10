@@ -18,7 +18,7 @@ interface Props {
 }
 
 const POLAR_POINTS = 50;
-const POINTS = 60;
+const POINTS = 40;
 
 const NavigationHyperbolic = ({ opacity }: Props) => {
   const [active, setActive] = useState<THREE.Object3D | undefined>(null!);
@@ -37,8 +37,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const B = useCompassStore((state) => state.B);
   const C = useCompassStore((state) => state.C);
   const helpers = useCompassStore((state) => state.helpers);
+  const DOP = useCompassStore((state) => state.DOP);
   // const counter = useCompassStore((state) => state.counter);
   const increaseCounter = useCompassStore((state) => state.increaseCounter);
+  const setDOP = useCompassStore((state) => state.setDOP);
 
   const set = useCompassStore((state) => state.set);
   const setTimedelta = useCompassStore((state) => state.setTimedelta);
@@ -123,16 +125,33 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       }
     );
 
-    return [hyper, hyper2];
+    return hyper2;
   };
 
-  const hyper = createHyperbola(A, B, (2 * timedelta) / 10);
-  const hyper2 = createHyperbola(A, C, (2 * ACdelta) / 10);
-  const [hyper3, hyper4] = createHyperbolaPolar(A, C, (2 * ACdelta) / 10);
-  const [hyper1Polar, hyper2Polar] = createHyperbolaPolar(
+  const hyper1Plus = createHyperbola(A, B, (2 * (timedelta + DOP)) / 100);
+  const hyper1Minus = createHyperbola(A, B, (2 * (timedelta - DOP)) / 100);
+  const hyper1PolarPlus = createHyperbolaPolar(
     A,
     B,
-    (2 * timedelta) / 10
+    (2 * (timedelta + DOP)) / 100
+  );
+  const hyper1PolarMinus = createHyperbolaPolar(
+    A,
+    B,
+    (2 * (timedelta - DOP)) / 100
+  );
+
+  const hyper2Plus = createHyperbola(A, C, (2 * (ACdelta + DOP)) / 100);
+  const hyper2Minus = createHyperbola(A, C, (2 * (ACdelta - DOP)) / 100);
+  const hyper2PolarPlus = createHyperbolaPolar(
+    A,
+    C,
+    (2 * (ACdelta + DOP)) / 100
+  );
+  const hyper2PolarMinus = createHyperbolaPolar(
+    A,
+    C,
+    (2 * (ACdelta - DOP)) / 100
   );
 
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
@@ -141,8 +160,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
 
   const calculateIntersection = () => {
-    const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 10);
-    const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 10);
+    const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 100);
+    const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 100);
     const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
     const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
@@ -263,6 +282,15 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       )}
       <Inputs3D gridPositionX={-1.4}>
         <div className="w-48 space-y-2 -mt-8">
+          <InputSlider
+            label="Time error"
+            unit="μs"
+            value={DOP}
+            min={0}
+            max={5}
+            step={0.5}
+            setter={setDOP}
+          />
           <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
           <button className="btn btn-block" onClick={() => increaseCounter()}>
             Visualize
@@ -278,10 +306,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
           <div className="ml-16">
             <InputSlider
               label="AB time diff"
-              unit="ms"
+              unit="μs"
               value={timedelta}
-              min={-9}
-              max={9}
+              min={-90}
+              max={90}
               setter={setTimedelta}
             />
           </div>
@@ -293,8 +321,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
         >
           <div className="ml-16">
             <InputSlider
-              label=""
-              unit="ms"
+              label="AC time diff"
+              unit="μs"
               value={ACdelta}
               min={-9}
               max={9}
@@ -323,48 +351,66 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
         <Signals opacity={opacity} />
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
-            {/* <animated.mesh
+            <animated.mesh
               position-x={spring.Ax.to((x) => -x)}
               position-y={spring.Ay.to((y) => -y)}
             >
               <AnimatedLine
-                points={hyper}
+                points={hyper1Plus}
                 style="airstream"
                 color="grid"
                 opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
               />
-            </animated.mesh> */}
-            <AnimatedLine
-              points={hyper2Polar}
+              <AnimatedLine
+                points={hyper1Minus}
+                style="airstream"
+                color="grid"
+                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+              />
+            </animated.mesh>
+            {/* <AnimatedLine
+              points={hyper1PolarPlus}
               style="airstream"
               color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
-          </animated.mesh>
-          <animated.mesh rotation-z={spring.rotationAC}>
-            {/* <animated.mesh
-              position-x={spring.Ax.to((x) => -x)}
-              position-y={spring.Ay.to((y) => -y)}
-            >
-              <AnimatedLine
-                points={hyper2}
-                style="airstream"
-                color="grid"
-                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
-              />
-            </animated.mesh> */}
-            {/* <AnimatedLine
-              points={hyper3}
+            <AnimatedLine
+              points={hyper1PolarMinus}
               style="airstream"
-              color="red"
+              color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             /> */}
-            <AnimatedLine
-              points={hyper4}
+          </animated.mesh>
+          <animated.mesh rotation-z={spring.rotationAC}>
+            <animated.mesh
+              position-x={spring.Ax.to((x) => -x)}
+              position-y={spring.Ay.to((y) => -y)}
+            >
+              <AnimatedLine
+                points={hyper2Plus}
+                style="airstream"
+                color="grid"
+                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+              />
+              <AnimatedLine
+                points={hyper2Minus}
+                style="airstream"
+                color="grid"
+                opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+              />
+            </animated.mesh>
+            {/* <AnimatedLine
+              points={hyper2PolarPlus}
               style="airstream"
               color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
             />
+            <AnimatedLine
+              points={hyper2PolarMinus}
+              style="airstream"
+              color="grid"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            /> */}
           </animated.mesh>
           <animated.mesh position-x={spring.x} position-y={spring.y}>
             <Resize rotation={[-Math.PI / 2, 0, 0]} scale={0.25}>
