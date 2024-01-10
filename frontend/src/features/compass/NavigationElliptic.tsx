@@ -116,9 +116,10 @@ const NavigationElliptic = ({ opacity }: Props) => {
 
   const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
 
+  const { e: e1, p: p1 } = getEllipseCoeffs(A, B, (2 * timedelta) / 10);
+  const { e: e2, p: p2 } = getEllipseCoeffs(A, C, (2 * ACdelta) / 10);
+
   const calculateIntersection = () => {
-    const { e: e1, p: p1 } = getEllipseCoeffs(A, B, (2 * timedelta) / 10);
-    const { e: e2, p: p2 } = getEllipseCoeffs(A, C, (2 * ACdelta) / 10);
     const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
     const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
@@ -219,8 +220,10 @@ const NavigationElliptic = ({ opacity }: Props) => {
       ACy: (A.y + C.y) / 2 + 0.75 * Math.cos(alphaAC),
       x,
       y,
+      p1,
+      p2,
     }),
-    [A, B, C, x, y]
+    [A, B, C, x, y, p1, p2]
   );
 
   return (
