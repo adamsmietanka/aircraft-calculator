@@ -12,13 +12,16 @@ import InputToggle from "../common/inputs/InputToggle";
 import Tower from "./Tower";
 import PlaneModel from "../aerodynamics/three/PlaneModel";
 import Signals from "./Signals";
+import AnimatedInputTechnical from "../common/drawings/AnimatedInputTechnical";
+import Formula from "../common/Formula";
+import AnimatedInputAngle from "../common/drawings/AnimatedInputAngle";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const POLAR_POINTS = 50;
-const POINTS = 40;
+const POINTS = 70;
 
 const NavigationHyperbolic = ({ opacity }: Props) => {
   const [active, setActive] = useState<THREE.Object3D | undefined>(null!);
@@ -37,8 +40,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const B = useCompassStore((state) => state.B);
   const C = useCompassStore((state) => state.C);
   const helpers = useCompassStore((state) => state.helpers);
+  const directrix = useCompassStore((state) => state.directrix);
+  const distances = useCompassStore((state) => state.distances);
   const DOP = useCompassStore((state) => state.DOP);
-  // const counter = useCompassStore((state) => state.counter);
+
   const increaseCounter = useCompassStore((state) => state.increaseCounter);
   const setDOP = useCompassStore((state) => state.setDOP);
 
@@ -46,6 +51,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const setTimedelta = useCompassStore((state) => state.setTimedelta);
   const setACdelta = useCompassStore((state) => state.setACdelta);
   const setHelpers = useCompassStore((state) => state.setHelpers);
+  const setDirectrix = useCompassStore((state) => state.setDirectrix);
+  const setDistances = useCompassStore((state) => state.setDistances);
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
@@ -159,9 +166,10 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
 
   const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
 
+  const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 100);
+  const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 100);
+
   const calculateIntersection = () => {
-    const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 100);
-    const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 100);
     const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
     const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
@@ -240,11 +248,12 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     if (areEqual(r14, r24))
       phiAngles = { ...phiAngles, phi2: Math.atan2(-s2, u2) };
 
-    if (areEqual(r11, r21)) return { x: r11 * u1, y: r11 * s1, ...phiAngles };
-    return { x: r12 * u1, y: r12 * -s1, ...phiAngles };
+    if (areEqual(r11, r21))
+      return { x: r11 * u1, y: r11 * s1, ...phiAngles, r: r11 };
+    return { x: r12 * u1, y: r12 * -s1, ...phiAngles, r: r12 };
   };
 
-  const { x, y, phi1, phi2 } = calculateIntersection();
+  const { x, y, phi1, phi2, r } = calculateIntersection();
 
   useEffect(() => {
     set(calculateIntersection());
@@ -262,8 +271,12 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
       ACy: (A.y + C.y) / 2 + 1.5 * Math.cos(alphaAC),
       x,
       y,
+      p1,
+      p2,
+      phi1: -phi1,
+      r,
     }),
-    [A, B, C, x, y]
+    [A, B, C, x, y, p1, p2, phi1, r]
   );
 
   return (
@@ -291,7 +304,29 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             step={0.5}
             setter={setDOP}
           />
-          <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
+
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Helpers</span>
+            </label>
+            <div className="flex flex-col">
+              <InputToggle
+                label="Solutions"
+                value={helpers}
+                setter={setHelpers}
+              />
+              <InputToggle
+                label="Directrix"
+                value={directrix}
+                setter={setDirectrix}
+              />
+              <InputToggle
+                label="Distances"
+                value={distances}
+                setter={setDistances}
+              />
+            </div>
+          </div>
           <button className="btn btn-block" onClick={() => increaseCounter()}>
             Visualize
           </button>
@@ -324,8 +359,8 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
               label="AC time diff"
               unit="μs"
               value={ACdelta}
-              min={-9}
-              max={9}
+              min={-90}
+              max={90}
               setter={setACdelta}
             />
           </div>
@@ -368,6 +403,57 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
                 opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
               />
             </animated.mesh>
+            <AnimatedLine
+              points={[
+                [p1, -1.5, 0],
+                [p1, 1.5, 0],
+              ]}
+              style="thin"
+              color="grid"
+              opacity={opacity.to((o) => (directrix ? o * 0.33 : 0))}
+            />
+            <AnimatedInputTechnical
+              visible={directrix}
+              distance={-2.5}
+              value={p1}
+              opacity={opacity.to((o) => 0.75 * o)}
+            >
+              p
+            </AnimatedInputTechnical>
+            <AnimatedInputAngle
+              angle={spring.phi1}
+              opacity={opacity.to((o) => (directrix ? 1 : 0))}
+              y={opacity}
+              scale={new SpringValue(3)}
+              show={directrix}
+            />
+            <animated.mesh rotation-z={spring.phi1.to((a) => -a)}>
+              <AnimatedInputTechnical
+                visible={directrix}
+                distance={-1}
+                value={r}
+                opacity={opacity.to((o) => 0.75 * o)}
+              >
+                r
+              </AnimatedInputTechnical>
+            </animated.mesh>
+            <AnimatedInputTechnical
+              visible={distances}
+              distance={-1.5}
+              value={2}
+              opacity={opacity.to((o) => 0.75 * o)}
+            >
+              D
+            </AnimatedInputTechnical>
+            <AnimatedInputTechnical
+              visible={distances}
+              distance={1}
+              startX={1}
+              value={timedelta / 100}
+              opacity={opacity.to((o) => 0.75 * o)}
+            >
+              <Formula tex={`\\Delta`} />
+            </AnimatedInputTechnical>
             {/* <AnimatedLine
               points={hyper1PolarPlus}
               style="airstream"
@@ -413,6 +499,14 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             /> */}
           </animated.mesh>
           <animated.mesh position-x={spring.x} position-y={spring.y}>
+            <AnimatedInputTechnical
+              visible={directrix}
+              distance={1}
+              value={-x + p1}
+              opacity={opacity.to((o) => 0.75 * o)}
+            >
+              AQ
+            </AnimatedInputTechnical>
             <Resize rotation={[-Math.PI / 2, 0, 0]} scale={0.25}>
               <PlaneModel opacity={opacity} />
             </Resize>
