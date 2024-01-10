@@ -32,7 +32,7 @@ const InputSlider = ({
           onChange={(e) => setter(parseFloat(e.target.value))}
           className="range range-xs join-item pr-2"
         />
-        <span className="flex items-center justify-center w-20 h-12 bg-base-300 join-item">
+        <span className="flex items-center justify-center w-24 h-12 bg-base-300 join-item">
           {value} {unit}
         </span>
       </div>

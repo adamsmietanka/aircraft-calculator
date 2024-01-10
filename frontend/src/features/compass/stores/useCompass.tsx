@@ -12,8 +12,10 @@ export interface CompassState {
   phi2: number;
   helpers: boolean;
   counter: number;
+  DOP: number;
   setTimedelta: (value: number) => void;
   setACdelta: (value: number) => void;
+  setDOP: (value: number) => void;
   setHelpers: (value: boolean) => void;
   increaseCounter: () => void;
   set: (value: Partial<CompassState>) => void;
@@ -31,8 +33,10 @@ export const useCompassStore = create<CompassState>()((set) => ({
   phi2: 0,
   helpers: true,
   counter: 0,
+  DOP: 0,
   setTimedelta: (value) => set({ timedelta: value }),
   setACdelta: (value) => set({ ACdelta: value }),
+  setDOP: (value) => set({ DOP: value }),
   setHelpers: (value) => set({ helpers: value }),
   increaseCounter: () =>
     set((state) => ({
