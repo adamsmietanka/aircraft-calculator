@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useWingStore } from "../stores/useWing";
-import useNACA4series from "./useNACA4series";
-import useProfileFlat from "./useProfileFlat";
+import getNACA4series from "../utils/getNACA4series";
+import getProfileFlat from "../utils/getProfileFlat";
 import { useProfileStore } from "../stores/useProfile";
 import useProfileCamber from "./useProfileCamber";
 
@@ -13,7 +13,7 @@ const useProfilePoints = () => {
 
   useEffect(() => {
     const { upper, lower, chord, max } =
-      profile.length === 2 ? useProfileFlat(T) : useNACA4series(M, P, T, F);
+      profile.length === 2 ? getProfileFlat(T) : getNACA4series(M, P, T, F);
 
     const low = [0];
     const high = [0];

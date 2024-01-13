@@ -1,6 +1,6 @@
 import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../common/three/config";
 
-const useNACA4series = (M: number, P: number, T: number, F: number) => {
+const getNACA4series = (M: number, P: number, T: number, F: number) => {
   const getCamberY = (x: number) => {
     if (x < P) {
       return (M / Math.pow(P, 2)) * (2 * P * x - x * x);
@@ -70,4 +70,4 @@ const useNACA4series = (M: number, P: number, T: number, F: number) => {
   };
 };
 
-export default useNACA4series;
+export default getNACA4series;

@@ -1,6 +1,6 @@
 import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../common/three/config";
 
-const useProfileFlat = (T: number) => {
+const getProfileFlat = (T: number) => {
   let upper = [];
   let lower = [];
   let chord = [];
@@ -38,4 +38,4 @@ const useProfileFlat = (T: number) => {
   };
 };
 
-export default useProfileFlat;
+export default getProfileFlat;
