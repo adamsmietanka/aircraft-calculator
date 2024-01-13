@@ -9,11 +9,7 @@ import {
 } from "@react-three/drei";
 import { SpringValue, animated } from "@react-spring/three";
 import FuseModel from "../aerodynamics/three/FuseModel";
-import { BufferGeometry, Mesh } from "three";
-import { useEffect, useState } from "react";
-import createWingModel from "../aerodynamics/three/utils/createWingModel";
-import { useProfileStore } from "../aerodynamics/stores/useProfile";
-import getProfilePoints from "../aerodynamics/utils/getProfilePoints";
+import useLandingPage from "./hooks/useLandingPage";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -22,38 +18,8 @@ interface Props {
 const SPAR_DIAMETER = 0.03;
 
 const Home = ({ opacity }: Props) => {
-  const [geom1, setGeom1] = useState<BufferGeometry>(null!);
-  const [geom2, setGeom2] = useState<BufferGeometry>(null!);
-  const profilePoints = useProfileStore((state) => state.profile);
-
-  useEffect(() => {
-    const otherProfilePoints = getProfilePoints("4415");
-    setGeom1(
-      createWingModel(
-        {
-          span: 12,
-          chord: 2,
-          chordTip: 1.2,
-          angle: 10,
-          shape: 1,
-        },
-        profilePoints
-      )
-    );
-    setGeom2(
-      createWingModel(
-        {
-          span: 12,
-          chord: 2,
-          chordTip: 1.2,
-          angle: 10,
-          shape: 0,
-        },
-        otherProfilePoints
-      )
-    );
-  }, []);
-
+  const { geom1, geom2 } = useLandingPage();
+  
   return (
     <mesh receiveShadow>
       <Clouds>
