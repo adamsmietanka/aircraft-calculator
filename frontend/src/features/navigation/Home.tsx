@@ -7,9 +7,13 @@ import {
   Instances,
   Instance,
 } from "@react-three/drei";
-import WingModel from "../aerodynamics/three/WingModel";
-import { SpringValue } from "@react-spring/three";
+import { SpringValue, animated } from "@react-spring/three";
 import FuseModel from "../aerodynamics/three/FuseModel";
+import { BufferGeometry, Mesh } from "three";
+import { useEffect, useState } from "react";
+import createWingModel from "../aerodynamics/three/utils/createWingModel";
+import { useProfileStore } from "../aerodynamics/stores/useProfile";
+import getProfilePoints from "../aerodynamics/utils/getProfilePoints";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -18,6 +22,38 @@ interface Props {
 const SPAR_DIAMETER = 0.03;
 
 const Home = ({ opacity }: Props) => {
+  const [geom1, setGeom1] = useState<BufferGeometry>(null!);
+  const [geom2, setGeom2] = useState<BufferGeometry>(null!);
+  const profilePoints = useProfileStore((state) => state.profile);
+
+  useEffect(() => {
+    const otherProfilePoints = getProfilePoints("4415");
+    setGeom1(
+      createWingModel(
+        {
+          span: 12,
+          chord: 2,
+          chordTip: 1.2,
+          angle: 10,
+          shape: 1,
+        },
+        profilePoints
+      )
+    );
+    setGeom2(
+      createWingModel(
+        {
+          span: 12,
+          chord: 2,
+          chordTip: 1.2,
+          angle: 10,
+          shape: 0,
+        },
+        otherProfilePoints
+      )
+    );
+  }, []);
+
   return (
     <mesh receiveShadow>
       <Clouds>
@@ -69,11 +105,21 @@ const Home = ({ opacity }: Props) => {
             <Instance position={[0.2, 0, 2.75]} />
             <Instance position={[1.2, 0, 2.75]} />
           </Instances>
-          <mesh scale-z={0.5}>
-            <WingModel opacity={opacity} shape={0} />
+          <mesh geometry={geom2} scale-z={0.5}>
+            <animated.meshStandardMaterial
+              color={"white"}
+              metalness={0.5}
+              transparent
+              opacity={opacity}
+            />
           </mesh>
-          <mesh scale-z={0.5} position-y={1.25}>
-            <WingModel opacity={opacity} shape={0} />
+          <mesh geometry={geom2} scale-z={0.5} position-y={1.25}>
+            <animated.meshStandardMaterial
+              color={"white"}
+              metalness={0.5}
+              transparent
+              opacity={opacity}
+            />
           </mesh>
           <FuseModel opacity={opacity} />
         </mesh>
@@ -86,8 +132,13 @@ const Home = ({ opacity }: Props) => {
         speed={1.25}
       >
         <mesh position={[-22, 0, 35]} receiveShadow scale-x={-1}>
-          <mesh scale-z={1.5}>
-            <WingModel opacity={opacity} shape={1} />
+          <mesh geometry={geom1}>
+            <animated.meshStandardMaterial
+              color={"white"}
+              metalness={0.5}
+              transparent
+              opacity={opacity}
+            />
           </mesh>
           <mesh scale-x={1.2}>
             <FuseModel opacity={opacity} />
