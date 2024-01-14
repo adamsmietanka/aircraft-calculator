@@ -2,6 +2,7 @@ import { getXTip } from "../hooks/useWingSpring";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
+import getEllipticOutline from "../../utils/getEllipticOutline";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
@@ -18,8 +19,6 @@ const createWingModel = (
 ) => {
   const { span, chord, chordTip, angle, shape } = config;
 
-  // const { modelPoints } = useWingOutline();
-
   const xTip = getXTip(angle, span);
 
   const getOutline = () => {
@@ -32,16 +31,17 @@ const createWingModel = (
         ],
         yOutline: [-span / 2, 0, span / 2],
       };
-    // if (shape === 1)
-    return {
-      xOutline: [
-        [xTip, xTip + chordTip],
-        [0, chord],
-        [xTip, xTip + chordTip],
-      ],
-      yOutline: [-span / 2, 0, span / 2],
-    };
-    // return modelPoints;
+    if (shape === 1)
+      return {
+        xOutline: [
+          [xTip, xTip + chordTip],
+          [0, chord],
+          [xTip, xTip + chordTip],
+        ],
+        yOutline: [-span / 2, 0, span / 2],
+      };
+    if (shape === 2) return getEllipticOutline(chord, span);
+    return getEllipticOutline(chord, span, true);
   };
 
   const wingGeometry = new BufferGeometry();
@@ -93,7 +93,7 @@ const createWingModel = (
   tipGeometry.deleteAttribute("uv");
 
   let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, tipGeometry]);
-  
+
   if (full) {
     tipGeometry.translate(0, 0, 2 * yOutline[0]);
     geom = BufferGeometryUtils.mergeGeometries([geom, tipGeometry]);

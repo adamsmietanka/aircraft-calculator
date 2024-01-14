@@ -18,7 +18,7 @@ interface Props {
 const SPAR_DIAMETER = 0.03;
 
 const Home = ({ opacity }: Props) => {
-  const { geom1, geom2, geom3 } = useLandingPage();
+  const { geom1, geom2, geom3, elliptic } = useLandingPage();
 
   return (
     <mesh receiveShadow>
@@ -91,7 +91,7 @@ const Home = ({ opacity }: Props) => {
             position-x={6.25}
             position-y={0.65}
             rotation-x={-Math.PI / 2}
-            geometry={geom3}
+            geometry={elliptic}
           >
             <animated.meshStandardMaterial
               color={"white"}
@@ -127,7 +127,6 @@ const Home = ({ opacity }: Props) => {
             position-y={0.65}
             rotation-x={-Math.PI / 2}
             geometry={geom3}
-            scale-z={1.25}
           >
             <animated.meshStandardMaterial
               color={"white"}
