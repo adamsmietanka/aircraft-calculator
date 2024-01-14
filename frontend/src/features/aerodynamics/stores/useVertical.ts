@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { getReynolds } from "../data/profiles";
 
-export interface WingState {
+export interface StabilizerState {
   chord: number;
   chordTip: number;
   tipX: number;
@@ -34,24 +34,24 @@ export interface WingState {
   setStallVelocity: (value: number) => void;
   setMaterial: (value: number) => void;
   setShape: (value: number) => void;
-  set: (value: Partial<WingState>) => void;
+  set: (value: Partial<StabilizerState>) => void;
 }
 
-export const useWingStore = create<WingState>()(
+export const useVerticalStore = create<StabilizerState>()(
   persist(
     (set, get) => ({
-      chord: 2,
-      chordTip: 1.14,
+      chord: 1.25,
+      chordTip: 0.65,
       tipX: 0.5,
-      span: 12,
-      angle: 15,
-      profile: "2412",
+      span: 3,
+      angle: 20,
+      profile: "0009",
       reynoldsIndex: 1,
       reynoldsClosest: 1,
       reynolds: 3,
       stallVelocity: 30,
       material: 0,
-      shape: 1,
+      shape: 3,
       // aerodynamics
       area: 0,
       aspectRatio: 0,
@@ -81,6 +81,6 @@ export const useWingStore = create<WingState>()(
       setShape: (value) => set({ shape: value }),
       set: (value) => set(value),
     }),
-    { name: "Wing" }
+    { name: "Vertical" }
   )
 );

@@ -1,4 +1,9 @@
-import { Instance, Instances, PresentationControls } from "@react-three/drei";
+import {
+  Edges,
+  Instance,
+  Instances,
+  PresentationControls,
+} from "@react-three/drei";
 import { SpringValue, animated, useSpring } from "@react-spring/three";
 import Inputs3D from "../../common/three/Inputs3D";
 import FuselageConfiguration from "../FuselageConfiguration";
@@ -12,6 +17,12 @@ import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical
 import InputDrawing from "../../common/inputs/InputDrawing";
 import InputToggle from "../../common/inputs/InputToggle";
 import FuselageChart from "./FuselageChart";
+import { BufferGeometry, SphereGeometry } from "three";
+import { useEffect, useState } from "react";
+import getProfilePoints from "../utils/getProfilePoints";
+import createWingModel from "./utils/createWingModel";
+import { useCSSColors } from "../../common/three/config";
+import { useVerticalStore } from "../stores/useVertical";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -26,11 +37,35 @@ const Fuselage = ({ opacity }: Props) => {
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
 
+  const verticalStabilizer = useVerticalStore();
+
   const setLength = usePlaneStore((state) => state.setLength);
   const setWingX = usePlaneStore((state) => state.setWingX);
   const setMeasurements = usePlaneStore((state) => state.setMeasurements);
 
   usePlaneAerodynamics();
+  const { gridColor } = useCSSColors();
+
+  const [vertical, setVertical] = useState<BufferGeometry>(
+    new SphereGeometry()
+  );
+
+  useEffect(() => {
+    const symmetric = getProfilePoints("0009");
+    setVertical(
+      createWingModel(
+        {
+          span: verticalStabilizer.span,
+          chord: verticalStabilizer.chord,
+          chordTip: verticalStabilizer.chordTip,
+          angle: verticalStabilizer.angle,
+          shape: verticalStabilizer.shape,
+        },
+        symmetric,
+        false
+      )
+    );
+  }, [verticalStabilizer]);
 
   const [planeSpring] = useSpring(
     () => ({
@@ -65,7 +100,7 @@ const Fuselage = ({ opacity }: Props) => {
           cursor={true} // Whether to toggle cursor style on drag
           snap={true} // Snap-back to center (can also be a spring config)
           speed={1} // Speed factor
-          zoom={2} // Zoom factor when half the polar-max is reached
+          zoom={1.25} // Zoom factor when half the polar-max is reached
           rotation={[0, 0, 0]} // Default rotation
           polar={[-Math.PI / 8, Math.PI / 16]} // Vertical limits
           azimuth={[-Math.PI / 2, Math.PI / 2]} // Horizontal limits
@@ -74,9 +109,39 @@ const Fuselage = ({ opacity }: Props) => {
           <mesh scale={1.25}>
             <animated.mesh position-z={planeSpring.fuseZ.to((z) => -z)}>
               <FuseModel opacity={opacity} />
+              <mesh
+                position-x={6}
+                position-y={0.69}
+                rotation-x={-Math.PI / 2}
+                geometry={vertical}
+              >
+                <animated.meshStandardMaterial
+                  color="white"
+                  metalness={0.5}
+                  transparent
+                  opacity={opacity}
+                  // wireframe
+                />
+                {/* <Edges color={gridColor} /> */}
+              </mesh>
             </animated.mesh>
             <animated.mesh position-z={planeSpring.fuseZ}>
               <FuseModel opacity={opacity} />
+              <mesh
+                position-x={6}
+                position-y={0.69}
+                rotation-x={-Math.PI / 2}
+                geometry={vertical}
+              >
+                <animated.meshStandardMaterial
+                  color="white"
+                  metalness={0.5}
+                  transparent
+                  opacity={opacity}
+                  // wireframe
+                />
+                {/* <Edges color={gridColor} /> */}
+              </mesh>
               <AnimatedInputTechnical
                 visible={measurements}
                 distance={2}
