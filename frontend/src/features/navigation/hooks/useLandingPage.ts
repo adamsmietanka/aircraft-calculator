@@ -8,11 +8,14 @@ const useLandingPage = () => {
   const [geom1, setGeom1] = useState<BufferGeometry>(null!);
   const [geom2, setGeom2] = useState<BufferGeometry>(null!);
   const [geom3, setGeom3] = useState<BufferGeometry>(null!);
+  const [elliptic, setElliptic] = useState<BufferGeometry>(null!);
 
   const profilePoints = useProfileStore((state) => state.profile);
 
   useEffect(() => {
     const otherProfilePoints = getProfilePoints("4415");
+    const symmetric = getProfilePoints("0006");
+    
     setGeom1(
       createWingModel(
         {
@@ -40,19 +43,32 @@ const useLandingPage = () => {
     setGeom3(
       createWingModel(
         {
-          span: 3,
+          span: 4,
           chord: 1.25,
           chordTip: 0.65,
           angle: 20,
           shape: 1,
         },
-        profilePoints,
+        symmetric,
+        false
+      )
+    );
+    setElliptic(
+      createWingModel(
+        {
+          span: 3,
+          chord: 1.25,
+          chordTip: 0.65,
+          angle: 20,
+          shape: 3,
+        },
+        symmetric,
         false
       )
     );
   }, []);
 
-  return { geom1, geom2, geom3 };
+  return { geom1, geom2, geom3, elliptic };
 };
 
 export default useLandingPage;
