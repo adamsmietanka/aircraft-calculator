@@ -4,25 +4,21 @@ import {
   Instances,
   PresentationControls,
 } from "@react-three/drei";
-import { SpringValue, animated, useSpring } from "@react-spring/three";
-import Inputs3D from "../../common/three/Inputs3D";
-import FuselageConfiguration from "../FuselageConfiguration";
+import { SpringValue, animated, easings, useSpring } from "@react-spring/three";
 import { usePlaneStore } from "../stores/usePlane";
 import { useWingStore } from "../stores/useWing";
 import WingModel from "./WingModel";
 import FuseModel from "./FuseModel";
 import usePlaneAerodynamics from "../hooks/usePlaneAerodynamics";
-import FuselageChoose from "../FuselageChoose";
-import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical";
-import InputDrawing from "../../common/inputs/InputDrawing";
-import InputToggle from "../../common/inputs/InputToggle";
-import FuselageChart from "./FuselageChart";
 import { BufferGeometry, SphereGeometry } from "three";
 import { useEffect, useState } from "react";
 import getProfilePoints from "../utils/getProfilePoints";
 import createWingModel from "./utils/createWingModel";
 import { useCSSColors } from "../../common/three/config";
 import { useVerticalStore } from "../stores/useVertical";
+import { useLocation } from "react-router-dom";
+import MeasurementsFuse from "./MeasurementsFuse";
+import MeasurementsVertical from "./MeasurementsVertical";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -38,10 +34,6 @@ const Fuselage = ({ opacity }: Props) => {
   const shape = useWingStore((state) => state.shape);
 
   const verticalStabilizer = useVerticalStore();
-
-  const setLength = usePlaneStore((state) => state.setLength);
-  const setWingX = usePlaneStore((state) => state.setWingX);
-  const setMeasurements = usePlaneStore((state) => state.setMeasurements);
 
   usePlaneAerodynamics();
   const { gridColor } = useCSSColors();
@@ -67,32 +59,36 @@ const Fuselage = ({ opacity }: Props) => {
     );
   }, [verticalStabilizer]);
 
-  const [planeSpring] = useSpring(
+  const { pathname } = useLocation();
+
+  const [planeSpring, api] = useSpring(
     () => ({
       wingY: configuration === 1 || configuration === 3 ? 1 : 0,
       cylinders:
         shape === 0 && (configuration === 1 || configuration === 3) ? 1 : 0,
       fuseZ: configuration === 2 || configuration === 3 ? span / 6 : 0,
       wingPosition: -wingX,
+      planePosition: pathname === "/aerodynamics/fuselage" ? 0 : -7.5,
     }),
-    [configuration, shape, wingX]
+    [configuration, shape, wingX, pathname]
   );
 
+  useEffect(() => {
+    api.start({
+      planePosition: pathname === "/aerodynamics/fuselage" ? 0 : -7.5,
+      config: {
+        duration: 1500,
+        easing: easings.easeOutQuad,
+      },
+    });
+  });
+
   return (
-    <mesh position-x={0}>
-      <mesh rotation={[(-20 * Math.PI) / 180, (-45 * Math.PI) / 180, 0, "YXZ"]}>
-        <Inputs3D gridPositionX={-1.2}>
-          <FuselageChoose />
-          <FuselageConfiguration />
-          <InputToggle
-            label="Measurements"
-            value={measurements}
-            setter={setMeasurements}
-          />
-        </Inputs3D>
-        <FuselageChart opacity={opacity} />
-      </mesh>
-      <mesh position-x={-4.5}>
+    <mesh position-x={-4.5}>
+      <animated.mesh
+        position-x={planeSpring.planePosition.to((x) => 0)}
+        // scale={1.5}
+      >
         <spotLight position={[-10, 5, 10]} intensity={0.5} />
         <PresentationControls
           enabled={true} // the controls can be disabled by setting this to false
@@ -106,7 +102,7 @@ const Fuselage = ({ opacity }: Props) => {
           azimuth={[-Math.PI / 2, Math.PI / 2]} // Horizontal limits
           config={{ mass: 1, tension: 170, friction: 26 }}
         >
-          <mesh scale={1.25}>
+          <animated.mesh scale={1.5} position-x={planeSpring.planePosition}>
             <animated.mesh position-z={planeSpring.fuseZ.to((z) => -z)}>
               <FuseModel opacity={opacity} />
               <mesh
@@ -142,24 +138,8 @@ const Fuselage = ({ opacity }: Props) => {
                 />
                 {/* <Edges color={gridColor} /> */}
               </mesh>
-              <AnimatedInputTechnical
-                visible={measurements}
-                distance={2}
-                value={length}
-                startX={-wingX}
-                opacity={opacity.to((o) => 0.75 * o)}
-              >
-                <InputDrawing value={length} setter={setLength} />
-              </AnimatedInputTechnical>
-              <AnimatedInputTechnical
-                visible={measurements}
-                distance={1.25}
-                value={wingX}
-                startX={-wingX}
-                opacity={opacity.to((o) => 0.75 * o)}
-              >
-                <InputDrawing value={wingX} setter={setWingX} />
-              </AnimatedInputTechnical>
+              <MeasurementsFuse opacity={opacity} />
+              <MeasurementsVertical opacity={opacity} />
             </animated.mesh>
             <WingModel opacity={opacity} />
             <animated.mesh position-y={planeSpring.wingY}>
@@ -180,9 +160,9 @@ const Fuselage = ({ opacity }: Props) => {
                 <Instance position={[1.2, 0, (0.95 * span) / 2]} />
               </Instances>
             </animated.mesh>
-          </mesh>
+          </animated.mesh>
         </PresentationControls>
-      </mesh>
+      </animated.mesh>
     </mesh>
   );
 };
