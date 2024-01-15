@@ -24,7 +24,10 @@ const Wing = ({ opacity }: Props) => {
   const stallVelocity = useWingStore((state) => state.stallVelocity);
   const setStallVelocity = useWingStore((state) => state.setStallVelocity);
   const stallReynolds = useWingStore((state) => state.stallReynolds);
-  
+
+  const shape = useWingStore((state) => state.shape);
+  const setShape = useWingStore((state) => state.setShape);
+
   useWingAerodynamics();
   useWingCharts();
 
@@ -42,7 +45,7 @@ const Wing = ({ opacity }: Props) => {
       <mesh rotation-x={-Math.PI / 2}>
         <Inputs3D gridPositionX={-1.3}>
           <ProfileChoose />
-          <WingShape />
+          <WingShape shape={shape} setter={setShape} />
           <WingMaterial />
           <InputUnits
             type="speed"
