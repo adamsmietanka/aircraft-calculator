@@ -9,7 +9,7 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import { Edges } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
 
-const MeasurementsVertical = ({ opacity }: Props) => {
+const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
   const chordTip = useVerticalStore((state) => state.chordTip);
   const setChord = useVerticalStore((state) => state.setChord);
@@ -24,7 +24,7 @@ const MeasurementsVertical = ({ opacity }: Props) => {
   const { pathname } = useLocation();
   const { gridColor } = useCSSColors();
 
-  const { vertical, leading, trailing } = useVertical();
+  const { vertical, leading, trailing, top } = useVertical();
 
   return (
     <group>
@@ -79,8 +79,9 @@ const MeasurementsVertical = ({ opacity }: Props) => {
       </AnimatedInputTechnical> */}
       <AnimatedLine points={leading} color="grid" opacity={opacity} />
       <AnimatedLine points={trailing} color="grid" opacity={opacity} />
+      <AnimatedLine points={top} color="grid" opacity={opacity} />
     </group>
   );
 };
 
-export default MeasurementsVertical;
+export default StabilizerVertical;
