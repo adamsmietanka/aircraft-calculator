@@ -4,33 +4,70 @@ import { Props } from "../../common/types/three";
 import InputDrawing from "../../common/inputs/InputDrawing";
 import { useLocation } from "react-router-dom";
 import { useVerticalStore } from "../stores/useVertical";
+import useVertical from "./hooks/useVertical";
+import AnimatedLine from "../../common/three/AnimatedLine";
+import { Edges } from "@react-three/drei";
+import { useCSSColors } from "../../common/three/config";
 
 const MeasurementsVertical = ({ opacity }: Props) => {
+  const chord = useVerticalStore((state) => state.chord);
   const chordTip = useVerticalStore((state) => state.chordTip);
+  const setChord = useVerticalStore((state) => state.setChord);
   const setChordTip = useVerticalStore((state) => state.setChordTip);
 
   const shape = useVerticalStore((state) => state.shape);
 
-  const length = usePlaneStore((state) => state.length);
-  const wingX = usePlaneStore((state) => state.wingX);
-  const measurements = usePlaneStore((state) => state.measurements);
+  const verticalToTail = usePlaneStore((state) => state.verticalToTail);
 
-  const setLength = usePlaneStore((state) => state.setLength);
-  const setWingX = usePlaneStore((state) => state.setWingX);
+  const setVerticalToTail = usePlaneStore((state) => state.setVerticalToTail);
 
   const { pathname } = useLocation();
+  const { gridColor } = useCSSColors();
+
+  const { vertical, leading, trailing } = useVertical();
 
   return (
-    <>
+    <group>
+      {/* <mesh rotation-x={-Math.PI / 2} geometry={vertical}>
+        <animated.meshStandardMaterial
+          color="white"
+          metalness={0.5}
+          transparent
+          opacity={opacity}
+          // wireframe
+        />
+        <Edges color={gridColor} />
+      </mesh> */}
       <AnimatedInputTechnical
+        visible={pathname === "/aerodynamics/vertical"}
+        distance={1}
+        value={chord}
+        opacity={opacity.to((o) => 0.75 * o)}
+      >
+        <InputDrawing value={chord} setter={setChord} />
+      </AnimatedInputTechnical>
+      <mesh rotation-x={(120 * Math.PI) / 180}>
+        <AnimatedInputTechnical
+          visible={pathname === "/aerodynamics/vertical"}
+          distance={1}
+          value={verticalToTail}
+          opacity={opacity.to((o) => 0.75 * o)}
+        >
+          <div className="transform scale-y-[-1]">
+            <InputDrawing value={verticalToTail} setter={setVerticalToTail} />
+          </div>
+        </AnimatedInputTechnical>
+      </mesh>
+      {/* <AnimatedInputTechnical
         visible={pathname === "/aerodynamics/vertical"}
         distance={2}
         value={chordTip}
         startX={-wingX}
         opacity={opacity.to((o) => 0.75 * o)}
       >
-        <InputDrawing value={length} setter={setLength} />
-      </AnimatedInputTechnical>
+        <InputDrawing value={chordTip} setter={setChordTip} />
+      </AnimatedInputTechnical> */}
+
       {/* <AnimatedInputTechnical
         visible={pathname === "/aerodynamics/vertical"}
         distance={1.25}
@@ -40,7 +77,9 @@ const MeasurementsVertical = ({ opacity }: Props) => {
       >
         <InputDrawing value={wingX} setter={setWingX} />
       </AnimatedInputTechnical> */}
-    </>
+      <AnimatedLine points={leading} color="grid" opacity={opacity} />
+      <AnimatedLine points={trailing} color="grid" opacity={opacity} />
+    </group>
   );
 };
 

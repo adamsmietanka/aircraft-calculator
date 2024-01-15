@@ -20,7 +20,7 @@ const createWingModel = (
 ) => {
   const wingGeometry = new BufferGeometry();
 
-  const { xOutline, yOutline } = getWingOutline(config);
+  const { xOutline, yOutline } = getWingOutline(config, true);
 
   const tipShape = new Shape();
 
