@@ -1,13 +1,14 @@
-import { useWingStore } from "./stores/useWing";
+interface Props {
+  label?: string;
+  shape: number;
+  setter: (value: number) => void;
+}
 
-const WingShape = () => {
-  const shape = useWingStore((state) => state.shape);
-  const setShape = useWingStore((state) => state.setShape);
-
+const WingShape = ({ label = "Wing", shape, setter }: Props) => {
   return (
     <div className="form-control">
       <label className="label">
-        <span className="label-text">Wing Shape</span>
+        <span className="label-text">{label} Shape</span>
       </label>
       <label className="flex flex-col">
         <input
@@ -16,7 +17,7 @@ const WingShape = () => {
           max="2"
           value={shape}
           className="range range-xs"
-          onChange={(e) => setShape(parseFloat(e.target.value))}
+          onChange={(e) => setter(parseFloat(e.target.value))}
         />
         <div className="w-full flex justify-between mt-2">
           <div className="flex -ml-3">
