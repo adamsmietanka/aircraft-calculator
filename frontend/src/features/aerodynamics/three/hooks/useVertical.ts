@@ -20,6 +20,10 @@ const useVertical = () => {
     [0, 0, 0],
     [1, 1, 1],
   ]);
+  const [top, setTop] = useState([
+    [0, 0, 0],
+    [1, 1, 1],
+  ]);
 
   useEffect(() => {
     const { leadingPoints, trailingPoints } = getLeadingTrailing(
@@ -35,6 +39,10 @@ const useVertical = () => {
     );
     setLeading(leadingPoints);
     setTrailing(trailingPoints);
+    setTop([
+      leadingPoints[leadingPoints.length - 1],
+      trailingPoints[trailingPoints.length - 1],
+    ]);
 
     const symmetric = getProfilePoints("0009");
     setVertical(
@@ -51,7 +59,7 @@ const useVertical = () => {
       )
     );
   }, [wing]);
-  return { vertical, leading, trailing };
+  return { vertical, leading, trailing, top };
 };
 
 export default useVertical;

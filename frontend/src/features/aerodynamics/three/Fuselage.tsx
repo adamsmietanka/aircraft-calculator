@@ -18,7 +18,7 @@ import { useCSSColors } from "../../common/three/config";
 import { useVerticalStore } from "../stores/useVertical";
 import { useLocation } from "react-router-dom";
 import MeasurementsFuse from "./MeasurementsFuse";
-import MeasurementsVertical from "./MeasurementsVertical";
+import StabilizerVertical from "./StabilizerVertical";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -110,7 +110,7 @@ const Fuselage = ({ opacity }: Props) => {
                 position-x={planeSpring.tailPosition}
                 position-y={0.69}
               >
-                <MeasurementsVertical opacity={opacity} />
+                <StabilizerVertical opacity={opacity} />
               </animated.mesh>
             </animated.mesh>
             <WingModel opacity={opacity} />

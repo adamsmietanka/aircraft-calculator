@@ -60,7 +60,7 @@ const useLandingPage = () => {
           chord: 1.25,
           chordTip: 0.65,
           angle: 20,
-          shape: 3,
+          shape: 2,
         },
         symmetric,
         false
