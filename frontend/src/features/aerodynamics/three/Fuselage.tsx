@@ -28,6 +28,7 @@ const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
+  const verticalToTail = usePlaneStore((state) => state.verticalToTail);
   const measurements = usePlaneStore((state) => state.measurements);
 
   const span = useWingStore((state) => state.span);
@@ -36,28 +37,6 @@ const Fuselage = ({ opacity }: Props) => {
   const verticalStabilizer = useVerticalStore();
 
   usePlaneAerodynamics();
-  const { gridColor } = useCSSColors();
-
-  const [vertical, setVertical] = useState<BufferGeometry>(
-    new SphereGeometry()
-  );
-
-  useEffect(() => {
-    const symmetric = getProfilePoints("0009");
-    setVertical(
-      createWingModel(
-        {
-          span: verticalStabilizer.span,
-          chord: verticalStabilizer.chord,
-          chordTip: verticalStabilizer.chordTip,
-          angle: verticalStabilizer.angle,
-          shape: verticalStabilizer.shape,
-        },
-        symmetric,
-        false
-      )
-    );
-  }, [verticalStabilizer]);
 
   const { pathname } = useLocation();
 
@@ -68,14 +47,17 @@ const Fuselage = ({ opacity }: Props) => {
         shape === 0 && (configuration === 1 || configuration === 3) ? 1 : 0,
       fuseZ: configuration === 2 || configuration === 3 ? span / 6 : 0,
       wingPosition: -wingX,
-      planePosition: pathname === "/aerodynamics/fuselage" ? 0 : -7.5,
+      planePosition: 0,
+      scale: 1.5,
+      tailPosition: length - wingX - verticalToTail,
     }),
-    [configuration, shape, wingX, pathname]
+    [configuration, shape, wingX, pathname, length, verticalToTail]
   );
 
   useEffect(() => {
     api.start({
       planePosition: pathname === "/aerodynamics/fuselage" ? 0 : -7.5,
+      scale: pathname === "/aerodynamics/fuselage" ? 1.5 : 3,
       config: {
         duration: 1500,
         easing: easings.easeOutQuad,
@@ -105,7 +87,7 @@ const Fuselage = ({ opacity }: Props) => {
           <animated.mesh scale={1.5} position-x={planeSpring.planePosition}>
             <animated.mesh position-z={planeSpring.fuseZ.to((z) => -z)}>
               <FuseModel opacity={opacity} />
-              <mesh
+              {/* <mesh
                 position-x={6}
                 position-y={0.69}
                 rotation-x={-Math.PI / 2}
@@ -118,28 +100,18 @@ const Fuselage = ({ opacity }: Props) => {
                   opacity={opacity}
                   // wireframe
                 />
-                {/* <Edges color={gridColor} /> */}
-              </mesh>
+                <Edges color={gridColor} />
+              </mesh> */}
             </animated.mesh>
             <animated.mesh position-z={planeSpring.fuseZ}>
               <FuseModel opacity={opacity} />
-              <mesh
-                position-x={6}
-                position-y={0.69}
-                rotation-x={-Math.PI / 2}
-                geometry={vertical}
-              >
-                <animated.meshStandardMaterial
-                  color="white"
-                  metalness={0.5}
-                  transparent
-                  opacity={opacity}
-                  // wireframe
-                />
-                {/* <Edges color={gridColor} /> */}
-              </mesh>
               <MeasurementsFuse opacity={opacity} />
-              <MeasurementsVertical opacity={opacity} />
+              <animated.mesh
+                position-x={planeSpring.tailPosition}
+                position-y={0.69}
+              >
+                <MeasurementsVertical opacity={opacity} />
+              </animated.mesh>
             </animated.mesh>
             <WingModel opacity={opacity} />
             <animated.mesh position-y={planeSpring.wingY}>

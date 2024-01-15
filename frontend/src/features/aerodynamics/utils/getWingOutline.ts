@@ -1,8 +1,9 @@
 import { getXTip } from "../three/hooks/useWingSpring";
 import { Props } from "../three/utils/createWingModel";
-import getEllipticOutline from "./getEllipticOutline";
+import getLeadingTrailing from "./getLeadingTrailing";
 
-const getWingOutline = ({ span, chord, chordTip, angle, shape }: Props) => {
+const getWingOutline = (config: Props, reverse = false) => {
+  const { span, chord, chordTip, angle, shape } = config;
   const xTip = getXTip(angle, span);
   if (shape === 0)
     return {
@@ -22,8 +23,11 @@ const getWingOutline = ({ span, chord, chordTip, angle, shape }: Props) => {
       ],
       yOutline: [-span / 2, 0, span / 2],
     };
-  if (shape === 2) return getEllipticOutline(chord, span);
-  return getEllipticOutline(chord, span, true);
+  const { leadingPoints, trailingPoints } = getLeadingTrailing(config, reverse);
+  return {
+    xOutline: leadingPoints.map(([x], index) => [x, trailingPoints[index][0]]),
+    yOutline: leadingPoints.map(([x, y, z]) => y),
+  };
 };
 
 export default getWingOutline;
