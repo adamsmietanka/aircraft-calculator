@@ -1,52 +1,27 @@
-import { getXTip } from "../hooks/useWingSpring";
 import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
 import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
-import getEllipticOutline from "../../utils/getEllipticOutline";
+import getWingOutline from "../../utils/getWingOutline";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
+export interface Props {
+  span: number;
+  chord: number;
+  chordTip: number;
+  angle: number;
+  shape: number;
+}
+
 const createWingModel = (
-  config: {
-    span: number;
-    chord: number;
-    chordTip: number;
-    angle: number;
-    shape: number;
-  },
+  config: Props,
   profilePoints: number[][],
   full = true
 ) => {
-  const { span, chord, chordTip, angle, shape } = config;
-
-  const xTip = getXTip(angle, span);
-
-  const getOutline = () => {
-    if (shape === 0)
-      return {
-        xOutline: [
-          [0, chord],
-          [0, chord],
-          [0, chord],
-        ],
-        yOutline: [-span / 2, 0, span / 2],
-      };
-    if (shape === 1)
-      return {
-        xOutline: [
-          [xTip, xTip + chordTip],
-          [0, chord],
-          [xTip, xTip + chordTip],
-        ],
-        yOutline: [-span / 2, 0, span / 2],
-      };
-    if (shape === 2) return getEllipticOutline(chord, span);
-    return getEllipticOutline(chord, span, true);
-  };
-
   const wingGeometry = new BufferGeometry();
 
-  const { xOutline, yOutline } = getOutline();
+  const { xOutline, yOutline } = getWingOutline(config);
+
   const tipShape = new Shape();
 
   console.log("new wing created");
