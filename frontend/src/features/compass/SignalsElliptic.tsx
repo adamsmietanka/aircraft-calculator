@@ -21,7 +21,7 @@ const circle = Array.from(Array(41).keys()).map((i) => [
 ]);
 
 const SIGNAL_SIZE = 2.5;
-const SIGNAL_VEL = 2e-4;
+const SIGNAL_VEL = 5e-4;
 const SIGNAL_DURATION = SIGNAL_SIZE / SIGNAL_VEL;
 
 const SignalsElliptic = ({ opacity }: SignalsProps) => {
