@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useUnits } from "../../settings/hooks/useUnits";
+import InputDrawingFeet from "./InputDrawingFeet";
 
 interface Props {
   small?: boolean;
@@ -16,7 +17,7 @@ const InputDrawing = ({
   max = 100000,
   setter,
 }: Props) => {
-  const { multiplier, step } = useUnits(value, "length");
+  const { multiplier, step, unit } = useUnits(value, "length");
 
   const [local, setLocal] = useState(value);
   console.log(step, local, multiplier);
@@ -29,7 +30,14 @@ const InputDrawing = ({
     setter && min <= local && local <= max && setter(local);
   }, [local]);
 
-  return (
+  return unit === "ft" ? (
+    <InputDrawingFeet
+      value={local}
+      min={min / multiplier}
+      max={max / multiplier}
+      setter={setter}
+    />
+  ) : (
     <input
       className={`input w-28 text-center bg-transparent focus:border-transparent focus:outline-none pl-8 ${
         small && "input-2sm"
