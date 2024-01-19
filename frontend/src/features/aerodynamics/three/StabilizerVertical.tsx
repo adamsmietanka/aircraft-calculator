@@ -18,6 +18,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
   const shape = useVerticalStore((state) => state.shape);
 
   const verticalToTail = usePlaneStore((state) => state.verticalToTail);
+  const length = usePlaneStore((state) => state.length);
 
   const setVerticalToTail = usePlaneStore((state) => state.setVerticalToTail);
 
@@ -54,7 +55,12 @@ const StabilizerVertical = ({ opacity }: Props) => {
           opacity={opacity.to((o) => 0.75 * o)}
         >
           <div className="transform scale-y-[-1]">
-            <InputDrawing value={verticalToTail} setter={setVerticalToTail} />
+            <InputDrawing
+              value={verticalToTail}
+              setter={setVerticalToTail}
+              min={chord}
+              max={length / 2}
+            />
           </div>
         </AnimatedInputTechnical>
       </mesh>

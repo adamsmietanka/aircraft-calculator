@@ -1,14 +1,33 @@
+import { useEffect, useState } from "react";
 import { useUnits } from "../../settings/hooks/useUnits";
 
 interface Props {
   small?: boolean;
   value: number;
   min?: number;
+  max?: number;
   setter?: (value: number) => void;
 }
 
-const InputDrawing = ({ small = false, value, min = 0, setter }: Props) => {
-  const { multiplier, step, displayValue } = useUnits(value, "length");
+const InputDrawing = ({
+  small = false,
+  value,
+  min = 0,
+  max = 100000,
+  setter,
+}: Props) => {
+  const { multiplier, step } = useUnits(value, "length");
+
+  const [local, setLocal] = useState(value);
+  console.log(step, local, multiplier);
+
+  useEffect(() => {
+    setLocal(value);
+  }, [value]);
+
+  useEffect(() => {
+    setter && min <= local && local <= max && setter(local);
+  }, [local]);
 
   return (
     <input
@@ -17,13 +36,11 @@ const InputDrawing = ({ small = false, value, min = 0, setter }: Props) => {
       }`}
       type="number"
       step={step}
-      value={displayValue}
-      min={min}
-      onChange={(e) =>
-        setter &&
-        parseFloat(e.target.value) &&
-        setter(parseFloat(e.target.value) * multiplier)
-      }
+      value={parseFloat((local / multiplier).toPrecision(4))}
+      min={min / multiplier}
+      max={max / multiplier}
+      onChange={(e) => setLocal(parseFloat(e.target.value) * multiplier)}
+      onBlur={() => setLocal(value)}
     />
   );
 };

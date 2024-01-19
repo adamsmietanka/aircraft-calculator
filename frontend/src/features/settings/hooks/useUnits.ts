@@ -16,7 +16,7 @@ export const useUnits = (value: number, type: string) => {
   const [unit, setUnit] = useState(types[type]);
 
   const multiplier = unitMultipliers[type][unit];
-  const step = getStep((0.1 * value) / multiplier);
+  const step = Math.pow(10, Math.floor(Math.log10(value / multiplier) - 0.6985) - 1);
 
   const displayValue = round(value / multiplier, step / 10);
 
