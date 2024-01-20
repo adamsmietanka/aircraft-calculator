@@ -19,6 +19,7 @@ interface Props {
   value: number;
   valueY?: number;
   startX?: number;
+  y?: number;
   opacity: number | SpringValue<number> | Interpolation<number>;
   distance?: number;
   vertical?: boolean;
@@ -45,6 +46,7 @@ const AnimatedInputTechnical = ({
   value,
   valueY = 0,
   startX = 0,
+  y = 0,
   opacity,
   distance = 1,
   vertical = false,
@@ -69,8 +71,9 @@ const AnimatedInputTechnical = ({
       value,
       startX,
       scale: fluidScale,
+      y,
     }),
-    [opacity, value, startX, fluidScale]
+    [opacity, value, startX, y, fluidScale]
   );
 
   return (
@@ -79,7 +82,7 @@ const AnimatedInputTechnical = ({
       ref={meshRef}
       visible={visible}
     >
-      <animated.mesh position-x={inputSpring.startX}>
+      <animated.mesh position-x={inputSpring.startX} position-y={inputSpring.y}>
         <AnimatedLine
           points={[
             [0, 0, 0],
