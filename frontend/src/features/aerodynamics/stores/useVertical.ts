@@ -62,7 +62,7 @@ export const useVerticalStore = create<StabilizerState>()(
       setChord: (value) => set({ chord: value }),
       setChordTip: (value) => set({ chordTip: value }),
       setTipX: (value) => set({ tipX: value }),
-      setSpan: (value) => set({ span: value }),
+      setSpan: (value) => set({ span: 2 * value }),
       setAngle: (value) => set({ angle: value }),
       setProfile: (value) =>
         set({

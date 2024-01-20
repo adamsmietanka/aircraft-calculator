@@ -8,10 +8,14 @@ import useVertical from "./hooks/useVertical";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { Edges } from "@react-three/drei";
 import { useCSSColors } from "../../common/three/config";
+import { getXTip } from "./hooks/useWingSpring";
 
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
+  const span = useVerticalStore((state) => state.span);
+  const angle = useVerticalStore((state) => state.angle);
   const chordTip = useVerticalStore((state) => state.chordTip);
+  const setSpan = useVerticalStore((state) => state.setSpan);
   const setChord = useVerticalStore((state) => state.setChord);
   const setChordTip = useVerticalStore((state) => state.setChordTip);
 
@@ -44,6 +48,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
         distance={1}
         value={chord}
         opacity={opacity.to((o) => 0.75 * o)}
+        outside
       >
         <InputDrawing value={chord} setter={setChord} />
       </AnimatedInputTechnical>
@@ -64,25 +69,32 @@ const StabilizerVertical = ({ opacity }: Props) => {
           </div>
         </AnimatedInputTechnical>
       </mesh>
-      {/* <AnimatedInputTechnical
-        visible={pathname === "/aerodynamics/vertical"}
-        distance={2}
+      <mesh rotation-z={(90 * Math.PI) / 180}>
+        <AnimatedInputTechnical
+          visible={pathname === "/aerodynamics/vertical"}
+          distance={1}
+          valueY={-getXTip(angle, span)}
+          value={span / 2}
+          opacity={opacity.to((o) => 0.75 * o)}
+        >
+          <InputDrawing
+            value={span / 2}
+            setter={setSpan}
+            min={chord}
+            max={length / 2}
+          />
+        </AnimatedInputTechnical>
+      </mesh>
+      <AnimatedInputTechnical
+        visible={pathname === "/aerodynamics/vertical" && shape === 1}
+        distance={1}
         value={chordTip}
-        startX={-wingX}
+        y={span / 2}
+        startX={getXTip(angle, span)}
         opacity={opacity.to((o) => 0.75 * o)}
       >
         <InputDrawing value={chordTip} setter={setChordTip} />
-      </AnimatedInputTechnical> */}
-
-      {/* <AnimatedInputTechnical
-        visible={pathname === "/aerodynamics/vertical"}
-        distance={1.25}
-        value={wingX}
-        startX={-wingX}
-        opacity={opacity.to((o) => 0.75 * o)}
-      >
-        <InputDrawing value={wingX} setter={setWingX} />
-      </AnimatedInputTechnical> */}
+      </AnimatedInputTechnical>
       <AnimatedLine points={leading} color="grid" opacity={opacity} />
       <AnimatedLine points={trailing} color="grid" opacity={opacity} />
       <AnimatedLine points={top} color="grid" opacity={opacity} />
