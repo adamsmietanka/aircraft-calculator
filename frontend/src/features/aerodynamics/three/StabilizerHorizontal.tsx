@@ -7,26 +7,49 @@ import { useHorizontalStore } from "../stores/useHorizontal";
 import useHorizontal from "./hooks/useHorizontal";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
-import { animated } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
+import fuselages from "../data/fuselages";
+import { useVerticalStore } from "../stores/useVertical";
+
+const getMaxTailY = (shape: number) => {
+  if (shape === 2) return 0.8;
+  return 1;
+};
 
 const StabilizerHorizontal = ({ opacity }: Props) => {
   const chord = useHorizontalStore((state) => state.chord);
   const span = useHorizontalStore((state) => state.span);
   const angle = useHorizontalStore((state) => state.angle);
   const chordTip = useHorizontalStore((state) => state.chordTip);
+  const position = useHorizontalStore((state) => state.position);
   const setSpan = useHorizontalStore((state) => state.setSpan);
   const setChord = useHorizontalStore((state) => state.setChord);
   const setChordTip = useHorizontalStore((state) => state.setChordTip);
 
   const shape = useHorizontalStore((state) => state.shape);
+
+  const shapeVertical = useVerticalStore((state) => state.shape);
+  const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
 
   const { pathname } = useLocation();
 
   const { horizontal, leading, trailing, top } = useHorizontal();
 
+  const [spring, api] = useSpring(
+    () => ({
+      y:
+        fuselages[fuselage].horizontalY * length +
+        ((fuselages[fuselage].verticalY - fuselages[fuselage].horizontalY) *
+          length +
+          (getMaxTailY(shapeVertical) * span) / 2 / 1.5) *
+          position,
+    }),
+    [fuselage, shape, shapeVertical, pathname, length, position]
+  );
+
   return (
-    <mesh rotation-x={-Math.PI / 2}>
+    <animated.mesh position-y={spring.y} rotation-x={-Math.PI / 2}>
       <mesh
         visible={pathname === "/aerodynamics/results"}
         rotation-x={-Math.PI / 2}
@@ -90,7 +113,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
           opacity={opacity}
         />
       </mesh>
-    </mesh>
+    </animated.mesh>
   );
 };
 
