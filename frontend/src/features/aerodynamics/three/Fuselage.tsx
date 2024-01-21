@@ -41,7 +41,6 @@ const Fuselage = ({ opacity }: Props) => {
       scale: 1.5,
       tailPosition: length - wingX - verticalToTail,
       verticalY: fuselages[fuselage].verticalY * length,
-      horizontalY: fuselages[fuselage].horizontalY * length,
     }),
     [configuration, fuselage, shape, wingX, pathname, length, verticalToTail]
   );
@@ -102,9 +101,7 @@ const Fuselage = ({ opacity }: Props) => {
                 <animated.mesh position-y={planeSpring.verticalY}>
                   <StabilizerVertical opacity={opacity} />
                 </animated.mesh>
-                <animated.mesh position-y={planeSpring.horizontalY}>
-                  <StabilizerHorizontal opacity={opacity} />
-                </animated.mesh>
+                <StabilizerHorizontal opacity={opacity} />
               </animated.mesh>
             </animated.mesh>
             <WingModel opacity={opacity} />

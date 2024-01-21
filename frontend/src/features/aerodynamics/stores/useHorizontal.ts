@@ -23,6 +23,7 @@ export interface StabilizerState {
   MACposition: number[];
   stallReynolds: number;
   kH: number;
+  position: number;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
   setTipX: (value: number) => void;
@@ -35,6 +36,7 @@ export interface StabilizerState {
   setStallVelocity: (value: number) => void;
   setMaterial: (value: number) => void;
   setShape: (value: number) => void;
+  setPosition: (value: number) => void;
   set: (value: Partial<StabilizerState>) => void;
 }
 
@@ -61,6 +63,7 @@ export const useHorizontalStore = create<StabilizerState>()(
       MACposition: [0, 0],
       stallReynolds: 0,
       kH: 0.5,
+      position: 0,
       setChord: (value) => set({ chord: value }),
       setChordTip: (value) => set({ chordTip: value }),
       setTipX: (value) => set({ tipX: value }),
@@ -81,6 +84,7 @@ export const useHorizontalStore = create<StabilizerState>()(
       setStallVelocity: (value) => set({ stallVelocity: value }),
       setMaterial: (value) => set({ material: value }),
       setShape: (value) => set({ shape: value }),
+      setPosition: (value) => set({ position: value }),
       set: (value) => set(value),
     }),
     { name: "Horizontal" }
