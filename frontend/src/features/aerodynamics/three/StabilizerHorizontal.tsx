@@ -48,16 +48,17 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
       >
         <InputDrawing value={chord} setter={setChord} />
       </AnimatedInputTechnical> */}
-      <mesh rotation-z={(90 * Math.PI) / 180}>
+      <mesh rotation-z={(-90 * Math.PI) / 180}>
         <AnimatedInputTechnical
           visible={pathname === "/aerodynamics/horizontal"}
-          distance={1}
-          valueY={-getXTip(angle, span)}
-          value={span / 2}
+          distance={2}
+          y={shape === 2 ? 0.3 * chord : getXTip(angle, span)}
+          startX={-span / 2}
+          value={span}
           opacity={opacity.to((o) => 0.75 * o)}
         >
           <InputDrawing
-            value={span / 2}
+            value={span}
             setter={setSpan}
             min={chord}
             max={length / 2}
