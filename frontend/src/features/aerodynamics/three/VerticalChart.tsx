@@ -54,10 +54,7 @@ const VerticalChart = ({ opacity }: Props) => {
       />
       <Legend
         gridPositionX={1.6}
-        items={[
-          { name: "Plane" },
-          { name: "Stabilizer", style: "dotted" },
-        ]}
+        items={[{ name: "Plane" }, { name: "Stabilizer", style: "dotted" }]}
         opacity={opacity}
         store={useVerticalChartStore}
       />

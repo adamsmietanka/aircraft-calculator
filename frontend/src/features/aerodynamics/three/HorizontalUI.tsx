@@ -10,7 +10,7 @@ const HorizontalUI = ({ opacity }: Props) => {
 
   return (
     <mesh rotation={[(-60 * Math.PI) / 180, (-20 * Math.PI) / 180, 0, "YXZ"]}>
-      <Inputs3D gridPositionX={0.25}>
+      <Inputs3D gridPositionX={-1.2}>
         <div className="w-48">
           <WingShape label="Stabilizer" shape={shape} setter={setShape} />
         </div>
