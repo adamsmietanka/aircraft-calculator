@@ -1,9 +1,8 @@
 import { Props } from "../../common/types/three";
 import Inputs3D from "../../common/three/Inputs3D";
-import { usePlaneStore } from "../stores/usePlane";
-import FuselageChart from "./FuselageChart";
 import { useVerticalStore } from "../stores/useVertical";
 import WingShape from "../WingShape";
+import VerticalChart from "./VerticalChart";
 
 const VerticalUI = ({ opacity }: Props) => {
   const shape = useVerticalStore((state) => state.shape);
@@ -15,15 +14,8 @@ const VerticalUI = ({ opacity }: Props) => {
         <div className="w-48">
           <WingShape label="Stabilizer" shape={shape} setter={setShape} />
         </div>
-        {/* <FuselageChoose />
-        <FuselageConfiguration /> */}
-        {/* <InputToggle
-          label="Measurements"
-          value={measurements}
-          setter={setMeasurements}
-        /> */}
       </Inputs3D>
-      <FuselageChart opacity={opacity} />
+      <VerticalChart opacity={opacity} />
     </mesh>
   );
 };
