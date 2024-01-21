@@ -6,7 +6,12 @@ import getProfilePoints from "../../utils/getProfilePoints";
 import createWingModel from "../utils/createWingModel";
 
 const useVertical = () => {
-  const wing = useVerticalStore();
+  const chord = useVerticalStore((state) => state.chord);
+  const span = useVerticalStore((state) => state.span);
+  const angle = useVerticalStore((state) => state.angle);
+  const chordTip = useVerticalStore((state) => state.chordTip);
+  const shape = useVerticalStore((state) => state.shape);
+  const set = useVerticalStore((state) => state.set);
 
   const [vertical, setVertical] = useState<BufferGeometry>(
     new SphereGeometry()
@@ -28,11 +33,11 @@ const useVertical = () => {
   useEffect(() => {
     const { leadingPoints, trailingPoints } = getLeadingTrailing(
       {
-        span: wing.span,
-        chord: wing.chord,
-        chordTip: wing.chordTip,
-        angle: wing.angle,
-        shape: wing.shape,
+        span,
+        chord,
+        chordTip,
+        angle,
+        shape,
       },
       true,
       false
@@ -48,17 +53,26 @@ const useVertical = () => {
     setVertical(
       createWingModel(
         {
-          span: wing.span,
-          chord: wing.chord,
-          chordTip: wing.chordTip,
-          angle: wing.angle,
-          shape: wing.shape,
+          span,
+          chord,
+          chordTip,
+          angle,
+          shape,
         },
         symmetric,
         false
       )
     );
-  }, [wing]);
+
+    const getArea = () => {
+      if (shape === 0) return chord * span;
+      if (shape === 1) return ((chord + chordTip) * span) / 2;
+      return (Math.PI * chord * span) / 4;
+    };
+
+    set({ area: getArea() });
+  }, [span, chord, chordTip, angle, shape]);
+  
   return { vertical, leading, trailing, top };
 };
 
