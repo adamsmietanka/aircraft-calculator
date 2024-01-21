@@ -55,6 +55,11 @@ const stepsList: Step[] = [
     feature: "aerodynamics",
     path: "vertical",
   },
+  {
+    name: "Horizontal stabilizer",
+    feature: "aerodynamics",
+    path: "horizontal",
+  },
   // {
   //   name: "Shapes",
   //   feature: "aerodynamics",

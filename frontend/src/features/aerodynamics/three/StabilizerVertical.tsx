@@ -6,9 +6,8 @@ import { useLocation } from "react-router-dom";
 import { useVerticalStore } from "../stores/useVertical";
 import useVertical from "./hooks/useVertical";
 import AnimatedLine from "../../common/three/AnimatedLine";
-import { Edges } from "@react-three/drei";
-import { useCSSColors } from "../../common/three/config";
 import { getXTip } from "./hooks/useWingSpring";
+import { animated } from "@react-spring/three";
 
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
@@ -27,22 +26,23 @@ const StabilizerVertical = ({ opacity }: Props) => {
   const setVerticalToTail = usePlaneStore((state) => state.setVerticalToTail);
 
   const { pathname } = useLocation();
-  const { gridColor } = useCSSColors();
 
   const { vertical, leading, trailing, top } = useVertical();
 
   return (
     <group>
-      {/* <mesh rotation-x={-Math.PI / 2} geometry={vertical}>
+      <mesh
+        visible={pathname === "/aerodynamics/horizontal"}
+        rotation-x={-Math.PI / 2}
+        geometry={vertical}
+      >
         <animated.meshStandardMaterial
           color="white"
           metalness={0.5}
           transparent
           opacity={opacity}
-          // wireframe
         />
-        <Edges color={gridColor} />
-      </mesh> */}
+      </mesh>
       <AnimatedInputTechnical
         visible={pathname === "/aerodynamics/vertical"}
         distance={1}

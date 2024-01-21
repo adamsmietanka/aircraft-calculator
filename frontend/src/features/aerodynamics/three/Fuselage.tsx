@@ -1,5 +1,4 @@
 import {
-  Edges,
   Instance,
   Instances,
   PresentationControls,
@@ -10,15 +9,12 @@ import { useWingStore } from "../stores/useWing";
 import WingModel from "./WingModel";
 import FuseModel from "./FuseModel";
 import usePlaneAerodynamics from "../hooks/usePlaneAerodynamics";
-import { BufferGeometry, SphereGeometry } from "three";
-import { useEffect, useState } from "react";
-import getProfilePoints from "../utils/getProfilePoints";
-import createWingModel from "./utils/createWingModel";
-import { useCSSColors } from "../../common/three/config";
+import { useEffect } from "react";
 import { useVerticalStore } from "../stores/useVertical";
 import { useLocation } from "react-router-dom";
 import MeasurementsFuse from "./MeasurementsFuse";
 import StabilizerVertical from "./StabilizerVertical";
+import StabilizerHorizontal from "./StabilizerHorizontal";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -29,12 +25,9 @@ const Fuselage = ({ opacity }: Props) => {
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
   const verticalToTail = usePlaneStore((state) => state.verticalToTail);
-  const measurements = usePlaneStore((state) => state.measurements);
 
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
-
-  const verticalStabilizer = useVerticalStore();
 
   usePlaneAerodynamics();
 
@@ -111,6 +104,7 @@ const Fuselage = ({ opacity }: Props) => {
                 position-y={0.69}
               >
                 <StabilizerVertical opacity={opacity} />
+                <StabilizerHorizontal opacity={opacity} />
               </animated.mesh>
             </animated.mesh>
             <WingModel opacity={opacity} />

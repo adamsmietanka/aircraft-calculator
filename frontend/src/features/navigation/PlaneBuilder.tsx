@@ -24,6 +24,7 @@ import LevelFlightFormula from "../aerodynamics/three/tutorials/LevelFlightFormu
 import NavigationElliptic from "../compass/NavigationElliptic";
 import FuselageUI from "../aerodynamics/three/FuselageUI";
 import VerticalUI from "../aerodynamics/three/VerticalUI ";
+import HorizontalUI from "../aerodynamics/three/HorizontalUI";
 
 const PlaneBuilder = () => {
   return (
@@ -77,11 +78,16 @@ const PlaneBuilder = () => {
         <Route path="/aerodynamics/inducedDrag" Element={InducedDrag} />
         <Route path="/aerodynamics/wing" Element={Wing} />
         <Route
-          paths={["/aerodynamics/fuselage", "/aerodynamics/vertical"]}
+          paths={[
+            "/aerodynamics/fuselage",
+            "/aerodynamics/vertical",
+            "/aerodynamics/horizontal",
+          ]}
           Element={Fuselage}
         />
         <Route path="/aerodynamics/fuselage" Element={FuselageUI} />
         <Route path="/aerodynamics/vertical" Element={VerticalUI} />
+        <Route path="/aerodynamics/horizontal" Element={HorizontalUI} />
         <Route path="/navigation/hyperbolic" Element={NavigationHyperbolic} />
         <Route path="/navigation/elliptic" Element={NavigationElliptic} />
       </Canvas>

@@ -15,6 +15,7 @@ const obj: Record<string, number[]> = {
   "/aerodynamics/wing": [20, 0, 0],
   "/aerodynamics/fuselage": [20, 70, -45],
   "/aerodynamics/vertical": [20, 70, 0],
+  "/aerodynamics/horizontal": [20, 30, -20],
   "/navigation/hyperbolic": [20, 90, 0],
   "/navigation/elliptic": [20, 90, 0],
 };
