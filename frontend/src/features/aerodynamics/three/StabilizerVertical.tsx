@@ -104,6 +104,14 @@ const StabilizerVertical = ({ opacity }: Props) => {
         <AnimatedLine points={leading} color="grid" opacity={opacity} />
         <AnimatedLine points={trailing} color="grid" opacity={opacity} />
         <AnimatedLine points={top} color="grid" opacity={opacity} />
+        <AnimatedLine
+          points={[
+            [0, 0, 0],
+            [chord, 0, 0],
+          ]}
+          color="grid"
+          opacity={opacity}
+        />
       </mesh>
     </group>
   );
