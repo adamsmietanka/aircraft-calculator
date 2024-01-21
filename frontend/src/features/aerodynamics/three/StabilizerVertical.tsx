@@ -73,7 +73,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
         <AnimatedInputTechnical
           visible={pathname === "/aerodynamics/vertical"}
           distance={1}
-          valueY={-getXTip(angle, span)}
+          valueY={shape === 2 ? -0.7 * chord : -getXTip(angle, span)}
           value={span / 2}
           opacity={opacity.to((o) => 0.75 * o)}
         >

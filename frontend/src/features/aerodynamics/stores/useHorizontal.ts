@@ -64,7 +64,7 @@ export const useHorizontalStore = create<StabilizerState>()(
       setChord: (value) => set({ chord: value }),
       setChordTip: (value) => set({ chordTip: value }),
       setTipX: (value) => set({ tipX: value }),
-      setSpan: (value) => set({ span: 2 * value }),
+      setSpan: (value) => set({ span: value }),
       setAngle: (value) => set({ angle: value }),
       setProfile: (value) =>
         set({
