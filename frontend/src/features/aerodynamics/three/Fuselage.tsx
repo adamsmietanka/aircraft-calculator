@@ -1,8 +1,4 @@
-import {
-  Instance,
-  Instances,
-  PresentationControls,
-} from "@react-three/drei";
+import { Instance, Instances, PresentationControls } from "@react-three/drei";
 import { SpringValue, animated, easings, useSpring } from "@react-spring/three";
 import { usePlaneStore } from "../stores/usePlane";
 import { useWingStore } from "../stores/useWing";
@@ -10,17 +6,18 @@ import WingModel from "./WingModel";
 import FuseModel from "./FuseModel";
 import usePlaneAerodynamics from "../hooks/usePlaneAerodynamics";
 import { useEffect } from "react";
-import { useVerticalStore } from "../stores/useVertical";
 import { useLocation } from "react-router-dom";
 import MeasurementsFuse from "./MeasurementsFuse";
 import StabilizerVertical from "./StabilizerVertical";
 import StabilizerHorizontal from "./StabilizerHorizontal";
+import fuselages from "../data/fuselages";
 
 interface Props {
   opacity: SpringValue<number>;
 }
 
 const Fuselage = ({ opacity }: Props) => {
+  const fuselage = usePlaneStore((state) => state.fuselage);
   const configuration = usePlaneStore((state) => state.configuration);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
@@ -43,8 +40,9 @@ const Fuselage = ({ opacity }: Props) => {
       planePosition: 0,
       scale: 1.5,
       tailPosition: length - wingX - verticalToTail,
+      verticalY: fuselages[fuselage].verticalY * length,
     }),
-    [configuration, shape, wingX, pathname, length, verticalToTail]
+    [configuration, fuselage, shape, wingX, pathname, length, verticalToTail]
   );
 
   useEffect(() => {
@@ -101,7 +99,7 @@ const Fuselage = ({ opacity }: Props) => {
               <MeasurementsFuse opacity={opacity} />
               <animated.mesh
                 position-x={planeSpring.tailPosition}
-                position-y={0.69}
+                position-y={planeSpring.verticalY}
               >
                 <StabilizerVertical opacity={opacity} />
                 <StabilizerHorizontal opacity={opacity} />
