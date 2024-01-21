@@ -65,7 +65,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
         </AnimatedInputTechnical>
       </mesh>
       <AnimatedInputTechnical
-        visible={pathname === "/aerodynamics/horizontal"  && shape === 1}
+        visible={pathname === "/aerodynamics/horizontal" && shape === 1}
         distance={1}
         value={chordTip}
         y={span / 2}

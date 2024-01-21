@@ -20,7 +20,6 @@ const InputDrawing = ({
   const { multiplier, step, unit } = useUnits(value, "length");
 
   const [local, setLocal] = useState(value);
-  console.log(step, local, multiplier);
 
   useEffect(() => {
     setLocal(value);

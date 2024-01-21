@@ -95,9 +95,16 @@ const StabilizerVertical = ({ opacity }: Props) => {
       >
         <InputDrawing value={chordTip} setter={setChordTip} />
       </AnimatedInputTechnical>
-      <AnimatedLine points={leading} color="grid" opacity={opacity} />
-      <AnimatedLine points={trailing} color="grid" opacity={opacity} />
-      <AnimatedLine points={top} color="grid" opacity={opacity} />
+      <mesh
+        visible={
+          pathname === "/aerodynamics/fuselage" ||
+          pathname === "/aerodynamics/vertical"
+        }
+      >
+        <AnimatedLine points={leading} color="grid" opacity={opacity} />
+        <AnimatedLine points={trailing} color="grid" opacity={opacity} />
+        <AnimatedLine points={top} color="grid" opacity={opacity} />
+      </mesh>
     </group>
   );
 };
