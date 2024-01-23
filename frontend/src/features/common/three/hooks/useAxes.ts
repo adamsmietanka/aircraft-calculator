@@ -20,7 +20,8 @@ export const getStep = (range: number) => {
 const useAxisTicks = (
   traces: Trace[],
   axes: Record<string, Axis>,
-  width: number = 1
+  width: number = 1,
+  height = 0.85
 ) => {
   const dataMinX = Math.min(...traces.map(({ points }) => points[0][0]));
 
@@ -58,7 +59,7 @@ const useAxisTicks = (
   };
 
   const localWidth = width * CANVAS_WIDTH;
-  const localHeight = 0.85 * CANVAS_HEIGHT;
+  const localHeight = height * CANVAS_HEIGHT;
 
   let xTicks = getTicks(minX, xStep, localWidth);
   let yTicks = getTicks(minY, yStep, localHeight);

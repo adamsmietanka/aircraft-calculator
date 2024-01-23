@@ -31,6 +31,7 @@ interface AxisProps {
   min: Record<string, number>;
   max: Record<string, number>;
   mid: number;
+  height: number;
   stepOpacity: SpringValue<number>;
   scaleX: SpringValue<number>;
   scaleY: SpringValue<number>;
@@ -44,6 +45,7 @@ const LinesVertical = ({
   min,
   max,
   mid,
+  height,
   stepOpacity,
   scaleX,
   scaleY,
@@ -76,9 +78,9 @@ const LinesVertical = ({
   const instancedMeshRef = useRef<InstancedMesh>(null!);
 
   const geom = useMemo(() => {
-    const height = 0.85 * CANVAS_HEIGHT - 0.5;
-    const cylinder = new CylinderGeometry(0.005, 0.005, height, 4);
-    cylinder.translate(0, height / 2, 0);
+    const localHeight = height * CANVAS_HEIGHT - 0.5;
+    const cylinder = new CylinderGeometry(0.005, 0.005, localHeight, 4);
+    cylinder.translate(0, localHeight / 2, 0);
     return cylinder;
   }, []);
 
