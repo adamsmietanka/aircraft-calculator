@@ -42,6 +42,7 @@ export type ChartProps = {
   >;
   yHover?: boolean;
   width: number;
+  height?: number;
   gridPositionX?: number;
   opacity?: SpringValue<number>;
 };
@@ -55,13 +56,15 @@ const LineChart = ({
   store,
   yHover = false,
   width = 1,
+  height = 1,
   gridPositionX = 0,
   opacity = new SpringValue(1),
 }: ChartProps) => {
   const { ticks, scale, data, min, max, mid, step } = useAxes(
     traces,
     axes,
-    width
+    width,
+    height
   );
 
   const colors = ["primary", "green", "orange", "secondary"];
@@ -87,6 +90,7 @@ const LineChart = ({
           mid={mid.x}
           min={min}
           max={max}
+          height={height}
           stepOpacity={opacity}
         />
         <LinesHorizontal

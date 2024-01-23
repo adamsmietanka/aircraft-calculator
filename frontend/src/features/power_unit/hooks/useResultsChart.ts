@@ -8,6 +8,7 @@ import { SynchronizedXMarkersStore } from "../../common/three/Hover";
 const useResultsChartStore = create<SynchronizedXMarkersStore>()((set) => ({
   x: 2,
   y: { "Propeller Power": 2, "Propeller Angle": 2 },
+  xHover: 0,
   hover: false,
   show: false,
   locked: false,
@@ -17,7 +18,7 @@ const useResultsChartStore = create<SynchronizedXMarkersStore>()((set) => ({
 const useResultsChart = () => {
   const table = useResultsStore((state) => state.table);
 
-  const x = useResultsChartStore((state) => state.x);
+  const xHover = useResultsChartStore((state) => state.xHover);
   const setCharts = useResultsChartStore((state) => state.set);
 
   const tracesPower = useMemo<Trace[]>(
@@ -62,11 +63,12 @@ const useResultsChart = () => {
 
   useEffect(() => {
     if (tracesPower[0].points.length) {
-      const yPower = linearInterpolationArray(tracesPower[0].points, x);
-      const yAngle = linearInterpolationArray(tracesAngle[0].points, x);
-      const yRPM = linearInterpolationArray(tracesRPM[0].points, x);
-      const yCp = linearInterpolationArray(tracesCp[0].points, x);
+      const yPower = linearInterpolationArray(tracesPower[0].points, xHover);
+      const yAngle = linearInterpolationArray(tracesAngle[0].points, xHover);
+      const yRPM = linearInterpolationArray(tracesRPM[0].points, xHover);
+      const yCp = linearInterpolationArray(tracesCp[0].points, xHover);
       setCharts({
+        x: xHover,
         y: {
           "Propeller Power": yPower,
           "Propeller Angle": yAngle,
@@ -76,7 +78,7 @@ const useResultsChart = () => {
         show: true,
       });
     }
-  }, [x, table]);
+  }, [xHover, table]);
 
   return {
     tracesPower,

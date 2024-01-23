@@ -28,7 +28,7 @@ const PowerUnitResults = () => {
 
   return (
     <div className="flex w-full h-full p-6">
-      <div className="flex flex-col w-80 mr-8 space-y-2">
+      <div className="flex flex-col w-80 mr-8 space-y-2 z-50">
         <InputUnits
           type="altitude"
           value={altitude}
@@ -54,9 +54,12 @@ const PowerUnitResults = () => {
       </div>
       <div className="flex flex-col space-y-4 w-3/5">
         <PowerUnitResults3D />
-        <div className="grid grid-cols-2 gap-4 h-1/2">
-          <Canvas orthographic camera={{ zoom: 30 }}>
+        <div className="fixed top-0 left-0 h-screen w-screen">
+          <Canvas flat camera={{ position: [0, 0, 20], fov: 60 }}>
             <LineChart
+              gridPositionX={-0.5}
+              width={0.5}
+              height={0.3}
               name="Propeller Power"
               traces={tracesPower}
               axes={{
@@ -68,9 +71,10 @@ const PowerUnitResults = () => {
               }}
               store={useResultsChartStore}
             />
-          </Canvas>
-          <Canvas orthographic camera={{ zoom: 30 }}>
             <LineChart
+              gridPositionX={0.5}
+              width={0.5}
+              height={0.3}
               name="Propeller Angle"
               traces={tracesAngle}
               axes={{
@@ -82,34 +86,38 @@ const PowerUnitResults = () => {
               }}
               store={useResultsChartStore}
             />
-          </Canvas>
-          <Canvas orthographic camera={{ zoom: 30 }}>
-            <LineChart
-              name="Propeller Speed"
-              traces={tracesRPM}
-              axes={{
-                x: { name: "Speed", type: "speed", max: 1.2 * speed },
-                y: {
-                  name: "RPM",
-                  min: 0,
-                },
-              }}
-              store={useResultsChartStore}
-            />
-          </Canvas>
-          <Canvas orthographic camera={{ zoom: 30 }}>
-            <LineChart
-              name="Coefficient of Power"
-              traces={tracesCp}
-              axes={{
-                x: { name: "Speed", type: "speed", max: 1.2 * speed },
-                y: {
-                  name: "Cp",
-                  min: 0,
-                },
-              }}
-              store={useResultsChartStore}
-            />
+            <mesh position-y={-6}>
+              <LineChart
+                gridPositionX={-0.5}
+                width={0.5}
+                height={0.3}
+                name="Propeller Speed"
+                traces={tracesRPM}
+                axes={{
+                  x: { name: "Speed", type: "speed", max: 1.2 * speed },
+                  y: {
+                    name: "RPM",
+                    min: 0,
+                  },
+                }}
+                store={useResultsChartStore}
+              />
+              <LineChart
+                gridPositionX={0.5}
+                width={0.5}
+                height={0.3}
+                name="Coefficient of Power"
+                traces={tracesCp}
+                axes={{
+                  x: { name: "Speed", type: "speed", max: 1.2 * speed },
+                  y: {
+                    name: "Cp",
+                    min: 0,
+                  },
+                }}
+                store={useResultsChartStore}
+              />
+            </mesh>
           </Canvas>
         </div>
       </div>
