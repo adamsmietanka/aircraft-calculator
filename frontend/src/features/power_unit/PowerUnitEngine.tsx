@@ -3,7 +3,7 @@ import { useEngineStore } from "./stores/useEngine";
 import PowerUnitEngineSupercharger from "./PowerUnitEngineSupercharger";
 import PowerUnitEngineTurbocharger from "./PowerUnitEngineTurbocharger";
 import InputUnits from "../common/inputs/InputUnits";
-import useEngineChart from "./hooks/useEngineChart";
+import useEngineChart, { useEngineChartStore } from "./hooks/useEngineChart";
 import { Canvas } from "@react-three/fiber";
 import LineChart from "../common/three/LineChart";
 
@@ -15,11 +15,11 @@ const PowerUnitEngine = () => {
   const setMaxAltitude = useEngineStore((state) => state.setMaxAltitude);
   const setKCoefficient = useEngineStore((state) => state.setKCoefficient);
 
-  const { points, useEngineChartStore } = useEngineChart();
+  const { points } = useEngineChart();
 
   return (
     <div className="flex p-6 h-full">
-      <div className="flex flex-col w-80 mr-8 space-y-1">
+      <div className="flex flex-col w-80 mr-8 space-y-1 z-50">
         <InputUnits
           type="power"
           value={seaLevelPower}
@@ -46,9 +46,10 @@ const PowerUnitEngine = () => {
         <PowerUnitEngineSupercharger />
         <PowerUnitEngineTurbocharger />
       </div>
-      <div className="sticky top-1/4 h-3/5 w-3/5">
-        <Canvas orthographic camera={{ zoom: 30 }}>
+      <div className="fixed top-0 left-0 h-screen w-screen">
+        <Canvas flat camera={{position: [0, 0, 20], fov: 60 }}>
           <LineChart
+            width={1}
             name="Engine Altitude Performance"
             traces={[{ name: "Power", points }]}
             axes={{
