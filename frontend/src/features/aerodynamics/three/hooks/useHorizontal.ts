@@ -13,20 +13,35 @@ import {
   getMAC,
   getMACposition,
 } from "../../utils/getWingSpecs";
+import { getWingPointsAt } from "../../utils/getWingOutline";
 
 const xG = 0.28;
 const xA = 0.25;
 const cM = -0.05;
 const Vfrac = 0.85;
 
+const getMaxTailY = (shape: number) => {
+  if (shape === 2) return 0.8;
+  return 1;
+};
+
 const useHorizontal = () => {
+  const [positionLeadTrail, setPositionLeadTrail] = useState([0, 0]);
+
   const chordV = useVerticalStore((state) => state.chord);
   const chord = useHorizontalStore((state) => state.chord);
   const span = useHorizontalStore((state) => state.span);
   const angle = useHorizontalStore((state) => state.angle);
   const chordTip = useHorizontalStore((state) => state.chordTip);
   const shape = useHorizontalStore((state) => state.shape);
+  const position = useHorizontalStore((state) => state.position);
   const set = useHorizontalStore((state) => state.set);
+
+  const shapeVertical = useVerticalStore((state) => state.shape);
+  const spanVertical = useVerticalStore((state) => state.span);
+  const chordVertical = useVerticalStore((state) => state.chord);
+  const chordTipVertical = useVerticalStore((state) => state.chordTip);
+  const angleVertical = useVerticalStore((state) => state.angle);
 
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
@@ -55,6 +70,20 @@ const useHorizontal = () => {
   const [symmetric] = useState(getProfilePoints("0009"));
 
   useEffect(() => {
+    const leadTrail = getWingPointsAt(
+      {
+        shape: shapeVertical,
+        span: spanVertical,
+        chord: chordVertical,
+        chordTip: chordTipVertical,
+        angle: angleVertical,
+      },
+      ((getMaxTailY(shapeVertical) * spanVertical) / 2) * position
+    );
+    setPositionLeadTrail(leadTrail);
+  }, [shapeVertical, spanVertical, chordVertical, position]);
+
+  useEffect(() => {
     const config = { span, chord, chordTip, angle, shape };
     set({ chord: chordV });
     const { leadingPoints, trailingPoints } = getLeadingTrailing(config);
@@ -80,7 +109,7 @@ const useHorizontal = () => {
     set({ area, kH, aspectRatio });
   }, [span, chord, chordTip, angle, shape, chordV]);
 
-  return { horizontal, leading, trailing, top };
+  return { horizontal, leading, trailing, top, positionLeadTrail };
 };
 
 export default useHorizontal;
