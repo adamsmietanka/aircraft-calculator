@@ -18,7 +18,7 @@ interface Props {
 const SPAR_DIAMETER = 0.03;
 
 const Home = ({ opacity }: Props) => {
-  const { geom1, geom2, geom3, elliptic } = useLandingPage();
+  const { geom1, geom2, geom3, elliptic, tail } = useLandingPage();
 
   return (
     <mesh receiveShadow>
@@ -100,6 +100,18 @@ const Home = ({ opacity }: Props) => {
               opacity={opacity}
             />
           </mesh>
+          <mesh
+            position-x={6.25}
+            position-y={0.45}
+            geometry={tail}
+          >
+            <animated.meshStandardMaterial
+              color={"white"}
+              metalness={0.5}
+              transparent
+              opacity={opacity}
+            />
+          </mesh>
           <FuseModel opacity={opacity} />
         </mesh>
       </Float>
@@ -127,6 +139,19 @@ const Home = ({ opacity }: Props) => {
             position-y={0.65}
             rotation-x={-Math.PI / 2}
             geometry={geom3}
+          >
+            <animated.meshStandardMaterial
+              color={"white"}
+              metalness={0.5}
+              transparent
+              opacity={opacity}
+            />
+          </mesh>
+          <mesh
+            position-x={8.5}
+            position-y={2.65}
+            scale-x={0.5}
+            geometry={tail}
           >
             <animated.meshStandardMaterial
               color={"white"}
