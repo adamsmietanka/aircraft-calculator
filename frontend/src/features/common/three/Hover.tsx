@@ -10,6 +10,8 @@ import { Mesh } from "three";
 export interface SimpleMarkerStore {
   x: number;
   y: number;
+  xHover: number;
+  yHover: number;
   hover: boolean;
   locked: boolean;
   legend?: string;

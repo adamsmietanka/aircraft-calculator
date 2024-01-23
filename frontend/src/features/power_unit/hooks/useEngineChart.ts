@@ -5,9 +5,11 @@ import { linearInterpolationArray } from "../../../utils/interpolation/binarySea
 import { create } from "zustand";
 import { SimpleMarkerStore } from "../../common/three/Hover";
 
-const useEngineChartStore = create<SimpleMarkerStore>()((set) => ({
+export const useEngineChartStore = create<SimpleMarkerStore>()((set) => ({
   x: 2,
   y: 2,
+  xHover: 0,
+  yHover: 0,
   hover: false,
   show: false,
   locked: false,
@@ -15,7 +17,7 @@ const useEngineChartStore = create<SimpleMarkerStore>()((set) => ({
 }));
 
 const useEngineChart = () => {
-  const x = useEngineChartStore((state) => state.x);
+  const xHover = useEngineChartStore((state) => state.xHover);
   const setChart = useEngineChartStore((state) => state.set);
 
   const heights = useEngineStore((state) => state.heights);
@@ -27,11 +29,11 @@ const useEngineChart = () => {
   );
 
   useEffect(() => {
-    const y = linearInterpolationArray(points, x);
-    setChart({ y });
-  }, [points, x]);
+    const y = linearInterpolationArray(points, xHover);
+    setChart({ x: xHover, y });
+  }, [points, xHover]);
 
-  return { points, useEngineChartStore };
+  return { points };
 };
 
 export default useEngineChart;

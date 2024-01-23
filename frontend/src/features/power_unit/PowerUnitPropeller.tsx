@@ -26,7 +26,7 @@ const PowerUnitPropeller = () => {
 
   return (
     <div className="flex w-full p-6 h-full">
-      <div className="flex flex-col w-80 mr-8 space-y-1">
+      <div className="flex flex-col w-80 mr-8 space-y-1 z-50">
         <InputNumber
           value={engineSpeed}
           setter={setEngineSpeed}
@@ -83,9 +83,11 @@ const PowerUnitPropeller = () => {
         <PowerUnitPropellerDiameter />
         <InputNumber disabled value={machTip} label="Blade Tip Mach number" />
       </div>
-      <div className="sticky top-1/4 h-3/5 w-3/5">
-        <Canvas orthographic camera={{ zoom: 30 }}>
+      <div className="fixed top-0 left-0 h-screen w-screen">
+        <Canvas flat camera={{position: [0, 0, 20], fov: 60 }}>
           <LineChart
+            name=""
+            width={1}
             traces={traces}
             axes={{
               x: { name: "Cn" },

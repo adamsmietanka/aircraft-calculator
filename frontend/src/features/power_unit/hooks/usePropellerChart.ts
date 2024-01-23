@@ -8,6 +8,8 @@ import { SimpleMarkerStore } from "../../common/three/Hover";
 const usePropellerChartStore = create<SimpleMarkerStore>()((set) => ({
   x: 2,
   y: 2,
+  xHover: 0,
+  yHover: 0,
   hover: false,
   show: false,
   locked: false,
