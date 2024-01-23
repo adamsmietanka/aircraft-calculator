@@ -10,6 +10,8 @@ import { getXTip } from "./hooks/useWingSpring";
 import { animated, useSpring } from "@react-spring/three";
 import fuselages from "../data/fuselages";
 import { useVerticalStore } from "../stores/useVertical";
+import { getWingPointsAt } from "../utils/getWingOutline";
+import { useState } from "react";
 
 const getMaxTailY = (shape: number) => {
   if (shape === 2) return 0.8;
@@ -29,12 +31,18 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
   const shape = useHorizontalStore((state) => state.shape);
 
   const shapeVertical = useVerticalStore((state) => state.shape);
+  const spanVertical = useVerticalStore((state) => state.span);
+  const chordVertical = useVerticalStore((state) => state.chord);
+  const chordTipVertical = useVerticalStore((state) => state.chordTip);
+  const angleVertical = useVerticalStore((state) => state.angle);
+
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
 
   const { pathname } = useLocation();
 
-  const { horizontal, leading, trailing, top } = useHorizontal();
+  const { horizontal, leading, trailing, top, positionLeadTrail } =
+    useHorizontal();
 
   const [spring, api] = useSpring(
     () => ({
@@ -42,14 +50,28 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
         fuselages[fuselage].horizontalY * length +
         ((fuselages[fuselage].verticalY - fuselages[fuselage].horizontalY) *
           length +
-          (getMaxTailY(shapeVertical) * span) / 2 / 1.5) *
+          (getMaxTailY(shapeVertical) * spanVertical) / 2) *
           position,
+      x: positionLeadTrail[0],
     }),
-    [fuselage, shape, shapeVertical, pathname, length, position]
+    [
+      fuselage,
+      shape,
+      shapeVertical,
+      spanVertical,
+      pathname,
+      length,
+      position,
+      positionLeadTrail,
+    ]
   );
 
   return (
-    <animated.mesh position-y={spring.y} rotation-x={-Math.PI / 2}>
+    <animated.mesh
+      position-y={spring.y}
+      position-x={spring.x}
+      rotation-x={-Math.PI / 2}
+    >
       <mesh
         visible={pathname === "/aerodynamics/results"}
         rotation-x={-Math.PI / 2}
