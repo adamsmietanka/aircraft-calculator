@@ -247,7 +247,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
     C,
     timedelta,
     ACdelta,
-    true
+    // true
   );
 
   useEffect(() => {
