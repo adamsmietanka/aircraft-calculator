@@ -4,7 +4,7 @@ import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
 import { useWingStore } from "../stores/useWing";
 import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
 import useReversedData from "../../common/hooks/useReversedData";
-import { table } from "../data/profiles_interpolated";
+import { getProfileInfo } from "../data/profiles_interpolated";
 
 const KINEMATIC_VISCOSITY = 1.4207e-5;
 
@@ -132,7 +132,7 @@ const useWingAerodynamics = () => {
 
     const closestIndex = getClosestReynolds(stallReynolds);
 
-    const { maxCz, CdOfZeroCl, slope } = table[profile][closestIndex];
+    const { maxCz, CdOfZeroCl, slope } = getProfileInfo(profile)[closestIndex];
 
     const Cxmin2 = CdOfZeroCl * Math.pow(stallReynolds / 1e7, 0.11);
     const deltaCxRe = (Cz: number) =>
