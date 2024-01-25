@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 import { useCSSColors } from "../three/config";
 import { useFrame } from "@react-three/fiber";
 import { SpringValue, animated, to } from "@react-spring/three";
@@ -13,11 +13,19 @@ interface Props {
   angle: SpringValue<number>;
   opacity: SpringValue<number>;
   show: boolean;
+  children?: ReactNode;
 }
 
 const ANGLE_MEAS_POINTS = 15;
 
-const WingInputAngle = ({ scale, y, angle, opacity, show }: Props) => {
+const WingInputAngle = ({
+  scale,
+  y,
+  angle,
+  opacity,
+  show,
+  children,
+}: Props) => {
   const positionRef = useRef<THREE.BufferAttribute>(null);
   const curveRef = useRef<THREE.BufferAttribute>(null);
   const materialRef = useRef<THREE.LineBasicMaterial>(null);
@@ -135,10 +143,10 @@ const WingInputAngle = ({ scale, y, angle, opacity, show }: Props) => {
           (y / 2 - 0.15) * Math.cos(angle / 2),
           0,
         ])}
-        rotation-z={angle.to((angle) => -(angle / 2))}
+        rotation-z={Math.PI/2}
         scale={scale.to((s) => 1 / s)}
       >
-        <Formula tex="\phi" />
+        {children}
       </AnimatedHtml>
     </animated.mesh>
   );

@@ -46,7 +46,7 @@ const Signals = ({ opacity }: Props) => {
       timedelta - ACdelta,
       -timedelta + ACdelta,
     ];
-    console.log(deltas);
+    // console.log(deltas);
     const firstSignalTime = Math.min(...deltas);
     setDelays({
       A: (deltas[0] - firstSignalTime) / (100 * SIGNAL_VEL), //4

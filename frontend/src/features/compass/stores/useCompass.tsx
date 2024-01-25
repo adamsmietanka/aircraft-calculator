@@ -3,9 +3,9 @@ import { create } from "zustand";
 export interface CompassState {
   timedelta: number;
   ACdelta: number;
-  A: Record<string, number>;
-  B: Record<string, number>;
-  C: Record<string, number>;
+  A: { x: number; y: number };
+  B: { x: number; y: number };
+  C: { x: number; y: number };
   x: number;
   y: number;
   phi1: number;

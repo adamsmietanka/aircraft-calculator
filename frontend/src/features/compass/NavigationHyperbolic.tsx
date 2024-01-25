@@ -161,15 +161,47 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     (2 * (ACdelta - DOP)) / 100
   );
 
+  const distanceAB = Math.hypot(B.y - A.y, B.x - A.x);
+  const distanceAC = Math.hypot(C.y - A.y, C.x - A.x);
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
   const alphaAC = Math.atan2(C.y - A.y, C.x - A.x);
-
-  const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
 
   const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * timedelta) / 100);
   const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * ACdelta) / 100);
 
-  const calculateIntersection = () => {
+  const getDistances = (
+    A: { x: number; y: number },
+    B: { x: number; y: number },
+    C: { x: number; y: number }
+  ) => ({
+    AB: Math.hypot(B.y - A.y, B.x - A.x),
+    AC: Math.hypot(C.y - A.y, C.x - A.x),
+  });
+
+  const getAngles = (
+    A: { x: number; y: number },
+    B: { x: number; y: number },
+    C: { x: number; y: number }
+  ) => ({
+    alphaAB: Math.atan2(B.y - A.y, B.x - A.x),
+    alphaAC: Math.atan2(C.y - A.y, C.x - A.x),
+  });
+
+  const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
+
+  const calculateIntersection = (
+    A: { x: number; y: number },
+    B: { x: number; y: number },
+    C: { x: number; y: number },
+    delta1: number,
+    delta2: number,
+    log = false
+  ) => {
+    const { alphaAB, alphaAC } = getAngles(A, B, C);
+
+    const { e: e1, p: p1 } = getHyperbolaCoeffs(A, B, (2 * delta1) / 100);
+    const { e: e2, p: p2 } = getHyperbolaCoeffs(A, C, (2 * delta2) / 100);
+
     const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
     const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
@@ -203,39 +235,59 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
 
     // console.table([
     //   {
-    //     u: u1,
-    //     s: s1,
-    //     alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
-    //     r1: r11,
-    //     r2: r21,
-    //     c: a * u1 + b * s1,
-    //     delta: Math.abs((r21 - r11) / r21),
+    //     e: e1,
+    //     p: p1,
     //   },
     //   {
-    //     u: u1,
-    //     s: -s1,
-    //     alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
-    //     r1: r12,
-    //     r2: r22,
-    //     c: a * u1 - b * s1,
-    //   },
-    //   {
-    //     u: u2,
-    //     s: s2,
-    //     alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
-    //     r1: r13,
-    //     r2: r23,
-    //     c: a * u2 + b * s2,
-    //   },
-    //   {
-    //     u: u2,
-    //     s: -s2,
-    //     alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
-    //     r1: r14,
-    //     r2: r24,
-    //     c: a * u2 - b * s2,
+    //     e: e2,
+    //     p: p2,
     //   },
     // ]);
+
+    log &&
+      console.table([
+        {
+          u: u1,
+          s: s1,
+          alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
+          r1: r11,
+          r2: r21,
+          // c: a * u1 + b * s1,
+          // delta: Math.abs((r21 - r11) / r21),
+          x: areEqual(r11, r21) ? A.x + r11 * u1 : 0,
+          y: areEqual(r11, r21) ? A.y + r11 * s1 : 0,
+        },
+        {
+          u: u1,
+          s: -s1,
+          alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
+          r1: r12,
+          r2: r22,
+          // c: a * u1 - b * s1,
+          x: areEqual(r12, r22) ? A.x + r12 * u1 : 0,
+          y: areEqual(r12, r22) ? A.y + r12 * -s1 : 0,
+        },
+        {
+          u: u2,
+          s: s2,
+          alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
+          r1: r13,
+          r2: r23,
+          // c: a * u2 + b * s2,
+          x: areEqual(r13, r23) ? A.x + r13 * u2 : 0,
+          y: areEqual(r13, r23) ? A.y + r13 * s2 : 0,
+        },
+        {
+          u: u2,
+          s: -s2,
+          alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
+          r1: r14,
+          r2: r24,
+          // c: a * u2 - b * s2,
+          x: areEqual(r14, r24) ? A.x + r14 * u2 : 0,
+          y: areEqual(r14, r24) ? A.y + r14 * -s2 : 0,
+        },
+      ]);
 
     // extract phi angles of solutions
     let phiAngles = { phi1: 0, phi2: 0 };
@@ -253,10 +305,44 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     return { x: r12 * u1, y: r12 * -s1, ...phiAngles, r: r12 };
   };
 
-  const { x, y, phi1, phi2, r } = calculateIntersection();
+  const { x, y, phi1, phi2, r } = calculateIntersection(
+    A,
+    B,
+    C,
+    timedelta,
+    ACdelta,
+    true
+  );
+  // const getVariance = (arr:number[][]) => arr.reduce(
+  //   (a, b) => a + b,
+  //   0,
+  // );
 
   useEffect(() => {
-    set(calculateIntersection());
+    set(calculateIntersection(A, B, C, timedelta, ACdelta));
+    let resultX = 0;
+    let resultY = 0;
+    let meas = 0;
+    const samples = 100;
+    const err = 10;
+    for (let i = 0; i < samples; i++) {
+      const delta = err * (Math.random() - 0.5);
+      meas += delta * delta;
+
+      const { x: xErr, y: yErr } = calculateIntersection(
+        A,
+        B,
+        C,
+        timedelta + delta,
+        ACdelta + delta
+      );
+      resultX += Math.pow(xErr - x, 2);
+      resultY += Math.pow(yErr - y, 2);
+    }
+    const measStd = (Math.sqrt(meas / samples) * 2) / 100;
+    const xVar = resultX / samples;
+    const yVar = resultY / samples;
+    console.log((Math.hypot(xVar, yVar) / measStd).toPrecision(4));
   }, [A, B, C, timedelta, ACdelta]);
 
   const [spring] = useSpring(
@@ -420,40 +506,86 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             >
               p
             </AnimatedInputTechnical>
-            <AnimatedInputAngle
-              angle={spring.phi1}
-              opacity={opacity.to((o) => (directrix ? 1 : 0))}
-              y={opacity}
-              scale={new SpringValue(3)}
-              show={directrix}
-            />
-            <animated.mesh rotation-z={spring.phi1.to((a) => -a)}>
+
+            <animated.mesh rotation-z={spring.rotationAB.to((a) => -a)}>
+              <AnimatedInputAngle
+                angle={spring.phi1}
+                opacity={opacity.to((o) => (directrix ? 1 : 0))}
+                y={opacity}
+                scale={new SpringValue(3)}
+                show={directrix}
+              >
+                <Formula tex="\phi" />
+              </AnimatedInputAngle>
+              <AnimatedInputAngle
+                angle={spring.rotationAB.to((a) => -a)}
+                opacity={opacity.to((o) => (distances || directrix ? 1 : 0))}
+                y={opacity}
+                scale={new SpringValue(3)}
+                show={distances || directrix}
+              >
+                <Formula tex="\alpha" />
+              </AnimatedInputAngle>
+              <AnimatedLine
+                points={[
+                  [0, 0, 0],
+                  [x, y, 0],
+                ]}
+                color="grid"
+                opacity={opacity.to((o) => (directrix ? o * 0.33 : 0))}
+              />
+            </animated.mesh>
+            <animated.mesh
+              rotation-z={to(
+                [spring.phi1, spring.rotationAB],
+                (f, a) => -f - a
+              )}
+            >
               <AnimatedInputTechnical
                 visible={directrix}
                 distance={-1}
                 value={r}
                 opacity={opacity.to((o) => 0.75 * o)}
               >
-                r
+                <div className="transform scale-[-1]">r</div>
               </AnimatedInputTechnical>
             </animated.mesh>
             <AnimatedInputTechnical
               visible={distances}
               distance={-1.5}
-              value={2}
+              value={distanceAB}
               opacity={opacity.to((o) => 0.75 * o)}
             >
               D
             </AnimatedInputTechnical>
             <AnimatedInputTechnical
               visible={distances}
-              distance={1}
-              startX={1}
+              startX={distanceAB / 2}
               value={timedelta / 100}
               opacity={opacity.to((o) => 0.75 * o)}
             >
-              <Formula tex={`\\Delta`} />
+              <Formula tex={`\\frac{\\Delta}{2}`} />
             </AnimatedInputTechnical>
+            <AnimatedLine
+              points={[
+                [distanceAB / 2, -0.25, 0],
+                [distanceAB / 2, 0.25, 0],
+              ]}
+              style="thin"
+              color="grid"
+              opacity={opacity.to((o) => (distances ? o * 0.33 : 0))}
+            />
+            <AnimatedLine
+              points={[
+                [0, 0, 0],
+                [distanceAB, 0, 0],
+              ]}
+              style="thin"
+              color="grid"
+              opacity={opacity.to((o) =>
+                distances || directrix ? o * 0.33 : 0
+              )}
+            />
             {/* <AnimatedLine
               points={hyper1PolarPlus}
               style="airstream"
@@ -499,14 +631,15 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
             /> */}
           </animated.mesh>
           <animated.mesh position-x={spring.x} position-y={spring.y}>
-            <AnimatedInputTechnical
-              visible={directrix}
-              distance={1}
-              value={-x + p1}
-              opacity={opacity.to((o) => 0.75 * o)}
-            >
-              AQ
-            </AnimatedInputTechnical>
+            <animated.mesh rotation-z={spring.rotationAB}>
+              <AnimatedInputTechnical
+                visible={directrix}
+                value={-r * Math.cos(phi1 - alphaAB) + p1}
+                opacity={opacity.to((o) => 0.75 * o)}
+              >
+                x
+              </AnimatedInputTechnical>
+            </animated.mesh>
             <Resize rotation={[-Math.PI / 2, 0, 0]} scale={0.25}>
               <PlaneModel opacity={opacity} />
             </Resize>
