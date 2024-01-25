@@ -64,11 +64,7 @@ export const useWingStore = create<WingState>()(
       setTipX: (value) => set({ tipX: value }),
       setSpan: (value) => set({ span: value }),
       setAngle: (value) => set({ angle: value }),
-      setProfile: (value) =>
-        set({
-          profile: value,
-          reynolds: getReynolds(value)[get().reynoldsIndex],
-        }),
+      setProfile: (value) => set({ profile: value }),
       setReynoldsIndex: (value) =>
         set({
           reynoldsIndex: value,
