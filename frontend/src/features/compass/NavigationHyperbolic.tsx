@@ -311,7 +311,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
     C,
     timedelta,
     ACdelta,
-    true
+    // true
   );
   // const getVariance = (arr:number[][]) => arr.reduce(
   //   (a, b) => a + b,
