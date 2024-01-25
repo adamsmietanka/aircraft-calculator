@@ -1,6 +1,11 @@
 export const getProfileData = (profile: string) => {
   return profiles[profiles.hasOwnProperty(profile) ? profile : "default"];
 };
+
+export const getProfileInfo = (profile: string): ProfileInfo[] => {
+  return table[table.hasOwnProperty(profile) ? profile : "default"];
+};
+
 export interface ProfileInfo {
   maxCz: number;
   angleOfMaxCz: number;
