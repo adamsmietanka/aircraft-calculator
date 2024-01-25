@@ -209,14 +209,12 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     );
     await sub(
       <>
-        The vertical -
-        <span className="text-primary mx-1">lift</span>
+        The vertical -<span className="text-primary mx-1">lift</span>
       </>
     );
     await sub(
       <>
-        And the horizontal -
-        <span className="text-error mx-1">drag</span>
+        And the horizontal -<span className="text-error mx-1">drag</span>
       </>
     );
 
