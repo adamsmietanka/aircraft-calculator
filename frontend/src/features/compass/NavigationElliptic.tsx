@@ -13,6 +13,7 @@ import Tower from "./Tower";
 import PlaneModel from "../aerodynamics/three/PlaneModel";
 import SignalsElliptic from "./SignalsElliptic";
 import { useCompassStore } from "./stores/useCompass";
+import { getAngles } from "./utils/maths";
 
 const HYPER_POINTS = 50;
 
@@ -38,6 +39,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
   const B = useEllipseStore((state) => state.B);
   const C = useEllipseStore((state) => state.C);
   const helpers = useEllipseStore((state) => state.helpers);
+  const DOP = useEllipseStore((state) => state.DOP);
 
   const increaseCounter = useCompassStore((state) => state.increaseCounter);
 
@@ -45,6 +47,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
   const setTimedelta = useEllipseStore((state) => state.setTimedelta);
   const setACdelta = useEllipseStore((state) => state.setACdelta);
   const setHelpers = useEllipseStore((state) => state.setHelpers);
+  const setDOP = useEllipseStore((state) => state.setDOP);
 
   const onTransform = (e: THREE.Event | undefined) => {
     if (e && e.target.object) {
@@ -108,18 +111,34 @@ const NavigationElliptic = ({ opacity }: Props) => {
     return [...ellipse, ...ellipseBottom.toReversed()];
   };
 
-  const ellipse1 = createEllipse(A, B, (2 * timedelta) / 10);
-  const ellipse2 = createEllipse(A, C, (2 * ACdelta) / 10);
+  const ellipse1Plus = createEllipse(A, B, (2 * (timedelta + DOP)) / 100);
+  const ellipse1Minus = createEllipse(A, B, (2 * (timedelta - DOP)) / 100);
+  const ellipse1 = createEllipse(A, B, (2 * timedelta) / 100);
+  const ellipse2Plus = createEllipse(A, B, (2 * (ACdelta + DOP)) / 100);
+  const ellipse2Minus = createEllipse(A, B, (2 * (ACdelta - DOP)) / 100);
+  const ellipse2 = createEllipse(A, C, (2 * ACdelta) / 100);
 
   const alphaAB = Math.atan2(B.y - A.y, B.x - A.x);
   const alphaAC = Math.atan2(C.y - A.y, C.x - A.x);
 
   const areEqual = (i: number, j: number) => Math.abs((j - i) / j) < 1e-2;
 
-  const { e: e1, p: p1 } = getEllipseCoeffs(A, B, (2 * timedelta) / 10);
-  const { e: e2, p: p2 } = getEllipseCoeffs(A, C, (2 * ACdelta) / 10);
+  const { e: e1, p: p1 } = getEllipseCoeffs(A, B, (2 * timedelta) / 100);
+  const { e: e2, p: p2 } = getEllipseCoeffs(A, C, (2 * ACdelta) / 100);
 
-  const calculateIntersection = () => {
+  const calculateIntersection = (
+    A: { x: number; y: number },
+    B: { x: number; y: number },
+    C: { x: number; y: number },
+    delta1: number,
+    delta2: number,
+    log = false
+  ) => {
+    const { alphaAB, alphaAC } = getAngles(A, B, C);
+
+    const { e: e1, p: p1 } = getEllipseCoeffs(A, B, (2 * delta1) / 100);
+    const { e: e2, p: p2 } = getEllipseCoeffs(A, C, (2 * delta2) / 100);
+
     const a = p2 * Math.cos(alphaAB) - p1 * Math.cos(alphaAC);
     const b = p2 * Math.sin(alphaAB) - p1 * Math.sin(alphaAC);
     const c = p1 / e2 - p2 / e1;
@@ -153,39 +172,59 @@ const NavigationElliptic = ({ opacity }: Props) => {
 
     // console.table([
     //   {
-    //     u: u1,
-    //     s: s1,
-    //     alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
-    //     r1: r11,
-    //     r2: r21,
-    //     c: a * u1 + b * s1,
-    //     delta: Math.abs((r21 - r11) / r21),
+    //     e: e1,
+    //     p: p1,
     //   },
     //   {
-    //     u: u1,
-    //     s: -s1,
-    //     alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
-    //     r1: r12,
-    //     r2: r22,
-    //     c: a * u1 - b * s1,
-    //   },
-    //   {
-    //     u: u2,
-    //     s: s2,
-    //     alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
-    //     r1: r13,
-    //     r2: r23,
-    //     c: a * u2 + b * s2,
-    //   },
-    //   {
-    //     u: u2,
-    //     s: -s2,
-    //     alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
-    //     r1: r14,
-    //     r2: r24,
-    //     c: a * u2 - b * s2,
+    //     e: e2,
+    //     p: p2,
     //   },
     // ]);
+
+    log &&
+      console.table([
+        {
+          u: u1,
+          s: s1,
+          alpha: (Math.atan2(s1, u1) * 180) / Math.PI,
+          r1: r11,
+          r2: r21,
+          // c: a * u1 + b * s1,
+          // delta: Math.abs((r21 - r11) / r21),
+          x: areEqual(r11, r21) ? A.x + r11 * u1 : 0,
+          y: areEqual(r11, r21) ? A.y + r11 * s1 : 0,
+        },
+        {
+          u: u1,
+          s: -s1,
+          alpha: (Math.atan2(-s1, u1) * 180) / Math.PI,
+          r1: r12,
+          r2: r22,
+          // c: a * u1 - b * s1,
+          x: areEqual(r12, r22) ? A.x + r12 * u1 : 0,
+          y: areEqual(r12, r22) ? A.y + r12 * -s1 : 0,
+        },
+        {
+          u: u2,
+          s: s2,
+          alpha: (Math.atan2(s2, u2) * 180) / Math.PI,
+          r1: r13,
+          r2: r23,
+          // c: a * u2 + b * s2,
+          x: areEqual(r13, r23) ? A.x + r13 * u2 : 0,
+          y: areEqual(r13, r23) ? A.y + r13 * s2 : 0,
+        },
+        {
+          u: u2,
+          s: -s2,
+          alpha: (Math.atan2(-s2, u2) * 180) / Math.PI,
+          r1: r14,
+          r2: r24,
+          // c: a * u2 - b * s2,
+          x: areEqual(r14, r24) ? A.x + r14 * u2 : 0,
+          y: areEqual(r14, r24) ? A.y + r14 * -s2 : 0,
+        },
+      ]);
 
     // extract phi angles of solutions
     let phiAngles = { phi1: 0, phi2: 0 };
@@ -202,10 +241,40 @@ const NavigationElliptic = ({ opacity }: Props) => {
     return { x: r14 * u2, y: r14 * -s2, ...phiAngles };
   };
 
-  const { x, y, phi1, phi2 } = calculateIntersection();
+  const { x, y, phi1, phi2 } = calculateIntersection(
+    A,
+    B,
+    C,
+    timedelta,
+    ACdelta,
+    true
+  );
 
   useEffect(() => {
-    set(calculateIntersection());
+    set(calculateIntersection(A, B, C, timedelta, ACdelta));
+    let resultX = 0;
+    let resultY = 0;
+    let meas = 0;
+    const samples = 100;
+    const err = 10;
+    for (let i = 0; i < samples; i++) {
+      const delta = err * (Math.random() - 0.5);
+      meas += delta * delta;
+
+      const { x: xErr, y: yErr } = calculateIntersection(
+        A,
+        B,
+        C,
+        timedelta + delta,
+        ACdelta + delta
+      );
+      resultX += Math.pow(xErr - x, 2);
+      resultY += Math.pow(yErr - y, 2);
+    }
+    const measStd = (Math.sqrt(meas / samples) * 2) / 100;
+    const xVar = resultX / samples;
+    const yVar = resultY / samples;
+    console.log((Math.hypot(xVar, yVar) / measStd).toPrecision(4));
   }, [A, B, C, timedelta, ACdelta]);
 
   const [spring] = useSpring(
@@ -242,6 +311,15 @@ const NavigationElliptic = ({ opacity }: Props) => {
       )}
       <Inputs3D gridPositionX={-1.4}>
         <div className="w-48 space-y-2 -mt-8">
+          <InputSlider
+            label="Time error"
+            unit="μs"
+            value={DOP}
+            min={0}
+            max={5}
+            step={0.5}
+            setter={setDOP}
+          />
           <InputToggle label="Helpers" value={helpers} setter={setHelpers} />
           <button className="btn btn-block" onClick={() => increaseCounter()}>
             Visualize
@@ -257,10 +335,11 @@ const NavigationElliptic = ({ opacity }: Props) => {
           <div className="ml-16">
             <InputSlider
               label="AB time diff"
-              unit="ms"
+              unit="μs"
               value={timedelta}
-              min={1}
-              max={9}
+              min={10}
+              max={250}
+              step={10}
               setter={setTimedelta}
             />
           </div>
@@ -273,10 +352,11 @@ const NavigationElliptic = ({ opacity }: Props) => {
           <div className="ml-16">
             <InputSlider
               label="AC time diff"
-              unit="ms"
+              unit="μs"
               value={ACdelta}
-              min={1}
-              max={9}
+              min={10}
+              max={250}
+              step={10}
               setter={setACdelta}
             />
           </div>
@@ -303,7 +383,13 @@ const NavigationElliptic = ({ opacity }: Props) => {
         <animated.mesh position-x={spring.Ax} position-y={spring.Ay}>
           <animated.mesh rotation-z={spring.rotationAB}>
             <AnimatedLine
-              points={ellipse1}
+              points={ellipse1Plus}
+              style="airstream"
+              color="grid"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            />
+            <AnimatedLine
+              points={ellipse1Minus}
               style="airstream"
               color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
@@ -311,7 +397,13 @@ const NavigationElliptic = ({ opacity }: Props) => {
           </animated.mesh>
           <animated.mesh rotation-z={spring.rotationAC}>
             <AnimatedLine
-              points={ellipse2}
+              points={ellipse2Plus}
+              style="airstream"
+              color="grid"
+              opacity={opacity.to((o) => (true ? o * 0.33 : 0))}
+            />
+            <AnimatedLine
+              points={ellipse2Minus}
               style="airstream"
               color="grid"
               opacity={opacity.to((o) => (true ? o * 0.33 : 0))}

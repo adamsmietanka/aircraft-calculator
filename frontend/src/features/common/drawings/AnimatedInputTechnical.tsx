@@ -61,7 +61,7 @@ const AnimatedInputTechnical = ({
   useFrame(() => {
     worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
   });
-  const autoOutside = outside || value * worldScale.x < 1.25;
+  const autoOutside = outside || Math.abs(value * worldScale.x) < 1.25;
 
   const outsideStickOut = useMemo(() => (value === 0 ? 0.75 : 1.5), [value]);
 
@@ -87,12 +87,17 @@ const AnimatedInputTechnical = ({
           points={[
             [0, 0, 0],
             [0, (distance + Math.sign(distance) * STICK_OUT) / fluidScale, 0],
+            // horizontal
             [0, distance / fluidScale, 0],
             [
-              value + (autoOutside ? outsideStickOut / fluidScale : 0),
+              value +
+                (autoOutside
+                  ? (Math.sign(value) * outsideStickOut) / fluidScale
+                  : 0),
               distance / fluidScale,
               0,
             ],
+            //right
             [
               value,
               (distance + Math.sign(distance) * STICK_OUT) / fluidScale,
@@ -125,7 +130,9 @@ const AnimatedInputTechnical = ({
             [inputSpring.value, inputSpring.scale],
             (value, scale) => [
               autoOutside
-                ? value + (VECTOR_TIP_LENGTH + outsideStickOut) / (2 * scale)
+                ? value +
+                  (VECTOR_TIP_LENGTH + Math.sign(value) * outsideStickOut) /
+                    (2 * scale)
                 : value / 2,
               (0.3 + distance) / scale,
               0,
