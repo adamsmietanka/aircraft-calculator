@@ -51,7 +51,7 @@ export const useVerticalStore = create<StabilizerState>()(
       reynolds: 3,
       stallVelocity: 30,
       material: 0,
-      shape: 3,
+      shape: 1,
       // aerodynamics
       area: 0,
       aspectRatio: 0,
