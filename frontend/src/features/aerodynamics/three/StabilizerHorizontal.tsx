@@ -8,62 +8,30 @@ import useHorizontal from "./hooks/useHorizontal";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
 import { animated, useSpring } from "@react-spring/three";
-import fuselages from "../data/fuselages";
-import { useVerticalStore } from "../stores/useVertical";
-import { getWingPointsAt } from "../utils/getWingOutline";
-import { useState } from "react";
-
-const getMaxTailY = (shape: number) => {
-  if (shape === 2) return 0.8;
-  return 1;
-};
+import useHorizontalPosition from "./hooks/useHorizontalPosition";
 
 const StabilizerHorizontal = ({ opacity }: Props) => {
   const chord = useHorizontalStore((state) => state.chord);
   const span = useHorizontalStore((state) => state.span);
   const angle = useHorizontalStore((state) => state.angle);
   const chordTip = useHorizontalStore((state) => state.chordTip);
-  const position = useHorizontalStore((state) => state.position);
   const setSpan = useHorizontalStore((state) => state.setSpan);
-  const setChord = useHorizontalStore((state) => state.setChord);
   const setChordTip = useHorizontalStore((state) => state.setChordTip);
 
   const shape = useHorizontalStore((state) => state.shape);
-
-  const shapeVertical = useVerticalStore((state) => state.shape);
-  const spanVertical = useVerticalStore((state) => state.span);
-  const chordVertical = useVerticalStore((state) => state.chord);
-  const chordTipVertical = useVerticalStore((state) => state.chordTip);
-  const angleVertical = useVerticalStore((state) => state.angle);
-
-  const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
 
   const { pathname } = useLocation();
 
-  const { horizontal, leading, trailing, top, positionLeadTrail } =
-    useHorizontal();
+  const { horizontal, leading, trailing, top } = useHorizontal();
+  const { positionLeadTrail, y } = useHorizontalPosition();
 
-  const [spring, api] = useSpring(
+  const [spring] = useSpring(
     () => ({
-      y:
-        fuselages[fuselage].horizontalY * length +
-        ((fuselages[fuselage].verticalY - fuselages[fuselage].horizontalY) *
-          length +
-          (getMaxTailY(shapeVertical) * spanVertical) / 2) *
-          position,
+      y,
       x: positionLeadTrail[0],
     }),
-    [
-      fuselage,
-      shape,
-      shapeVertical,
-      spanVertical,
-      pathname,
-      length,
-      position,
-      positionLeadTrail,
-    ]
+    [y, positionLeadTrail]
   );
 
   return (

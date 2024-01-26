@@ -25,7 +25,7 @@ export const usePlaneStore = create<PlaneState>()(
       fuselage: 2303,
       length: 9,
       wingX: 1.5,
-      verticalToTail: 2,
+      verticalToTail: 1.3,
       fuseLatch: false,
       measurements: true,
       setConfiguration: (value) => set({ configuration: value }),

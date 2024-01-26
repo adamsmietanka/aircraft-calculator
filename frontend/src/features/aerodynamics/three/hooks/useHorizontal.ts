@@ -15,10 +15,7 @@ import {
 } from "../../utils/getWingSpecs";
 import { getWingPointsAt } from "../../utils/getWingOutline";
 
-const xG = 0.28;
 const xA = 0.25;
-const cM = -0.05;
-const Vfrac = 0.85;
 
 const getMaxTailY = (shape: number) => {
   if (shape === 2) return 0.8;
@@ -85,7 +82,6 @@ const useHorizontal = () => {
 
   useEffect(() => {
     const config = { span, chord, chordTip, angle, shape };
-    set({ chord: chordV });
     const { leadingPoints, trailingPoints } = getLeadingTrailing(config);
     setLeading(leadingPoints);
     setTrailing(trailingPoints);
@@ -103,11 +99,10 @@ const useHorizontal = () => {
     const stabilizerX = length - wingX - verticalToTail;
     const stabilizerXAero = stabilizerX + MACpositionH + MAC_H * 0.25;
     const lH = stabilizerXAero - MACposition - MAC * xA;
-    const kH = ((area * lH) / (wingArea * MAC)) * Vfrac;
-    // console.log(stabilizerXAero, lH, kH);
+    const kH = ((area * lH) / (wingArea * MAC)) * (0.85 + 0.13 * position);
 
     set({ area, kH, aspectRatio });
-  }, [span, chord, chordTip, angle, shape, chordV]);
+  }, [span, chord, chordTip, angle, shape, chordV, position]);
 
   return { horizontal, leading, trailing, top, positionLeadTrail };
 };
