@@ -1,35 +1,22 @@
 import { Props } from "../../common/types/three";
-import Inputs3D from "../../common/three/Inputs3D";
-import { useHorizontalStore } from "../stores/useHorizontal";
-import WingShape from "../WingShape";
-import HorizontalChart from "./HorizontalChart";
-import HorizontalPosition from "./HorizontalPosition";
 import LineChart from "../../common/three/LineChart";
 import { usePlaneCoefficientsStore } from "../stores/usePlaneCoefficients";
 import HoverableFormulaSimple from "../../common/HoverableFormulaSimple";
 import { usePlaneStore } from "../stores/usePlane";
-import useGlideCharts, { useGlideChartStore } from "../hooks/useGlideChart";
+import useKChart, { useKChartStore } from "../hooks/useKChart";
 import Legend from "../../common/three/Legend";
+import useGlideChart, { useGlideChartStore } from "../hooks/useGlideChart";
 
 const HorizontalUI = ({ opacity }: Props) => {
-  const shape = useHorizontalStore((state) => state.shape);
-  const setShape = useHorizontalStore((state) => state.setShape);
-
   const kMax = usePlaneStore((state) => state.kMax);
 
   const k = usePlaneCoefficientsStore((state) => state.k);
 
-  useGlideCharts();
+  useKChart();
+  useGlideChart();
 
   return (
     <mesh rotation={[(-45 * Math.PI) / 180, (0 * Math.PI) / 180, 0, "YXZ"]}>
-      {/* <Inputs3D gridPositionX={-1.2}>
-        <div className="w-48">
-          <WingShape label="Stabilizer" shape={shape} setter={setShape} />
-          <HorizontalPosition />
-        </div>
-      </Inputs3D> */}
-      {/* <HorizontalChart opacity={opacity} /> */}
       <LineChart
         width={0.35}
         height={0.5}
@@ -67,7 +54,7 @@ const HorizontalUI = ({ opacity }: Props) => {
             // max: 1.75,
           },
         }}
-        store={useGlideChartStore}
+        store={useKChartStore}
       />
       <LineChart
         width={0.5}
@@ -82,52 +69,37 @@ const HorizontalUI = ({ opacity }: Props) => {
               [0, 1, 0],
               [kMax, 0, 0],
             ],
+            style: "dotted",
           },
           {
             name: "Current",
             points: [
               [0, 1, 0],
-              [useGlideChartStore.getState().y["Coefficient of Lift"], 0, 0],
+              [useKChartStore.getState().y, 0, 0],
             ],
-            style: "dotted",
+            style: "normal",
           },
-          // { name: "Stabilizer", points: cdHorizontal, style: "dotted" },
         ]}
         axes={{
           x: {
-            // symbol: (
-            //   <HoverableFormulaSimple
-            //     className="text-lg"
-            //     name="Coefficient of Drag"
-            //     tex="C_D"
-            //   />
-            // ),
             type: "altitude",
             name: "Distance",
             min: 0,
           },
           y: {
-            // symbol: (
-            //   <HoverableFormulaSimple
-            //     className="text-lg"
-            //     name="Coefficient of Lift"
-            //     tex="C_L"
-            //   />
-            // ),
             type: "altitude",
             name: "Altitude",
             min: 0,
             max: 1.25,
           },
         }}
-        yHover
-        // store={useHorizontalChartStore}
+        store={useGlideChartStore}
       />
       <Legend
         gridPositionX={1.6}
-        items={[{ name: "Optimal" }, { name: "Current", style: "dotted" }]}
+        items={[{ name: "Optimal", style: "dotted" }, { name: "Current" }]}
         opacity={opacity}
-        // store={useHorizontalChartStore}
+        store={useGlideChartStore}
       />
     </mesh>
   );
