@@ -9,6 +9,8 @@ export interface PlaneState {
   verticalToTail: number;
   fuseLatch: boolean;
   measurements: boolean;
+  kMax: number;
+  angleOpt: number;
   setConfiguration: (value: number) => void;
   setFuselage: (value: number) => void;
   setLength: (value: number) => void;
@@ -28,6 +30,8 @@ export const usePlaneStore = create<PlaneState>()(
       verticalToTail: 1.3,
       fuseLatch: false,
       measurements: true,
+      kMax: 10,
+      angleOpt: 10,
       setConfiguration: (value) => set({ configuration: value }),
       setFuselage: (value) =>
         set((state) => ({ fuselage: value, fuseLatch: !state.fuseLatch })),
