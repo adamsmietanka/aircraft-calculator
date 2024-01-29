@@ -3,20 +3,26 @@ import { BufferGeometry } from "three";
 import { useProfileStore } from "../../aerodynamics/stores/useProfile";
 import getProfilePoints from "../../aerodynamics/utils/getProfilePoints";
 import createWingModel from "../../aerodynamics/three/utils/createWingModel";
+import { useLoader } from "@react-three/fiber";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 const useLandingPage = () => {
+  const [fuse1, setFuse1] = useState<BufferGeometry>(null!);
+  const [fuse2, setFuse2] = useState<BufferGeometry>(null!);
+
   const [geom1, setGeom1] = useState<BufferGeometry>(null!);
   const [geom2, setGeom2] = useState<BufferGeometry>(null!);
   const [geom3, setGeom3] = useState<BufferGeometry>(null!);
   const [elliptic, setElliptic] = useState<BufferGeometry>(null!);
   const [tail, setTail] = useState<BufferGeometry>(null!);
+  const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
 
   const profilePoints = useProfileStore((state) => state.profile);
 
   useEffect(() => {
     const otherProfilePoints = getProfilePoints("4415");
     const symmetric = getProfilePoints("0006");
-    
+
     setGeom1(
       createWingModel(
         {
@@ -79,9 +85,11 @@ const useLandingPage = () => {
         symmetric
       )
     );
+    setFuse1(nodes[2303]?.geometry);
+    setFuse2(nodes[2302]?.geometry);
   }, []);
 
-  return { geom1, geom2, geom3, elliptic, tail };
+  return { geom1, geom2, geom3, elliptic, tail, fuse1, fuse2 };
 };
 
 export default useLandingPage;

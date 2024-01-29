@@ -7,18 +7,20 @@ import {
   Instances,
   Instance,
 } from "@react-three/drei";
-import { SpringValue, animated } from "@react-spring/three";
-import FuseModel from "../aerodynamics/three/FuseModel";
 import useLandingPage from "./hooks/useLandingPage";
+import { useMemo } from "react";
+import { MeshStandardMaterial } from "three";
 
-interface Props {
-  opacity: SpringValue<number>;
-}
 
 const SPAR_DIAMETER = 0.03;
 
-const Home = ({ opacity }: Props) => {
-  const { geom1, geom2, geom3, elliptic, tail } = useLandingPage();
+const Home = () => {
+  const { geom1, geom2, geom3, elliptic, tail, fuse1, fuse2 } =
+    useLandingPage();
+
+  const material = useMemo(() => {
+    return new MeshStandardMaterial({ metalness: 0.5 });
+  }, []);
 
   return (
     <mesh receiveShadow>
@@ -71,48 +73,32 @@ const Home = ({ opacity }: Props) => {
             <Instance position={[0.2, 0, 2.75]} />
             <Instance position={[1.2, 0, 2.75]} />
           </Instances>
-          <mesh geometry={geom2} scale-z={0.5}>
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <mesh geometry={geom2} scale-z={0.5} position-y={1.25}>
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+          <mesh geometry={geom2} scale-z={0.5} material={material} />
+          <mesh
+            geometry={geom2}
+            scale-z={0.5}
+            position-y={1.25}
+            material={material}
+          />
           <mesh
             position-x={6.25}
             position-y={0.65}
             rotation-x={-Math.PI / 2}
             geometry={elliptic}
-          >
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+            material={material}
+          />
           <mesh
             position-x={6.25}
             position-y={0.45}
             geometry={tail}
-          >
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <FuseModel opacity={opacity} />
+            material={material}
+          />
+          <mesh
+            scale={9}
+            position-x={-1.5}
+            geometry={fuse2}
+            material={material}
+          />
         </mesh>
       </Float>
       <Float
@@ -123,43 +109,29 @@ const Home = ({ opacity }: Props) => {
         speed={1.25}
       >
         <mesh position={[-22, 0, 35]} receiveShadow scale-x={-1}>
-          <mesh geometry={geom1}>
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
-          <mesh scale-x={1.2}>
-            <FuseModel opacity={opacity} />
-          </mesh>
+          <mesh geometry={geom1} material={material} />
+
+          <mesh
+            scale={9}
+            scale-x={10.5}
+            position-x={-1.5}
+            geometry={fuse1}
+            material={material}
+          />
           <mesh
             position-x={7.75}
             position-y={0.65}
             rotation-x={-Math.PI / 2}
             geometry={geom3}
-          >
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+            material={material}
+          />
           <mesh
             position-x={8.5}
             position-y={2.65}
             scale-x={0.5}
             geometry={tail}
-          >
-            <animated.meshStandardMaterial
-              color={"white"}
-              metalness={0.5}
-              transparent
-              opacity={opacity}
-            />
-          </mesh>
+            material={material}
+          />
         </mesh>
       </Float>
     </mesh>
