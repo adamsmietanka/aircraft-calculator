@@ -3,6 +3,7 @@ import { create } from "zustand";
 interface PlaneState {
   cl: number[][];
   clHorizontal: number[][];
+  k: number[][];
   cd: number[][];
   cdFuse: number[][];
   cdVertical: number[][];
@@ -22,6 +23,10 @@ export const usePlaneCoefficientsStore = create<PlaneState>()((set) => ({
     [1, 1, 1],
   ],
   clHorizontal: [
+    [0, 0, 0],
+    [1, 1, 1],
+  ],
+  k: [
     [0, 0, 0],
     [1, 1, 1],
   ],

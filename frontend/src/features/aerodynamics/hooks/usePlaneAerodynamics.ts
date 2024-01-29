@@ -7,6 +7,7 @@ import useReversedData from "../../common/hooks/useReversedData";
 import { table as profileTable } from "../data/profiles_interpolated";
 import { useVerticalStore } from "../stores/useVertical";
 import { useHorizontalStore } from "../stores/useHorizontal";
+import { linearInterpolation } from "../../../utils/interpolation/binarySearch";
 
 const table: Record<number, { cd: number; area: number }> = {
   2301: { cd: 0.353, area: 0.0153 },
@@ -22,6 +23,17 @@ const xG = 0.28;
 const xA = 0.25;
 const cM = -0.05;
 
+const getAlphaFromCl = (monotonic: number[][], k: number[][]) => {
+  const [cl0, alpha0] = monotonic[1];
+  const [cl1, alpha1] = monotonic[monotonic.length - 2];
+
+  return k.map(([y, x, z]) => [
+    linearInterpolation(cl0, alpha0, cl1, alpha1, x),
+    y,
+    z,
+  ]);
+};
+
 const usePlaneAerodynamics = () => {
   const wingCl = useWingCoefficientsStore((state) => state.cl);
   const wingCd = useWingCoefficientsStore((state) => state.cd);
@@ -36,6 +48,7 @@ const usePlaneAerodynamics = () => {
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
   const configuration = usePlaneStore((state) => state.configuration);
+  const setPlane = usePlaneStore((state) => state.set);
 
   const set = usePlaneCoefficientsStore((state) => state.set);
 
@@ -54,8 +67,6 @@ const usePlaneAerodynamics = () => {
 
     const getCdVertical = () =>
       ((minCd + 0.005) * areaVertical * fuseNumber) / (area * wingNumber);
-
-    const cl = wingCl;
     const cdVertical = wingCd.map(([y, x, z]) => [getCdVertical(), x, z]);
     const cdFuse = wingCd.map(([y, x, z]) => [getCdFuse(x), x, z]);
 
@@ -77,10 +88,16 @@ const usePlaneAerodynamics = () => {
     ]);
 
     const cd = wingCd.map(([y, x, z]) => [
-      (y + getCdFuse(x) + getCdVertical() + getCdHorizontal(getClHorizontal(x))) * (1 + INTERFERENCE),
+      (y +
+        getCdFuse(x) +
+        getCdVertical() +
+        getCdHorizontal(getClHorizontal(x))) *
+        (1 + INTERFERENCE),
       x,
       z,
     ]);
+
+    const cl = wingCl.map(([x, y, z]) => [x, y, z]);
 
     const { monotonic, reversed } = useReversedData(cl, cd);
     const { monotonic: monotonicHorizontal, reversed: reversedHorizontal } =
@@ -88,9 +105,18 @@ const usePlaneAerodynamics = () => {
     const { reversed: reversedFuse } = useReversedData(cl, cdFuse);
     const { reversed: reversedVertical } = useReversedData(cl, cdVertical);
 
+    const k = cd.map(([y, x, z]) => [x / y, x, z]);
+    const kAlpha = getAlphaFromCl(monotonic, k);
+
+    const highestK = kAlpha.reduce((previous, current) =>
+      current[1] > previous[1] ? current : previous
+    );
+    setPlane({ kMax: highestK[1], angleOpt: highestK[0] });
+
     set({
       cl,
       clHorizontal,
+      k: kAlpha,
       cd,
       monotonic,
       monotonicHorizontal,

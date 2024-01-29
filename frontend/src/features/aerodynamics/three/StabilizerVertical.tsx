@@ -9,6 +9,8 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
 import { animated } from "@react-spring/three";
 
+const meshVisible = ["/aerodynamics/horizontal", "/aerodynamics/results"];
+
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
   const span = useVerticalStore((state) => state.span);
@@ -32,7 +34,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
   return (
     <group>
       <mesh
-        visible={pathname === "/aerodynamics/horizontal"}
+        visible={meshVisible.includes(pathname)}
         rotation-x={-Math.PI / 2}
         geometry={vertical}
       >
