@@ -35,8 +35,12 @@ const Wing = ({ opacity }: Props) => {
   const profileCd = useProfileCoefficientsStore((state) => state.cd);
 
   const wingCl = useWingCoefficientsStore((state) => state.cl);
+  const monotonic = useWingCoefficientsStore((state) => state.monotonic);
   const wingCd = useWingCoefficientsStore((state) => state.cd);
   const inducedCd = useWingCoefficientsStore((state) => state.cdInduced);
+
+  const first = monotonic[1];
+  const last = monotonic[monotonic.length - 2];
 
   return (
     <>
@@ -69,6 +73,14 @@ const Wing = ({ opacity }: Props) => {
           traces={[
             { name: "Wing", points: wingCl },
             { name: "Profile", points: profileCl, style: "dotted" },
+            {
+              name: "asd",
+              points: [
+                [first[1], first[0], 0],
+                [last[1], last[0], 0],
+              ],
+              style: "thin",
+            },
           ]}
           axes={{
             x: {
