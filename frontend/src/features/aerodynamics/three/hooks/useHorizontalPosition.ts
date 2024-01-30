@@ -4,6 +4,7 @@ import { useVerticalStore } from "../../stores/useVertical";
 import { useHorizontalStore } from "../../stores/useHorizontal";
 import { usePlaneStore } from "../../stores/usePlane";
 import fuselages from "../../data/fuselages";
+import { isMultifuse } from "../../utils/planeConfiguration";
 
 /**
  * The highest you can put a horizontal stabilizer on a vertical stabilizer
@@ -25,15 +26,17 @@ const useHorizontalPosition = () => {
   const angle = useVerticalStore((state) => state.angle);
 
   const position = useHorizontalStore((state) => state.position);
+  const shapeH = useHorizontalStore((state) => state.shape);
+  const spanH = useHorizontalStore((state) => state.span);
+  const angleH = useHorizontalStore((state) => state.angle);
 
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
+  const configuration = usePlaneStore((state) => state.configuration);
+  const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
   const setPlane = usePlaneStore((state) => state.set);
 
   const set = useHorizontalStore((state) => state.set);
-
-  const [positionLeadTrail, setPositionLeadTrail] = useState([0, 0]);
-  const [y, setY] = useState(0);
 
   useEffect(() => {
     const { horizontalY, verticalY } = fuselages[fuselage];
@@ -50,14 +53,18 @@ const useHorizontalPosition = () => {
       },
       clampOverZero(relativeY)
     );
-    setY(y);
-    setPositionLeadTrail(leadTrail);
+
     const newChord = leadTrail[1] - leadTrail[0];
     set({ chord: newChord, chordTip: 0.6 * newChord });
-    setPlane({ horizontalX: leadTrail[0], horizontalY: y });
-  }, [shape, span, chord, position, fuselage]);
-
-  return { positionLeadTrail, y };
+    setPlane({
+      horizontalX:
+        leadTrail[0] -
+        (isMultifuse(configuration) && shapeH == 1
+          ? (Math.tan((angleH * Math.PI) / 180) * fuselageDistance) / 2
+          : 0),
+      horizontalY: y,
+    });
+  }, [shape, span, chord, position, fuselage, shapeH, configuration, fuselageDistance]);
 };
 
 export default useHorizontalPosition;

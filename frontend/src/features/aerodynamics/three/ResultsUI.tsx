@@ -109,7 +109,7 @@ const HorizontalUI = ({ opacity }: Props) => {
         store={useGlideChartStore}
       >
         <animated.mesh rotation-z={spring.y}>
-          <Resize rotation={[0, Math.PI, 0]} scale={3}>
+          <Resize rotation={[Math.PI/16, Math.PI, 0]} scale={3}>
             <PlaneModel opacity={opacity} />
           </Resize>
         </animated.mesh>

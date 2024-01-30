@@ -20,19 +20,21 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
 
   const shape = useHorizontalStore((state) => state.shape);
   const verticalX = usePlaneStore((state) => state.verticalX);
+  const horizontalX = usePlaneStore((state) => state.horizontalX);
+  const horizontalY = usePlaneStore((state) => state.horizontalY);
   const length = usePlaneStore((state) => state.length);
 
   const { pathname } = useLocation();
 
   const { horizontal, leading, trailing, top } = useHorizontal();
-  const { positionLeadTrail, y } = useHorizontalPosition();
+  useHorizontalPosition();
 
   const [spring] = useSpring(
     () => ({
-      y,
-      x: positionLeadTrail[0] + verticalX,
+      y: horizontalY,
+      x: horizontalX + verticalX,
     }),
-    [y, positionLeadTrail, verticalX]
+    [horizontalX, horizontalY, verticalX]
   );
 
   return (

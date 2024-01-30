@@ -8,7 +8,7 @@ import { useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { useWingStore } from "../stores/useWing";
 import { DoubleSide } from "three";
-import { isMultifuse } from "../utils/planeConfiguration";
+import { isMultifuse, isMultiwing } from "../utils/planeConfiguration";
 
 const PlaneModel = ({ opacity }: Props) => {
   const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
@@ -35,6 +35,20 @@ const PlaneModel = ({ opacity }: Props) => {
       <mesh
         position-x={verticalX}
         position-y={verticalY}
+        position-z={isMultifuse(configuration) ? fuselageDistance / 2 : 0}
+        rotation-x={-Math.PI / 2}
+        geometry={vertical}
+      >
+        <animated.meshStandardMaterial
+          // metalness={0.5}
+          transparent
+          opacity={opacity}
+        />
+      </mesh>
+      <mesh
+        position-x={verticalX}
+        position-y={verticalY}
+        position-z={isMultifuse(configuration) ? -fuselageDistance / 2 : 0}
         rotation-x={-Math.PI / 2}
         geometry={vertical}
       >
@@ -81,6 +95,9 @@ const PlaneModel = ({ opacity }: Props) => {
         />
       </mesh>
       <WingModel opacity={opacity} />
+      <mesh position-y={isMultiwing(configuration) ? 1 : 0}>
+        <WingModel opacity={opacity} />
+      </mesh>
     </mesh>
   );
 };
