@@ -26,16 +26,16 @@ const HorizontalUI = ({ opacity }: Props) => {
     () => ({
       y:
         -Math.atan(1 / (legend === "Optimal" ? kMax : y)) +
-        (legend === "Optimal" ? angleOpt : angle * Math.PI) / 180,
+        ((legend === "Optimal" ? angleOpt : angle) * Math.PI) / 180,
     }),
-    [y, legend]
+    [y, legend, angle, angleOpt]
   );
 
   return (
     <mesh rotation={[(-45 * Math.PI) / 180, (0 * Math.PI) / 180, 0, "YXZ"]}>
       <LineChart
         width={0.35}
-        height={0.5}
+        height={0.6}
         gridPositionX={-1.35}
         opacity={opacity}
         name="Coefficient of Lift"
@@ -69,7 +69,7 @@ const HorizontalUI = ({ opacity }: Props) => {
       />
       <LineChart
         width={1.25}
-        height={0.5}
+        height={0.6}
         gridPositionX={0.25}
         opacity={opacity}
         name="Coefficient of Drag"
@@ -94,7 +94,7 @@ const HorizontalUI = ({ opacity }: Props) => {
         axes={{
           x: {
             type: "altitude",
-            name: "Distance",
+            name: "Glide Distance",
             min: 0,
           },
           y: {

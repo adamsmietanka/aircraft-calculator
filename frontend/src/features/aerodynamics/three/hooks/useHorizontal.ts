@@ -14,6 +14,7 @@ import {
   getMACposition,
 } from "../../utils/getWingSpecs";
 import { getWingPointsAt } from "../../utils/getWingOutline";
+import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
 
 const xA = 0.25;
 
@@ -47,6 +48,8 @@ const useHorizontal = () => {
   const MAC = useWingStore((state) => state.MAC);
   const MACposition = useWingStore((state) => state.MACposition)[0];
   const wingArea = useWingStore((state) => state.area);
+
+  const setGeometry = usePlaneGeometryStore((state) => state.set);
 
   const [horizontal, setHorizontal] = useState<BufferGeometry>(
     new SphereGeometry()
@@ -90,7 +93,9 @@ const useHorizontal = () => {
       trailingPoints[trailingPoints.length - 1],
     ]);
 
-    setHorizontal(createWingModel(config, symmetric));
+    const geom = createWingModel(config, symmetric);
+    setGeometry({ horizontal: geom });
+    setHorizontal(geom);
 
     const area = getArea(config);
     const aspectRatio = getAspectRatio(config);

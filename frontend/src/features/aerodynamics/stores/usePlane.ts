@@ -9,6 +9,8 @@ export interface PlaneState {
   verticalToTail: number;
   verticalX: number;
   verticalY: number;
+  horizontalX: number;
+  horizontalY: number;
   fuseLatch: boolean;
   measurements: boolean;
   kMax: number;
@@ -32,6 +34,8 @@ export const usePlaneStore = create<PlaneState>()(
       verticalToTail: 1.3,
       verticalX: 1.3,
       verticalY: 1.3,
+      horizontalX: 1.3,
+      horizontalY: 1.3,
       fuseLatch: false,
       measurements: true,
       kMax: 10,

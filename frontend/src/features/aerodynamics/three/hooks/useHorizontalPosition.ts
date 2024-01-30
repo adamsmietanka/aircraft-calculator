@@ -28,6 +28,7 @@ const useHorizontalPosition = () => {
 
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
+  const setPlane = usePlaneStore((state) => state.set);
 
   const set = useHorizontalStore((state) => state.set);
 
@@ -53,6 +54,7 @@ const useHorizontalPosition = () => {
     setPositionLeadTrail(leadTrail);
     const newChord = leadTrail[1] - leadTrail[0];
     set({ chord: newChord, chordTip: 0.6 * newChord });
+    setPlane({ horizontalX: leadTrail[0], horizontalY: y });
   }, [shape, span, chord, position, fuselage]);
 
   return { positionLeadTrail, y };

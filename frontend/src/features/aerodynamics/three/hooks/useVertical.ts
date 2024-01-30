@@ -46,15 +46,7 @@ const useVertical = () => {
       verticalX: length - wingX - verticalToTail,
       verticalY: fuselages[fuselage].verticalY * length,
     });
-  }, [
-    configuration,
-    fuselage,
-    shape,
-    wingX,
-    // pathname,
-    length,
-    verticalToTail,
-  ]);
+  }, [configuration, fuselage, shape, wingX, length, verticalToTail]);
 
   useEffect(() => {
     const { leadingPoints, trailingPoints } = getLeadingTrailing(

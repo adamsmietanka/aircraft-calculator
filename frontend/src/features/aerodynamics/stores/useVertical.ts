@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { getReynolds } from "../data/profiles";
 
 export interface StabilizerState {
   chord: number;
