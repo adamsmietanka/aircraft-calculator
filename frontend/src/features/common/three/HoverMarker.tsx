@@ -11,7 +11,7 @@ import {
   SynchronizedXMarkersStore,
 } from "./Hover";
 import AnimatedLine from "./AnimatedLine";
-import { useMemo, useRef } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 import { Mesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import AnimatedHtml from "./AnimatedHtml";
@@ -31,6 +31,7 @@ interface Props {
   opacity: SpringValue<number>;
   show: boolean;
   disable: boolean;
+  children?: ReactNode;
 }
 
 const HoverMarker = ({
@@ -43,6 +44,7 @@ const HoverMarker = ({
   opacity,
   show,
   disable,
+  children,
 }: Props) => {
   const meshRef = useRef<Mesh>(null!);
   const { valueMultiplier: yMultiplier } = useChartUnits(axes.y.type);
@@ -52,8 +54,11 @@ const HoverMarker = ({
 
   const worldScale = useMemo(() => new Vector3(1, 1, 1), []);
 
+  const markerRef = useRef<Mesh>(null!);
+
   useFrame(() => {
     worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
+    children && markerRef.current.position.set(hoverSpring.x.get(), hoverSpring.y.get(), 0);
   });
 
   const locked = store((state) => state.locked);
@@ -172,6 +177,9 @@ const HoverMarker = ({
           }`}
         />
       </AnimatedHtml>
+      <mesh ref={markerRef} >
+        {children}
+      </mesh>
     </mesh>
   );
 };

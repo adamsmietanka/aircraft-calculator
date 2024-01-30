@@ -6,14 +6,30 @@ import { usePlaneStore } from "../stores/usePlane";
 import useKChart, { useKChartStore } from "../hooks/useKChart";
 import Legend from "../../common/three/Legend";
 import useGlideChart, { useGlideChartStore } from "../hooks/useGlideChart";
+import PlaneModel from "./PlaneModel";
+import { Resize } from "@react-three/drei";
+import { animated, useSpring } from "@react-spring/three";
 
 const HorizontalUI = ({ opacity }: Props) => {
   const kMax = usePlaneStore((state) => state.kMax);
+  const angleOpt = usePlaneStore((state) => state.angleOpt);
 
   const k = usePlaneCoefficientsStore((state) => state.k);
+  const angle = useKChartStore((state) => state.x);
+  const y = useKChartStore((state) => state.y);
+  const legend = useGlideChartStore((state) => state.legend);
 
   useKChart();
   useGlideChart();
+
+  const [spring] = useSpring(
+    () => ({
+      y:
+        -Math.atan(1 / (legend === "Optimal" ? kMax : y)) +
+        (legend === "Optimal" ? angleOpt : angle * Math.PI) / 180,
+    }),
+    [y, legend]
+  );
 
   return (
     <mesh rotation={[(-45 * Math.PI) / 180, (0 * Math.PI) / 180, 0, "YXZ"]}>
@@ -75,7 +91,7 @@ const HorizontalUI = ({ opacity }: Props) => {
             name: "Current",
             points: [
               [0, 1, 0],
-              [useKChartStore.getState().y, 0, 0],
+              [y, 0, 0],
             ],
             style: "normal",
           },
@@ -95,7 +111,13 @@ const HorizontalUI = ({ opacity }: Props) => {
         }}
         equalAxis
         store={useGlideChartStore}
-      />
+      >
+        <animated.mesh rotation-z={spring.y}>
+          <Resize rotation={[0, Math.PI, 0]} scale={2}>
+            <PlaneModel opacity={opacity} />
+          </Resize>
+        </animated.mesh>
+      </LineChart>
       <Legend
         gridPositionX={1.6}
         items={[{ name: "Optimal", style: "dotted" }, { name: "Current" }]}

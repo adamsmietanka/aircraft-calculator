@@ -4,7 +4,7 @@ import { StoreApi, UseBoundStore } from "zustand";
 import HoverMarker from "./HoverMarker";
 import round from "../../../utils/interpolation/round";
 import { SpringValue } from "@react-spring/three";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { Mesh } from "three";
 
 export interface SimpleMarkerStore {
@@ -53,6 +53,7 @@ interface HoverProps {
   yHover: boolean;
   opacity: SpringValue<number>;
   show: boolean;
+  children?: ReactNode;
 }
 const clamp = (num: number, min: number, max: number) =>
   Math.min(Math.max(num, min), max);
@@ -70,6 +71,7 @@ const Hover = ({
   yHover,
   opacity,
   show,
+  children,
 }: HoverProps) => {
   const meshRef = useRef<Mesh>(null!);
 
@@ -120,7 +122,9 @@ const Hover = ({
         opacity={opacity}
         show={show}
         disable={disable}
-      />
+      >
+        {children}
+      </HoverMarker>
     </mesh>
   );
 };

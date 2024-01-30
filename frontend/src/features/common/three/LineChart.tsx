@@ -10,6 +10,7 @@ import Hover, {
 } from "./Hover";
 import { CANVAS_WIDTH } from "./config";
 import AnimatedLine from "./AnimatedLine";
+import { ReactNode } from "react";
 
 export interface Axis {
   name: string;
@@ -46,6 +47,7 @@ export type ChartProps = {
   gridPositionX?: number;
   opacity?: SpringValue<number>;
   equalAxis?: boolean;
+  children?: ReactNode;
 };
 
 const LineChart = ({
@@ -61,6 +63,7 @@ const LineChart = ({
   gridPositionX = 0,
   opacity = new SpringValue(1),
   equalAxis = false,
+  children,
 }: ChartProps) => {
   const { ticks, scale, data, min, max, mid, step } = useAxes(
     traces,
@@ -135,7 +138,9 @@ const LineChart = ({
               yHover={yHover}
               opacity={opacity}
               show={show}
-            />
+            >
+              {children}
+            </Hover>
           )}
         </animated.mesh>
       </mesh>
