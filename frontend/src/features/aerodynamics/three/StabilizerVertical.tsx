@@ -8,6 +8,7 @@ import useVertical from "./hooks/useVertical";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
 import { animated } from "@react-spring/three";
+import { isMultifuse } from "../utils/planeConfiguration";
 
 const meshVisible = ["/aerodynamics/horizontal", "/aerodynamics/results"];
 
@@ -24,6 +25,8 @@ const StabilizerVertical = ({ opacity }: Props) => {
 
   const verticalToTail = usePlaneStore((state) => state.verticalToTail);
   const length = usePlaneStore((state) => state.length);
+  const configuration = usePlaneStore((state) => state.configuration);
+  const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
 
   const setVerticalToTail = usePlaneStore((state) => state.setVerticalToTail);
 
@@ -36,6 +39,19 @@ const StabilizerVertical = ({ opacity }: Props) => {
       <mesh
         visible={meshVisible.includes(pathname)}
         rotation-x={-Math.PI / 2}
+        geometry={vertical}
+      >
+        <animated.meshStandardMaterial
+          color="white"
+          metalness={0.5}
+          transparent
+          opacity={opacity}
+        />
+      </mesh>
+      <mesh
+        visible={meshVisible.includes(pathname) && isMultifuse(configuration)}
+        rotation-x={-Math.PI / 2}
+        position-z={-fuselageDistance}
         geometry={vertical}
       >
         <animated.meshStandardMaterial
@@ -102,6 +118,26 @@ const StabilizerVertical = ({ opacity }: Props) => {
           pathname === "/aerodynamics/fuselage" ||
           pathname === "/aerodynamics/vertical"
         }
+      >
+        <AnimatedLine points={leading} color="grid" opacity={opacity} />
+        <AnimatedLine points={trailing} color="grid" opacity={opacity} />
+        <AnimatedLine points={top} color="grid" opacity={opacity} />
+        <AnimatedLine
+          points={[
+            [0, 0, 0],
+            [chord, 0, 0],
+          ]}
+          color="grid"
+          opacity={opacity}
+        />
+      </mesh>
+      <mesh
+        visible={
+          (pathname === "/aerodynamics/fuselage" ||
+            pathname === "/aerodynamics/vertical") &&
+          isMultifuse(configuration)
+        }
+        position-z={-fuselageDistance}
       >
         <AnimatedLine points={leading} color="grid" opacity={opacity} />
         <AnimatedLine points={trailing} color="grid" opacity={opacity} />

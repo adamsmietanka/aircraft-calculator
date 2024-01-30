@@ -33,6 +33,7 @@ const HorizontalUI = ({ opacity }: Props) => {
 
   return (
     <mesh rotation={[(-45 * Math.PI) / 180, (0 * Math.PI) / 180, 0, "YXZ"]}>
+      <directionalLight position={[100, 0, 0]} intensity={1}/>
       <LineChart
         width={0.35}
         height={0.6}
@@ -108,7 +109,7 @@ const HorizontalUI = ({ opacity }: Props) => {
         store={useGlideChartStore}
       >
         <animated.mesh rotation-z={spring.y}>
-          <Resize rotation={[0, Math.PI, 0]} scale={2.5}>
+          <Resize rotation={[0, Math.PI, 0]} scale={3}>
             <PlaneModel opacity={opacity} />
           </Resize>
         </animated.mesh>

@@ -20,9 +20,10 @@ const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
-  
+
   const verticalX = usePlaneStore((state) => state.verticalX);
   const verticalY = usePlaneStore((state) => state.verticalY);
+  const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
 
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
@@ -36,7 +37,8 @@ const Fuselage = ({ opacity }: Props) => {
       wingY: configuration === 1 || configuration === 3 ? 1 : 0,
       cylinders:
         shape === 0 && (configuration === 1 || configuration === 3) ? 1 : 0,
-      fuseZ: configuration === 2 || configuration === 3 ? span / 6 : 0,
+      fuseZ:
+        configuration === 2 || configuration === 3 ? fuselageDistance / 2 : 0,
       wingPosition: -wingX,
       planePosition: 0,
       scale: 1.5,
@@ -46,6 +48,7 @@ const Fuselage = ({ opacity }: Props) => {
     [
       configuration,
       fuselage,
+      fuselageDistance,
       shape,
       wingX,
       pathname,
@@ -96,9 +99,9 @@ const Fuselage = ({ opacity }: Props) => {
                 <animated.mesh position-y={planeSpring.verticalY}>
                   <StabilizerVertical opacity={opacity} />
                 </animated.mesh>
-                <StabilizerHorizontal opacity={opacity} />
               </animated.mesh>
             </animated.mesh>
+            <StabilizerHorizontal opacity={opacity} />
             <WingModel opacity={opacity} />
             <animated.mesh position-y={planeSpring.wingY}>
               <WingModel opacity={opacity} />
