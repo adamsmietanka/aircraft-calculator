@@ -20,7 +20,7 @@ const HorizontalUI = ({ opacity }: Props) => {
       <LineChart
         width={0.35}
         height={0.5}
-        gridPositionX={0.15}
+        gridPositionX={-1.35}
         opacity={opacity}
         name="Coefficient of Lift"
         traces={[
@@ -57,9 +57,9 @@ const HorizontalUI = ({ opacity }: Props) => {
         store={useKChartStore}
       />
       <LineChart
-        width={0.5}
+        width={1.25}
         height={0.5}
-        gridPositionX={1}
+        gridPositionX={0.25}
         opacity={opacity}
         name="Coefficient of Drag"
         traces={[
@@ -93,6 +93,7 @@ const HorizontalUI = ({ opacity }: Props) => {
             max: 1.25,
           },
         }}
+        equalAxis
         store={useGlideChartStore}
       />
       <Legend
