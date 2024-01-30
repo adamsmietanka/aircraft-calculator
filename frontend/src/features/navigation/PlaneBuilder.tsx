@@ -25,6 +25,7 @@ import NavigationElliptic from "../compass/NavigationElliptic";
 import FuselageUI from "../aerodynamics/three/FuselageUI";
 import VerticalUI from "../aerodynamics/three/VerticalUI ";
 import HorizontalUI from "../aerodynamics/three/HorizontalUI";
+import GlideUI from "../aerodynamics/three/GlideUI";
 import ResultsUI from "../aerodynamics/three/ResultsUI";
 
 const PlaneBuilder = () => {
@@ -83,6 +84,7 @@ const PlaneBuilder = () => {
             "/aerodynamics/fuselage",
             "/aerodynamics/vertical",
             "/aerodynamics/horizontal",
+            "/aerodynamics/results",
           ]}
           Element={Fuselage}
         />
@@ -90,6 +92,7 @@ const PlaneBuilder = () => {
         <Route path="/aerodynamics/vertical" Element={VerticalUI} />
         <Route path="/aerodynamics/horizontal" Element={HorizontalUI} />
         <Route path="/aerodynamics/results" Element={ResultsUI} />
+        <Route path="/aerodynamics/glide" Element={GlideUI} />
         <Route path="/navigation/hyperbolic" Element={NavigationHyperbolic} />
         <Route path="/navigation/elliptic" Element={NavigationElliptic} />
       </Canvas>

@@ -9,6 +9,7 @@ import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
 import { animated, useSpring } from "@react-spring/three";
 import useHorizontalPosition from "./hooks/useHorizontalPosition";
+import { DoubleSide } from "three";
 
 const StabilizerHorizontal = ({ opacity }: Props) => {
   const chord = useHorizontalStore((state) => state.chord);
@@ -53,6 +54,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
           metalness={0.5}
           transparent
           opacity={opacity}
+          side={DoubleSide}
         />
       </mesh>
       {/* <AnimatedInputTechnical
