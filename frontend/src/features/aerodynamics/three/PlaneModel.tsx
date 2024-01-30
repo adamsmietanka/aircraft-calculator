@@ -10,6 +10,10 @@ const PlaneModel = ({ opacity }: Props) => {
   const verticalX = usePlaneStore((state) => state.verticalX);
   const verticalY = usePlaneStore((state) => state.verticalY);
 
+  const horizontal = usePlaneGeometryStore((state) => state.horizontal);
+  const horizontalX = usePlaneStore((state) => state.horizontalX);
+  const horizontalY = usePlaneStore((state) => state.horizontalY);
+
   return (
     <mesh position-x={-1.5}>
       <mesh
@@ -19,7 +23,18 @@ const PlaneModel = ({ opacity }: Props) => {
         geometry={vertical}
       >
         <animated.meshStandardMaterial
-          metalness={0.5}
+          // metalness={0.5}
+          transparent
+          opacity={opacity}
+        />
+      </mesh>
+      <mesh
+        position-x={verticalX + horizontalX}
+        position-y={horizontalY}
+        geometry={horizontal}
+      >
+        <animated.meshStandardMaterial
+          // metalness={0.5}
           transparent
           opacity={opacity}
         />
