@@ -4,6 +4,9 @@ import getLeadingTrailing from "../../utils/getLeadingTrailing";
 import { BufferGeometry, SphereGeometry } from "three";
 import getProfilePoints from "../../utils/getProfilePoints";
 import createWingModel from "../utils/createWingModel";
+import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
+import { usePlaneStore } from "../../stores/usePlane";
+import fuselages from "../../data/fuselages";
 
 const useVertical = () => {
   const chord = useVerticalStore((state) => state.chord);
@@ -12,6 +15,7 @@ const useVertical = () => {
   const chordTip = useVerticalStore((state) => state.chordTip);
   const shape = useVerticalStore((state) => state.shape);
   const set = useVerticalStore((state) => state.set);
+  const setGeometry = usePlaneGeometryStore((state) => state.set);
 
   const [vertical, setVertical] = useState<BufferGeometry>(
     new SphereGeometry()
@@ -28,6 +32,28 @@ const useVertical = () => {
   const [top, setTop] = useState([
     [0, 0, 0],
     [1, 1, 1],
+  ]);
+
+  const fuselage = usePlaneStore((state) => state.fuselage);
+  const configuration = usePlaneStore((state) => state.configuration);
+  const length = usePlaneStore((state) => state.length);
+  const wingX = usePlaneStore((state) => state.wingX);
+  const verticalToTail = usePlaneStore((state) => state.verticalToTail);
+  const setPlane = usePlaneStore((state) => state.set);
+
+  useEffect(() => {
+    setPlane({
+      verticalX: length - wingX - verticalToTail,
+      verticalY: fuselages[fuselage].verticalY * length,
+    });
+  }, [
+    configuration,
+    fuselage,
+    shape,
+    wingX,
+    // pathname,
+    length,
+    verticalToTail,
   ]);
 
   useEffect(() => {
@@ -50,19 +76,19 @@ const useVertical = () => {
     ]);
 
     const symmetric = getProfilePoints("0009");
-    setVertical(
-      createWingModel(
-        {
-          span,
-          chord,
-          chordTip,
-          angle,
-          shape,
-        },
-        symmetric,
-        false
-      )
+    const geom = createWingModel(
+      {
+        span,
+        chord,
+        chordTip,
+        angle,
+        shape,
+      },
+      symmetric,
+      false
     );
+    setVertical(geom);
+    setGeometry({ vertical: geom });
 
     const getArea = () => {
       if (shape === 0) return chord * span;
@@ -72,7 +98,7 @@ const useVertical = () => {
 
     set({ area: getArea() });
   }, [span, chord, chordTip, angle, shape]);
-  
+
   return { vertical, leading, trailing, top };
 };
 

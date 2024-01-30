@@ -39,10 +39,7 @@ const HorizontalUI = ({ opacity }: Props) => {
         gridPositionX={-1.35}
         opacity={opacity}
         name="Coefficient of Lift"
-        traces={[
-          { name: "K", points: k },
-          // { name: "Stabilizer", points: clHorizontal, style: "dotted" },
-        ]}
+        traces={[{ name: "K", points: k }]}
         axes={{
           x: {
             symbol: (
@@ -66,8 +63,6 @@ const HorizontalUI = ({ opacity }: Props) => {
               />
             ),
             name: "Coefficient of Lift (Cl)",
-            // min: -1.75,
-            // max: 1.75,
           },
         }}
         store={useKChartStore}
@@ -113,7 +108,7 @@ const HorizontalUI = ({ opacity }: Props) => {
         store={useGlideChartStore}
       >
         <animated.mesh rotation-z={spring.y}>
-          <Resize rotation={[0, Math.PI, 0]} scale={2}>
+          <Resize rotation={[0, Math.PI, 0]} scale={2.5}>
             <PlaneModel opacity={opacity} />
           </Resize>
         </animated.mesh>

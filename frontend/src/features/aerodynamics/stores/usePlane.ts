@@ -7,6 +7,8 @@ export interface PlaneState {
   length: number;
   wingX: number;
   verticalToTail: number;
+  verticalX: number;
+  verticalY: number;
   fuseLatch: boolean;
   measurements: boolean;
   kMax: number;
@@ -28,6 +30,8 @@ export const usePlaneStore = create<PlaneState>()(
       length: 9,
       wingX: 1.5,
       verticalToTail: 1.3,
+      verticalX: 1.3,
+      verticalY: 1.3,
       fuseLatch: false,
       measurements: true,
       kMax: 10,
