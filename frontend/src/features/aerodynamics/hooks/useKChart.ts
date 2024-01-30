@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
 import { usePlaneCoefficientsStore } from "../stores/usePlaneCoefficients";
 import { usePlaneStore } from "../stores/usePlane";
+import { useGlideChartStore } from "./useGlideChart";
 
 export const useKChartStore = create<SimpleMarkerStore>()((set) => ({
   x: 2,
@@ -23,6 +24,7 @@ const useKChart = () => {
   const legend = useKChartStore((state) => state.legend) as string;
   const locked = useKChartStore((state) => state.locked);
   const setCharts = useKChartStore((state) => state.set);
+  const setGlideChart = useGlideChartStore((state) => state.set);
 
   const k = usePlaneCoefficientsStore((state) => state.k);
 
@@ -37,7 +39,10 @@ const useKChart = () => {
 
   useEffect(() => {
     !hover && !locked && setCharts({ x: angleOpt, y: kMax, locked: true });
-    hover && setCharts({ locked: false });
+    if (hover) {
+      setCharts({ locked: false });
+      setGlideChart({ legend: "Current" });
+    }
   }, [k, hover, kMax]);
 };
 
