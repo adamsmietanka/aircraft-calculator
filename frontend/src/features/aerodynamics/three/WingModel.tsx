@@ -1,5 +1,6 @@
 import { SpringValue, animated } from "@react-spring/three";
 import useWingModel from "./hooks/useWingModel";
+import { DoubleSide } from "three";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -12,10 +13,11 @@ const WingModel = ({ opacity, shape }: Props) => {
   return (
     <mesh geometry={geom}>
       <animated.meshStandardMaterial
-        color={"white"}
-        metalness={0.5}
+        // color={"white"}
+        // metalness={0.5}
         transparent
         opacity={opacity}
+        side={DoubleSide}
       />
     </mesh>
   );

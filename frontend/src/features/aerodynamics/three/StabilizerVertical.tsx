@@ -32,7 +32,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
   const { vertical, leading, trailing, top } = useVertical();
 
   return (
-    <group>
+    <mesh>
       <mesh
         visible={meshVisible.includes(pathname)}
         rotation-x={-Math.PI / 2}
@@ -115,7 +115,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
           opacity={opacity}
         />
       </mesh>
-    </group>
+    </mesh>
   );
 };
 

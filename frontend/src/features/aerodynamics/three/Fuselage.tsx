@@ -10,7 +10,6 @@ import { useLocation } from "react-router-dom";
 import MeasurementsFuse from "./MeasurementsFuse";
 import StabilizerVertical from "./StabilizerVertical";
 import StabilizerHorizontal from "./StabilizerHorizontal";
-import fuselages from "../data/fuselages";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -21,7 +20,9 @@ const Fuselage = ({ opacity }: Props) => {
   const configuration = usePlaneStore((state) => state.configuration);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
-  const verticalToTail = usePlaneStore((state) => state.verticalToTail);
+  
+  const verticalX = usePlaneStore((state) => state.verticalX);
+  const verticalY = usePlaneStore((state) => state.verticalY);
 
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
@@ -39,10 +40,19 @@ const Fuselage = ({ opacity }: Props) => {
       wingPosition: -wingX,
       planePosition: 0,
       scale: 1.5,
-      tailPosition: length - wingX - verticalToTail,
-      verticalY: fuselages[fuselage].verticalY * length,
+      tailPosition: verticalX,
+      verticalY,
     }),
-    [configuration, fuselage, shape, wingX, pathname, length, verticalToTail]
+    [
+      configuration,
+      fuselage,
+      shape,
+      wingX,
+      pathname,
+      length,
+      verticalX,
+      verticalY,
+    ]
   );
 
   useEffect(() => {
@@ -78,21 +88,6 @@ const Fuselage = ({ opacity }: Props) => {
           <animated.mesh scale={1.5} position-x={planeSpring.planePosition}>
             <animated.mesh position-z={planeSpring.fuseZ.to((z) => -z)}>
               <FuseModel opacity={opacity} />
-              {/* <mesh
-                position-x={6}
-                position-y={0.69}
-                rotation-x={-Math.PI / 2}
-                geometry={vertical}
-              >
-                <animated.meshStandardMaterial
-                  color="white"
-                  metalness={0.5}
-                  transparent
-                  opacity={opacity}
-                  // wireframe
-                />
-                <Edges color={gridColor} />
-              </mesh> */}
             </animated.mesh>
             <animated.mesh position-z={planeSpring.fuseZ}>
               <FuseModel opacity={opacity} />
