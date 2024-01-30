@@ -5,9 +5,13 @@ import InputDrawing from "../../common/inputs/InputDrawing";
 import { useLocation } from "react-router-dom";
 
 const MeasurementsFuse = ({ opacity }: Props) => {
+  const configuration = usePlaneStore((state) => state.configuration);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
-  const measurements = usePlaneStore((state) => state.measurements);
+  const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
+  const setFuselageDistance = usePlaneStore(
+    (state) => state.setFuselageDistance
+  );
 
   const setLength = usePlaneStore((state) => state.setLength);
   const setWingX = usePlaneStore((state) => state.setWingX);
@@ -34,6 +38,20 @@ const MeasurementsFuse = ({ opacity }: Props) => {
       >
         <InputDrawing value={wingX} setter={setWingX} />
       </AnimatedInputTechnical>
+      <mesh position-x={-wingX} rotation-y={-Math.PI / 2}>
+        <AnimatedInputTechnical
+          visible={
+            pathname === "/aerodynamics/fuselage" &&
+            (configuration === 2 || configuration === 3)
+          }
+          distance={1.25}
+          value={fuselageDistance}
+          startX={-fuselageDistance}
+          opacity={opacity.to((o) => 0.75 * o)}
+        >
+          <InputDrawing value={fuselageDistance} setter={setFuselageDistance} />
+        </AnimatedInputTechnical>
+      </mesh>
     </>
   );
 };

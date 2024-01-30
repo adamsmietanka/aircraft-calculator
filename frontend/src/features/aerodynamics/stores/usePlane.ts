@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 export interface PlaneState {
   configuration: number;
   fuselage: number;
+  fuselageDistance: number;
   length: number;
   wingX: number;
   verticalToTail: number;
@@ -17,6 +18,7 @@ export interface PlaneState {
   angleOpt: number;
   setConfiguration: (value: number) => void;
   setFuselage: (value: number) => void;
+  setFuselageDistance: (value: number) => void;
   setLength: (value: number) => void;
   setWingX: (value: number) => void;
   setVerticalToTail: (value: number) => void;
@@ -29,6 +31,7 @@ export const usePlaneStore = create<PlaneState>()(
     (set) => ({
       configuration: 0,
       fuselage: 2303,
+      fuselageDistance: 6,
       length: 9,
       wingX: 1.5,
       verticalToTail: 1.3,
@@ -43,6 +46,7 @@ export const usePlaneStore = create<PlaneState>()(
       setConfiguration: (value) => set({ configuration: value }),
       setFuselage: (value) =>
         set((state) => ({ fuselage: value, fuseLatch: !state.fuseLatch })),
+      setFuselageDistance: (value) => set({ fuselageDistance: value }),
       setLength: (value) => set({ length: value }),
       setWingX: (value) => set({ wingX: value }),
       setVerticalToTail: (value) => set({ verticalToTail: value }),

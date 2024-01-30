@@ -15,6 +15,7 @@ import {
 } from "../../utils/getWingSpecs";
 import { getWingPointsAt } from "../../utils/getWingOutline";
 import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
+import { isMultifuse } from "../../utils/planeConfiguration";
 
 const xA = 0.25;
 
@@ -26,7 +27,6 @@ const getMaxTailY = (shape: number) => {
 const useHorizontal = () => {
   const [positionLeadTrail, setPositionLeadTrail] = useState([0, 0]);
 
-  const chordV = useVerticalStore((state) => state.chord);
   const chord = useHorizontalStore((state) => state.chord);
   const span = useHorizontalStore((state) => state.span);
   const angle = useHorizontalStore((state) => state.angle);
@@ -41,10 +41,13 @@ const useHorizontal = () => {
   const chordTipVertical = useVerticalStore((state) => state.chordTip);
   const angleVertical = useVerticalStore((state) => state.angle);
 
+  const configuration = usePlaneStore((state) => state.configuration);
+  const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
   const verticalToTail = usePlaneStore((state) => state.verticalToTail);
 
+  const wingSpan = useWingStore((state) => state.span);
   const MAC = useWingStore((state) => state.MAC);
   const MACposition = useWingStore((state) => state.MACposition)[0];
   const wingArea = useWingStore((state) => state.area);
@@ -107,7 +110,16 @@ const useHorizontal = () => {
     const kH = ((area * lH) / (wingArea * MAC)) * (0.85 + 0.13 * position);
 
     set({ area, kH, aspectRatio });
-  }, [span, chord, chordTip, angle, shape, chordV, position]);
+  }, [span, chord, chordTip, angle, shape, chordVertical, position]);
+
+  useEffect(() => {
+    if (isMultifuse(configuration)) {
+      set({ span: fuselageDistance * 1.5 });
+    } else {
+      set({ span: wingSpan / 3 });
+    }
+    console.log(21)
+  }, [configuration, fuselageDistance]);
 
   return { horizontal, leading, trailing, top, positionLeadTrail };
 };

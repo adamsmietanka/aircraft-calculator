@@ -19,6 +19,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
   const setChordTip = useHorizontalStore((state) => state.setChordTip);
 
   const shape = useHorizontalStore((state) => state.shape);
+  const verticalX = usePlaneStore((state) => state.verticalX);
   const length = usePlaneStore((state) => state.length);
 
   const { pathname } = useLocation();
@@ -29,9 +30,9 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
   const [spring] = useSpring(
     () => ({
       y,
-      x: positionLeadTrail[0],
+      x: positionLeadTrail[0] + verticalX,
     }),
-    [y, positionLeadTrail]
+    [y, positionLeadTrail, verticalX]
   );
 
   return (
@@ -74,7 +75,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
             value={span}
             setter={setSpan}
             min={chord}
-            max={length / 2}
+            max={length}
           />
         </AnimatedInputTechnical>
       </mesh>
