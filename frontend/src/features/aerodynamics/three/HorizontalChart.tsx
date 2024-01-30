@@ -57,7 +57,7 @@ const HorizontalChart = ({ opacity }: Props) => {
       /> */}
       <LineChart
         width={0.5}
-        gridPositionX={1}
+        gridPositionX={0.75}
         opacity={opacity}
         name="Coefficient of Drag"
         traces={[
@@ -93,7 +93,7 @@ const HorizontalChart = ({ opacity }: Props) => {
         store={useHorizontalChartStore}
       />
       <Legend
-        gridPositionX={1.6}
+        gridPositionX={1.4}
         items={[{ name: "Plane" }, { name: "Stabilizer", style: "dotted" }]}
         opacity={opacity}
         store={useHorizontalChartStore}

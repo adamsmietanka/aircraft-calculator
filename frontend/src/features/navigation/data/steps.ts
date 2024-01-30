@@ -65,6 +65,11 @@ const stepsList: Step[] = [
     feature: "aerodynamics",
     path: "results",
   },
+  {
+    name: "Glide",
+    feature: "aerodynamics",
+    path: "glide",
+  },
   // {
   //   name: "Shapes",
   //   feature: "aerodynamics",

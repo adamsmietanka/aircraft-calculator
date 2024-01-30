@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import MeasurementsFuse from "./MeasurementsFuse";
 import StabilizerVertical from "./StabilizerVertical";
 import StabilizerHorizontal from "./StabilizerHorizontal";
+import { useResultsChartStore } from "../hooks/useResultsChart";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -25,8 +26,13 @@ const Fuselage = ({ opacity }: Props) => {
   const verticalY = usePlaneStore((state) => state.verticalY);
   const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
 
+  const MAC = useWingStore((state) => state.MAC);
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
+
+  const x = useResultsChartStore((state) => state.x);
+  const locked = useResultsChartStore((state) => state.locked);
+  const hover = useResultsChartStore((state) => state.hover);
 
   usePlaneAerodynamics();
 
@@ -44,6 +50,8 @@ const Fuselage = ({ opacity }: Props) => {
       scale: 1.5,
       tailPosition: verticalX,
       verticalY,
+      planeRotation: 0,
+      planeAoA: 0,
     }),
     [
       configuration,
@@ -60,14 +68,32 @@ const Fuselage = ({ opacity }: Props) => {
 
   useEffect(() => {
     api.start({
-      planePosition: pathname === "/aerodynamics/fuselage" ? 0 : -7.5,
+      planePosition:
+        pathname === "/aerodynamics/fuselage" ||
+        pathname === "/aerodynamics/results"
+          ? MAC / 2
+          : -7.5,
       scale: pathname === "/aerodynamics/fuselage" ? 1.5 : 3,
+      planeRotation:
+        pathname === "/aerodynamics/results" ||
+        pathname === "/aerodynamics/glide"
+          ? Math.PI / 1.15
+          : 0,
       config: {
         duration: 1500,
         easing: easings.easeOutQuad,
       },
     });
-  });
+  }, [pathname]);
+
+  useEffect(() => {
+    api.start({
+      planeAoA:
+        (pathname === "/aerodynamics/results" && !!locked) || hover
+          ? (-x["Coefficient of Lift"] * Math.PI) / 180
+          : 0,
+    });
+  }, [x, pathname, locked, hover]);
 
   return (
     <mesh position-x={-4.5}>
@@ -88,7 +114,12 @@ const Fuselage = ({ opacity }: Props) => {
           azimuth={[-Math.PI / 2, Math.PI / 2]} // Horizontal limits
           config={{ mass: 1, tension: 170, friction: 26 }}
         >
-          <animated.mesh scale={1.5} position-x={planeSpring.planePosition}>
+          <animated.mesh
+            scale={1.5}
+            position-x={planeSpring.planePosition}
+            rotation-y={planeSpring.planeRotation}
+            rotation-z={planeSpring.planeAoA}
+          >
             <animated.mesh position-z={planeSpring.fuseZ.to((z) => -z)}>
               <FuseModel opacity={opacity} />
             </animated.mesh>
