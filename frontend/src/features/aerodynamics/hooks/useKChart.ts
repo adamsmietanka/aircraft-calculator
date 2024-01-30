@@ -35,7 +35,7 @@ const useKChart = () => {
     const aoa = xHover;
     const K = linearInterpolationArray(k, aoa);
     K > 0 && setCharts({ x: aoa, y: K });
-  }, [legend, xHover]);
+  }, [k, legend, xHover]);
 
   useEffect(() => {
     !hover && !locked && setCharts({ x: angleOpt, y: kMax, locked: true });
