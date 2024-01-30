@@ -21,7 +21,8 @@ const useAxisTicks = (
   traces: Trace[],
   axes: Record<string, Axis>,
   width: number = 1,
-  height = 0.85
+  height = 0.85,
+  equalAxis: boolean
 ) => {
   const dataMinX = Math.min(...traces.map(({ points }) => points[0][0]));
 
@@ -62,7 +63,7 @@ const useAxisTicks = (
   const localHeight = height * CANVAS_HEIGHT;
 
   let xTicks = getTicks(minX, xStep, localWidth);
-  let yTicks = getTicks(minY, yStep, localHeight);
+  let yTicks = getTicks(minY, equalAxis ? xStep/2 : yStep, localHeight);
 
   const X_TEXTS = 3;
   const Y_TEXTS = 0.5;
@@ -72,7 +73,7 @@ const useAxisTicks = (
 
   return {
     ticks: { x: xTicks, y: yTicks },
-    scale: [scaleX, scaleY, 1],
+    scale: [scaleX, equalAxis ? scaleX : scaleY, 1],
     min: { x: minX * scaleX, y: minY * scaleY },
     max: { x: maxX * scaleX, y: maxY * scaleY },
     data: {
@@ -83,7 +84,7 @@ const useAxisTicks = (
       x: (scaleX * (minX + maxX) - X_TEXTS) / 2,
       y: (scaleY * (minY + maxY) - Y_TEXTS) / 2,
     },
-    step: { x: xStep, y: yStep },
+    step: { x: xStep, y: equalAxis ? xStep : yStep },
   };
 };
 

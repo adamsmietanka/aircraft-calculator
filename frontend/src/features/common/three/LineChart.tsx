@@ -45,6 +45,7 @@ export type ChartProps = {
   height?: number;
   gridPositionX?: number;
   opacity?: SpringValue<number>;
+  equalAxis?: boolean;
 };
 
 const LineChart = ({
@@ -59,12 +60,14 @@ const LineChart = ({
   height = 1,
   gridPositionX = 0,
   opacity = new SpringValue(1),
+  equalAxis = false,
 }: ChartProps) => {
   const { ticks, scale, data, min, max, mid, step } = useAxes(
     traces,
     axes,
     width,
-    height
+    height,
+    equalAxis
   );
 
   const colors = ["primary", "green", "orange", "secondary"];

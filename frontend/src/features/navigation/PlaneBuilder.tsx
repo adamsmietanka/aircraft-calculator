@@ -83,7 +83,6 @@ const PlaneBuilder = () => {
             "/aerodynamics/fuselage",
             "/aerodynamics/vertical",
             "/aerodynamics/horizontal",
-            "/aerodynamics/results",
           ]}
           Element={Fuselage}
         />
