@@ -1,9 +1,8 @@
 import { animated, useSpring } from "@react-spring/web";
-import { ReactComponent as Arrow } from "../../assets/arrow.svg";
-import { ReactComponent as Fuse1 } from "../../assets/fuselages/2301.svg";
-import { ReactComponent as Fuse2 } from "../../assets/fuselages/2302.svg";
-import { ReactComponent as Fuse3 } from "../../assets/fuselages/2303.svg";
-import { ReactComponent as Fuse4 } from "../../assets/fuselages/2304.svg";
+import Fuse1 from "../../assets/fuselages/2301.svg?react";
+import Fuse2 from "../../assets/fuselages/2302.svg?react";
+import Fuse3 from "../../assets/fuselages/2303.svg?react";
+import Fuse4 from "../../assets/fuselages/2304.svg?react";
 import Formula from "../common/Formula";
 import fuselages from "./data/fuselages";
 import { usePlaneStore } from "./stores/usePlane";

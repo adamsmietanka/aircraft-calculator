@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import steps, { Step } from "./data/steps";
-import { ReactComponent as Info } from "../../assets/info.svg";
+import Info from "../../assets/info.svg?react";
 import { useNavigationStore } from "./useNavigation";
 
 const Tutorials = () => {

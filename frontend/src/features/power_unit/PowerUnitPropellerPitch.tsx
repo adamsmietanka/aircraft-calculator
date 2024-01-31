@@ -1,7 +1,7 @@
 import InfoTooltip from "../common/InfoTooltip";
 import { usePropellerStore } from "./stores/usePropeller";
 import { useOptimalFixedAngle } from "./hooks/useOptimalFixedAngle";
-import { ReactComponent as ProfileIcon } from "../../assets/clarkY.svg";
+import ProfileIcon from "../../assets/clarkY.svg?react";
 
 
 const PowerUnitPropellerPitch = () => {

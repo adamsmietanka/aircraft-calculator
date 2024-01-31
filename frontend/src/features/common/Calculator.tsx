@@ -1,4 +1,4 @@
-import { ReactComponent as CalculatorIcon } from "../../assets/calculator.svg";
+import CalculatorIcon from "../../assets/calculator.svg?react";
 
 interface Props {
   calculated: boolean;

@@ -17,7 +17,7 @@ import { useFrame } from "@react-three/fiber";
 import AnimatedHtml from "./AnimatedHtml";
 import useConfig from "../subtitles/hooks/useConfig";
 import { useAnimationStore } from "../subtitles/stores/useAnimation";
-import { ReactComponent as PadlockIcon } from "../../../assets/padlock.svg";
+import PadlockIcon from "../../../assets/padlock.svg?react";
 
 interface Props {
   name: string;
@@ -58,7 +58,12 @@ const HoverMarker = ({
 
   useFrame(() => {
     worldScale.setFromMatrixScale(meshRef.current.matrixWorld);
-    children && markerRef.current.position.set(hoverSpring.x.get(), hoverSpring.y.get(), 0);
+    children &&
+      markerRef.current.position.set(
+        hoverSpring.x.get(),
+        hoverSpring.y.get(),
+        0
+      );
   });
 
   const locked = store((state) => state.locked);
@@ -177,9 +182,7 @@ const HoverMarker = ({
           }`}
         />
       </AnimatedHtml>
-      <mesh ref={markerRef} >
-        {children}
-      </mesh>
+      <mesh ref={markerRef}>{children}</mesh>
     </mesh>
   );
 };

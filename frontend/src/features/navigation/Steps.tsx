@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useNavigationStore } from "./useNavigation";
 import steps, { Step } from "./data/steps";
 import { a, useSpring } from "@react-spring/web";
-import { ReactComponent as Arrow } from "../../assets/arrow.svg";
+import Arrow from "../../assets/arrow.svg?react";
 
 const Steps = () => {
   let { pathname } = useLocation();

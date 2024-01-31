@@ -1,4 +1,4 @@
-import { ReactComponent as Info } from "../../assets/info.svg";
+import Info from "../../assets/info.svg?react";
 
 interface Props {
   text: string;

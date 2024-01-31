@@ -1,7 +1,7 @@
-import { ReactComponent as Wood } from "../../assets/materials/log.svg";
-import { ReactComponent as Metal } from "../../assets/materials/metal.svg";
-import { ReactComponent as Fabric } from "../../assets/materials/fabric.svg";
-import { ReactComponent as Honeycomb } from "../../assets/materials/honeycomb.svg";
+import Wood from "../../assets/materials/log.svg?react";
+import Metal from "../../assets/materials/metal.svg?react";
+import Fabric from "../../assets/materials/fabric.svg?react";
+import Honeycomb from "../../assets/materials/honeycomb.svg?react";
 import { useWingStore } from "./stores/useWing";
 
 const WingMaterial = () => {

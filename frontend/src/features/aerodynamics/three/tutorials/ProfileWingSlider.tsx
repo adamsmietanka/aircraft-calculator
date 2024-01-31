@@ -1,4 +1,3 @@
-import { ReactComponent as Mass } from "../../../../assets/mass.svg";
 import { useShowStore } from "./stores/useInduced";
 
 interface Props {

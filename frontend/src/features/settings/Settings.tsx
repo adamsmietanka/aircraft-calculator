@@ -1,5 +1,5 @@
 import React from "react";
-import { ReactComponent as Cog } from "../../assets/cog.svg";
+import Cog from "../../assets/cog.svg?react";
 import { useGlobalUnitsStore } from "./stores/useGlobalUnits";
 import InputRadio from "../common/inputs/InputRadio";
 import { useThemeStore } from "./stores/useTheme";

@@ -1,4 +1,4 @@
-import { ReactComponent as PadlockIcon } from "../../assets/padlock.svg";
+import PadlockIcon from "../../assets/padlock.svg?react";
 
 interface Props {
   locked: boolean;

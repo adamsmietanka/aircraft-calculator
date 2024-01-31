@@ -3,7 +3,7 @@ import WeightCofiguration from "./WeightCofiguration";
 import { useWeightStore } from "../../data/stores/useWeightConfiguration";
 import WeightDistributionCharts from "./WeightDistributionCharts";
 import AddConfiguration from "./AddConfiguration";
-import { ReactComponent as Edit } from "../../assets/edit.svg";
+import Edit from "../../assets/edit.svg?react";
 
 import { CoG } from "../../utils/massCalculations";
 import AddComponent from "./AddComponent";

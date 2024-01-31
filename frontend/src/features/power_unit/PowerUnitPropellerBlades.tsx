@@ -1,6 +1,6 @@
-import { ReactComponent as Two } from "../../assets/blades/two.svg";
-import { ReactComponent as Three } from "../../assets/blades/three.svg";
-import { ReactComponent as Four } from "../../assets/blades/four.svg";
+import Two from "../../assets/blades/two.svg?react";
+import Three from "../../assets/blades/three.svg?react";
+import Four from "../../assets/blades/four.svg?react";
 import { usePropellerStore } from "./stores/usePropeller";
 import { useDidMount } from "./hooks/useDidMount";
 

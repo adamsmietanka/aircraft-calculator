@@ -1,4 +1,4 @@
-import { ReactComponent as Mass } from "../../../../assets/mass.svg";
+import Mass  from "../../../../assets/mass.svg?react";
 
 interface Props {
   value: number;

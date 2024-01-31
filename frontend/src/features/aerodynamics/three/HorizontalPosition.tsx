@@ -1,6 +1,6 @@
 import { useHorizontalStore } from "../stores/useHorizontal";
-import { ReactComponent as Fuse } from "../../../assets/tails/tailFuse.svg";
-import { ReactComponent as T } from "../../../assets/tails/tailT.svg";
+import Fuse from "../../../assets/tails/tailFuse.svg?react";
+import T from "../../../assets/tails/tailT.svg?react";
 
 const HorizontalPosition = () => {
   const position = useHorizontalStore((state) => state.position);
