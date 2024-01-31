@@ -51,9 +51,10 @@ const linkList = [
   },
 ];
 
-const links = import.meta.env.PROD
-  ? linkList.filter((l) => whitelist.includes(l.to))
-  : linkList;
+const links =
+  window.location.hostname === "bookofflight.com"
+    ? linkList.filter((l) => whitelist.includes(l.to))
+    : linkList;
 
 const Navigation = () => {
   const { pathname } = useLocation();
