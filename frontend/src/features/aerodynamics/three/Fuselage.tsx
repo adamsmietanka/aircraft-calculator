@@ -46,7 +46,7 @@ const Fuselage = ({ opacity }: Props) => {
       fuseZ:
         configuration === 2 || configuration === 3 ? fuselageDistance / 2 : 0,
       wingPosition: -wingX,
-      planePosition: 0,
+      planePosition: MAC / 2,
       scale: 1.5,
       tailPosition: verticalX,
       verticalY,

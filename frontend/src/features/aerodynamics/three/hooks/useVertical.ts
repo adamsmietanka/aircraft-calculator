@@ -7,6 +7,7 @@ import createWingModel from "../utils/createWingModel";
 import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
 import { usePlaneStore } from "../../stores/usePlane";
 import fuselages from "../../data/fuselages";
+import { getArea, getAspectRatio } from "../../utils/getWingSpecs";
 
 const useVertical = () => {
   const chord = useVerticalStore((state) => state.chord);
@@ -49,14 +50,15 @@ const useVertical = () => {
   }, [configuration, fuselage, shape, wingX, length, verticalToTail]);
 
   useEffect(() => {
+    const config = {
+      span,
+      chord,
+      chordTip,
+      angle,
+      shape,
+    };
     const { leadingPoints, trailingPoints } = getLeadingTrailing(
-      {
-        span,
-        chord,
-        chordTip,
-        angle,
-        shape,
-      },
+      config,
       true,
       false
     );
@@ -68,27 +70,11 @@ const useVertical = () => {
     ]);
 
     const symmetric = getProfilePoints("0009");
-    const geom = createWingModel(
-      {
-        span,
-        chord,
-        chordTip,
-        angle,
-        shape,
-      },
-      symmetric,
-      false
-    );
+    const geom = createWingModel(config, symmetric, false);
     setVertical(geom);
     setGeometry({ vertical: geom });
 
-    const getArea = () => {
-      if (shape === 0) return chord * span;
-      if (shape === 1) return ((chord + chordTip) * span) / 2;
-      return (Math.PI * chord * span) / 4;
-    };
-
-    set({ area: getArea() });
+    set({ area: getArea(config) / 2, aspectRatio: getAspectRatio(config) });
   }, [span, chord, chordTip, angle, shape]);
 
   return { vertical, leading, trailing, top };

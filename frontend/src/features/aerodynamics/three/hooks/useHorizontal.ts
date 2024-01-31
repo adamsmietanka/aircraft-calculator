@@ -109,7 +109,7 @@ const useHorizontal = () => {
     const lH = stabilizerXAero - MACposition - MAC * xA;
     const kH = ((area * lH) / (wingArea * MAC)) * (0.85 + 0.13 * position);
 
-    set({ area, kH, aspectRatio });
+    set({ area, kH, aspectRatio, lever: lH });
   }, [span, chord, chordTip, angle, shape, chordVertical, position]);
 
   useEffect(() => {
@@ -118,7 +118,6 @@ const useHorizontal = () => {
     } else {
       set({ span: wingSpan / 3 });
     }
-    console.log(21)
   }, [configuration, fuselageDistance]);
 
   return { horizontal, leading, trailing, top, positionLeadTrail };

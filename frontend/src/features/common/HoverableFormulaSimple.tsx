@@ -13,10 +13,10 @@ const HoverableFormulaSimple = ({
   name,
   tex,
   texHover,
-  center = true,
+  center = false,
 }: Props) => {
   const [hover, setHover] = useState(false);
-  
+
   useEffect(() => {
     if (typeof window?.MathJax !== "undefined") {
       window.MathJax.typesetClear();
@@ -26,7 +26,8 @@ const HoverableFormulaSimple = ({
 
   return (
     <div
-      className={`tooltip flex justify-center ${center || "items-left"} ` + className}
+      className={`tooltip flex ${
+        center && "items-center"} ` + className}
       data-tip={name}
       onPointerEnter={() => setHover(true)}
       onPointerLeave={() => setHover(false)}
