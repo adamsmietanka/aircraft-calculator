@@ -97,7 +97,8 @@ const useWingModel = (customShape?: number) => {
   };
 
   useEffect(() => {
-    (state.previousPath === "/aerodynamics/wing" || pathname === "/") &&
+    ((state?.previousPath && state.previousPath === "/aerodynamics/wing") ||
+      pathname === "/") &&
       createModel();
   }, [profilePoints, pathname]);
 
