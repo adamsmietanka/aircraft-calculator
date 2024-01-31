@@ -108,10 +108,19 @@ const usePlaneAerodynamics = () => {
     const k = cd.map(([y, x, z]) => [x / y, x, z]);
     const kAlpha = getAlphaFromCl(monotonic, k);
 
+    const lowestCd = cd.reduce((previous, current) =>
+      current[0] < previous[0] ? current : previous
+    );
+
     const highestK = kAlpha.reduce((previous, current) =>
       current[1] > previous[1] ? current : previous
     );
-    setPlane({ kMax: highestK[1], angleOpt: highestK[0] });
+    setPlane({
+      kMax: highestK[1],
+      angleOpt: highestK[0],
+      cDmin: lowestCd[0],
+      clOfCdMin: lowestCd[1],
+    });
 
     set({
       cl,

@@ -6,16 +6,46 @@ import useResultsCharts, {
   useResultsChartStore,
 } from "../hooks/useResultsChart";
 import Legend from "../../common/three/Legend";
+import AnimatedHtml from "../../common/three/AnimatedHtml";
+import { usePlaneStore } from "../stores/usePlane";
+import HoverableFormula from "../../common/HoverableFormula";
 
 const ResultsUI = ({ opacity }: Props) => {
   const cl = usePlaneCoefficientsStore((state) => state.cl);
   const k = usePlaneCoefficientsStore((state) => state.k);
   const cd = usePlaneCoefficientsStore((state) => state.cd);
 
+  const kMax = usePlaneStore((state) => state.kMax);
+  const angleOpt = usePlaneStore((state) => state.angleOpt);
+  const cDmin = usePlaneStore((state) => state.cDmin);
+  const clOfCdMin = usePlaneStore((state) => state.clOfCdMin);
+
+  const setChart = useResultsChartStore((state) => state.set);
+
   useResultsCharts();
 
   return (
     <mesh rotation={[(-20 * Math.PI) / 180, (0 * Math.PI) / 180, 0, "YXZ"]}>
+      <AnimatedHtml position-y={-5} position-x={-4}>
+        <div className="text-2xl space-y-4">
+          <HoverableFormula
+            name="Glide Ratio"
+            tex={`\\frac{L}{D}_{max}=${kMax.toFixed(2)}`}
+            texHover={`\\frac{L}{D}_{max}=${kMax.toFixed(3)}`}
+            hover={false}
+            onEnter={() => setChart({ hover: true, xHover: angleOpt })}
+            onLeave={() => setChart({ hover: false, xHover: 0 })}
+          />
+          <HoverableFormula
+            name="Minimum Drag Coefficient"
+            tex={`C_{D_{min}}=${cDmin.toFixed(4)}`}
+            texHover={`C_{D_{min}}=${cDmin.toFixed(4)}`}
+            hover={false}
+            onEnter={() => setChart({ hover: true, yHover: clOfCdMin })}
+            onLeave={() => setChart({ hover: false, yHover: 0 })}
+          />
+        </div>
+      </AnimatedHtml>
       <LineChart
         width={0.4}
         gridPositionX={0.15}
@@ -81,9 +111,7 @@ const ResultsUI = ({ opacity }: Props) => {
         gridPositionX={1.3}
         opacity={opacity}
         name="Coefficient of Drag"
-        traces={[
-          { name: "Plane", points: cd },
-        ]}
+        traces={[{ name: "Plane", points: cd }]}
         axes={{
           x: {
             symbol: (

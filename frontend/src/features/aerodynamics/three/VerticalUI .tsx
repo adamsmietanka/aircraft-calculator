@@ -11,6 +11,7 @@ import { useGlobalUnitsStore } from "../../settings/stores/useGlobalUnits";
 const VerticalUI = ({ opacity }: Props) => {
   const shape = useVerticalStore((state) => state.shape);
   const setShape = useVerticalStore((state) => state.setShape);
+  
   const area = useVerticalStore((state) => state.area);
   const aspectRatio = useVerticalStore((state) => state.aspectRatio);
 
