@@ -12,7 +12,7 @@ const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
 const useWingModel = (customShape?: number) => {
   const wing = useWingStore();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
 
   const profilePoints = useProfileStore((state) => state.profile);
   const { modelPoints } = useWingOutline();
@@ -97,9 +97,10 @@ const useWingModel = (customShape?: number) => {
   };
 
   useEffect(() => {
-    (pathname === "/aerodynamics/fuselage" || pathname === "/") &&
+    (state.previousPath === "/aerodynamics/wing" || pathname === "/") &&
       createModel();
   }, [profilePoints, pathname]);
+
   useEffect(() => {
     createModel();
   }, []);

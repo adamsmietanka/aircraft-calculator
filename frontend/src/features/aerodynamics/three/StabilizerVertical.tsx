@@ -10,7 +10,7 @@ import { getXTip } from "./hooks/useWingSpring";
 import { animated } from "@react-spring/three";
 import { isMultifuse } from "../utils/planeConfiguration";
 
-const meshVisible = ["/aerodynamics/horizontal", "/aerodynamics/results"];
+const meshVisible = ["/aerodynamics/horizontal", "/aerodynamics/results", "/aerodynamics/glide"];
 
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);

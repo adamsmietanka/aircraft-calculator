@@ -60,7 +60,7 @@ const GlideUI = ({ opacity }: Props) => {
               <HoverableFormulaSimple
                 className="text-2xl"
                 name="Lift To Drag Ratio"
-                tex="\frac{C_L}{C_D}"
+                tex="\frac{L}{D}"
               />
             ),
             name: "Coefficient of Lift (Cl)",
@@ -109,7 +109,7 @@ const GlideUI = ({ opacity }: Props) => {
         store={useGlideChartStore}
       >
         <animated.mesh rotation-z={spring.y}>
-          <Resize rotation={[Math.PI/16, Math.PI, 0]} scale={3}>
+          <Resize rotation={[Math.PI/64, Math.PI, 0]} scale={3}>
             <PlaneModel opacity={opacity} />
           </Resize>
         </animated.mesh>

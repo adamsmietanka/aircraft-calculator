@@ -16,6 +16,7 @@ export interface StabilizerState {
   MACposition: number[];
   stallReynolds: number;
   kH: number;
+  lever: number;
   position: number;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
@@ -44,6 +45,7 @@ export const useHorizontalStore = create<StabilizerState>()(
       MACposition: [0, 0],
       stallReynolds: 0,
       kH: 0.5,
+      lever: 0.5,
       position: 0,
       setChord: (value) => set({ chord: value }),
       setChordTip: (value) => set({ chordTip: value }),

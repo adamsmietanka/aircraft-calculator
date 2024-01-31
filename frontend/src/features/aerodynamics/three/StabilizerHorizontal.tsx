@@ -45,7 +45,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
       rotation-x={-Math.PI / 2}
     >
       <mesh
-        visible={pathname === "/aerodynamics/results"}
+        visible={pathname === "/aerodynamics/results" || pathname === "/aerodynamics/glide"}
         rotation-x={-Math.PI / 2}
         geometry={horizontal}
       >

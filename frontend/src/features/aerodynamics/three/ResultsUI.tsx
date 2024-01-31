@@ -57,7 +57,7 @@ const ResultsUI = ({ opacity }: Props) => {
           {
             name: (
               <HoverableFormulaSimple
-                className="text-lg -ml-8"
+                className="text-lg"
                 name="Coefficient of Lift"
                 tex="C_L"
               />
@@ -66,7 +66,7 @@ const ResultsUI = ({ opacity }: Props) => {
           {
             name: (
               <HoverableFormulaSimple
-                className="text-xl -ml-8"
+                className="text-xl"
                 name="Lift To Drag Ratio"
                 tex="\frac{L}{D} / 10"
               />
