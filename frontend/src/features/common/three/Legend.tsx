@@ -8,10 +8,11 @@ import {
   SynchronizedXMarkersStore,
 } from "./Hover";
 import AnimatedHtml from "./AnimatedHtml";
+import { ReactNode } from "react";
 
 interface Props {
   gridPositionX: number;
-  items: Array<Record<string, string>>;
+  items: Array<{ name: string | ReactNode; style?: string; color?: string }>;
   opacity: SpringValue<number>;
   store?: UseBoundStore<
     StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
@@ -40,7 +41,13 @@ const Legend = ({ gridPositionX, items, opacity, store }: Props) => {
               className={`${store && "cursor-pointer"} ${
                 i.name === store?.getState().legend && "font-bold"
               }`}
-              onClick={() => store && store.setState({ legend: i.name })}
+              onClick={() =>
+                store &&
+                store.setState({
+                  legend:
+                    typeof i.name === "string" ? i.name : i.name?.toString(),
+                })
+              }
             >
               {i.name}
             </div>
