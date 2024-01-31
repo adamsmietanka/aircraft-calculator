@@ -17,8 +17,8 @@ const ResultsUI = ({ opacity }: Props) => {
   return (
     <mesh rotation={[(-20 * Math.PI) / 180, (0 * Math.PI) / 180, 0, "YXZ"]}>
       <LineChart
-        width={0.5}
-        gridPositionX={0.35}
+        width={0.4}
+        gridPositionX={0.15}
         opacity={opacity}
         name="Coefficient of Lift"
         traces={[
@@ -52,7 +52,7 @@ const ResultsUI = ({ opacity }: Props) => {
         store={useResultsChartStore}
       />
       <Legend
-        gridPositionX={0.9}
+        gridPositionX={0.62}
         items={[
           {
             name: (
@@ -78,7 +78,7 @@ const ResultsUI = ({ opacity }: Props) => {
       />
       <LineChart
         width={0.5}
-        gridPositionX={1.55}
+        gridPositionX={1.3}
         opacity={opacity}
         name="Coefficient of Drag"
         traces={[

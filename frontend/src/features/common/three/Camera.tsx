@@ -30,7 +30,7 @@ const getCenter = (pathname: string) => {
     "/aerodynamics/inducedDrag": [-5, 0, 0],
     "/aerodynamics/fuselage": [0, 0, 0],
     "/aerodynamics/horizontal": [-3, 0, 0],
-    "/aerodynamics/results": [2, 0, 0],
+    "/aerodynamics/results": [0, 0, 0],
   };
   return center[pathname] || [0, 0, 0];
 };

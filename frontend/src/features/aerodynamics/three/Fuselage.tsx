@@ -11,6 +11,7 @@ import MeasurementsFuse from "./MeasurementsFuse";
 import StabilizerVertical from "./StabilizerVertical";
 import StabilizerHorizontal from "./StabilizerHorizontal";
 import { useResultsChartStore } from "../hooks/useResultsChart";
+import FuselageVectors from "./FuselageVectors";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -27,6 +28,7 @@ const Fuselage = ({ opacity }: Props) => {
   const fuselageDistance = usePlaneStore((state) => state.fuselageDistance);
 
   const MAC = useWingStore((state) => state.MAC);
+  const MACposition = useWingStore((state) => state.MACposition);
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
 
@@ -46,7 +48,7 @@ const Fuselage = ({ opacity }: Props) => {
       fuseZ:
         configuration === 2 || configuration === 3 ? fuselageDistance / 2 : 0,
       wingPosition: -wingX,
-      planePosition: MAC / 2,
+      planePosition: 0,
       scale: 1.5,
       tailPosition: verticalX,
       verticalY,
@@ -71,13 +73,13 @@ const Fuselage = ({ opacity }: Props) => {
       planePosition:
         pathname === "/aerodynamics/fuselage" ||
         pathname === "/aerodynamics/results"
-          ? MAC / 2
+          ? 0
           : -7.5,
       scale: pathname === "/aerodynamics/fuselage" ? 1.5 : 3,
       planeRotation:
         pathname === "/aerodynamics/results" ||
         pathname === "/aerodynamics/glide"
-          ? Math.PI / 1.15
+          ? Math.PI / 1.08
           : 0,
       config: {
         duration: 1500,
@@ -120,6 +122,11 @@ const Fuselage = ({ opacity }: Props) => {
             rotation-y={planeSpring.planeRotation}
             rotation-z={planeSpring.planeAoA}
           >
+            <mesh position-x={MAC / 4 + MACposition[0]}>
+              <animated.mesh rotation-z={planeSpring.planeAoA.to((a) => -a)}>
+                <FuselageVectors opacity={opacity} />
+              </animated.mesh>
+            </mesh>
             <animated.mesh position-z={planeSpring.fuseZ.to((z) => -z)}>
               <FuseModel opacity={opacity} />
             </animated.mesh>
