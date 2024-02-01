@@ -11,7 +11,6 @@ import useLandingPage from "./hooks/useLandingPage";
 import { useMemo } from "react";
 import { MeshStandardMaterial } from "three";
 import Contact from "./Contact";
-import { useCSSColors } from "../common/three/config";
 
 const SPAR_DIAMETER = 0.03;
 
@@ -22,7 +21,6 @@ const Home = () => {
   const material = useMemo(() => {
     return new MeshStandardMaterial({ metalness: 0.5 });
   }, []);
-  const { gridColor } = useCSSColors();
 
   return (
     <mesh receiveShadow>
@@ -35,7 +33,6 @@ const Home = () => {
           bounds={[20, 6, 1]}
           volume={30}
           segments={10} // Number of particles
-          color="white"
         />
       </Clouds>
 
@@ -56,7 +53,7 @@ const Home = () => {
             bevelThickness={0.1}
           >
             {"Book \n   of\nFlight"}
-            <meshPhongMaterial color={gridColor}/>
+            <meshPhongMaterial />
           </Text3D>
         </Center>
       </Float>
