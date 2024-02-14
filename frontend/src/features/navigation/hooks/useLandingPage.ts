@@ -12,9 +12,11 @@ const useLandingPage = () => {
 
   const [geom1, setGeom1] = useState<BufferGeometry>(null!);
   const [geom2, setGeom2] = useState<BufferGeometry>(null!);
-  const [geom3, setGeom3] = useState<BufferGeometry>(null!);
+  const [vertical, setVertical] = useState<BufferGeometry>(null!);
   const [elliptic, setElliptic] = useState<BufferGeometry>(null!);
   const [tail, setTail] = useState<BufferGeometry>(null!);
+  const [tailSquare, setTailSquare] = useState<BufferGeometry>(null!);
+
   const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
 
   const profilePoints = useProfileStore((state) => state.profile);
@@ -47,12 +49,12 @@ const useLandingPage = () => {
         otherProfilePoints
       )
     );
-    setGeom3(
+    setVertical(
       createWingModel(
         {
-          span: 4,
-          chord: 1.25,
-          chordTip: 0.65,
+          span: 3,
+          chord: 1.5,
+          chordTip: 0.9,
           angle: 20,
           shape: 1,
         },
@@ -85,11 +87,23 @@ const useLandingPage = () => {
         symmetric
       )
     );
+    setTailSquare(
+      createWingModel(
+        {
+          span: 3.5,
+          chord: 0.7,
+          chordTip: 0.65,
+          angle: 5,
+          shape: 1,
+        },
+        symmetric
+      )
+    );
     setFuse1(nodes[2303]?.geometry);
     setFuse2(nodes[2302]?.geometry);
   }, []);
 
-  return { geom1, geom2, geom3, elliptic, tail, fuse1, fuse2 };
+  return { geom1, geom2, vertical, elliptic, tail, tailSquare, fuse1, fuse2 };
 };
 
 export default useLandingPage;

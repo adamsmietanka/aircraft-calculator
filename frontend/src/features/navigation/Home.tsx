@@ -15,7 +15,7 @@ import Contact from "./Contact";
 const SPAR_DIAMETER = 0.03;
 
 const Home = () => {
-  const { geom1, geom2, geom3, elliptic, tail, fuse1, fuse2 } =
+  const { geom1, geom2, vertical, elliptic, tail, tailSquare, fuse1, fuse2 } =
     useLandingPage();
 
   const material = useMemo(() => {
@@ -38,8 +38,8 @@ const Home = () => {
 
       <Float
         speed={1} // Animation speed, defaults to 1
-        rotationIntensity={0.1} // XYZ rotation intensity, defaults to 1
-        floatIntensity={1} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
+        rotationIntensity={0.05} // XYZ rotation intensity, defaults to 1
+        floatIntensity={0.5} // Up/down float intensity, works like a multiplier with floatingRange,defaults to 1
       >
         <Center position={[0.2, 0.05, 60]}>
           <Text3D
@@ -60,11 +60,11 @@ const Home = () => {
       <Float
         position={[-5, 0, 0]}
         rotation={[0, Math.PI / 8, Math.PI / 16]}
-        rotationIntensity={1}
-        floatIntensity={10}
-        speed={1.75}
+        rotationIntensity={0.25}
+        floatIntensity={5}
+        speed={1.5}
       >
-        <mesh position={[0, 0, 50]} receiveShadow>
+        <mesh position={[-6, 1.5, 50]} receiveShadow scale={1.25}>
           <Instances limit={4} position-y={1.25 / 2} position-x={0.1}>
             <cylinderGeometry args={[SPAR_DIAMETER, SPAR_DIAMETER, 1.25, 32]} />
             <meshStandardMaterial color={"white"} metalness={0.5} />
@@ -102,13 +102,18 @@ const Home = () => {
         </mesh>
       </Float>
       <Float
-        position={[1, 1.1, -0.5]}
-        rotation={[0, 0, Math.PI / 32]}
-        rotationIntensity={2}
-        floatIntensity={2}
-        speed={1.25}
+        position={[1.5, 3, -0.5]}
+        rotation={[0, 0, Math.PI / 16]}
+        rotationIntensity={0.35}
+        floatIntensity={5}
+        speed={1.5}
       >
-        <mesh position={[-22, 0, 35]} receiveShadow scale-x={-1}>
+        <mesh
+          position={[-12, 0, 38]}
+          receiveShadow
+          scale={[-1.45, 1.45, 1.45]}
+          rotation={[-Math.PI / 16, 0, 0]}
+        >
           <mesh geometry={geom1} material={material} />
 
           <mesh
@@ -119,17 +124,16 @@ const Home = () => {
             material={material}
           />
           <mesh
-            position-x={7.75}
+            position-x={7.5}
             position-y={0.65}
             rotation-x={-Math.PI / 2}
-            geometry={geom3}
+            geometry={vertical}
             material={material}
           />
           <mesh
-            position-x={8.5}
-            position-y={2.65}
-            scale-x={0.5}
-            geometry={tail}
+            position-x={8.1}
+            position-y={1.95}
+            geometry={tailSquare}
             material={material}
           />
         </mesh>
