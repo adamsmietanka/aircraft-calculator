@@ -56,10 +56,7 @@ const useProfileVisualizer = () => {
   };
 
   const [profileSpring, api] = useSpring(() => ({
-    angle:
-      keepAngle || showVisuals
-        ? (-x["Coefficient of Lift"] * Math.PI) / 180
-        : 0,
+    angle: 0,
     scale: getScale(),
     gridX: getPosition(),
     vectorsPosition: centerVectors ? 0.25 : 0,
@@ -98,7 +95,16 @@ const useProfileVisualizer = () => {
       vectorY: vector3rdNewton ? -0.03 : 0,
       config: customConfig,
     });
-  }, [x, scale, chord, showVisuals, pathname, centerVectors, vector3rdNewton]);
+  }, [
+    x,
+    scale,
+    chord,
+    showVisuals,
+    pathname,
+    centerVectors,
+    vector3rdNewton,
+    customConfig,
+  ]);
 
   return { profileSpring, showVisuals };
 };

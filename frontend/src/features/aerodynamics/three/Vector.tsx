@@ -44,7 +44,7 @@ const Vector = ({
       visible: show,
       config: customConfig,
     }),
-    [value, otherValue]
+    [value, otherValue, customConfig]
   );
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import { useBernoulliStore } from "./stores/useBernoulli";
 import { useNewtonStore } from "./stores/useNewton";
 import { useMisconceptionStore } from "./stores/useMisconception";
 import { useCameraStore } from "../../../common/three/stores/useCamera";
+import { useAnimationStore } from "../../../common/subtitles/stores/useAnimation";
 
 const Introduction = ({ opacity, visible }: ElementProps) => {
   const setProfile = useWingStore((state) => state.setProfile);
@@ -24,6 +25,8 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   const setChart = useProfileChartsStore((state) => state.set);
   const setCamera = useCameraStore((state) => state.set);
 
+  const setAnimation = useAnimationStore((state) => state.set);
+
   const navigate = useNavigate();
 
   const { sub, pause, show, hide } = useSubs();
@@ -33,14 +36,6 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       await pause(600);
       setProfile(p);
     }
-  };
-
-  const setAngles = async (angles: number[], delay = 100) => {
-    for (const a of angles) {
-      setChart({ xHover: a });
-      await pause(delay);
-    }
-    await pause(250);
   };
 
   const setup = () => {
@@ -65,15 +60,10 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       setChart({ hover: true, locked: "Coefficient of Lift", xHover: 0 })
     );
     await sub("There's a force acting on it");
+    setAnimation({ slowdown: true });
     await sub("When it's parallel to the airflow that force is minimal");
-    await sub(
-      "When angled it quickly grows",
-      async () =>
-        await setAngles(
-          Array.from(Array(16).keys()).map((i) => (i / 15) * (i / 15) * 5)
-        ),
-      50
-    );
+    await sub("When angled it quickly grows", () => setChart({ xHover: 5 }));
+    setAnimation({ slowdown: false });
     await sub("What is the source of this force?");
 
     await sub("Let's stop the flow for a moment", async () => {
@@ -146,16 +136,14 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       set({ axisCenter: false });
       setCamera({ spherical: [10, 90, 0] });
     });
-
-    await sub(
-      "However this will create a torque and spin our plate",
-      async () => {
-        await pause(500);
-        await setAngles(Array.from(Array(16).keys()).map((i) => (-i + 15) / 3));
-        setChart({ xHover: 5 });
-      },
-      50
-    );
+    
+    setAnimation({ slowdown: true });
+    await pause(100);
+    setChart({ xHover: 0 });
+    await sub("However this will create a torque and spin our plate");
+    setAnimation({ slowdown: false });
+    await pause(100);
+    setChart({ xHover: 5 });
 
     await sub("so we actually need a moment to counteract it", () =>
       set({ moment: true, centerVectors: false })
@@ -260,7 +248,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       async () => {
         setMisconception({ show: false });
         set({ flattenOutline: false });
-        setProfile("06");
+        setProfile("04");
         await pause(1500);
         set({ flattenOutline: true });
       }
@@ -279,7 +267,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     );
     await sub(
       <>
-        it's a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
+        This is a&nbsp;<p className="text-primary">NACA 2412</p>&nbsp;profile
       </>
     );
     await sub("It belongs to the NACA 4-digit series family");

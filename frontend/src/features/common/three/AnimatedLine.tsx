@@ -52,10 +52,10 @@ const AnimatedLine = ({
       offset: styles[style]?.offset || 0,
       config: customConfig,
     }),
-    [points, opacity, width, worldScale]
+    [points, opacity, width, worldScale, customConfig]
   );
 
-  useFrame((state,delta) => {
+  useFrame((state, delta) => {
     worldScale.setFromMatrixScale(lineRef.current.matrixWorld);
     lineRef.current.geometry.setPositions(lineSpring.points.get());
     computeLineDistancesScaled(lineRef.current.geometry, worldScale);

@@ -5,6 +5,7 @@ import { SpringValue, useSpring } from "@react-spring/three";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import Formula from "../../common/Formula";
 import { useWingStore } from "../stores/useWing";
+import useConfig from "../../common/subtitles/hooks/useConfig";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -28,11 +29,14 @@ const ProfileVectors = ({ opacity, show }: Props) => {
   const lift = cl * Math.pow(reynolds / 6, 2);
   const drag = cd * Math.pow(reynolds / 6, 2);
 
+  const { customConfig } = useConfig();
+
   const [vectorsSpring] = useSpring(
     () => ({
       rotationWeight: Math.PI,
       rotationLift: splitVectors ? 0 : -Math.atan2(cd, cl),
       rotationDrag: splitVectors ? -Math.PI / 2 : -Math.atan2(cd, cl),
+      config: customConfig,
     }),
     [splitVectors, x, y]
   );
