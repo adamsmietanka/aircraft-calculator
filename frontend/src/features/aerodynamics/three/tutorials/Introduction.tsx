@@ -44,7 +44,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   };
 
   const setup = () => {
-    setProfile("06");
+    setProfile("04");
     setReynolds(6);
     set({
       showChord: true,

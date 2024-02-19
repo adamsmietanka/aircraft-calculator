@@ -53,7 +53,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
       // default positions
       api.start({
         vertX: 0,
-        vertY: -0.03,
+        vertY: -0.02,
         downY: -down * VECTOR_SIZE,
         upY: up * VECTOR_SIZE,
         horX: -0.5,
