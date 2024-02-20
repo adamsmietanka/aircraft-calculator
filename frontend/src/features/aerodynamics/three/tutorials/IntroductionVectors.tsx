@@ -20,7 +20,10 @@ const VECTOR_SPREAD = 0.01;
 
 const IntroductionVectors = ({ opacity }: Props) => {
   const pressuresShow = useHoverProfileStore((state) => state.pressuresShow);
+  const pressureUpper = useHoverProfileStore((state) => state.pressureUpper);
+  const pressureLower = useHoverProfileStore((state) => state.pressureLower);
   const pressuresEqual = useHoverProfileStore((state) => state.pressuresEqual);
+
   const showSum = useHoverProfileStore((state) => state.vectorsNet);
   const moment = useHoverProfileStore((state) => state.moment);
 
@@ -105,7 +108,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               <animated.mesh position-y={spring.downY}>
                 <VectorNew
                   y={down}
-                  show={pressuresShow}
+                  show={pressuresShow || pressureLower}
                   opacity={opacity}
                   color="primary"
                 />
@@ -120,7 +123,7 @@ const IntroductionVectors = ({ opacity }: Props) => {
               <animated.mesh position-y={spring.upY}>
                 <VectorNew
                   y={-up}
-                  show={pressuresShow}
+                  show={pressuresShow || pressureUpper}
                   opacity={opacity}
                   color="secondary"
                 />

@@ -11,6 +11,7 @@ import { useBernoulliStore } from "./stores/useBernoulli";
 import { useNewtonStore } from "./stores/useNewton";
 import { useMisconceptionStore } from "./stores/useMisconception";
 import { useCameraStore } from "../../../common/three/stores/useCamera";
+import IntroductionParticles from "./IntroductionParticles";
 import { useAnimationStore } from "../../../common/subtitles/stores/useAnimation";
 
 const Introduction = ({ opacity, visible }: ElementProps) => {
@@ -73,14 +74,22 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
     await sub(
       "Air molecules are constantly colliding and pushing on the plate",
-      async () => set({ pressuresShow: true })
+      async () => set({ airVectors: true })
     );
 
-    await sub("This is pressure");
+    await sub("When we sum up all this forces", async () => {
+      set({ airVectorsCenter: true });
+      await pause(800);
+      set({ airVectors: false });
+      await pause(100);
+      set({ pressuresShow: true });
+    });
+    await sub("We get the pressure");
+    set({ airVectorsCenter: false });
     await sub("Without the air flow");
     await sub(
-      "The atmospheric pressure acting on our plate cancels out",
-      async () => set({ vectorsNet: true })
+      "The atmospheric forces acting on our plate cancel out",
+      async () => set({ vectorsNet: true, airVectors: false })
     );
     await sub("Resulting in a zero net force", async () =>
       set({ pressuresShow: false })
@@ -92,17 +101,37 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub("When we add back the flow", async () => {
       setChart({ hover: true });
       set({
-        pressuresShow: true,
         pressuresEqual: false,
         keepAngle: false,
       });
     });
-    await sub("The exposed lower side of the plate gets more collisions");
-    await sub("The pressure goes up");
+    await sub("The exposed lower side of the plate gets more collisions", () =>
+      set({ airVectorsLower: true })
+    );
+    await sub("The pressure goes up", async () => {
+      set({ airVectorsCenter: true });
+      await pause(800);
+      set({ airVectorsLower: false });
+      await pause(100);
+      set({ pressureLower: true });
+    });
+    set({ airVectorsCenter: false });
+    await pause(250);
 
-    await sub("The upper surface is shielded from the flow");
-    await sub("Fewer collisions result in a lower pressure");
-    await sub("The same applies to the shorter sides");
+    await sub("The upper surface is shielded from the flow", () =>
+      set({ airVectorsUpper: true })
+    );
+    await sub("Fewer collisions result in a lower pressure", async () => {
+      set({ airVectorsCenter: true });
+      await pause(800);
+      set({ airVectorsUpper: false });
+      await pause(100);
+      set({ pressureUpper: true });
+    });
+    set({ airVectorsCenter: false });
+    await sub("The same applies to the shorter sides", () =>
+      set({ pressuresShow: true })
+    );
 
     await sub(
       "The net force is the aerodynamic force we saw earlier",
@@ -110,7 +139,11 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
         await pause(500);
         set({ vectorsNet: true });
         await pause(600);
-        set({ pressuresShow: false });
+        set({
+          pressuresShow: false,
+          pressureLower: false,
+          pressureUpper: false,
+        });
         await pause(250);
         set({
           showVectors: true,
@@ -343,7 +376,12 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
 
   useAnimation(animation, cleanup, setup, visible);
 
-  return <IntroductionVectors opacity={opacity} />;
+  return (
+    <mesh>
+      <IntroductionVectors opacity={opacity} />
+      <IntroductionParticles opacity={opacity} />
+    </mesh>
+  );
 };
 
 export default Introduction;

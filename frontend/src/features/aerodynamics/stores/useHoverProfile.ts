@@ -8,7 +8,13 @@ export interface HoverProfileState {
   vectorSize: number;
   vector3rdNewton: boolean;
   centerVectors: boolean;
+  airVectors: boolean;
+  airVectorsUpper: boolean;
+  airVectorsLower: boolean;
+  airVectorsCenter: boolean;
   pressuresShow: boolean;
+  pressureUpper: boolean;
+  pressureLower: boolean;
   pressuresEqual: boolean;
   vectorsNet: boolean;
   axis: boolean;
@@ -38,7 +44,13 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   vectorSize: 1,
   vector3rdNewton: false,
   centerVectors: false,
+  airVectors: false,
+  airVectorsUpper: false,
+  airVectorsLower: false,
+  airVectorsCenter: false,
   pressuresShow: false,
+  pressureUpper: false,
+  pressureLower: false,
   pressuresEqual: true,
   vectorsNet: false,
   axis: false,
