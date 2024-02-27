@@ -60,8 +60,8 @@ const ProfileVisualizer = ({ opacity }: Props) => {
           />
           <AnimatedLine
             points={[
-              [0, 0, -0.01],
-              [1, 0, -0.01],
+              [0, 0, -0.005],
+              [1, 0, -0.005],
             ]}
             style="thin"
             color="grid"

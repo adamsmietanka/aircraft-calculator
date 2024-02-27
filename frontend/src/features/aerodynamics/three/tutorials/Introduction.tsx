@@ -62,31 +62,28 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     );
     await sub("There's a force acting on it");
     setAnimation({ slowdown: true });
-    await sub("When it's parallel to the airflow that force is minimal");
     await sub("When angled it quickly grows", () => setChart({ xHover: 5 }));
     setAnimation({ slowdown: false });
-    await sub("What is the source of this force?");
 
     await sub("Let's stop the flow for a moment", async () => {
       set({ showVectors: false, keepAngle: true });
       setChart({ hover: false });
     });
 
+    await sub("Air molecules are moving a lot", async () =>
+      set({ airParticles: true })
+    );
     await sub(
-      "Air molecules are constantly colliding and pushing on the plate",
-      async () => set({ airVectors: true })
+      "When they collide with the plate they create a tiny force",
+      async () => set({ airVectors: true, airParticles: false })
     );
 
-    await sub("When we sum up all this forces", async () => {
+    await sub("All these forces sum up to the pressure", async () => {
       set({ airVectorsCenter: true });
-      await pause(800);
-      set({ airVectors: false });
-      await pause(100);
-      set({ pressuresShow: true });
+      await pause(1500);
+      set({ airVectors: false, pressuresShow: true });
     });
-    await sub("We get the pressure");
     set({ airVectorsCenter: false });
-    await sub("Without the air flow");
     await sub(
       "The atmospheric forces acting on our plate cancel out",
       async () => set({ vectorsNet: true, airVectors: false })
@@ -103,6 +100,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       set({
         pressuresEqual: false,
         keepAngle: false,
+        airVectorsWithFlow: true,
       });
     });
     await sub("The exposed lower side of the plate gets more collisions", () =>
@@ -110,10 +108,8 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     );
     await sub("The pressure goes up", async () => {
       set({ airVectorsCenter: true });
-      await pause(800);
-      set({ airVectorsLower: false });
-      await pause(100);
-      set({ pressureLower: true });
+      await pause(1500);
+      set({ airVectorsLower: false, pressureLower: true });
     });
     set({ airVectorsCenter: false });
     await pause(250);
@@ -123,28 +119,26 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     );
     await sub("Fewer collisions result in a lower pressure", async () => {
       set({ airVectorsCenter: true });
-      await pause(800);
-      set({ airVectorsUpper: false });
-      await pause(100);
-      set({ pressureUpper: true });
+      await pause(1500);
+      set({ airVectorsUpper: false, pressureUpper: true });
     });
-    set({ airVectorsCenter: false });
     await sub("The same applies to the shorter sides", () =>
       set({ pressuresShow: true })
     );
+    set({ airVectorsCenter: false });
 
     await sub(
       "The net force is the aerodynamic force we saw earlier",
       async () => {
         await pause(500);
         set({ vectorsNet: true });
-        await pause(600);
+        await pause(1000);
         set({
           pressuresShow: false,
           pressureLower: false,
           pressureUpper: false,
         });
-        await pause(250);
+        await pause(200);
         set({
           showVectors: true,
         });
@@ -169,7 +163,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       set({ axisCenter: false });
       setCamera({ spherical: [10, 90, 0] });
     });
-    
+
     setAnimation({ slowdown: true });
     await pause(100);
     setChart({ xHover: 0 });
@@ -354,6 +348,7 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       error: false,
     });
     set({
+      airVectorsWithFlow: false,
       hoverA: false,
       hoverB: false,
       hoverC: false,

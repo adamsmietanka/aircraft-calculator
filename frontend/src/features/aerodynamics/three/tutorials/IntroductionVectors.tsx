@@ -32,8 +32,8 @@ const IntroductionVectors = ({ opacity }: Props) => {
 
   const down = pressuresEqual ? 0.55 : 0.9;
   const up = pressuresEqual ? 0.55 : 0.2;
-  const left = pressuresEqual ? 0.05 : 0.07;
-  const right = pressuresEqual ? 0.05 : 0.04;
+  const left = pressuresEqual ? 0.05 : 0.055;
+  const right = pressuresEqual ? 0.05 : 0.045;
 
   const [spring, api] = useSpring(
     () => ({
