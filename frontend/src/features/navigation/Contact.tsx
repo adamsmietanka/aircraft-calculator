@@ -61,7 +61,7 @@ const Contact = () => {
             </div>
             <p className="text-xs flex space-x-2">
               <Mail />{" "}
-              <small className="select-all">adamsmietanka@outlook.com</small>
+              <small className="select-all">adam@bookofflight.com</small>
             </p>
           </div>
         </AnimatedHtml>
