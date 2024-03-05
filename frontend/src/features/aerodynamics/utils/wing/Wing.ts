@@ -23,6 +23,7 @@ export class Wing {
   public shape: number;
   public vertices: number[];
 
+  FLAP_CHORD = 0.3;
   FLAP_START = 0.1;
   FLAP_END = 0.95;
   WING_SEGMENTS = 10;
@@ -91,17 +92,56 @@ export class Wing {
       }
     });
   }
-  createWingModel = () => {
+  createModel = () => {
     const wingGeometry = new BufferGeometry();
     const tipShape = new Shape();
 
     this.createSection(this.profile.points, 0, this.FLAP_START);
     this.createSection(
-      this.profile.getOutlineWithoutFlap(),
+      this.profile.getOutlineWithoutFlap(1 - this.FLAP_CHORD),
       this.FLAP_START,
       this.FLAP_END
     );
     this.createSection(this.profile.points, this.FLAP_END, 1);
+
+    const tip = this.profile.transform(
+      this.profile.points,
+      this.getLE(this.span / 2),
+      this.span / 2,
+      this.getChord(this.span / 2)
+    );
+    tipShape.moveTo(tip[0][0], tip[0][1]);
+
+    for (let i = 1; i < PANELS; i++) {
+      tipShape.lineTo(tip[i][0], tip[i][1]);
+    }
+
+    const attr = new BufferAttribute(new Float32Array(this.vertices), 3);
+    wingGeometry.setAttribute("position", attr);
+    wingGeometry.computeVertexNormals();
+
+    const tipGeometry = new ShapeGeometry(tipShape).toNonIndexed();
+    tipGeometry.translate(0, 0, this.span / 2);
+    tipGeometry.deleteAttribute("uv");
+
+    let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, tipGeometry]);
+
+    tipGeometry.translate(0, 0, ((this.FLAP_START - 1) * this.span) / 2);
+    geom = BufferGeometryUtils.mergeGeometries([geom, tipGeometry]);
+
+    return geom;
+  };
+
+  createFlap = () => {
+    const wingGeometry = new BufferGeometry();
+    const tipShape = new Shape();
+    this.vertices = [];
+
+    this.createSection(
+      this.profile.getOutlineFlap(1 - this.FLAP_CHORD),
+      this.FLAP_START + 0.01,
+      this.FLAP_END - 0.01
+    );
 
     const tip = this.profile.transform(
       this.profile.points,

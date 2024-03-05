@@ -10,7 +10,11 @@ import { getXTip } from "./hooks/useWingSpring";
 import { animated } from "@react-spring/three";
 import { isMultifuse } from "../utils/planeConfiguration";
 
-const meshVisible = ["/aerodynamics/horizontal", "/aerodynamics/results", "/aerodynamics/glide"];
+const meshVisible = [
+  "/aerodynamics/horizontal",
+  "/aerodynamics/results",
+  "/aerodynamics/glide",
+];
 
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
@@ -32,7 +36,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
 
   const { pathname } = useLocation();
 
-  const { vertical, leading, trailing, top } = useVertical();
+  const { vertical, rudder, leading, trailing, top } = useVertical();
 
   return (
     <mesh>
@@ -40,6 +44,18 @@ const StabilizerVertical = ({ opacity }: Props) => {
         visible={meshVisible.includes(pathname)}
         rotation-x={-Math.PI / 2}
         geometry={vertical}
+      >
+        <animated.meshStandardMaterial
+          color="white"
+          metalness={0.5}
+          transparent
+          opacity={opacity}
+        />
+      </mesh>
+      <mesh
+        visible={meshVisible.includes(pathname)}
+        rotation-x={-Math.PI / 2}
+        geometry={rudder}
       >
         <animated.meshStandardMaterial
           color="white"

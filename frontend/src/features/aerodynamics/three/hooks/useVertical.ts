@@ -20,6 +20,7 @@ const useVertical = () => {
   const [vertical, setVertical] = useState<BufferGeometry>(
     new SphereGeometry()
   );
+  const [rudder, setRudder] = useState<BufferGeometry>(new SphereGeometry());
 
   const [leading, setLeading] = useState([
     [0, 0, 0],
@@ -70,15 +71,15 @@ const useVertical = () => {
 
     const wing = new Wing(config, "0009");
 
-
-    const geom = wing.createWingModel();
+    const geom = wing.createModel();
     setVertical(geom);
+    setRudder(wing.createFlap());
     setGeometry({ vertical: geom });
 
     set({ area: getArea(config) / 2, aspectRatio: getAspectRatio(config) });
   }, [span, chord, chordTip, angle, shape]);
 
-  return { vertical, leading, trailing, top };
+  return { vertical, rudder, leading, trailing, top };
 };
 
 export default useVertical;
