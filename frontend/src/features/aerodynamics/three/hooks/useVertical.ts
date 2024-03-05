@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import { useVerticalStore } from "../../stores/useVertical";
 import getLeadingTrailing from "../../utils/getLeadingTrailing";
 import { BufferGeometry, SphereGeometry } from "three";
-import getProfilePoints from "../../utils/getProfilePoints";
-import createWingModel from "../utils/createWingModel";
 import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
 import { usePlaneStore } from "../../stores/usePlane";
 import fuselages from "../../data/fuselages";
 import { getArea, getAspectRatio } from "../../utils/getWingSpecs";
+import { Wing } from "../../utils/wing/Wing";
 
 const useVertical = () => {
   const chord = useVerticalStore((state) => state.chord);
@@ -69,8 +68,10 @@ const useVertical = () => {
       trailingPoints[trailingPoints.length - 1],
     ]);
 
-    const symmetric = getProfilePoints("0009");
-    const geom = createWingModel(config, symmetric, false);
+    const wing = new Wing(config, "0009");
+
+
+    const geom = wing.createWingModel();
     setVertical(geom);
     setGeometry({ vertical: geom });
 
