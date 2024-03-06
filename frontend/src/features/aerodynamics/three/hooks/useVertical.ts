@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useVerticalStore } from "../../stores/useVertical";
 import getLeadingTrailing from "../../utils/getLeadingTrailing";
-import { BufferGeometry, SphereGeometry } from "three";
 import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
 import { usePlaneStore } from "../../stores/usePlane";
 import fuselages from "../../data/fuselages";
@@ -17,10 +16,7 @@ const useVertical = () => {
   const set = useVerticalStore((state) => state.set);
   const setGeometry = usePlaneGeometryStore((state) => state.set);
 
-  const [vertical, setVertical] = useState<BufferGeometry>(
-    new SphereGeometry()
-  );
-  const [rudder, setRudder] = useState<BufferGeometry>(new SphereGeometry());
+  const [stabilizer, setStabilizer] = useState<Wing>(new Wing({}, "10"));
 
   const [leading, setLeading] = useState([
     [0, 0, 0],
@@ -72,14 +68,15 @@ const useVertical = () => {
     const wing = new Wing(config, "0009");
 
     const geom = wing.createModel();
-    setVertical(geom);
-    setRudder(wing.createFlap());
+    wing.createFlap();
     setGeometry({ vertical: geom });
+
+    setStabilizer(wing);
 
     set({ area: getArea(config) / 2, aspectRatio: getAspectRatio(config) });
   }, [span, chord, chordTip, angle, shape]);
 
-  return { vertical, rudder, leading, trailing, top };
+  return { leading, trailing, top, stabilizer };
 };
 
 export default useVertical;

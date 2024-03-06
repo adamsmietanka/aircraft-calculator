@@ -1,18 +1,26 @@
 import { NUMBER_OF_AIRFOIL_SEGMENTS } from "./../../../common/three/config";
-import { BufferAttribute, BufferGeometry, Shape, ShapeGeometry } from "three";
+import {
+  BufferAttribute,
+  BufferGeometry,
+  Shape,
+  ShapeGeometry,
+  SphereGeometry,
+} from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
-import { Profile, ProfilePoints } from "./Profile";
+import { Profile } from "./Profile";
 import { ProfileFactory } from "./ProfileFactory";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
 export interface WingShape {
-  span: number;
-  chord: number;
-  chordTip: number;
-  angle: number;
-  shape: number;
+  span?: number;
+  chord?: number;
+  chordTip?: number;
+  angle?: number;
+  shape?: number;
 }
+const interpolate = (start: number, end: number, ratio: number) =>
+  start + (end - start) * ratio;
 
 export class Wing {
   public profile: Profile;
@@ -22,9 +30,11 @@ export class Wing {
   public angle: number;
   public shape: number;
   public vertices: number[];
+  public geometry: BufferGeometry;
+  public flap: BufferGeometry;
 
   FLAP_CHORD_START = 0.7;
-  FLAP_START = 0.1;
+  FLAP_START = 0.05;
   FLAP_END = 0.9;
   WING_SEGMENTS = 10;
 
@@ -34,15 +44,24 @@ export class Wing {
    * @returns
    */
   public getLE(y: number): number {
-    return 0;
+    if (this.shape === 0) return 0;
+    return Math.tan((this.angle * Math.PI) / 180) * y;
   }
 
   public getChord(y: number): number {
-    return this.chord;
+    if (this.shape === 0) return this.chord;
+    return interpolate(this.chord, this.chordTip, (2 * y) / this.span);
   }
 
+  public getFlapAxisAngle = () => {
+    if (this.shape === 0) return 0;
+    const xTip = this.getLE(this.span / 2);
+    const x = xTip + (this.chordTip - this.chord) * this.FLAP_CHORD_START;
+    return Math.atan((2 * x) / this.span);
+  };
+
   constructor(
-    { span, chord, chordTip, angle, shape }: WingShape,
+    { span = 1, chord = 1, chordTip = 1, angle = 0, shape = 0 }: WingShape,
     profile: string
   ) {
     this.profile = ProfileFactory.create(profile);
@@ -52,6 +71,8 @@ export class Wing {
     this.angle = angle;
     this.shape = shape;
     this.vertices = [];
+    this.geometry = new SphereGeometry();
+    this.flap = new SphereGeometry();
   }
 
   sectionPoints(start: number, end: number) {
@@ -138,6 +159,8 @@ export class Wing {
       flapLowerTip,
     ]);
 
+    this.geometry = geom;
+
     return geom;
   };
 
@@ -173,6 +196,7 @@ export class Wing {
     );
 
     let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, flapTip]);
+    this.flap = geom;
 
     return geom;
   };
