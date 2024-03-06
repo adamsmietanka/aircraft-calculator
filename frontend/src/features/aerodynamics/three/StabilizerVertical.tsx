@@ -34,10 +34,15 @@ const Rudder = ({ opacity, stabilizer }: Props & { stabilizer: any }) => {
     [left, right]
   );
 
+  const flapY = (span * stabilizer.FLAP_START) / 2;
+  const flapX =
+    stabilizer.getChord(flapY) * stabilizer.FLAP_CHORD_START +
+    stabilizer.getLE(flapY);
+
   return (
     <animated.mesh
-      position-x={chord * stabilizer.FLAP_CHORD_START}
-      position-z={(span * stabilizer.FLAP_START) / 2}
+      position-x={flapX}
+      position-z={flapY}
       rotation-y={stabilizer.getFlapAxisAngle()}
       rotation-z={spring.angle}
     >
@@ -45,8 +50,8 @@ const Rudder = ({ opacity, stabilizer }: Props & { stabilizer: any }) => {
         <mesh
           visible={meshVisible.includes(pathname)}
           geometry={stabilizer.flap}
-          position-x={-chord * stabilizer.FLAP_CHORD_START}
-          position-z={(-span * stabilizer.FLAP_START) / 2}
+          position-x={-flapX}
+          position-z={-flapY}
         >
           <animated.meshStandardMaterial
             color="white"
