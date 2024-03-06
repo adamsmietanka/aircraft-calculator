@@ -1,8 +1,6 @@
-import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
-import { Profile, ProfileDetails, ProfilePoints } from "./Profile";
+import { Profile, ProfilePoints } from "./Profile";
 
 export class ProfileFlat extends Profile {
-  public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
   public static SEGMENTS_V = 2; // amount of segments on the shorter sides of the plate
 
   parseName(name: string) {
@@ -26,20 +24,19 @@ export class ProfileFlat extends Profile {
     let lower = [];
     let camber = [];
 
-    for (let i = 0; i <= ProfileFlat.SEGMENTS; i++) {
+    for (let i = 0; i <= Profile.SEGMENTS; i++) {
       let x, y;
       if (i < ProfileFlat.SEGMENTS_V) {
         x = 0;
         y = ((i / ProfileFlat.SEGMENTS_V) * this.T) / 2;
-      } else if (i <= ProfileFlat.SEGMENTS - ProfileFlat.SEGMENTS_V) {
+      } else if (i <= Profile.SEGMENTS - ProfileFlat.SEGMENTS_V) {
         x =
           (i - ProfileFlat.SEGMENTS_V) /
-          (ProfileFlat.SEGMENTS - 2 * ProfileFlat.SEGMENTS_V);
+          (Profile.SEGMENTS - 2 * ProfileFlat.SEGMENTS_V);
         y = this.T / 2;
       } else {
         x = 1;
-        y =
-          (((ProfileFlat.SEGMENTS - i) / ProfileFlat.SEGMENTS_V) * this.T) / 2;
+        y = (((Profile.SEGMENTS - i) / ProfileFlat.SEGMENTS_V) * this.T) / 2;
       }
 
       lower.push([x, -y, 0]);

@@ -1,3 +1,5 @@
+import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
+
 export interface ProfileDetails {
   M: number;
   P: number;
@@ -25,6 +27,10 @@ export interface ProfileMethods {
   getFlapLE: (X: number) => number[][];
 }
 
+/**
+ * The class encompasses all the logic of creating the profile and flap outlines
+ * @param SEGMENTS number of the profile segments, per side. So all profiles have 2x
+ */
 export abstract class Profile
   implements ProfilePoints, ProfileMethods, ProfileDetails
 {
@@ -40,6 +46,7 @@ export abstract class Profile
   public max: number[][];
 
   public static FLAP_LE_SEGMENTS = 8;
+  public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
 
   public abstract parseName(name: string): ProfileDetails;
   public abstract createPoints(): ProfilePoints;
