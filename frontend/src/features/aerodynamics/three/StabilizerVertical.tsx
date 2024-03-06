@@ -29,7 +29,7 @@ const Rudder = ({ opacity, stabilizer }: Props & { stabilizer: any }) => {
 
   const [spring] = useSpring(
     () => ({
-      angle: (((+right - +left) * 30) / 180) * Math.PI,
+      angle: (((+right - +left) * 35) / 180) * Math.PI,
     }),
     [left, right]
   );
