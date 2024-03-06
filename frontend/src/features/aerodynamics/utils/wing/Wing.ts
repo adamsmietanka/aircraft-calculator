@@ -32,6 +32,7 @@ export class Wing {
   public vertices: number[];
   public geometry: BufferGeometry;
   public flap: BufferGeometry;
+  public full: boolean;
 
   FLAP_CHORD_START = 0.7;
   FLAP_START = 0.05;
@@ -62,7 +63,8 @@ export class Wing {
 
   constructor(
     { span = 1, chord = 1, chordTip = 1, angle = 0, shape = 0 }: WingShape,
-    profile: string
+    profile: string,
+    full = true
   ) {
     this.profile = ProfileFactory.create(profile);
     this.span = span;
@@ -73,6 +75,7 @@ export class Wing {
     this.vertices = [];
     this.geometry = new SphereGeometry();
     this.flap = new SphereGeometry();
+    this.full = full;
   }
 
   sectionPoints(start: number, end: number) {
@@ -158,6 +161,19 @@ export class Wing {
       tipGeometry,
       flapLowerTip,
     ]);
+
+    if (this.full) {
+      wingGeometry.scale(1, 1, -1);
+      wingGeometry.computeVertexNormals();
+      tipGeometry.scale(1, 1, -1);
+      tipGeometry.computeVertexNormals();
+
+      geom = BufferGeometryUtils.mergeGeometries([
+        geom,
+        tipGeometry,
+        wingGeometry,
+      ]);
+    }
 
     this.geometry = geom;
 
