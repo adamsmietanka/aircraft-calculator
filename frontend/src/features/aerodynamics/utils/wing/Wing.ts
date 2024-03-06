@@ -23,7 +23,7 @@ export class Wing {
   public shape: number;
   public vertices: number[];
 
-  FLAP_CHORD = 0.3;
+  FLAP_CHORD_START = 0.7;
   FLAP_START = 0.1;
   FLAP_END = 0.95;
   WING_SEGMENTS = 10;
@@ -97,9 +97,11 @@ export class Wing {
     const wingGeometry = new BufferGeometry();
     const tipShape = new Shape();
 
+    this.profile.updateForFlap(this.FLAP_CHORD_START);
+
     this.createSection(this.profile.points, 0, this.FLAP_START);
     this.createSection(
-      this.profile.getOutlineWithoutFlap(1 - this.FLAP_CHORD),
+      this.profile.getOutlineWithoutFlap(this.FLAP_CHORD_START),
       this.FLAP_START,
       this.FLAP_END
     );
@@ -158,7 +160,7 @@ export class Wing {
     const wingGeometry = new BufferGeometry();
     this.vertices = [];
 
-    const points = this.profile.getOutlineFlap(1 - this.FLAP_CHORD);
+    const points = this.profile.getOutlineFlap(this.FLAP_CHORD_START);
     this.createSection(points, this.FLAP_START + 0.01, this.FLAP_END - 0.01);
 
     const attr = new BufferAttribute(new Float32Array(this.vertices), 3);
