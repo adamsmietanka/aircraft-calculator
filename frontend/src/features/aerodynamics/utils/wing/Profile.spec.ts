@@ -4,7 +4,6 @@ import { ProfileFlat } from "./ProfileFlat";
 
 describe("Profile creation", () => {
   beforeEach(() => {
-    Profile.FLAP_LE_SEGMENTS = 8;
     Profile.SEGMENTS = 25;
     ProfileFlat.SEGMENTS_V = 2;
   });
@@ -40,44 +39,6 @@ describe("Profile creation", () => {
     expect(profile.max[1][1] - profile.max[0][1]).toBeCloseTo(15 / 100, 4);
   });
 
-  it("gets the outline of the wing without a flap", () => {
-    ProfileFlat.SEGMENTS_V = 1;
-    Profile.SEGMENTS = 4;
-
-    const profile = ProfileFactory.create("10");
-
-    expect(profile.getOutlineWithoutFlap()).toEqual([
-      [0, 0, 0],
-      [0, 0.05, 0],
-      [0.5, 0.05, 0],
-      [0.5, -0.05, 0],
-      [0, -0.05, 0],
-      [0, -0, 0],
-    ]);
-  });
-
-  it("gets the leading edge of the flap", () => {
-    Profile.FLAP_LE_SEGMENTS = 2;
-    Profile.SEGMENTS = 4;
-    ProfileFlat.SEGMENTS_V = 1;
-
-    const profile = ProfileFactory.create("20");
-    const leadingEdge = profile.getFlapLE(0.5);
-
-    expect(leadingEdge[0][0]).toBe(0.4);
-    expect(leadingEdge[0][1]).toBeCloseTo(0, 5);
-    expect(leadingEdge.length).toBe(1);
-  });
-
-  it("gets the flap outline", () => {
-    const profile = ProfileFactory.create("2412");
-    console.log(
-      profile.upper,
-      profile.getOutlineWithoutFlap(),
-      profile.getOutlineFlap()
-    );
-  });
-
   it("transforms points", () => {
     const profile = ProfileFactory.create("10");
 
@@ -108,5 +69,59 @@ describe("Profile creation", () => {
 
     x = 0.8;
     expect(profile.getLowerUpper(x)[1][0]).toBeCloseTo(x, 2);
+  });
+});
+
+describe("Flap creation", () => {
+  beforeEach(() => {
+    Profile.FLAP_LE_SEGMENTS = 8;
+    Profile.SEGMENTS = 25;
+    ProfileFlat.SEGMENTS_V = 2;
+  });
+
+  it("gets the outline of the wing without a flap", () => {
+    ProfileFlat.SEGMENTS_V = 1;
+    Profile.SEGMENTS = 4;
+
+    const profile = ProfileFactory.create("10");
+
+    expect(profile.getOutlineWithoutFlap()).toEqual([
+      [0, 0, 0],
+      [0, 0.05, 0],
+      [0.5, 0.05, 0],
+      [0.5, -0.05, 0],
+      [0, -0.05, 0],
+      [0, -0, 0],
+    ]);
+  });
+
+  it("gets the leading edge of the flap", () => {
+    Profile.FLAP_LE_SEGMENTS = 2;
+    Profile.SEGMENTS = 4;
+    ProfileFlat.SEGMENTS_V = 1;
+
+    const profile = ProfileFactory.create("20");
+    const leadingEdge = profile.getFlapLE(0.5);
+
+    expect(leadingEdge[0][0]).toBe(0.4);
+    expect(leadingEdge[0][1]).toBeCloseTo(0, 5);
+    expect(leadingEdge.length).toBe(1);
+  });
+
+  it("gets the flap outline", () => {
+    Profile.FLAP_LE_SEGMENTS = 2;
+    Profile.SEGMENTS = 6;
+    ProfileFlat.SEGMENTS_V = 1;
+
+    const profile = ProfileFactory.create("20");
+    expect(profile.getOutlineFlap()).toEqual([
+      [1, -0, 0],
+      [1, -0.1, 0],
+      [0.75, -0.1, 0],
+      [0.65, -6.123233995736766e-18, 0],
+      [0.75, 0.1, 0],
+      [1, 0.1, 0],
+      [1, 0, 0],
+    ]);
   });
 });
