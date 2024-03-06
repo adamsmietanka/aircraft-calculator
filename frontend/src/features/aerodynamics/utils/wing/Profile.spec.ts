@@ -83,13 +83,23 @@ describe("Flap creation", () => {
     ProfileFlat.SEGMENTS_V = 1;
     Profile.SEGMENTS = 4;
 
-    const profile = ProfileFactory.create("10");
+    const plate = ProfileFactory.create("10");
 
-    expect(profile.getOutlineWithoutFlap()).toEqual([
+    expect(plate.getOutlineWithoutFlap()).toEqual([
       [0, 0, 0],
       [0, 0.05, 0],
       [0.5, 0.05, 0],
       [0.5, -0.05, 0],
+      [0, -0.05, 0],
+      [0, -0, 0],
+    ]);
+
+    plate.updateForFlap();
+    expect(plate.getOutlineWithoutFlap()).toEqual([
+      [0, 0, 0],
+      [0, 0.05, 0],
+      [0.58, 0.05, 0],
+      [0.58, -0.05, 0],
       [0, -0.05, 0],
       [0, -0, 0],
     ]);
@@ -113,13 +123,73 @@ describe("Flap creation", () => {
     Profile.SEGMENTS = 6;
     ProfileFlat.SEGMENTS_V = 1;
 
-    const profile = ProfileFactory.create("20");
-    expect(profile.getOutlineFlap()).toEqual([
+    const plate = ProfileFactory.create("20");
+    expect(plate.getOutlineFlap()).toEqual([
       [1, -0, 0],
       [1, -0.1, 0],
       [0.75, -0.1, 0],
       [0.65, -6.123233995736766e-18, 0],
       [0.75, 0.1, 0],
+      [1, 0.1, 0],
+      [1, 0, 0],
+    ]);
+
+    plate.updateForFlap();
+    expect(plate.getOutlineFlap()).toEqual([
+      [1, -0, 0],
+      [1, -0.1, 0],
+      [0.6, -0.1, 0],
+      [0.5, -6.123233995736766e-18, 0],
+      [0.6, 0.1, 0],
+      [1, 0.1, 0],
+      [1, 0, 0],
+    ]);
+
+    Profile.SEGMENTS = 4;
+
+    const profile = ProfileFactory.create("2412");
+    expect(profile.getOutlineFlap()).toEqual([
+      [1, 0, 0],
+      [0.852575033597649, -0.010842211015825711, 0],
+      [0.83413955058404, 0.008571628993408067, 0],
+      [0.8545317475888985, 0.02798546900264185, 0],
+      [1, 0, 0],
+    ]);
+  });
+
+  it("gets the point index closest to flap edge", () => {
+    Profile.SEGMENTS = 4;
+    ProfileFlat.SEGMENTS_V = 1;
+
+    const profile = ProfileFactory.create("20");
+    expect(profile.getLastWingIndex(0.4)).toBe(1);
+    expect(profile.getLastWingIndex(0.5)).toBe(1);
+    expect(profile.getLastWingIndex(0.6)).toBe(2);
+  });
+
+  it("update points for flap", () => {
+    Profile.SEGMENTS = 5;
+    ProfileFlat.SEGMENTS_V = 1;
+
+    const profile = ProfileFactory.create("20");
+
+    expect(profile.upper.length).toBe(Profile.SEGMENTS + 1);
+    expect(profile.upper).toEqual([
+      [0, 0, 0],
+      [0, 0.1, 0],
+      [0.3333333333333333, 0.1, 0],
+      [0.6666666666666666, 0.1, 0],
+      [1, 0.1, 0],
+      [1, 0, 0],
+    ]);
+
+    profile.updateForFlap();
+    expect(profile.upper.length).toBe(Profile.SEGMENTS + 1);
+    expect(profile.upper).toEqual([
+      [0, 0, 0],
+      [0, 0.1, 0],
+      [0.58, 0.1, 0],
+      [0.6, 0.1, 0],
       [1, 0.1, 0],
       [1, 0, 0],
     ]);

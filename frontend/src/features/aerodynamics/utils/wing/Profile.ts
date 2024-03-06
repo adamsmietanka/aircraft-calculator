@@ -25,6 +25,7 @@ export interface ProfileMethods {
   getOutlineWithoutFlap: (X: number) => number[][];
   getOutlineFlap: (X: number) => number[][];
   getFlapLE: (X: number) => number[][];
+  updateForFlap: (X: number) => void;
 }
 
 /**
@@ -45,8 +46,9 @@ export abstract class Profile
   public camber: number[][];
   public max: number[][];
 
-  public static FLAP_LE_SEGMENTS = 8;
   public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
+  public static FLAP_LE_SEGMENTS = 8;
+  public static FLAP_GAP = 0.01;
 
   public abstract parseName(name: string): ProfileDetails;
   public abstract createPoints(): ProfilePoints;
@@ -88,8 +90,8 @@ export abstract class Profile
    */
   public getOutlineWithoutFlap(X = 0.6) {
     return [
-      ...this.upper.filter(([x]) => x <= X),
-      ...this.lower.filter(([x]) => x <= X).toReversed(),
+      ...this.upper.filter(([x]) => x < X),
+      ...this.lower.filter(([x]) => x < X).toReversed(),
     ];
   }
 
@@ -128,6 +130,33 @@ export abstract class Profile
       ...this.lower.filter(([x]) => x >= X).toReversed(),
       ...this.getFlapLE(X),
       ...this.upper.filter(([x]) => x >= X),
+    ];
+  }
+
+  public getLastWingIndex(X = 0.6) {
+    const points = this.upper.filter(([x]) => x < X);
+    return points.length - 1;
+  }
+
+  public updateForFlap(X = 0.6) {
+    const Xgap = X - 2 * Profile.FLAP_GAP;
+    const yFlap = this.getLowerUpper(X).map(([x, y, z]) => y);
+    const yGap = this.getLowerUpper(Xgap).map(([x, y, z]) => y);
+
+    const index = this.getLastWingIndex(X);
+
+    this.upper = [
+      ...this.upper.slice(0, index),
+      [Xgap, yGap[1], 0],
+      [X, yFlap[1], 0],
+      ...this.upper.slice(index + 2),
+    ];
+
+    this.lower = [
+      ...this.lower.slice(0, index),
+      [Xgap, yGap[0], 0],
+      [X, yFlap[0], 0],
+      ...this.lower.slice(index + 2),
     ];
   }
 }
