@@ -43,6 +43,7 @@ export abstract class Profile
 
   public abstract parseName(name: string): ProfileDetails;
   public abstract createPoints(): ProfilePoints;
+  public abstract getLowerUpper(x: number): number[][];
 
   constructor(name: string) {
     const { M, P, T, F } = this.parseName(name);
@@ -72,7 +73,6 @@ export abstract class Profile
   public transform(points: number[][], X: number, Y: number, chord: number) {
     return points.map(([x, y, z]) => [X + chord * x, chord * y, Y]);
   }
-
 
   /**
    * Get the outline of the wing excluding the flap
