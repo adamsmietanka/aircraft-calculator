@@ -98,4 +98,17 @@ describe("Profile creation", () => {
       [1.1, 1, 1],
     ]);
   });
+
+  it("can get profile y at an arbitrary x", () => {
+    let x = 0.5;
+    
+    const profileFlat = ProfileFactory.create("10");
+    expect(profileFlat.getLowerUpper(x)[1][1]).toBe(0.05);
+
+    const profile = ProfileFactory.create("2412");
+    expect(profile.getLowerUpper(x)[1][0]).toBeCloseTo(x, 2);
+
+    x = 0.8;
+    expect(profile.getLowerUpper(x)[1][0]).toBeCloseTo(x, 2);
+  });
 });

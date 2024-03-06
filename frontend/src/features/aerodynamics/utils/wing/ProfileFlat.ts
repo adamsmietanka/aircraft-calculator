@@ -14,6 +14,13 @@ export class ProfileFlat extends Profile {
     };
   }
 
+  getLowerUpper(x: number) {
+    return [
+      [x, -this.T / 2, 0],
+      [x, this.T / 2, 0],
+    ];
+  }
+
   createPoints(): ProfilePoints {
     let upper = [];
     let lower = [];
