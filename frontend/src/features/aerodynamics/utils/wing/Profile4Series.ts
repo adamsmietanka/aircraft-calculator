@@ -1,17 +1,13 @@
-import { NUMBER_OF_AIRFOIL_SEGMENTS } from "../../../common/three/config";
 import { Profile, ProfilePoints } from "./Profile";
 
 const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
 
 export class Profile4Series extends Profile {
-  public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
-
   parseName(name: string) {
     return {
       M: parseInt(name[0]) / 100,
       P: parseInt(name[1]) / 10,
       T: parseInt(name.slice(2, 4)) / 100,
-      // max thickness position
       F: 0.3,
     };
   }
@@ -68,8 +64,8 @@ export class Profile4Series extends Profile {
     let lower = [];
     let camber = [];
 
-    for (let i = 0; i < Profile4Series.SEGMENTS; i++) {
-      const x = cosineSpacing(i / Profile4Series.SEGMENTS);
+    for (let i = 0; i < Profile.SEGMENTS; i++) {
+      const x = cosineSpacing(i / Profile.SEGMENTS);
       const y = this.getCamberY(x);
       const points = this.getLowerUpper(x);
 
