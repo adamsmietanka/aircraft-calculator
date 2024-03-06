@@ -16,28 +16,31 @@ export class Profile4Series extends Profile {
     };
   }
 
-  createPoints({ M, P, T, F }: ProfileDetails): ProfilePoints {
+  createPoints(): ProfilePoints {
     let upper = [];
     let lower = [];
     let camber = [];
     const getCamberY = (x: number) => {
-      if (x < P) {
-        return (M / Math.pow(P, 2)) * (2 * P * x - x * x);
+      if (x < this.P) {
+        return (this.M / Math.pow(this.P, 2)) * (2 * this.P * x - x * x);
       }
-      return (M / Math.pow(1 - P, 2)) * (1 - 2 * P + 2 * P * x - x * x);
+      return (
+        (this.M / Math.pow(1 - this.P, 2)) *
+        (1 - 2 * this.P + 2 * this.P * x - x * x)
+      );
     };
 
     const getCamberGradient = (x: number) => {
-      if (x < P) {
-        return ((2 * M) / Math.pow(P, 2)) * (P - x);
+      if (x < this.P) {
+        return ((2 * this.M) / Math.pow(this.P, 2)) * (this.P - x);
       }
-      return ((2 * M) / Math.pow(1 - P, 2)) * (P - x);
+      return ((2 * this.M) / Math.pow(1 - this.P, 2)) * (this.P - x);
     };
 
     const getThickness = (x: number) => {
       return (
         5 *
-        T *
+        this.T *
         (0.2969 * Math.pow(x, 0.5) -
           0.126 * x -
           0.3516 * Math.pow(x, 2) +
@@ -76,7 +79,7 @@ export class Profile4Series extends Profile {
     lower.push([1, 0, 0]);
     upper.push([1, 0, 0]);
     camber.push([1, 0, 0]);
-    const max = getLowerUpper(F);
+    const max = getLowerUpper(this.F);
 
     return {
       points: [...upper, ...lower.toReversed().slice(1)],

@@ -125,7 +125,16 @@ export class Wing {
     tipGeometry.translate(0, 0, this.span / 2);
     tipGeometry.deleteAttribute("uv");
 
-    let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, tipGeometry]);
+    const flapLowerTip = this.createPanel(
+      this.profile.points,
+      (this.FLAP_START * this.span) / 2
+    );
+
+    let geom = BufferGeometryUtils.mergeGeometries([
+      wingGeometry,
+      tipGeometry,
+      flapLowerTip,
+    ]);
 
     return geom;
   };
@@ -161,16 +170,7 @@ export class Wing {
       ((this.FLAP_END - 0.01) * this.span) / 2
     );
 
-    const flapLowerTip = this.createPanel(
-      this.profile.points,
-      (this.FLAP_START * this.span) / 2
-    );
-
-    let geom = BufferGeometryUtils.mergeGeometries([
-      wingGeometry,
-      flapTip,
-      flapLowerTip,
-    ]);
+    let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, flapTip]);
 
     return geom;
   };

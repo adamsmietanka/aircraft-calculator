@@ -14,7 +14,7 @@ export class ProfileFlat extends Profile {
     };
   }
 
-  createPoints({ T }: ProfileDetails): ProfilePoints {
+  createPoints(): ProfilePoints {
     let upper = [];
     let lower = [];
     let camber = [];
@@ -23,15 +23,16 @@ export class ProfileFlat extends Profile {
       let x, y;
       if (i < ProfileFlat.SEGMENTS_V) {
         x = 0;
-        y = ((i / ProfileFlat.SEGMENTS_V) * T) / 2;
+        y = ((i / ProfileFlat.SEGMENTS_V) * this.T) / 2;
       } else if (i <= ProfileFlat.SEGMENTS - ProfileFlat.SEGMENTS_V) {
         x =
           (i - ProfileFlat.SEGMENTS_V) /
           (ProfileFlat.SEGMENTS - 2 * ProfileFlat.SEGMENTS_V);
-        y = T / 2;
+        y = this.T / 2;
       } else {
         x = 1;
-        y = (((ProfileFlat.SEGMENTS - i) / ProfileFlat.SEGMENTS_V) * T) / 2;
+        y =
+          (((ProfileFlat.SEGMENTS - i) / ProfileFlat.SEGMENTS_V) * this.T) / 2;
       }
 
       lower.push([x, -y, 0]);
@@ -39,8 +40,8 @@ export class ProfileFlat extends Profile {
       camber.push([x, 0, 0]);
     }
     const max = [
-      [1, -T / 2, 0],
-      [1, T / 2, 0],
+      [1, -this.T / 2, 0],
+      [1, this.T / 2, 0],
     ];
 
     return {
