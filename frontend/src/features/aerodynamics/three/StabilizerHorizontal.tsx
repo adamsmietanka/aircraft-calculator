@@ -10,6 +10,52 @@ import { getXTip } from "./hooks/useWingSpring";
 import { animated, useSpring } from "@react-spring/three";
 import useHorizontalPosition from "./hooks/useHorizontalPosition";
 import { DoubleSide } from "three";
+import { useKeyboardControls } from "@react-three/drei";
+import { Controls } from "../../navigation/PlaneBuilder";
+
+const meshVisible = ["/aerodynamics/results", "/aerodynamics/glide"];
+
+const Elevator = ({ opacity, stabilizer }: Props & { stabilizer: any }) => {
+  const up = useKeyboardControls<Controls>((state) => state.up);
+  const down = useKeyboardControls<Controls>((state) => state.down);
+
+  const chord = useHorizontalStore((state) => state.chord);
+  const span = useHorizontalStore((state) => state.span);
+
+  const { pathname } = useLocation();
+
+  const [spring] = useSpring(
+    () => ({
+      angle: (((+down - +up) * 30) / 180) * Math.PI,
+    }),
+    [up, down]
+  );
+
+  return (
+    <animated.mesh
+      position-x={chord * stabilizer.FLAP_CHORD_START}
+      position-z={(span * stabilizer.FLAP_START) / 2}
+      rotation-y={stabilizer.getFlapAxisAngle()}
+      rotation-z={spring.angle}
+    >
+      <mesh rotation-y={-stabilizer.getFlapAxisAngle()}>
+        <mesh
+          visible={meshVisible.includes(pathname)}
+          geometry={stabilizer.flap}
+          position-x={-chord * stabilizer.FLAP_CHORD_START}
+          position-z={(-span * stabilizer.FLAP_START) / 2}
+        >
+          <animated.meshStandardMaterial
+            color="white"
+            metalness={0.5}
+            transparent
+            opacity={opacity}
+          />
+        </mesh>
+      </mesh>
+    </animated.mesh>
+  );
+};
 
 const StabilizerHorizontal = ({ opacity }: Props) => {
   const chord = useHorizontalStore((state) => state.chord);
@@ -27,7 +73,7 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
 
   const { pathname } = useLocation();
 
-  const { horizontal, leading, trailing, top } = useHorizontal();
+  const { leading, trailing, top, stabilizer } = useHorizontal();
   useHorizontalPosition();
 
   const [spring] = useSpring(
@@ -44,18 +90,23 @@ const StabilizerHorizontal = ({ opacity }: Props) => {
       position-x={spring.x}
       rotation-x={-Math.PI / 2}
     >
-      <mesh
-        visible={pathname === "/aerodynamics/results" || pathname === "/aerodynamics/glide"}
-        rotation-x={-Math.PI / 2}
-        geometry={horizontal}
-      >
-        <animated.meshStandardMaterial
-          color="white"
-          metalness={0.5}
-          transparent
-          opacity={opacity}
-          side={DoubleSide}
-        />
+      <mesh rotation-x={-Math.PI / 2}>
+        <mesh
+          visible={meshVisible.includes(pathname)}
+          geometry={stabilizer.geometry}
+        >
+          <animated.meshStandardMaterial
+            color="white"
+            metalness={0.5}
+            transparent
+            opacity={opacity}
+            side={DoubleSide}
+          />
+        </mesh>
+        <Elevator opacity={opacity} stabilizer={stabilizer} />
+        <mesh scale-z={-1}>
+          <Elevator opacity={opacity} stabilizer={stabilizer} />
+        </mesh>
       </mesh>
       {/* <AnimatedInputTechnical
         visible={pathname === "/aerodynamics/horizontal"}
