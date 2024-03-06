@@ -25,7 +25,7 @@ export class Wing {
 
   FLAP_CHORD_START = 0.7;
   FLAP_START = 0.1;
-  FLAP_END = 0.95;
+  FLAP_END = 0.9;
   WING_SEGMENTS = 10;
 
   /**

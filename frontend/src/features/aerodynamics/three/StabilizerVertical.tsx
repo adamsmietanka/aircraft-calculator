@@ -7,14 +7,53 @@ import { useVerticalStore } from "../stores/useVertical";
 import useVertical from "./hooks/useVertical";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
-import { animated } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import { isMultifuse } from "../utils/planeConfiguration";
+import { useKeyboardControls } from "@react-three/drei";
+import { Controls } from "../../navigation/PlaneBuilder";
 
 const meshVisible = [
   "/aerodynamics/horizontal",
   "/aerodynamics/results",
   "/aerodynamics/glide",
 ];
+
+const Rudder = ({ opacity, geom }: Props & { geom: any }) => {
+  const left = useKeyboardControls<Controls>((state) => state.left);
+  const right = useKeyboardControls<Controls>((state) => state.right);
+
+  const chord = useVerticalStore((state) => state.chord);
+
+  const { pathname } = useLocation();
+
+  const [spring] = useSpring(
+    () => ({
+      angle: (((+right - +left) * 30) / 180) * Math.PI,
+    }),
+    [left, right]
+  );
+
+  return (
+    <animated.mesh
+      position-x={chord * 0.7}
+      rotation-x={-Math.PI / 2}
+      rotation-z={spring.angle}
+    >
+      <mesh
+        visible={meshVisible.includes(pathname)}
+        geometry={geom}
+        position-x={-chord * 0.7}
+      >
+        <animated.meshStandardMaterial
+          color="white"
+          metalness={0.5}
+          transparent
+          opacity={opacity}
+        />
+      </mesh>
+    </animated.mesh>
+  );
+};
 
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
@@ -52,18 +91,7 @@ const StabilizerVertical = ({ opacity }: Props) => {
           opacity={opacity}
         />
       </mesh>
-      <mesh
-        visible={meshVisible.includes(pathname)}
-        rotation-x={-Math.PI / 2}
-        geometry={rudder}
-      >
-        <animated.meshStandardMaterial
-          color="white"
-          metalness={0.5}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
+      <Rudder opacity={opacity} geom={rudder} />
       <mesh
         visible={meshVisible.includes(pathname) && isMultifuse(configuration)}
         rotation-x={-Math.PI / 2}
