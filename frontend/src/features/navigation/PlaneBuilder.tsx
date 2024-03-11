@@ -10,6 +10,8 @@ import { Perf, PerfHeadless, usePerf } from "r3f-perf";
 import { checkVisible } from "../common/three/checkVisible";
 import InducedDrag from "../aerodynamics/three/tutorials/InducedDrag";
 import {
+  FaceControls,
+  FaceLandmarker,
   KeyboardControls,
   KeyboardControlsEntry,
   OrbitControls,
@@ -71,56 +73,62 @@ const PlaneBuilder = () => {
             });
           }}
         >
-          {/* <StatsGl className="ml-20" /> */}
-          {/* <Perf /> */}
-          {/* <gridHelper rotation-x={Math.PI / 2} position-x={-5}/> */}
-          <OrbitControls enabled={false} />
-          <ambientLight intensity={0.1} />
-          <pointLight position={[-10, 10, 0]} intensity={100} />
-          <spotLight position={[-10, -40, 70]} intensity={1000} />
-          <spotLight position={[-10, 10, 70]} intensity={1000} />
+          <FaceLandmarker>
+            {/* <FaceControls offsetScalar={2} smoothTime={0.75} /> */}
+            {/* <StatsGl className="ml-20" /> */}
+            {/* <Perf /> */}
+            {/* <gridHelper rotation-x={Math.PI / 2} position-x={-5}/> */}
+            <OrbitControls enabled={false} />
+            <ambientLight intensity={0.1} />
+            <pointLight position={[-10, 10, 0]} intensity={100} />
+            <spotLight position={[-10, -40, 70]} intensity={1000} />
+            <spotLight position={[-10, 10, 70]} intensity={1000} />
 
-          <Camera />
+            <Camera />
 
-          <Route paths={["/", "/aerodynamics/profile"]} Element={Home} />
-          <Route path="/aerodynamics/profile" Element={Profile} />
-          <Route
-            paths={["/aerodynamics/introduction", "/aerodynamics/profile"]}
-            Element={ProfileNACAExplanation}
-          />
-          <Route
-            paths={["/aerodynamics/introduction"]}
-            Element={Introduction}
-          />
-          <Route
-            paths={[
-              "/aerodynamics/introduction",
-              "/aerodynamics/profile",
-              "/aerodynamics/levelFlight",
-              "/aerodynamics/inducedDrag",
-              "/aerodynamics/wing",
-            ]}
-            Element={ProfileVisualizer}
-          />
-          <Route path="/aerodynamics/levelFlight" Element={LevelFlight} />
-          <Route path="/aerodynamics/inducedDrag" Element={InducedDrag} />
-          <Route path="/aerodynamics/wing" Element={Wing} />
-          <Route
-            paths={[
-              "/aerodynamics/fuselage",
-              "/aerodynamics/vertical",
-              "/aerodynamics/horizontal",
-              "/aerodynamics/results",
-            ]}
-            Element={Fuselage}
-          />
-          <Route path="/aerodynamics/fuselage" Element={FuselageUI} />
-          <Route path="/aerodynamics/vertical" Element={VerticalUI} />
-          <Route path="/aerodynamics/horizontal" Element={HorizontalUI} />
-          <Route path="/aerodynamics/results" Element={ResultsUI} />
-          <Route path="/aerodynamics/glide" Element={GlideUI} />
-          <Route path="/navigation/hyperbolic" Element={NavigationHyperbolic} />
-          <Route path="/navigation/elliptic" Element={NavigationElliptic} />
+            <Route paths={["/", "/aerodynamics/profile"]} Element={Home} />
+            <Route path="/aerodynamics/profile" Element={Profile} />
+            <Route
+              paths={["/aerodynamics/introduction", "/aerodynamics/profile"]}
+              Element={ProfileNACAExplanation}
+            />
+            <Route
+              paths={["/aerodynamics/introduction"]}
+              Element={Introduction}
+            />
+            <Route
+              paths={[
+                "/aerodynamics/introduction",
+                "/aerodynamics/profile",
+                "/aerodynamics/levelFlight",
+                "/aerodynamics/inducedDrag",
+                "/aerodynamics/wing",
+              ]}
+              Element={ProfileVisualizer}
+            />
+            <Route path="/aerodynamics/levelFlight" Element={LevelFlight} />
+            <Route path="/aerodynamics/inducedDrag" Element={InducedDrag} />
+            <Route path="/aerodynamics/wing" Element={Wing} />
+            <Route
+              paths={[
+                "/aerodynamics/fuselage",
+                "/aerodynamics/vertical",
+                "/aerodynamics/horizontal",
+                "/aerodynamics/results",
+              ]}
+              Element={Fuselage}
+            />
+            <Route path="/aerodynamics/fuselage" Element={FuselageUI} />
+            <Route path="/aerodynamics/vertical" Element={VerticalUI} />
+            <Route path="/aerodynamics/horizontal" Element={HorizontalUI} />
+            <Route path="/aerodynamics/results" Element={ResultsUI} />
+            <Route path="/aerodynamics/glide" Element={GlideUI} />
+            <Route
+              path="/navigation/hyperbolic"
+              Element={NavigationHyperbolic}
+            />
+            <Route path="/navigation/elliptic" Element={NavigationElliptic} />
+          </FaceLandmarker>
         </Canvas>
       </KeyboardControls>
     </div>
