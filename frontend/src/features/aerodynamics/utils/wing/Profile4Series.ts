@@ -59,7 +59,7 @@ export class Profile4Series extends Profile {
     ];
   }
 
-  createPoints(): ProfilePoints {
+  createPoints() {
     let upper = [];
     let lower = [];
     let camber = [];
@@ -76,14 +76,13 @@ export class Profile4Series extends Profile {
     lower.push([1, 0, 0]);
     upper.push([1, 0, 0]);
     camber.push([1, 0, 0]);
+
     const max = this.getLowerUpper(this.F);
 
-    return {
-      points: [...upper, ...lower.toReversed().slice(1)],
-      upper,
-      lower,
-      camber,
-      max,
-    };
+    this.upper = upper;
+    this.lower = lower;
+    this.camber = camber;
+    this.max = max;
+    this.points = [...upper, ...lower.toReversed().slice(1)];
   }
 }

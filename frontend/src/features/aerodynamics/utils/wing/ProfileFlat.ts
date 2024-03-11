@@ -19,7 +19,7 @@ export class ProfileFlat extends Profile {
     ];
   }
 
-  createPoints(): ProfilePoints {
+  createPoints() {
     let upper = [];
     let lower = [];
     let camber = [];
@@ -48,12 +48,10 @@ export class ProfileFlat extends Profile {
       [1, this.T / 2, 0],
     ];
 
-    return {
-      points: [...upper, ...lower.toReversed()],
-      upper,
-      lower,
-      camber,
-      max,
-    };
+    this.upper = upper;
+    this.lower = lower;
+    this.camber = camber;
+    this.max = max;
+    this.points = [...upper, ...lower.toReversed().slice(1)];
   }
 }

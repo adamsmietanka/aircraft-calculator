@@ -67,6 +67,8 @@ export class Wing {
     full = true
   ) {
     this.profile = ProfileFactory.create(profile);
+    this.profile.createPoints();
+
     this.span = span;
     this.chord = chord;
     this.chordTip = chordTip;
@@ -198,9 +200,10 @@ export class Wing {
   createFlap = () => {
     const wingGeometry = new BufferGeometry();
     this.vertices = [];
+    const gap = (0.015 * 2) / this.span;
 
     const points = this.profile.getOutlineFlap(this.FLAP_CHORD_START);
-    this.createSection(points, this.FLAP_START + 0.01, this.FLAP_END - 0.01);
+    this.createSection(points, this.FLAP_START + gap, this.FLAP_END - gap);
 
     const attr = new BufferAttribute(new Float32Array(this.vertices), 3);
     wingGeometry.setAttribute("position", attr);
@@ -208,7 +211,7 @@ export class Wing {
 
     const flapTip = this.createPanel(
       points,
-      ((this.FLAP_END - 0.01) * this.span) / 2
+      ((this.FLAP_END - gap) * this.span) / 2
     );
 
     let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, flapTip]);

@@ -13,12 +13,25 @@ describe("Profile creation", () => {
     Profile.SEGMENTS = 3;
 
     const profile = ProfileFactory.create("10");
+    profile.createPoints();
+
     expect(profile.upper).toEqual([
       [0, 0, 0],
       [0, 0.05, 0],
       [1, 0.05, 0],
       [1, 0, 0],
     ]);
+
+    expect(profile.points).toEqual([
+      [0, 0, 0],
+      [0, 0.05, 0],
+      [1, 0.05, 0],
+      [1, 0, 0], // the last point is not duplicated
+      [1, -0.05, 0],
+      [0, -0.05, 0],
+      [0, -0, 0],
+    ]);
+
     expect(profile.upper.length).toBe(Profile.SEGMENTS + 1);
   });
 
@@ -26,6 +39,7 @@ describe("Profile creation", () => {
     Profile.SEGMENTS = 2;
 
     const profile = ProfileFactory.create("2412");
+    profile.createPoints();
 
     expect(profile.upper[1][0]).toBeCloseTo(0.5, 2);
     expect(profile.max[1][1] - profile.max[0][1]).toBeCloseTo(12 / 100, 4);
@@ -36,6 +50,8 @@ describe("Profile creation", () => {
 
   it("creates a NACA 2415 profile", () => {
     const profile = ProfileFactory.create("2415");
+    profile.createPoints();
+
     expect(profile.max[1][1] - profile.max[0][1]).toBeCloseTo(15 / 100, 4);
   });
 
@@ -84,6 +100,7 @@ describe("Flap creation", () => {
     Profile.SEGMENTS = 4;
 
     const plate = ProfileFactory.create("10");
+    plate.createPoints();
 
     expect(plate.getOutlineWithoutFlap()).toEqual([
       [0, 0, 0],
@@ -111,6 +128,7 @@ describe("Flap creation", () => {
     ProfileFlat.SEGMENTS_V = 1;
 
     const profile = ProfileFactory.create("20");
+    profile.createPoints();
     const leadingEdge = profile.getFlapLE(0.5);
 
     expect(leadingEdge[0][0]).toBe(0.4);
@@ -124,6 +142,8 @@ describe("Flap creation", () => {
     ProfileFlat.SEGMENTS_V = 1;
 
     const plate = ProfileFactory.create("20");
+    plate.createPoints();
+
     expect(plate.getOutlineFlap()).toEqual([
       [1, -0, 0],
       [1, -0.1, 0],
@@ -148,6 +168,7 @@ describe("Flap creation", () => {
     Profile.SEGMENTS = 4;
 
     const profile = ProfileFactory.create("2412");
+    profile.createPoints();
     expect(profile.getOutlineFlap()).toEqual([
       [1, 0, 0],
       [0.852575033597649, -0.010842211015825711, 0],
@@ -162,6 +183,7 @@ describe("Flap creation", () => {
     ProfileFlat.SEGMENTS_V = 1;
 
     const profile = ProfileFactory.create("20");
+    profile.createPoints();
     expect(profile.getLastWingIndex(0.4)).toBe(1);
     expect(profile.getLastWingIndex(0.5)).toBe(1);
     expect(profile.getLastWingIndex(0.6)).toBe(2);
@@ -172,6 +194,7 @@ describe("Flap creation", () => {
     ProfileFlat.SEGMENTS_V = 1;
 
     const profile = ProfileFactory.create("20");
+    profile.createPoints();
 
     expect(profile.upper.length).toBe(Profile.SEGMENTS + 1);
     expect(profile.upper).toEqual([
