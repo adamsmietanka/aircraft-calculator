@@ -2,16 +2,16 @@ import { Wing } from "./Wing";
 
 jest.mock("three/examples/jsm/utils/BufferGeometryUtils", () => {});
 
+const config = {
+  span: 2,
+  chord: 1,
+  chordTip: 1,
+  angle: 0,
+  shape: 0,
+};
+
 describe("Wing creation", () => {
   it("creates section points", () => {
-    const config = {
-      span: 2,
-      chord: 1,
-      chordTip: 1,
-      angle: 0,
-      shape: 0,
-    };
-
     const wing = new Wing(config, "30");
 
     expect(wing.sectionPoints(0, 0.4)).toEqual([

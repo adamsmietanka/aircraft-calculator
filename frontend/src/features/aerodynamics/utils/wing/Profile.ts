@@ -48,10 +48,10 @@ export abstract class Profile
 
   public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
   public static FLAP_LE_SEGMENTS = 8;
-  public static FLAP_GAP = 0.01;
+  public FLAP_GAP = 0.01;
 
   public abstract parseName(name: string): ProfileDetails;
-  public abstract createPoints(): ProfilePoints;
+  public abstract createPoints(): void;
   public abstract getLowerUpper(x: number): number[][];
 
   constructor(name: string) {
@@ -62,13 +62,11 @@ export abstract class Profile
     this.T = T;
     this.F = F;
 
-    const { upper, lower, camber, max, points } = this.createPoints();
-
-    this.upper = upper;
-    this.lower = lower;
-    this.camber = camber;
-    this.max = max;
-    this.points = points;
+    this.upper = [];
+    this.lower = [];
+    this.camber = [];
+    this.max = [];
+    this.points = [];
   }
 
   /**
@@ -139,7 +137,7 @@ export abstract class Profile
   }
 
   public updateForFlap(X = 0.6) {
-    const Xgap = X - 2 * Profile.FLAP_GAP;
+    const Xgap = X - 2 * this.FLAP_GAP;
     const yFlap = this.getLowerUpper(X).map(([x, y, z]) => y);
     const yGap = this.getLowerUpper(Xgap).map(([x, y, z]) => y);
 
