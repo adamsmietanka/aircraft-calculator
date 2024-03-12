@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 // spherical coords
 const obj: Record<string, number[]> = {
-  "/": [70, 90, 0],
+  "/": [15, 80, 45],
   "/aerodynamics/introduction": [10, 90, 0],
   "/aerodynamics/profile": [20, 90, 0],
   "/aerodynamics/levelFlight": [10, 90, 0],
