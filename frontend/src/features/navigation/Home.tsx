@@ -18,8 +18,32 @@ import { animated, easings, useSpring } from "@react-spring/three";
 import Inputs3D from "../common/three/Inputs3D";
 import Arrow from "../../assets/arrow.svg?react";
 import { useCameraStore } from "../common/three/stores/useCamera";
+import AnimatedLine from "../common/three/AnimatedLine";
 
 const SPAR_DIAMETER = 0.03;
+
+const transform = (point: number[], { x = 0, y = 0, z = 0 }) => [
+  point[0] + x,
+  point[1] + y,
+  point[2] + z,
+];
+
+const bearing = { old: [0.35, 0, 0], new: [1, 0, 0] };
+const tank = { old: [0, 0, 0.6], new: [-1, 0, 0] };
+const filter1 = { old: [-0.25, -0.5, 0.1], new: [1, 0, 0.6] };
+const filter2 = { old: [0.25, -0.5, 0.1], new: [1.5, 0, 0.6] };
+
+const points = [bearing.old, tank.old, filter1.old, bearing.old];
+const pointsDiagram = [
+  bearing.new,
+  transform(bearing.new, { z: -0.5 }),
+  transform(tank.new, { z: -0.5 }),
+  tank.new,
+  transform(tank.new, { z: 1 }),
+  transform(filter1.new, { z: 0.4 }),
+  filter1.new,
+  bearing.new,
+];
 
 const Home = () => {
   const setCamera = useCameraStore((state) => state.set);
@@ -35,10 +59,11 @@ const Home = () => {
 
   const [spring] = useSpring(
     () => ({
-      bearing: diagram ? [8, 0, 0] : [0.35, 0, 0],
-      tank: diagram ? [6, 0, 0] : [0, 0, 0.6],
-      filter1: diagram ? [7, 0, 0.6] : [-0.25, -0.5, 0.1],
-      filter2: diagram ? [7.5, 0, 0.6] : [0.25, -0.5, 0.1],
+      all: diagram ? 6 : 0,
+      bearing: diagram ? bearing.new : bearing.old,
+      tank: diagram ? tank.new : tank.old,
+      filter1: diagram ? filter1.new : filter1.old,
+      filter2: diagram ? filter2.new : filter2.old,
       config: {
         duration: 1500,
         easing: easings.easeOutQuad,
@@ -135,23 +160,31 @@ const Home = () => {
             <cylinderGeometry args={[0.07, 0.07, 1, 32]} />
             <meshPhongMaterial />
           </animated.mesh>
-          <animated.mesh position={spring.bearing}>
-            <mesh rotation-z={Math.PI / 2}>
+          <animated.mesh position-x={spring.all}>
+            <animated.mesh position={spring.bearing}>
+              <mesh rotation-z={Math.PI / 2}>
+                <cylinderGeometry args={[0.1, 0.1, 0.15, 32]} />
+                <meshPhongMaterial color="grey" />
+              </mesh>
+            </animated.mesh>
+            <animated.mesh position={spring.tank}>
+              <boxGeometry args={[0.5, 0.25, 0.25]} />
+              <meshPhongMaterial color="white" />
+            </animated.mesh>
+            <animated.mesh position={spring.filter1}>
               <cylinderGeometry args={[0.1, 0.1, 0.15, 32]} />
-              <meshPhongMaterial color="grey" />
-            </mesh>
-          </animated.mesh>
-          <animated.mesh position={spring.tank}>
-            <boxGeometry args={[0.5, 0.25, 0.25]} />
-            <meshPhongMaterial color="white" />
-          </animated.mesh>
-          <animated.mesh position={spring.filter1}>
-            <cylinderGeometry args={[0.1, 0.1, 0.15, 32]} />
-            <meshPhongMaterial color="purple" />
-          </animated.mesh>
-          <animated.mesh position={spring.filter2}>
-            <cylinderGeometry args={[0.1, 0.1, 0.15, 32]} />
-            <meshPhongMaterial color="purple" />
+              <meshPhongMaterial color="purple" />
+            </animated.mesh>
+            <animated.mesh position={spring.filter2}>
+              <cylinderGeometry args={[0.1, 0.1, 0.15, 32]} />
+              <meshPhongMaterial color="purple" />
+            </animated.mesh>
+
+            <AnimatedLine
+              points={diagram ? pointsDiagram : pointsDiagram}
+              style="dotted"
+              color="grid"
+            />
           </animated.mesh>
         </mesh>
       </PresentationControls>
