@@ -129,7 +129,7 @@ const Steps = () => {
         <Outlet />
       </div>
       <div className="sticky flex justify-between bottom-0 p-4 z-40 h-20">
-        <a.button
+        {/* <a.button
           className={`btn normal-case ${
             (currentStepIndex === 0 || steps[currentStepIndex].tutorial) &&
             "invisible"
@@ -159,7 +159,7 @@ const Steps = () => {
         >
           Skip
           <Arrow />
-        </a.button>
+        </a.button> */}
       </div>
     </>
   );

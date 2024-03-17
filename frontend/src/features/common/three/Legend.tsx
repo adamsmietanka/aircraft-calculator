@@ -14,12 +14,19 @@ interface Props {
   gridPositionX: number;
   items: Array<{ name: string | ReactNode; style?: string; color?: string }>;
   opacity: SpringValue<number>;
+  show?: boolean;
   store?: UseBoundStore<
     StoreApi<SimpleMarkerStore | SynchronizedXMarkersStore | MarkersStore>
   >;
 }
 
-const Legend = ({ gridPositionX, items, opacity, store }: Props) => {
+const Legend = ({
+  gridPositionX,
+  items,
+  opacity,
+  show = true,
+  store,
+}: Props) => {
   return (
     <animated.mesh
       position-x={(gridPositionX * CANVAS_WIDTH) / 2}
@@ -34,9 +41,9 @@ const Legend = ({ gridPositionX, items, opacity, store }: Props) => {
             ]}
             style={i.style}
             color={i.color}
-            opacity={opacity}
+            opacity={opacity.to((o) => (show ? 1 : 0))}
           />
-          <AnimatedHtml position={[2, -index, 0]} className="w-20">
+          <AnimatedHtml position={[2, -index, 0]} className="w-20" show={show}>
             <div
               className={`${store && "cursor-pointer"} ${
                 i.name === store?.getState().legend && "font-bold"

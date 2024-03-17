@@ -49,10 +49,10 @@ const AnimatedLine = ({
       points: points.flat(),
       opacity,
       width: styles[style]?.width || width,
-      offset: styles[style]?.offset || 0,
+      offset: offset,
       config: customConfig,
     }),
-    [points, opacity, width, worldScale, customConfig]
+    [points, opacity, width, offset, worldScale, customConfig]
   );
 
   useFrame((state, delta) => {
@@ -62,7 +62,7 @@ const AnimatedLine = ({
 
     lineRef.current.material.opacity = lineSpring.opacity.get();
     lineRef.current.material.linewidth = lineSpring.width.get();
-    lineRef.current.material.dashOffset -= offset * delta * 60;
+    lineRef.current.material.dashOffset -= lineSpring.offset.get() * delta * 60;
   });
 
   const _start = useMemo(() => new Vector3(), []);

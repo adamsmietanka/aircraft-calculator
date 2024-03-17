@@ -19,6 +19,8 @@ import Inputs3D from "../common/three/Inputs3D";
 import Arrow from "../../assets/arrow.svg?react";
 import { useCameraStore } from "../common/three/stores/useCamera";
 import AnimatedLine from "../common/three/AnimatedLine";
+import Legend from "../common/three/Legend";
+import { Props } from "../common/types/three";
 
 const transform = (point: number[], { x = 0, y = 0, z = 0 }) => [
   point[0] + x,
@@ -44,6 +46,36 @@ const t1 = transform(tank.new, { z: 0.5 });
 const t2 = transform(tank.new, { z: -0.5 });
 const f1 = transform(filter1.new, { z: 0.75 });
 const f2 = transform(filter2.new, { z: 0.5 });
+
+const supply1 = [
+  tank.new,
+  t1,
+  transform(t1, { x: -0.35 }),
+  override(b1, { x: tank.new[0] - 0.35 }),
+  b1,
+  bearing.new,
+];
+
+const supply2 = [b1, b2, bearing2.new];
+
+const scavenge1 = [
+  bearing.new,
+  override(f1, { x: bearing.new[0] }),
+  f1,
+  filter1.new,
+  override(t2, { x: filter1.new[0] }),
+  t2,
+  tank.new,
+];
+
+const scavenge2 = [
+  bearing2.new,
+  override(f2, { x: bearing2.new[0] }),
+  f2,
+  filter2.new,
+  override(t1, { x: filter2.new[0] }),
+  override(t1, { x: filter1.new[0] }),
+];
 
 const pointsDiagram = [
   bearing.new,
@@ -71,7 +103,7 @@ const pointsDiagram2 = [
   b1,
 ];
 
-const Home = () => {
+const Home = ({ opacity }: Props) => {
   const setCamera = useCameraStore((state) => state.set);
 
   const { geom1, geom2, vertical, elliptic, tail, tailSquare, fuse1, fuse2 } =
@@ -82,6 +114,7 @@ const Home = () => {
   }, []);
 
   const [diagram, setDiagram] = useState(false);
+  const [hover, setHover] = useState(false);
 
   const [spring] = useSpring(
     () => ({
@@ -102,7 +135,7 @@ const Home = () => {
   );
 
   useEffect(() => {
-    if (diagram) setCamera({ center: [8, 0, 0], spherical: [10, 0, 0] });
+    if (diagram) setCamera({ center: [8, 0, 0], spherical: [15, 0, 0] });
     else setCamera({ center: [0, 0, 0], spherical: [15, 80, 45] });
   }, [diagram]);
 
@@ -219,18 +252,54 @@ const Home = () => {
             </animated.mesh>
 
             <AnimatedLine
-              points={diagram ? pointsDiagram : pointsDiagram}
+              points={supply1}
               opacity={diagram ? 1 : 0}
               style="dotted"
-              color="grid"
+              offset={hover ? 0.1 : 0}
+              color="teal"
+            />
+            <AnimatedLine
+              points={supply2}
+              opacity={diagram ? 1 : 0}
+              style="dotted"
+              offset={hover ? 0.1 : 0}
+              color="teal"
             />
 
             <AnimatedLine
-              points={pointsDiagram2}
+              points={scavenge1}
               opacity={diagram ? 1 : 0}
               style="dotted"
-              color="grid"
+              offset={hover ? 0.1 : 0}
+              color="purple"
             />
+            <AnimatedLine
+              points={scavenge2}
+              opacity={diagram ? 1 : 0}
+              style="dotted"
+              offset={hover ? 0.1 : 0}
+              color="purple"
+            />
+            <mesh rotation-x={-Math.PI / 2}>
+              <mesh
+                visible={false}
+                onPointerOver={(e) => (e.stopPropagation(), setHover(true))}
+                onPointerOut={(e) => setHover(false)}
+              >
+                <planeGeometry args={[4, 3.2]} />
+                <meshBasicMaterial opacity={0} transparent />
+              </mesh>
+              <Legend
+                gridPositionX={0.3}
+                items={[
+                  { name: "Supply", style: "dotted", color: "teal" },
+                  { name: "Scavenge", style: "dotted", color: "purple" },
+                ]}
+                opacity={opacity}
+                show={diagram}
+                // store={usePlaneChartStore}
+              />
+            </mesh>
           </animated.mesh>
         </mesh>
       </PresentationControls>
