@@ -65,7 +65,7 @@ const useVertical = () => {
       trailingPoints[trailingPoints.length - 1],
     ]);
 
-    const wing = new Wing(config, "0009", false);
+    const wing = new Wing(config, "0009", false, true);
 
     const geom = wing.createModel();
     wing.createFlap();
