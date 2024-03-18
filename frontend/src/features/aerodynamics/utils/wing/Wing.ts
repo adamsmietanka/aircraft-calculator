@@ -36,6 +36,7 @@ export class Wing {
   public geometry: BufferGeometry;
   public flap: BufferGeometry;
   public full: boolean;
+  public reversed: boolean;
 
   FLAP_CHORD_START = 0.7;
   FLAP_START = 0.05;
@@ -52,7 +53,9 @@ export class Wing {
     if (this.shape === 1) return Math.tan((this.angle * Math.PI) / 180) * y;
 
     const j = Math.abs((2 * y) / this.span);
-    return 0.7 * this.chord * (1 - Math.sqrt(1 - j * j));
+    return (
+      (this.reversed ? 0.7 : 0.3) * this.chord * (1 - Math.sqrt(1 - j * j))
+    );
   }
 
   public getChord(y: number): number {
@@ -64,16 +67,26 @@ export class Wing {
   }
 
   public getFlapAxisAngle = () => {
-    if (this.shape === 0 || this.shape == 2) return 0;
+    if (this.shape === 0 || (this.shape === 2 && this.reversed)) return 0;
+    if (this.shape === 2) {
+      const xStart = 0.4 * this.getChord((this.FLAP_START * this.span) / 2);
+      const xEnd = 0.4 * this.getChord((this.FLAP_END * this.span) / 2);
+      return -Math.atan2(
+        xStart - xEnd,
+        (this.span * (this.FLAP_END - this.FLAP_START)) / 2
+      );
+    }
+
     const xTip = this.getLE(this.span / 2);
     const x = xTip + (this.chordTip - this.chord) * this.FLAP_CHORD_START;
-    return Math.atan((2 * x) / this.span);
+    return Math.atan2(x, this.span / 2);
   };
 
   constructor(
     { span = 1, chord = 1, chordTip = 1, angle = 0, shape = 0 }: WingShape,
     profile: string,
-    full = true
+    full = true,
+    reversed = false
   ) {
     this.profile = ProfileFactory.create(profile);
     this.profile.createPoints();
@@ -87,6 +100,7 @@ export class Wing {
     this.geometry = new SphereGeometry();
     this.flap = new SphereGeometry();
     this.full = full;
+    this.reversed = reversed;
   }
 
   sectionPoints(start: number, end: number) {
@@ -99,8 +113,7 @@ export class Wing {
       );
     }
     const range = end - start;
-    const len =
-      Math.ceil(range * this.WING_SEGMENTS);
+    const len = Math.ceil(range * this.WING_SEGMENTS);
     const step = range / len;
     return [...Array(len + 1).keys()].map(
       (x) => ((start + x * step) * this.span) / 2
