@@ -73,7 +73,7 @@ const WingModel = ({ opacity }: Props) => {
     };
 
     const wing = new Wing(config, profile);
-    wing.FLAP_START = 0.5;
+    wing.FLAP_START = 0.65;
     wing.FLAP_END = 0.95;
 
     wing.createModel();

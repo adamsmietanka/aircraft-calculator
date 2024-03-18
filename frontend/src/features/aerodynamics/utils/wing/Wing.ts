@@ -12,6 +12,11 @@ import { ProfileFactory } from "./ProfileFactory";
 
 const PANELS = 2 * NUMBER_OF_AIRFOIL_SEGMENTS + 1;
 
+const interpolate = (start: number, end: number, ratio: number) =>
+  start + (end - start) * ratio;
+const sin = (x: number) => Math.sin((x * Math.PI) / 2);
+const asin = (x: number) => (Math.asin(x) / Math.PI) * 2;
+
 export interface WingShape {
   span?: number;
   chord?: number;
@@ -19,8 +24,6 @@ export interface WingShape {
   angle?: number;
   shape?: number;
 }
-const interpolate = (start: number, end: number, ratio: number) =>
-  start + (end - start) * ratio;
 
 export class Wing {
   public profile: Profile;
@@ -46,16 +49,22 @@ export class Wing {
    */
   public getLE(y: number): number {
     if (this.shape === 0) return 0;
-    return Math.tan((this.angle * Math.PI) / 180) * y;
+    if (this.shape === 1) return Math.tan((this.angle * Math.PI) / 180) * y;
+
+    const j = Math.abs((2 * y) / this.span);
+    return 0.7 * this.chord * (1 - Math.sqrt(1 - j * j));
   }
 
   public getChord(y: number): number {
     if (this.shape === 0) return this.chord;
-    return interpolate(this.chord, this.chordTip, (2 * y) / this.span);
+
+    const j = Math.abs((2 * y) / this.span);
+    if (this.shape === 1) return interpolate(this.chord, this.chordTip, j);
+    return this.chord * Math.sqrt(1 - j * j);
   }
 
   public getFlapAxisAngle = () => {
-    if (this.shape === 0) return 0;
+    if (this.shape === 0 || this.shape == 2) return 0;
     const xTip = this.getLE(this.span / 2);
     const x = xTip + (this.chordTip - this.chord) * this.FLAP_CHORD_START;
     return Math.atan((2 * x) / this.span);
@@ -81,8 +90,17 @@ export class Wing {
   }
 
   sectionPoints(start: number, end: number) {
+    if (this.shape === 2) {
+      const range = asin(end) - asin(start);
+      const len = Math.ceil(range * this.WING_SEGMENTS);
+      const step = range / len;
+      return [...Array(len + 1).keys()].map(
+        (x) => (sin(asin(start) + x * step) * this.span) / 2
+      );
+    }
     const range = end - start;
-    const len = Math.ceil(range * this.WING_SEGMENTS);
+    const len =
+      Math.ceil(range * this.WING_SEGMENTS);
     const step = range / len;
     return [...Array(len + 1).keys()].map(
       (x) => ((start + x * step) * this.span) / 2
@@ -91,6 +109,7 @@ export class Wing {
 
   createSection(points: number[][], start: number, end: number) {
     const Y = this.sectionPoints(start, end);
+
     Y.forEach((y, i) => {
       const fuse = this.profile.transform(
         points,
