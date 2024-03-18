@@ -153,10 +153,10 @@ const Home = ({ opacity }: Props) => {
         azimuth={[-Math.PI / 2, Math.PI / 2]} // Horizontal limits
         config={{ mass: 1, tension: 170, friction: 26 }}
       >
-        <mesh rotation-x={-Math.PI / 3}>
-          <Inputs3D gridPositionX={0.3}>
+        <mesh rotation-x={-Math.PI / 3} position-y={-2} position-z={-0.5}>
+          <Inputs3D gridPositionX={0.4}>
             <button
-              className="btn normal-case"
+              className="btn normal-case btn-ghost"
               onClick={() => setDiagram(() => !diagram)}
             >
               {diagram ? (
@@ -254,6 +254,7 @@ const Home = ({ opacity }: Props) => {
             <AnimatedLine
               points={supply1}
               opacity={diagram ? 1 : 0}
+              show={diagram}
               style="dotted"
               offset={hover ? 0.1 : 0}
               color="teal"
@@ -261,6 +262,7 @@ const Home = ({ opacity }: Props) => {
             <AnimatedLine
               points={supply2}
               opacity={diagram ? 1 : 0}
+              show={diagram}
               style="dotted"
               offset={hover ? 0.1 : 0}
               color="teal"
@@ -269,6 +271,7 @@ const Home = ({ opacity }: Props) => {
             <AnimatedLine
               points={scavenge1}
               opacity={diagram ? 1 : 0}
+              show={diagram}
               style="dotted"
               offset={hover ? 0.1 : 0}
               color="purple"
@@ -276,6 +279,7 @@ const Home = ({ opacity }: Props) => {
             <AnimatedLine
               points={scavenge2}
               opacity={diagram ? 1 : 0}
+              show={diagram}
               style="dotted"
               offset={hover ? 0.1 : 0}
               color="purple"

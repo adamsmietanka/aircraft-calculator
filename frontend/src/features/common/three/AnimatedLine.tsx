@@ -18,6 +18,7 @@ type Props = {
   points: number[][];
   scale?: number[];
   opacity?: number | SpringValue<number> | Interpolation<number>;
+  show?: boolean;
   offset?: number;
   width?: SpringValue<number> | number;
   color?: string;
@@ -29,6 +30,7 @@ const AnimatedLine = ({
   points,
   scale,
   opacity = 1,
+  show = true,
   offset = 0,
   width = 3,
   color = "primary",
@@ -112,6 +114,7 @@ const AnimatedLine = ({
   return (
     <Line
       ref={lineRef}
+      visible={show}
       dashed
       points={[0, 0, 0, 1, 0, 0]}
       color={colors[color] || color}
