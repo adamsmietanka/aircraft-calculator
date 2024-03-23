@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useHorizontalStore } from "../../stores/useHorizontal";
 import getLeadingTrailing from "../../utils/getLeadingTrailing";
-import { BufferGeometry, SphereGeometry } from "three";
-import getProfilePoints from "../../utils/getProfilePoints";
-import createWingModel from "../utils/createWingModel";
 import { useVerticalStore } from "../../stores/useVertical";
 import { usePlaneStore } from "../../stores/usePlane";
 import { useWingStore } from "../../stores/useWing";
@@ -16,6 +13,7 @@ import {
 import { getWingPointsAt } from "../../utils/getWingOutline";
 import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
 import { isMultifuse } from "../../utils/planeConfiguration";
+import { Wing } from "../../utils/wing/Wing";
 
 const xA = 0.25;
 
@@ -52,11 +50,9 @@ const useHorizontal = () => {
   const MACposition = useWingStore((state) => state.MACposition)[0];
   const wingArea = useWingStore((state) => state.area);
 
-  const setGeometry = usePlaneGeometryStore((state) => state.set);
+  const [stabilizer, setStabilizer] = useState(new Wing({}, "10"));
 
-  const [horizontal, setHorizontal] = useState<BufferGeometry>(
-    new SphereGeometry()
-  );
+  const setGeometry = usePlaneGeometryStore((state) => state.set);
 
   const [leading, setLeading] = useState([
     [0, 0, 0],
@@ -70,7 +66,6 @@ const useHorizontal = () => {
     [0, 0, 0],
     [1, 1, 1],
   ]);
-  const [symmetric] = useState(getProfilePoints("0009"));
 
   useEffect(() => {
     const leadTrail = getWingPointsAt(
@@ -96,9 +91,14 @@ const useHorizontal = () => {
       trailingPoints[trailingPoints.length - 1],
     ]);
 
-    const geom = createWingModel(config, symmetric);
+    const wing = new Wing(config, "0009");
+    wing.FLAP_CHORD_START = 0.6;
+    const geom = wing.createModel();
+    wing.createFlap();
+
     setGeometry({ horizontal: geom });
-    setHorizontal(geom);
+
+    setStabilizer(wing);
 
     const area = getArea(config);
     const aspectRatio = getAspectRatio(config);
@@ -120,7 +120,7 @@ const useHorizontal = () => {
     }
   }, [configuration, fuselageDistance]);
 
-  return { horizontal, leading, trailing, top, positionLeadTrail };
+  return { leading, trailing, top, positionLeadTrail, stabilizer };
 };
 
 export default useHorizontal;

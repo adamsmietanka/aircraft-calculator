@@ -7,10 +7,63 @@ import { useVerticalStore } from "../stores/useVertical";
 import useVertical from "./hooks/useVertical";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import { getXTip } from "./hooks/useWingSpring";
-import { animated } from "@react-spring/three";
+import { animated, useSpring } from "@react-spring/three";
 import { isMultifuse } from "../utils/planeConfiguration";
+import { useKeyboardControls } from "@react-three/drei";
+import { Controls } from "../../navigation/PlaneBuilder";
 
-const meshVisible = ["/aerodynamics/horizontal", "/aerodynamics/results", "/aerodynamics/glide"];
+const meshVisible = [
+  "/aerodynamics/horizontal",
+  "/aerodynamics/results",
+  "/aerodynamics/glide",
+];
+
+const Rudder = ({ opacity, stabilizer }: Props & { stabilizer: any }) => {
+  const left = useKeyboardControls<Controls>((state) => state.left);
+  const right = useKeyboardControls<Controls>((state) => state.right);
+
+  const chord = useVerticalStore((state) => state.chord);
+  const span = useVerticalStore((state) => state.span);
+
+  const { pathname } = useLocation();
+
+  const [spring] = useSpring(
+    () => ({
+      angle: (((+right - +left) * 35) / 180) * Math.PI,
+    }),
+    [left, right]
+  );
+
+  const flapY = (span * stabilizer.FLAP_START) / 2;
+  const flapX =
+    stabilizer.getChord(flapY) * stabilizer.FLAP_CHORD_START +
+    stabilizer.getLE(flapY);
+
+  return (
+    <animated.mesh
+      position-x={flapX}
+      position-z={flapY}
+      rotation-y={stabilizer.getFlapAxisAngle()}
+      rotation-z={spring.angle}
+    >
+      <mesh rotation-y={-stabilizer.getFlapAxisAngle()}>
+        <mesh
+          visible={meshVisible.includes(pathname)}
+          geometry={stabilizer.flap}
+          position-x={-flapX}
+          position-z={-flapY}
+        >
+          <animated.meshStandardMaterial
+            color="white"
+            metalness={0.5}
+            transparent
+            opacity={opacity}
+          />
+        </mesh>
+      </mesh>
+    </animated.mesh>
+  );
+};
 
 const StabilizerVertical = ({ opacity }: Props) => {
   const chord = useVerticalStore((state) => state.chord);
@@ -32,34 +85,35 @@ const StabilizerVertical = ({ opacity }: Props) => {
 
   const { pathname } = useLocation();
 
-  const { vertical, leading, trailing, top } = useVertical();
+  const { leading, trailing, top, stabilizer } = useVertical();
 
   return (
     <mesh>
-      <mesh
-        visible={meshVisible.includes(pathname)}
-        rotation-x={-Math.PI / 2}
-        geometry={vertical}
-      >
-        <animated.meshStandardMaterial
-          color="white"
-          metalness={0.5}
-          transparent
-          opacity={opacity}
-        />
-      </mesh>
-      <mesh
-        visible={meshVisible.includes(pathname) && isMultifuse(configuration)}
-        rotation-x={-Math.PI / 2}
-        position-z={-fuselageDistance}
-        geometry={vertical}
-      >
-        <animated.meshStandardMaterial
-          color="white"
-          metalness={0.5}
-          transparent
-          opacity={opacity}
-        />
+      <mesh rotation-x={-Math.PI / 2}>
+        <mesh
+          visible={meshVisible.includes(pathname)}
+          geometry={stabilizer.geometry}
+        >
+          <animated.meshStandardMaterial
+            color="white"
+            metalness={0.5}
+            transparent
+            opacity={opacity}
+          />
+        </mesh>
+        <Rudder opacity={opacity} stabilizer={stabilizer} />
+        <mesh
+          visible={meshVisible.includes(pathname) && isMultifuse(configuration)}
+          position-z={-fuselageDistance}
+          geometry={stabilizer.geometry}
+        >
+          <animated.meshStandardMaterial
+            color="white"
+            metalness={0.5}
+            transparent
+            opacity={opacity}
+          />
+        </mesh>
       </mesh>
       <AnimatedInputTechnical
         visible={pathname === "/aerodynamics/vertical"}

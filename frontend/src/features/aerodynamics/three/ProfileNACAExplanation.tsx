@@ -18,6 +18,13 @@ interface Props {
   opacity?: SpringValue<number>;
 }
 
+/**
+ * Used to align latex symbols with surroundings
+ * @param inside the text to be hidden
+ * @returns text wrapped with vphantom
+ */
+const phantom = (inside: string) => `\\vphantom{${inside}}`;
+
 const ProfileNACAExplanation = ({ opacity }: Props) => {
   const hover = useProfileChartsStore((state) => state.hover);
   const locked = useProfileChartsStore((state) => state.locked);
@@ -41,6 +48,10 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
   const highestPoint = useProfileStore((state) => state.highestPoint);
 
   const { profileSpring } = useProfileVisualizer();
+
+  const first = `${M * 100}`;
+  const second = `${P * 10}`;
+  const third = `${String(T * 100).padStart(2, "0")}`;
 
   return (
     <animated.mesh
@@ -69,21 +80,21 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
         <div className="flex text-3xl">
           <HoverableFormulaColor
             name="Maximum camber of the airfoil"
-            tex={`${M * 100}`}
+            tex={first + phantom(second + third)}
             hover={hoverA}
             onEnter={() => onProfile && set({ hoverA: true })}
             onLeave={() => onProfile && set({ hoverA: false })}
           />
           <HoverableFormulaColor
             name="Position of maximum camber"
-            tex={`${P * 10}`}
+            tex={phantom(first) + second + phantom(third)}
             hover={hoverB}
             onEnter={() => onProfile && set({ hoverB: true })}
             onLeave={() => onProfile && set({ hoverB: false })}
           />
           <HoverableFormulaColor
             name="Maximum thickness of the airfoil"
-            tex={`${String(T * 100).padStart(2, "0")}`}
+            tex={phantom(first + second) + third}
             hover={hoverC}
             onEnter={() => onProfile && set({ hoverC: true })}
             onLeave={() => onProfile && set({ hoverC: false })}

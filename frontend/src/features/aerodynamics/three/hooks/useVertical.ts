@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useVerticalStore } from "../../stores/useVertical";
 import getLeadingTrailing from "../../utils/getLeadingTrailing";
-import { BufferGeometry, SphereGeometry } from "three";
-import getProfilePoints from "../../utils/getProfilePoints";
-import createWingModel from "../utils/createWingModel";
 import { usePlaneGeometryStore } from "../../stores/usePlaneGeometry";
 import { usePlaneStore } from "../../stores/usePlane";
 import fuselages from "../../data/fuselages";
 import { getArea, getAspectRatio } from "../../utils/getWingSpecs";
+import { Wing } from "../../utils/wing/Wing";
 
 const useVertical = () => {
   const chord = useVerticalStore((state) => state.chord);
@@ -18,9 +16,7 @@ const useVertical = () => {
   const set = useVerticalStore((state) => state.set);
   const setGeometry = usePlaneGeometryStore((state) => state.set);
 
-  const [vertical, setVertical] = useState<BufferGeometry>(
-    new SphereGeometry()
-  );
+  const [stabilizer, setStabilizer] = useState<Wing>(new Wing({}, "10"));
 
   const [leading, setLeading] = useState([
     [0, 0, 0],
@@ -69,15 +65,18 @@ const useVertical = () => {
       trailingPoints[trailingPoints.length - 1],
     ]);
 
-    const symmetric = getProfilePoints("0009");
-    const geom = createWingModel(config, symmetric, false);
-    setVertical(geom);
+    const wing = new Wing(config, "0009", false, true);
+
+    const geom = wing.createModel();
+    wing.createFlap();
     setGeometry({ vertical: geom });
+
+    setStabilizer(wing);
 
     set({ area: getArea(config) / 2, aspectRatio: getAspectRatio(config) });
   }, [span, chord, chordTip, angle, shape]);
 
-  return { vertical, leading, trailing, top };
+  return { leading, trailing, top, stabilizer };
 };
 
 export default useVertical;
