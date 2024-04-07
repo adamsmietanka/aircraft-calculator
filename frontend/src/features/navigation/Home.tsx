@@ -9,18 +9,49 @@ import {
 } from "@react-three/drei";
 import useLandingPage from "./hooks/useLandingPage";
 import { useMemo } from "react";
-import { MeshStandardMaterial } from "three";
+import { DoubleSide, MeshStandardMaterial } from "three";
 import Contact from "./Contact";
+import { Plane } from "../aerodynamics/utils/plane/Plane";
+import { Props } from "../common/types/three";
+import RudderNew from "../aerodynamics/three/controls/RudderNew";
+import Ailerons from "../aerodynamics/three/controls/Aileron";
+import Elevator from "../aerodynamics/three/controls/Elevator";
 
 const SPAR_DIAMETER = 0.03;
 
-const Home = () => {
+const Home = ({ opacity }: Props) => {
   const { geom1, geom2, vertical, elliptic, tail, tailSquare, fuse1, fuse2 } =
     useLandingPage();
 
   const material = useMemo(() => {
     return new MeshStandardMaterial({ metalness: 0.5 });
   }, []);
+
+  const materialDouble = useMemo(() => {
+    return new MeshStandardMaterial({ metalness: 0.5, side: DoubleSide });
+  }, []);
+
+  const plane = useMemo(
+    () =>
+      new Plane({
+        wing: {
+          span: 6,
+          chord: 2,
+        },
+        vertical: {
+          shape: 2,
+        },
+        horizontal: {
+          span: 4,
+          chord: 1.25,
+          chordTip: 0.65,
+          angle: 5,
+          shape: 1,
+        },
+        fuselage: { shape: 2303, length: 9, wingX: 1.5 },
+      }),
+    []
+  );
 
   return (
     <mesh receiveShadow>
@@ -73,32 +104,16 @@ const Home = () => {
             <Instance position={[0.2, 0, 2.75]} />
             <Instance position={[1.2, 0, 2.75]} />
           </Instances>
-          <mesh geometry={geom2} scale-z={0.5} material={material} />
-          <mesh
+          {/* <mesh
             geometry={geom2}
             scale-z={0.5}
             position-y={1.25}
             material={material}
-          />
-          <mesh
-            position-x={6.25}
-            position-y={0.65}
-            rotation-x={-Math.PI / 2}
-            geometry={elliptic}
-            material={material}
-          />
-          <mesh
-            position-x={6.25}
-            position-y={0.45}
-            geometry={tail}
-            material={material}
-          />
-          <mesh
-            scale={9}
-            position-x={-1.5}
-            geometry={fuse2}
-            material={material}
-          />
+          /> */}
+          <RudderNew opacity={opacity} stabilizer={plane.vertical} />
+          <Elevator opacity={opacity} stabilizer={plane.horizontal} />
+          <Ailerons opacity={opacity} wing={plane.wing} />
+          <mesh geometry={plane.geometry} material={materialDouble} />
         </mesh>
       </Float>
       <Float

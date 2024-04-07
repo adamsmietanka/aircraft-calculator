@@ -11,6 +11,7 @@ interface Props {
 
 const FuseModel = ({ opacity }: Props) => {
   const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
+  
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);
   const wingX = usePlaneStore((state) => state.wingX);
