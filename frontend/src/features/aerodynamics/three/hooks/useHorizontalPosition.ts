@@ -16,7 +16,7 @@ const getMaxY = (shape: number, span: number) =>
 
 const interp = (y0: number, y1: number, x: number) => y0 + (y1 - y0) * x;
 
-const clampOverZero = (val: number) => (val < 0 ? 0 : val);
+const clampOverZero = (val: number) => Math.max(0, val);
 
 const useHorizontalPosition = () => {
   const shape = useVerticalStore((state) => state.shape);
@@ -64,7 +64,16 @@ const useHorizontalPosition = () => {
           : 0),
       horizontalY: y,
     });
-  }, [shape, span, chord, position, fuselage, shapeH, configuration, fuselageDistance]);
+  }, [
+    shape,
+    span,
+    chord,
+    position,
+    fuselage,
+    shapeH,
+    configuration,
+    fuselageDistance,
+  ]);
 };
 
 export default useHorizontalPosition;

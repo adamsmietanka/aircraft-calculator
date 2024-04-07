@@ -151,7 +151,7 @@ export class Wing {
     });
   }
 
-  createModel = () => {
+  public createModel = () => {
     const wingGeometry = new BufferGeometry();
     const tipShape = new Shape();
 
