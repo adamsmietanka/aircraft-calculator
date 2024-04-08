@@ -35,8 +35,8 @@ const Aileron = ({
           <animated.meshStandardMaterial
             color="white"
             metalness={0.5}
-            transparent
-            opacity={opacity}
+            // transparent
+            // opacity={opacity}
           />
         </mesh>
       </mesh>
