@@ -48,7 +48,31 @@ const Home = ({ opacity }: Props) => {
           angle: 5,
           shape: 1,
         },
-        fuselage: { shape: 2303, length: 9, wingX: 1.5 },
+        fuselage: { shape: 2302, length: 9, wingX: 1.5, configuration: 1 },
+      }),
+    []
+  );
+
+  const plane2 = useMemo(
+    () =>
+      new Plane({
+        wing: {
+          span: 12,
+          chord: 2,
+          shape: 1,
+          angle: 10,
+        },
+        vertical: {
+          shape: 1,
+        },
+        horizontal: {
+          span: 4,
+          chord: 1.25,
+          chordTip: 0.65,
+          angle: 5,
+          shape: 1,
+        },
+        fuselage: { shape: 2303, length: 10, wingX: 1.8 },
       }),
     []
   );
@@ -129,28 +153,10 @@ const Home = ({ opacity }: Props) => {
           scale={[-1.45, 1.45, 1.45]}
           rotation={[-Math.PI / 16, 0, 0]}
         >
-          <mesh geometry={geom1} material={material} />
-
-          <mesh
-            scale={9}
-            scale-x={10.5}
-            position-x={-1.5}
-            geometry={fuse1}
-            material={material}
-          />
-          <mesh
-            position-x={7.5}
-            position-y={0.65}
-            rotation-x={-Math.PI / 2}
-            geometry={vertical}
-            material={material}
-          />
-          <mesh
-            position-x={8.1}
-            position-y={1.95}
-            geometry={tailSquare}
-            material={material}
-          />
+          <RudderNew opacity={opacity} stabilizer={plane2.vertical} />
+          <Elevator opacity={opacity} stabilizer={plane2.horizontal} />
+          <Ailerons opacity={opacity} wing={plane2.wing} />
+          <mesh geometry={plane2.geometry} material={materialDouble} />
         </mesh>
       </Float>
       <Contact />

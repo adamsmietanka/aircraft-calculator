@@ -11,6 +11,7 @@ export interface IPlane {
   vertical: WingShape;
   horizontal: WingShape;
   fuselage: Partial<Fuse>;
+  configuration?: number;
 }
 
 /**
@@ -32,24 +33,33 @@ export class Plane implements IPlane {
   public fuselage: Fuse;
   public geometry: BufferGeometry;
   public config: IPlane;
-  public rudder: Mesh;
 
   constructor(config: IPlane) {
     this.wing = new Wing(config.wing, "2412");
+
+    this.wing.FLAP_START = 0.6;
+    this.wing.FLAP_END = 0.9;
+
     this.wing.createModel();
     this.wing.createFlap();
-    
+
     this.horizontal = new Horizontal(config);
     this.vertical = new Vertical(config);
     this.fuselage = new Fuselage(config.fuselage);
     this.config = config;
 
-    this.rudder = new Mesh();
-
     this.geometry = new SphereGeometry();
     this.positionVertical();
     this.positionHorizontal();
     this.position();
+  }
+
+  merge(geometries: BufferGeometry[]) {
+    return BufferGeometryUtils.mergeGeometries(geometries);
+  }
+
+  addGeometries(geometries: BufferGeometry[]) {
+    this.geometry = this.merge([this.geometry, ...geometries]);
   }
 
   public positionVertical() {
@@ -71,7 +81,8 @@ export class Plane implements IPlane {
       0
     );
     const y = verticalY * length + relativeY;
-    const x = this.vertical.getLE(clampOverZero(relativeY)) + this.vertical.position[0];
+    const x =
+      this.vertical.getLE(clampOverZero(relativeY)) + this.vertical.position[0];
     const chord = this.vertical.getChord(clampOverZero(relativeY));
 
     this.horizontal.chord = chord;
@@ -94,15 +105,25 @@ export class Plane implements IPlane {
     this.horizontal.geometry.translate(x, y, 0);
   }
 
-  public position() {
-    this.fuselage.geometry = this.fuselage.geometry.toNonIndexed();
-    this.fuselage.geometry.deleteAttribute("uv");
+  public isMultifuse = () => [2, 3].includes(this.fuselage.configuration);
+  public isBiplane = () => [1, 3].includes(this.fuselage.configuration);
 
-    this.geometry = BufferGeometryUtils.mergeGeometries([
-      this.fuselage.geometry.toNonIndexed(),
-      this.wing.geometry,
-      this.vertical.geometry,
-      this.horizontal.geometry,
-    ]);
+  public position() {
+    if (this.isMultifuse()) {
+      let geom = this.fuselage.geometry;
+      this.geometry = this.merge([
+        geom.clone().translate(0, 0, -1.5),
+        geom.translate(0, 0, 1.5),
+      ]);
+    } else this.geometry = this.fuselage.geometry;
+
+    if (this.isBiplane()) {
+      let geom = this.wing.geometry;
+      this.addGeometries([geom.clone(), geom.translate(0, 1.25, 0)]);
+    } else {
+      this.addGeometries([this.wing.geometry]);
+    }
+
+    this.addGeometries([this.vertical.geometry, this.horizontal.geometry]);
   }
 }
