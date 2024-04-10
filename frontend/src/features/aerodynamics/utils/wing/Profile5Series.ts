@@ -2,29 +2,55 @@ import { Profile, ProfilePoints } from "./Profile";
 
 const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
 
-export class Profile4Series extends Profile {
+const coeffs: Record<number, { r: number; k: number }> = {
+  1: { r: 0.058, k: 361.4 },
+  2: { r: 0.126, k: 51.64 },
+  3: { r: 0.2025, k: 15.957 },
+  4: { r: 0.29, k: 6.643 },
+  5: { r: 0.391, k: 3.23 },
+};
+
+export class Profile5Series extends Profile {
+  public r = 0;
+  public k = 0;
+  public L = 0;
+  public S = 0;
+
   parseName(name: string) {
-    this.M = parseInt(name[0]) / 100;
-    this.P = parseInt(name[1]) / 10;
-    this.T = parseInt(name.slice(2, 4)) / 100;
-    this.F = 0.3;
+    const L = parseInt(name[0]);
+    const P = parseInt(name[1]);
+    const S = parseInt(name[2]);
+    const T = parseInt(name.slice(3, 5));
+    const F = 0.3;
+
+    this.L = L * 0.15;
+    this.P = P * 0.05;
+    this.S = S;
+    this.T = T * 0.01;
+    this.F = F;
+
+    this.r = coeffs[P].r;
+    this.k = coeffs[P].k;
   }
 
   getCamberY(x: number) {
-    if (x < this.P) {
-      return (this.M / Math.pow(this.P, 2)) * (2 * this.P * x - x * x);
+    if (x < this.r) {
+      return (
+        (this.k / 6) *
+        (x * x * x - 3 * this.r * x * x + this.r * this.r * (3 - this.r) * x)
+      );
     }
-    return (
-      (this.M / Math.pow(1 - this.P, 2)) *
-      (1 - 2 * this.P + 2 * this.P * x - x * x)
-    );
+    return ((this.k * this.r * this.r * this.r) / 6) * (1 - x);
   }
 
   getCamberGradient(x: number) {
-    if (x < this.P) {
-      return ((2 * this.M) / Math.pow(this.P, 2)) * (this.P - x);
+    if (x < this.r) {
+      return (
+        (this.k / 6) *
+        (3 * x * x - 6 * this.r * x + this.r * this.r * (3 - this.r))
+      );
     }
-    return ((2 * this.M) / Math.pow(1 - this.P, 2)) * (this.P - x);
+    return -(this.k * this.r * this.r * this.r) / 6;
   }
 
   getThickness(x: number) {
@@ -82,5 +108,10 @@ export class Profile4Series extends Profile {
     this.camber = camber;
     this.max = max;
     this.points = [...upper, ...lower.toReversed().slice(1)];
+  }
+
+  constructor(name: string) {
+    super(name);
+    this.parseName(name);
   }
 }
