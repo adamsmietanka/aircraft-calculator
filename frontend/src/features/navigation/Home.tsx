@@ -7,26 +7,47 @@ import {
   Instances,
   Instance,
 } from "@react-three/drei";
-import useLandingPage from "./hooks/useLandingPage";
-import { useMemo } from "react";
-import { DoubleSide, MeshStandardMaterial } from "three";
+import { useMemo, useRef } from "react";
+import { DoubleSide, Mesh, MeshStandardMaterial } from "three";
 import Contact from "./Contact";
 import { Plane } from "../aerodynamics/utils/plane/Plane";
 import { Props } from "../common/types/three";
 import RudderNew from "../aerodynamics/three/controls/RudderNew";
 import Ailerons from "../aerodynamics/three/controls/Aileron";
 import Elevator from "../aerodynamics/three/controls/Elevator";
+import { Propeller } from "../aerodynamics/utils/plane/Propeller";
+import { useFrame } from "@react-three/fiber";
 
 const SPAR_DIAMETER = 0.03;
 
-const Home = ({ opacity }: Props) => {
-  const { geom1, geom2, vertical, elliptic, tail, tailSquare, fuse1, fuse2 } =
-    useLandingPage();
-
+const PropellerModel = ({ propeller }: { propeller: Propeller }) => {
   const material = useMemo(() => {
     return new MeshStandardMaterial({ metalness: 0.5 });
   }, []);
 
+  const angle = 30;
+
+  const propRef = useRef<Mesh>(null!);
+  useFrame(() => {
+    if (propRef.current) propRef.current.rotation.x -= 0.03;
+  });
+  return (
+    <mesh ref={propRef} position={propeller.position}>
+      {[...new Array(propeller.blades)].map((_, index) => (
+        <mesh
+          geometry={propeller.geometry}
+          material={material}
+          rotation-z={
+            (angle * Math.PI) / 180 + propeller.getThreeFourthsAngle()
+          }
+          rotation-x={(2 * Math.PI * index) / propeller.blades}
+        />
+      ))}
+    </mesh>
+  );
+};
+
+const Home = ({ opacity }: Props) => {
   const materialDouble = useMemo(() => {
     return new MeshStandardMaterial({ metalness: 0.5, side: DoubleSide });
   }, []);
@@ -48,7 +69,8 @@ const Home = ({ opacity }: Props) => {
           angle: 5,
           shape: 1,
         },
-        fuselage: { shape: 2302, length: 9, wingX: 1.5, configuration: 1 },
+        fuselage: { shape: 2301, length: 9, wingX: 1.5, configuration: 1 },
+        propeller: { blades: 2, diameter: 3, chord: 0.2 },
       }),
     []
   );
@@ -73,6 +95,7 @@ const Home = ({ opacity }: Props) => {
           shape: 1,
         },
         fuselage: { shape: 2303, length: 10, wingX: 1.8 },
+        propeller: { blades: 4, diameter: 0, chord: 0.2 },
       }),
     []
   );
@@ -138,6 +161,7 @@ const Home = ({ opacity }: Props) => {
           <Elevator opacity={opacity} stabilizer={plane.horizontal} />
           <Ailerons opacity={opacity} wing={plane.wing} />
           <mesh geometry={plane.geometry} material={materialDouble} />
+          <PropellerModel propeller={plane.propeller} />
         </mesh>
       </Float>
       <Float
