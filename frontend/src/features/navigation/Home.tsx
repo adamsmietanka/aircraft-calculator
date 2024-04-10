@@ -32,17 +32,24 @@ const PropellerModel = ({ propeller }: { propeller: Propeller }) => {
     if (propRef.current) propRef.current.rotation.x -= 0.03;
   });
   return (
-    <mesh ref={propRef} position={propeller.position}>
-      {[...new Array(propeller.blades)].map((_, index) => (
-        <mesh
-          geometry={propeller.geometry}
-          material={material}
-          rotation-z={
-            (angle * Math.PI) / 180 + propeller.getThreeFourthsAngle()
-          }
-          rotation-x={(2 * Math.PI * index) / propeller.blades}
-        />
-      ))}
+    <mesh position={propeller.position}>
+      <mesh ref={propRef}>
+        {[...new Array(propeller.blades)].map((_, index) => (
+          <mesh
+            geometry={propeller.geometry}
+            material={material}
+            rotation-z={
+              (angle * Math.PI) / 180 + propeller.getThreeFourthsAngle()
+            }
+            rotation-x={(2 * Math.PI * index) / propeller.blades}
+          />
+        ))}
+      </mesh>
+      <mesh
+        geometry={propeller.spinner}
+        position-x={-0.25}
+        material={material}
+      />
     </mesh>
   );
 };
@@ -69,7 +76,7 @@ const Home = ({ opacity }: Props) => {
           angle: 5,
           shape: 1,
         },
-        fuselage: { shape: 2301, length: 9, wingX: 1.5, configuration: 1 },
+        fuselage: { shape: 2302, length: 9, wingX: 1.5, configuration: 1 },
         propeller: { blades: 2, diameter: 3, chord: 0.2 },
       }),
     []

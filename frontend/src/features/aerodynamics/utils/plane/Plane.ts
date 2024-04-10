@@ -134,6 +134,10 @@ export class Plane implements IPlane {
       this.addGeometries([this.wing.geometry]);
     }
 
-    this.addGeometries([this.vertical.geometry, this.horizontal.geometry]);
+    this.addGeometries([
+      this.vertical.geometry,
+      this.horizontal.geometry,
+      this.propeller.spinner,
+    ]);
   }
 }
