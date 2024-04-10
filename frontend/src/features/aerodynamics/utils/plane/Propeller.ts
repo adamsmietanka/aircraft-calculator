@@ -1,4 +1,10 @@
-import { BufferAttribute, BufferGeometry } from "three";
+import {
+  BufferAttribute,
+  BufferGeometry,
+  LatheGeometry,
+  SphereGeometry,
+  Vector2,
+} from "three";
 import { Wing } from "../wing/Wing";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 
@@ -18,6 +24,7 @@ const defaults = {
 export class Propeller extends Wing {
   public blades: number;
   public position: [x: number, y: number, z: number];
+  public spinner: BufferGeometry = new SphereGeometry();
 
   public getAngle(y: number): number {
     return (2 * (-1.5 * y)) / this.span;
@@ -46,6 +53,20 @@ export class Propeller extends Wing {
     return blade;
   }
 
+  public createSpinner() {
+    const points = [];
+    for (let i = 0; i < 10; i++) {
+      points.push(new Vector2(Math.sin(i * 0.16) * 0.25, i * 0.05));
+    }
+    const geometry = new LatheGeometry(points)
+      .rotateZ(-Math.PI / 2)
+      .toNonIndexed();
+    this.spinner = geometry;
+    this.spinner.deleteAttribute("uv");
+
+    return geometry;
+  }
+
   constructor({ blades = 3, diameter = 2.5, chord = 0.2 }: Prop) {
     super({ ...defaults, span: diameter, chord }, "6612", false, true);
     this.blades = blades;
@@ -56,5 +77,6 @@ export class Propeller extends Wing {
     geom.rotateZ(-Math.PI * 0.5);
 
     this.geometry = geom;
+    this.createSpinner();
   }
 }
