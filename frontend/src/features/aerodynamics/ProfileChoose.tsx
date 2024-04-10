@@ -24,7 +24,7 @@ const ProfileChoose = () => {
       <div className="join h-12 p-0">
         <div className="dropdown dropdown-hover border rounded-btn input-bordered w-full join-item">
           <label tabIndex={0} className="label p-4 h-full">
-            {profile.length === 4
+            {profile.length !== 2
               ? `NACA ${profile}`
               : profile === "30"
               ? "Brick"
@@ -63,7 +63,7 @@ const ProfileChoose = () => {
               >
                 <summary>NACA 5-series</summary>
                 <ul>
-                  {profileList.map(
+                  {[...profileList, "21012", "23012", "23015", "23018", "25012"].map(
                     (p) =>
                       p.length === 5 && (
                         <li key={p}>

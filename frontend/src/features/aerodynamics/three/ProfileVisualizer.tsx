@@ -55,7 +55,7 @@ const ProfileVisualizer = ({ opacity }: Props) => {
             width={1.5}
             color="secondary"
             opacity={opacity.to((o) =>
-              showCamber && profile.length === 4 ? o / 1.5 : 0
+              showCamber && profile.length !== 2 ? o / 1.5 : 0
             )}
           />
           <AnimatedLine

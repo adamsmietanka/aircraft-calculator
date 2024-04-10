@@ -35,38 +35,27 @@ export interface ProfileMethods {
 export abstract class Profile
   implements ProfilePoints, ProfileMethods, ProfileDetails
 {
-  public M: number;
-  public P: number;
-  public T: number;
-  public F: number;
+  public M: number = 0;
+  public P: number = 0;
+  public T: number = 0;
+  public F: number = 0;
 
-  public lower: number[][];
-  public upper: number[][];
-  public points: number[][];
-  public camber: number[][];
-  public max: number[][];
+  public lower: number[][] = [];
+  public upper: number[][] = [];
+  public points: number[][] = [];
+  public camber: number[][] = [];
+  public max: number[][] = [];
 
   public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
   public static FLAP_LE_SEGMENTS = 8;
   public FLAP_GAP = 0.01;
 
-  public abstract parseName(name: string): ProfileDetails;
+  public abstract parseName(name: string): void;
   public abstract createPoints(): void;
   public abstract getLowerUpper(x: number): number[][];
 
   constructor(name: string) {
-    const { M, P, T, F } = this.parseName(name);
-
-    this.M = M;
-    this.P = P;
-    this.T = T;
-    this.F = F;
-
-    this.upper = [];
-    this.lower = [];
-    this.camber = [];
-    this.max = [];
-    this.points = [];
+    this.parseName(name);
   }
 
   /**
