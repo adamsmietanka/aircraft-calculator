@@ -80,6 +80,14 @@ export abstract class Profile
   public transform(points: number[][], X: number, Y: number, chord: number) {
     return points.map(([x, y, z]) => [X + chord * x, chord * y, Y]);
   }
+  public rotate(points: number[][], angle: number) {
+    const temp = points.map(([x, y, z]) => [x - 0.25, y, z]);
+    return temp.map(([x, y, z]) => [
+      x * Math.cos(angle) + y * Math.sin(angle) + 0.25,
+      y * Math.cos(angle) - x * Math.sin(angle),
+      z,
+    ]);
+  }
 
   /**
    * Get the outline of the wing excluding the flap

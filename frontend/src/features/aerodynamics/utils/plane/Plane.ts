@@ -1,16 +1,18 @@
-import { BufferGeometry, Mesh, SphereGeometry } from "three";
+import { BufferGeometry, SphereGeometry } from "three";
 import { Wing, WingShape } from "../wing/Wing";
 import { Fuse, Fuselage } from "./Fuselage";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils";
 import { Vertical } from "../wing/Vertical";
 import fuselages from "../../data/fuselages";
 import { Horizontal } from "../wing/Horizontal";
+import { Prop, Propeller } from "./Propeller";
 
 export interface IPlane {
   wing: WingShape;
   vertical: WingShape;
   horizontal: WingShape;
   fuselage: Partial<Fuse>;
+  propeller: Prop;
   configuration?: number;
 }
 
@@ -31,6 +33,7 @@ export class Plane implements IPlane {
   public vertical: Vertical;
   public horizontal: Horizontal;
   public fuselage: Fuse;
+  public propeller: Propeller;
   public geometry: BufferGeometry;
   public config: IPlane;
 
@@ -46,6 +49,7 @@ export class Plane implements IPlane {
     this.horizontal = new Horizontal(config);
     this.vertical = new Vertical(config);
     this.fuselage = new Fuselage(config.fuselage);
+    this.propeller = new Propeller(config.propeller);
     this.config = config;
 
     this.geometry = new SphereGeometry();
@@ -109,6 +113,12 @@ export class Plane implements IPlane {
   public isBiplane = () => [1, 3].includes(this.fuselage.configuration);
 
   public position() {
+    this.propeller.position = [
+      -1.7,
+      fuselages[this.fuselage.shape].propY * this.fuselage.length,
+      0,
+    ];
+
     if (this.isMultifuse()) {
       let geom = this.fuselage.geometry;
       this.geometry = this.merge([
