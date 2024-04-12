@@ -2,14 +2,18 @@ import { animated, to, useSpring } from "@react-spring/three";
 import { useInducedDragStore } from "./stores/useInducedDrag";
 import { Props } from "../../../common/types/three";
 import { DoubleSide } from "three";
-import useSimpleWingModel from "../hooks/useSimpleWingModel";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { Wing } from "../../utils/wing/Wing";
 
 const InducedDragWing = ({ opacity }: Props) => {
   const show = useInducedDragStore((state) => state.wing);
   const wingspan = useInducedDragStore((state) => state.wingspan);
 
-  const { geom } = useSimpleWingModel();
+  const wing = useMemo(() => {
+    const wing = new Wing({ span: 2 }, "2412");
+    wing.createModel(false);
+    return wing;
+  }, []);
 
   const [spring, api] = useSpring(
     () => ({
@@ -28,7 +32,7 @@ const InducedDragWing = ({ opacity }: Props) => {
   }, [wingspan]);
   return (
     <animated.mesh visible={spring.visible} scale-z={spring.wingspan}>
-      <mesh geometry={geom}>
+      <mesh geometry={wing.geometry}>
         <animated.meshStandardMaterial
           color={"lightgray"}
           side={DoubleSide}

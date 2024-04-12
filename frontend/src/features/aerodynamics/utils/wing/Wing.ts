@@ -162,19 +162,23 @@ export class Wing {
     });
   }
 
-  public createModel = () => {
+  public createModel = (flaps = true) => {
     const wingGeometry = new BufferGeometry();
     const tipShape = new Shape();
 
     this.profile.updateForFlap(this.FLAP_CHORD_START);
 
-    this.createSection(this.profile.points, 0, this.FLAP_START);
-    this.createSection(
-      this.profile.getOutlineWithoutFlap(this.FLAP_CHORD_START),
-      this.FLAP_START,
-      this.FLAP_END
-    );
-    this.createSection(this.profile.points, this.FLAP_END, 1);
+    if (flaps) {
+      this.createSection(this.profile.points, 0, this.FLAP_START);
+      this.createSection(
+        this.profile.getOutlineWithoutFlap(this.FLAP_CHORD_START),
+        this.FLAP_START,
+        this.FLAP_END
+      );
+      this.createSection(this.profile.points, this.FLAP_END, 1);
+    } else {
+      this.createSection(this.profile.points, 0, 1);
+    }
 
     const tip = this.profile.transform(
       this.profile.points,
