@@ -246,7 +246,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
     B,
     C,
     timedelta,
-    ACdelta,
+    ACdelta
     // true
   );
 
@@ -274,7 +274,6 @@ const NavigationElliptic = ({ opacity }: Props) => {
     const measStd = (Math.sqrt(meas / samples) * 2) / 100;
     const xVar = resultX / samples;
     const yVar = resultY / samples;
-    console.log((Math.hypot(xVar, yVar) / measStd).toPrecision(4));
   }, [A, B, C, timedelta, ACdelta]);
 
   const [spring] = useSpring(
