@@ -12,7 +12,7 @@ export interface ProfilePoints {
   lower: number[][];
   upper: number[][];
   points: number[][];
-  max: number[][];
+  max: { x: number; y: number; z: number }[];
 }
 
 export interface ProfileMethods {
@@ -38,13 +38,18 @@ export abstract class Profile
   public M: number = 0;
   public P: number = 0;
   public T: number = 0;
-  public F: number = 0;
+  public F: number = 0.3;
 
   public lower: number[][] = [];
   public upper: number[][] = [];
   public points: number[][] = [];
   public camber: number[][] = [];
-  public max: number[][] = [];
+  public max: { x: number; y: number; z: number }[] = [
+    { x: 0, y: 0, z: 0 },
+    { x: 0, y: 0, z: 0 },
+  ];
+  public lowerFlat: number[][] = [];
+  public upperFlat: number[][] = [];
 
   public static SEGMENTS = NUMBER_OF_AIRFOIL_SEGMENTS;
   public static FLAP_LE_SEGMENTS = 8;
@@ -153,5 +158,30 @@ export abstract class Profile
       [X, yFlap[0], 0],
       ...this.lower.slice(index + 2),
     ];
+  }
+  public flatten() {
+    let sum = 0;
+    this.upperFlat = this.upper.map((p, index, arr) => {
+      if (index > 0) {
+        const dist = Math.hypot(
+          p[0] - arr[index - 1][0],
+          p[1] - arr[index - 1][1]
+        );
+        sum += dist;
+      }
+      return [sum, 0.01, 0];
+    });
+
+    sum = 0;
+    this.lowerFlat = this.lower.map((p, index, arr) => {
+      if (index > 0) {
+        const dist = Math.hypot(
+          p[0] - arr[index - 1][0],
+          p[1] - arr[index - 1][1]
+        );
+        sum += dist;
+      }
+      return [sum, -0.01, 0];
+    });
   }
 }

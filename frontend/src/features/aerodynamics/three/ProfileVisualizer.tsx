@@ -10,6 +10,7 @@ import ProfileFlowSpeed from "./ProfileFlowSpeed";
 import { useWingStore } from "../stores/useWing";
 import { useProfileStore } from "../stores/useProfile";
 import ProfileAxis from "./tutorials/ProfileAxis";
+import ProfileNACAExplanation from "./ProfileNACAExplanation";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -19,11 +20,9 @@ const ProfileVisualizer = ({ opacity }: Props) => {
   const profile = useWingStore((state) => state.profile);
 
   useProfilePoints();
-  const upperFlat = useProfileStore((state) => state.upperFlat);
-  const lowerFlat = useProfileStore((state) => state.lowerFlat);
-  const upperPoints = useProfileStore((state) => state.upper);
-  const lowerPoints = useProfileStore((state) => state.lower);
-  const chordPoints = useProfileStore((state) => state.chord);
+
+  const prof = useProfileStore((state) => state.prof);
+
   const { profileSpring, showVisuals } = useProfileVisualizer();
 
   const showChord = useHoverProfileStore((state) => state.showChord);
@@ -38,20 +37,21 @@ const ProfileVisualizer = ({ opacity }: Props) => {
       position-y={profileSpring.positionZ}
       scale={profileSpring.scale}
     >
+      <ProfileNACAExplanation opacity={opacity} />
       <animated.mesh rotation-z={profileSpring.angle} position-x={0.25}>
         <mesh position-x={-0.25}>
           <AnimatedLine
-            points={flatten ? upperFlat : upperPoints}
+            points={flatten ? prof.upperFlat : prof.upper}
             width={2}
             opacity={opacity}
           />
           <AnimatedLine
-            points={flatten ? lowerFlat : lowerPoints}
+            points={flatten ? prof.lowerFlat : prof.lower}
             width={2}
             opacity={opacity}
           />
           <AnimatedLine
-            points={chordPoints}
+            points={prof.camber}
             width={1.5}
             color="secondary"
             opacity={opacity.to((o) =>
