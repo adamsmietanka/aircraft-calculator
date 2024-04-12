@@ -77,6 +77,33 @@ const ProfileTable = () => {
         </tbody>
         <thead>
           <tr>
+            <th>NACA 5-series</th>
+          </tr>
+        </thead>
+        <tbody>
+          {table.map(
+            (row) =>
+              row.name.length === 5 && (
+                <tr
+                  key={row.name}
+                  className={`${
+                    wing.profile === row.name && "bg-base-200"
+                  } cursor-pointer`}
+                  onClick={() => wing.setProfile(row.name)}
+                >
+                  <td>{row.name}</td>
+                  <td>{row.maxCz.toFixed(3)}</td>
+                  <td>{row.angleOfMaxCz.toFixed(1)}°</td>
+                  <td>{row.angleOfZeroCl.toFixed(2)}°</td>
+                  <td>{row.minCd.toFixed(4)}</td>
+                  <td>{row.czOfMinCd.toFixed(2)}</td>
+                  <td>{row.slope.toFixed(2)}</td>
+                </tr>
+              )
+          )}
+        </tbody>
+        <thead>
+          <tr>
             <th>Flat plates</th>
           </tr>
         </thead>
