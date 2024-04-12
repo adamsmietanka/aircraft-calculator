@@ -58,8 +58,8 @@ const Profile = ({ opacity, visible }: ElementProps) => {
               />
             ),
             name: "Coefficient of Lift (Cl)",
-            min: -1.75,
-            max: 1.75,
+            min: -1.8,
+            max: 1.8,
           },
         }}
         store={useProfileChartsStore}
@@ -81,7 +81,7 @@ const Profile = ({ opacity, visible }: ElementProps) => {
             ),
             name: "Coefficient of Drag (Cd)",
             min: 0,
-            max: profile.length === 2 ? 0.2 : 0.035,
+            max: profile.length === 2 ? 0.2 : 0.05,
           },
           y: {
             symbol: (
@@ -92,8 +92,8 @@ const Profile = ({ opacity, visible }: ElementProps) => {
               />
             ),
             name: "Cl",
-            min: -1.75,
-            max: 1.75,
+            min: -1.8,
+            max: 1.8,
           },
         }}
         store={useProfileChartsStore}
