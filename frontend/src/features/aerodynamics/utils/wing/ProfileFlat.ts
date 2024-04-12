@@ -4,12 +4,10 @@ export class ProfileFlat extends Profile {
   public static SEGMENTS_V = 2; // amount of segments on the shorter sides of the plate
 
   parseName(name: string) {
-    return {
-      M: 0,
-      P: 0,
-      T: parseInt(name) / 100,
-      F: 0.3,
-    };
+    this.M = 0;
+    this.P = 0;
+    this.T = parseInt(name) / 100;
+    this.F = 0.3;
   }
 
   getLowerUpper(x: number) {
