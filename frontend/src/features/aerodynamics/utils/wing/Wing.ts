@@ -128,31 +128,36 @@ export class Wing {
     const Y = this.sectionPoints(start, end);
 
     Y.forEach((y, i) => {
-      const rotatedFuse = this.profile.rotate(points, this.getAngle(Y[i - 1]));
-      const fuse = this.profile.transform(
-        rotatedFuse,
-        this.getLE(Y[i - 1]),
-        Y[i - 1],
-        this.getChord(Y[i - 1])
-      );
+      if (i > 0) {
+        const rotatedFuse = this.profile.rotate(
+          points,
+          this.getAngle(Y[i - 1])
+        );
+        const fuse = this.profile.transform(
+          rotatedFuse,
+          this.getLE(Y[i - 1]),
+          Y[i - 1],
+          this.getChord(Y[i - 1])
+        );
 
-      const rotatedTip = this.profile.rotate(points, this.getAngle(Y[i]));
-      const tip = this.profile.transform(
-        rotatedTip,
-        this.getLE(y),
-        y,
-        this.getChord(y)
-      );
+        const rotatedTip = this.profile.rotate(points, this.getAngle(Y[i]));
+        const tip = this.profile.transform(
+          rotatedTip,
+          this.getLE(y),
+          y,
+          this.getChord(y)
+        );
 
-      const panels = tip.length - 1;
+        const panels = tip.length - 1;
 
-      for (let i = 0; i < panels; i++) {
-        this.vertices.push(...fuse[panels - i]);
-        this.vertices.push(...fuse[panels - i - 1]);
-        this.vertices.push(...tip[panels - i]);
-        this.vertices.push(...fuse[panels - i - 1]);
-        this.vertices.push(...tip[panels - i - 1]);
-        this.vertices.push(...tip[panels - i]);
+        for (let i = 0; i < panels; i++) {
+          this.vertices.push(...fuse[panels - i]);
+          this.vertices.push(...fuse[panels - i - 1]);
+          this.vertices.push(...tip[panels - i]);
+          this.vertices.push(...fuse[panels - i - 1]);
+          this.vertices.push(...tip[panels - i - 1]);
+          this.vertices.push(...tip[panels - i]);
+        }
       }
     });
   }
@@ -179,7 +184,7 @@ export class Wing {
     );
     tipShape.moveTo(tip[0][0], tip[0][1]);
 
-    for (let i = 1; i < PANELS; i++) {
+    for (let i = 1; i < this.profile.points.length; i++) {
       tipShape.lineTo(tip[i][0], tip[i][1]);
     }
 
