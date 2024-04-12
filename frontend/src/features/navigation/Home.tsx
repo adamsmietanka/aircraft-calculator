@@ -28,14 +28,17 @@ const PropellerModel = ({ propeller }: { propeller: Propeller }) => {
   const angle = 30;
 
   const propRef = useRef<Mesh>(null!);
+
   useFrame(() => {
     if (propRef.current) propRef.current.rotation.x -= 0.03;
   });
+
   return (
     <mesh position={propeller.position}>
       <mesh ref={propRef}>
         {[...new Array(propeller.blades)].map((_, index) => (
           <mesh
+            key={index}
             geometry={propeller.geometry}
             material={material}
             rotation-z={

@@ -10,13 +10,9 @@ const defaults = {
 };
 
 export class Horizontal extends Wing {
-  public position: [x: number, y: number, z: number];
+  public position: [x: number, y: number, z: number] = [0, 0, 0];
 
   constructor(config: IPlane) {
     super({ ...defaults, ...config.horizontal }, "0009");
-    // this.createModel();
-    // this.createFlap();
-    
-    this.position = [0, 0, 0];
   }
 }
