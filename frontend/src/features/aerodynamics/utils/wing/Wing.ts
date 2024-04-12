@@ -41,7 +41,7 @@ export class Wing {
   FLAP_CHORD_START = 0.7;
   FLAP_START = 0.05;
   FLAP_END = 0.9;
-  WING_SEGMENTS = 10;
+  SEGMENTS = 10;
 
   /**
    * Get leading edge x-position at given y
@@ -110,14 +110,14 @@ export class Wing {
   sectionPoints(start: number, end: number) {
     if (this.shape === 2) {
       const range = asin(end) - asin(start);
-      const len = Math.ceil(range * this.WING_SEGMENTS);
+      const len = Math.ceil(range * this.SEGMENTS);
       const step = range / len;
       return [...Array(len + 1).keys()].map(
         (x) => (sin(asin(start) + x * step) * this.span) / 2
       );
     }
     const range = end - start;
-    const len = Math.ceil(range * this.WING_SEGMENTS);
+    const len = Math.ceil(range * this.SEGMENTS);
     const step = range / len;
     return [...Array(len + 1).keys()].map(
       (x) => ((start + x * step) * this.span) / 2
