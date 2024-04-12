@@ -11,8 +11,7 @@ interface Props {
 }
 
 const ProfileAirstreams = ({ opacity, show }: Props) => {
-  const upperPoints = useProfileStore((state) => state.upper);
-  const lowerPoints = useProfileStore((state) => state.lower);
+  const prof = useProfileStore((state) => state.prof);
 
   const reynolds = useWingStore((state) => state.reynolds);
 
@@ -25,7 +24,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
     <mesh>
       <mesh position-y={0.02}>
         <AnimatedLine
-          points={upperPoints.slice(
+          points={prof.upper.slice(
             omittedPoints,
             NUMBER_OF_AIRFOIL_SEGMENTS - omittedPoints + 1
           )}
@@ -37,7 +36,7 @@ const ProfileAirstreams = ({ opacity, show }: Props) => {
       </mesh>
       <mesh position-y={-0.02}>
         <AnimatedLine
-          points={lowerPoints.slice(
+          points={prof.lower.slice(
             omittedPoints,
             NUMBER_OF_AIRFOIL_SEGMENTS - omittedPoints + 1
           )}

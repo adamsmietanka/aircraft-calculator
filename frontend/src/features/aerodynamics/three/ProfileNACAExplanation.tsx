@@ -4,15 +4,12 @@ import AnimatedInputTechnical from "../../common/drawings/AnimatedInputTechnical
 import Formula from "../../common/Formula";
 import HoverableFormulaColor from "../../common/HoverableFormulaColor";
 import AnimatedLine from "../../common/three/AnimatedLine";
-import { SpringValue, animated } from "@react-spring/three";
+import { SpringValue } from "@react-spring/three";
 import { useProfileChartsStore } from "../hooks/useProfileCharts";
 import useWingScale from "../hooks/useWingScale";
-import useProfileVisualizer from "./hooks/useProfileVisualizer";
-import { CANVAS_WIDTH } from "../../common/three/config";
 import { useHoverProfileStore } from "../stores/useHoverProfile";
 import { useLocation } from "react-router-dom";
 import { useProfileStore } from "../stores/useProfile";
-import useProfileCamber from "../hooks/useProfileCamber";
 
 interface Props {
   opacity?: SpringValue<number>;
@@ -42,22 +39,14 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
 
   const { scaleProfile } = useWingScale();
 
-  const { M, P, T, F } = useProfileCamber();
-  const maxThickness = useProfileStore((state) => state.maxThickness);
-  const lowestPoint = useProfileStore((state) => state.lowestPoint);
-  const highestPoint = useProfileStore((state) => state.highestPoint);
+  const prof = useProfileStore((state) => state.prof);
 
-  const { profileSpring } = useProfileVisualizer();
 
-  const first = `${M * 100}`;
-  const second = `${P * 10}`;
-  const third = `${String(T * 100).padStart(2, "0")}`;
-
+  const first = `${prof.M * 100}`;
+  const second = `${prof.P * 10}`;
+  const third = `${String(prof.T * 100).padStart(2, "0")}`;
   return (
-    <animated.mesh
-      position-x={profileSpring.gridX.to((x) => (x * CANVAS_WIDTH) / 2)}
-      scale={scaleProfile}
-    >
+    <mesh>
       <Plane
         args={[1.1, 0.5]}
         position-x={0.5}
@@ -121,34 +110,34 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           visible={hoverA}
           scale={scaleProfile}
           distance={0.25}
-          value={M}
-          valueY={-P}
+          value={prof.M}
+          valueY={-prof.P}
           opacity={0.75}
           vertical
         >
           <div className={`flex text-xl ${hoverA || "hidden"}`}>
-            <Formula className={`${M === 0 && "hidden"}`} tex="0.0" />
-            <Formula className="text-error" tex={`${M * 100}`} />
+            <Formula className={`${prof.M === 0 && "hidden"}`} tex="0.0" />
+            <Formula className="text-error" tex={`${prof.M * 100}`} />
           </div>
         </AnimatedInputTechnical>
         <AnimatedInputTechnical
           visible={hoverB}
           distance={-1.25}
-          value={P}
-          valueY={M}
+          value={prof.P}
+          valueY={prof.M}
           opacity={0.75}
         >
           <div className={`flex text-xl ${hoverB || "hidden"}`}>
-            <Formula className={`${P === 0 && "hidden"}`} tex="0." />
-            <Formula className="text-error" tex={`${P * 10}`} />
+            <Formula className={`${prof.P === 0 && "hidden"}`} tex="0." />
+            <Formula className="text-error" tex={`${prof.P * 10}`} />
           </div>
         </AnimatedInputTechnical>
         <mesh visible={hoverC}>
-          <mesh position-x={F}>
+          <mesh position-x={prof.F}>
             <AnimatedInputTechnical
               distance={-0.7 * scaleProfile - 0.6}
-              value={maxThickness}
-              startX={lowestPoint}
+              value={prof.max[1].y - prof.max[0].y}
+              startX={prof.max[0].y}
               opacity={0.75}
               vertical
             >
@@ -156,14 +145,14 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
                 <Formula tex="0." />
                 <Formula
                   className="text-error"
-                  tex={`${String(T * 100).padStart(2, "0")}`}
+                  tex={`${String(prof.T * 100).padStart(2, "0")}`}
                 />
               </div>
             </AnimatedInputTechnical>
             <AnimatedLine
               points={[
-                [0, lowestPoint, 0],
-                [0, highestPoint, 0],
+                [0, prof.max[0].y, 0],
+                [0, prof.max[1].y, 0],
               ]}
               opacity={0.75}
               width={1.5}
@@ -173,17 +162,17 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
           </mesh>
           <AnimatedInputTechnical
             distance={-1.25}
-            value={F}
-            valueY={lowestPoint}
+            value={prof.F}
+            valueY={prof.max[0].y}
             opacity={0.75}
           >
             <div className={`flex text-xl ${hoverC || "hidden"}`}>
-              <Formula tex={`${F}`} />
+              <Formula tex={`${prof.F}`} />
             </div>
           </AnimatedInputTechnical>
         </mesh>
       </mesh>
-    </animated.mesh>
+    </mesh>
   );
 };
 

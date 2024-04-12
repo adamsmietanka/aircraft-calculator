@@ -106,7 +106,11 @@ export class Profile5Series extends Profile {
     this.upper = upper;
     this.lower = lower;
     this.camber = camber;
-    this.max = max;
+    this.max = max.map(([x, y, z]) => ({
+      x,
+      y,
+      z,
+    }));
     this.points = [...upper, ...lower.toReversed().slice(1)];
   }
 

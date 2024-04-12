@@ -16,7 +16,7 @@ const ProfileOutlines = ({ opacity }: Props) => {
   const span = useWingStore((state) => state.span);
   const shape = useWingStore((state) => state.shape);
 
-  const profilePoints = useProfileStore((state) => state.profile);
+  const prof = useProfileStore((state) => state.prof);
   const { F } = useProfileCamber();
 
   const [profileSpring] = useSpring(() => {
@@ -48,7 +48,7 @@ const ProfileOutlines = ({ opacity }: Props) => {
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
-        <AnimatedLine points={profilePoints} opacity={opacity} />
+        <AnimatedLine points={prof.points} opacity={opacity} />
       </animated.mesh>
       <animated.mesh
         position-x={profileSpring.positionX}
@@ -56,7 +56,7 @@ const ProfileOutlines = ({ opacity }: Props) => {
         rotation-x={Math.PI / 2}
         scale={profileSpring.scale}
       >
-        <AnimatedLine points={profilePoints} opacity={opacity} />
+        <AnimatedLine points={prof.points} opacity={opacity} />
       </animated.mesh>
     </>
   );
