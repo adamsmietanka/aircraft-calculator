@@ -161,12 +161,6 @@ const Home = ({ opacity }: Props) => {
             <Instance position={[0.2, 0, 2.75]} />
             <Instance position={[1.2, 0, 2.75]} />
           </Instances>
-          {/* <mesh
-            geometry={geom2}
-            scale-z={0.5}
-            position-y={1.25}
-            material={material}
-          /> */}
           <RudderNew opacity={opacity} stabilizer={plane.vertical} />
           <Elevator opacity={opacity} stabilizer={plane.horizontal} />
           <Ailerons opacity={opacity} wing={plane.wing} />
