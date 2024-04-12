@@ -63,7 +63,7 @@ const ProfileChoose = () => {
               >
                 <summary>NACA 5-series</summary>
                 <ul>
-                  {[...profileList, "21012", "23012", "23015", "23018", "25012"].map(
+                  {profileList.map(
                     (p) =>
                       p.length === 5 && (
                         <li key={p}>
