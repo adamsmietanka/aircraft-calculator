@@ -258,7 +258,7 @@ const IntroductionParticles = ({ opacity }: Props) => {
                 color={"white"}
               />
               {positions.map((pos, i) => (
-                <Particle scale={0.01} position={pos} />
+                <Particle key={i} scale={0.01} position={pos} />
               ))}
             </Instances>
           </mesh>
