@@ -32,8 +32,9 @@ const ProfileChoose = () => {
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-48"
+            className="dropdown-content transform -translate-y-2/4 -translate-x-1 z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-48"
           >
+            <li className="menu-title">Profiles</li>
             <li>
               <details
                 open
@@ -59,6 +60,7 @@ const ProfileChoose = () => {
             </li>
             <li>
               <details
+                open
                 onClick={() => (document.activeElement as HTMLElement).blur()}
               >
                 <summary>NACA 5-series</summary>
