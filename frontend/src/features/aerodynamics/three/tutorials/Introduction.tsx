@@ -19,6 +19,9 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
   const setReynolds = useWingStore((state) => state.setReynolds);
 
   const set = useHoverProfileStore((state) => state.set);
+  const hoverOn = useHoverProfileStore((state) => state.hoverOn);
+  const hoverOff = useHoverProfileStore((state) => state.hoverOff);
+
   const setBernoulli = useBernoulliStore((state) => state.set);
   const setNewton = useNewtonStore((state) => state.set);
   const setMisconception = useMisconceptionStore((state) => state.set);
@@ -301,30 +304,30 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     await sub("This name is a simple mathematical relation", () =>
       set({ hoverPlane: true })
     );
-    set({ hoverA: true });
+    hoverOn("Y");
     await pause(750);
     await show("max camber");
     await showDimension(["1412", "2412", "3412", "4412", "5412", "4412"]);
-    set({ hoverA: false });
+    hoverOff("Y");
     hide();
     await pause(1000);
 
-    set({ hoverB: true });
+    hoverOn("X");
     await pause(750);
     await show("position of max camber");
     await showDimension(["4312", "4412", "4512", "4612", "4512", "4412"]);
-    set({ hoverB: false });
+    hoverOff("X");
     hide();
     await pause(1000);
 
-    set({ hoverC: true });
+    hoverOn("T");
     await pause(750);
     await show("position of max camber");
     await showDimension(["4415", "4418", "4421", "4424", "4412"]);
     hide();
     await pause(500);
     await sub("The max thickness is at 30% of chord");
-    set({ hoverC: false });
+    hoverOff("T");
 
     set({ hoverPlane: false, vectorSize: 1 });
     await pause(500);
@@ -349,9 +352,6 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
     });
     set({
       airVectorsWithFlow: false,
-      hoverA: false,
-      hoverB: false,
-      hoverC: false,
       hoverPlane: false,
       centerVectors: false,
       vectorsNet: false,
@@ -367,6 +367,10 @@ const Introduction = ({ opacity, visible }: ElementProps) => {
       showCamber: true,
       flattenOutline: false,
     });
+    hoverOff("Y");
+    hoverOff("X");
+    hoverOff("T");
+
   };
 
   useAnimation(animation, cleanup, setup, visible);
