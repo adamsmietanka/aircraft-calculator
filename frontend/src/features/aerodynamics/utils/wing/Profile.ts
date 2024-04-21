@@ -35,6 +35,7 @@ export interface ProfileMethods {
 export abstract class Profile
   implements ProfilePoints, ProfileMethods, ProfileDetails
 {
+  public name: string;
   public M: number = 0;
   public P: number = 0;
   public T: number = 0;
@@ -60,6 +61,7 @@ export abstract class Profile
   public abstract getLowerUpper(x: number): number[][];
 
   constructor(name: string) {
+    this.name = name;
     this.parseName(name);
   }
 

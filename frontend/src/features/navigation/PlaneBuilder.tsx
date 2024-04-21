@@ -17,7 +17,6 @@ import {
   OrbitControls,
   StatsGl,
 } from "@react-three/drei";
-import ProfileNACAExplanation from "../aerodynamics/three/ProfileNACAExplanation";
 import Introduction from "../aerodynamics/three/tutorials/Introduction";
 import ProfileVisualizer from "../aerodynamics/three/ProfileVisualizer";
 import LevelFlight from "../aerodynamics/three/tutorials/LevelFlight";
@@ -88,10 +87,6 @@ const PlaneBuilder = () => {
 
             <Route paths={["/", "/aerodynamics/profile"]} Element={Home} />
             <Route path="/aerodynamics/profile" Element={Profile} />
-            <Route
-              paths={["/aerodynamics/introduction", "/aerodynamics/profile"]}
-              Element={ProfileNACAExplanation}
-            />
             <Route
               paths={["/aerodynamics/introduction"]}
               Element={Introduction}

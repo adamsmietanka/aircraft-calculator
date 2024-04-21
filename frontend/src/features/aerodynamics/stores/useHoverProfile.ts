@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { DRAG_VECTOR_SCALE } from "../../common/three/config";
+import { produce } from "immer";
 
 export interface HoverProfileState {
   splitVectors: boolean;
@@ -28,13 +29,13 @@ export interface HoverProfileState {
   hoverPlane: boolean;
   showChord: boolean;
   showCamber: boolean;
-  hoverA: boolean;
-  hoverB: boolean;
-  hoverC: boolean;
+  hover: Record<string, boolean>;
   mass: number;
   speed: number;
   fallVelocity: number;
   setMass: (value: number) => void;
+  hoverOn: (value: string) => void;
+  hoverOff: (value: string) => void;
   setSpeed: (value: number) => void;
   set: (value: Partial<HoverProfileState>) => void;
 }
@@ -66,13 +67,30 @@ export const useHoverProfileStore = create<HoverProfileState>()((set) => ({
   showChord: true,
   showCamber: true,
   hoverPlane: false,
-  hoverA: false,
-  hoverB: false,
-  hoverC: false,
+  hover: {
+    Y: false,
+    X: false,
+    T: false,
+    L: false,
+    P: false,
+    S: false,
+  },
   mass: 0.5,
   speed: 1,
   fallVelocity: 0,
   setMass: (value) => set({ mass: value }),
+  hoverOn: (value) =>
+    set(
+      produce((state) => {
+        state.hover[value] = true;
+      })
+    ),
+  hoverOff: (value) =>
+    set(
+      produce((state) => {
+        state.hover[value] = false;
+      })
+    ),
   setSpeed: (value) => set({ speed: value }),
   set: (value) => set(value),
 }));
