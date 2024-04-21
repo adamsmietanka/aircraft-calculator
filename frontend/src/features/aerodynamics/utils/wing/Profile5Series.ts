@@ -1,4 +1,4 @@
-import { Profile, ProfilePoints } from "./Profile";
+import { Profile } from "./Profile";
 
 const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
 
@@ -24,7 +24,7 @@ export class Profile5Series extends Profile {
     const F = 0.3;
 
     this.L = L * 0.15;
-    this.P = P * 0.05;
+    this.P = parseFloat((P * 0.05).toFixed(2));
     this.S = S;
     this.T = T * 0.01;
     this.F = F;
@@ -87,6 +87,8 @@ export class Profile5Series extends Profile {
     let upper = [];
     let lower = [];
     let camber = [];
+
+    this.M = this.getCamberY(this.P);
 
     for (let i = 0; i < Profile.SEGMENTS; i++) {
       const x = cosineSpacing(i / Profile.SEGMENTS);
