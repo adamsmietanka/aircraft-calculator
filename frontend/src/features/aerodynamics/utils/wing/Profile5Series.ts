@@ -9,10 +9,17 @@ const coeffs: Record<number, { r: number; k: number }> = {
   4: { r: 0.29, k: 6.643 },
   5: { r: 0.391, k: 3.23 },
 };
+const coeffsReflex: Record<number, { r: number; k1: number; k2: number }> = {
+  2: { r: 0.13, k1: 51.99, k2: 7.64e-4 },
+  3: { r: 0.217, k1: 15.793, k2: 6.77e-3 },
+  4: { r: 0.318, k1: 6.52, k2: 3.03e-2 },
+  5: { r: 0.441, k1: 3.191, k2: 0.1355 },
+};
 
 export class Profile5Series extends Profile {
   public r = 0;
-  public k = 0;
+  public k1 = 0;
+  public k2 = 0;
 
   parseName(name: string) {
     const L = parseInt(name[0]);
@@ -23,32 +30,50 @@ export class Profile5Series extends Profile {
 
     this.L = parseFloat((L * 0.15).toFixed(2));
     this.P = parseFloat((P * 0.05).toFixed(2));
-    this.S = S;
+    this.S = !!S;
     this.T = T * 0.01;
     this.F = F;
 
-    this.r = coeffs[P].r;
-    this.k = coeffs[P].k;
+    this.r = this.S ? coeffsReflex[P].r : coeffs[P].r;
+    this.k1 = this.S ? coeffsReflex[P].k1 : coeffs[P].k;
+    this.k2 = coeffsReflex[P].k2;
   }
 
   getCamberY(x: number) {
     if (x < this.r) {
+      if (this.S)
+        return (
+          (this.k1 / 6) *
+          (Math.pow(x - this.r, 3) -
+            this.k2 * Math.pow(1 - this.r, 3) * x -
+            Math.pow(this.r, 3) * x +
+            Math.pow(this.r, 3))
+        );
       return (
-        (this.k / 6) *
+        (this.k1 / 6) *
         (x * x * x - 3 * this.r * x * x + this.r * this.r * (3 - this.r) * x)
       );
     }
-    return ((this.k * this.r * this.r * this.r) / 6) * (1 - x);
+
+    if (this.S)
+      return (
+        (this.k1 / 6) *
+        (this.k2 * Math.pow(x - this.r, 3) -
+          this.k2 * Math.pow(1 - this.r, 3) * x -
+          Math.pow(this.r, 3) * x +
+          Math.pow(this.r, 3))
+      );
+    return ((this.k1 * this.r * this.r * this.r) / 6) * (1 - x);
   }
 
   getCamberGradient(x: number) {
     if (x < this.r) {
       return (
-        (this.k / 6) *
+        (this.k1 / 6) *
         (3 * x * x - 6 * this.r * x + this.r * this.r * (3 - this.r))
       );
     }
-    return -(this.k * this.r * this.r * this.r) / 6;
+    return -(this.k1 * this.r * this.r * this.r) / 6;
   }
 
   getThickness(x: number) {
