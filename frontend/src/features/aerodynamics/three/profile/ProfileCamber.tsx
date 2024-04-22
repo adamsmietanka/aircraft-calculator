@@ -56,11 +56,11 @@ const ProfileCamber = () => {
         valueY={prof.M}
         opacity={0.75}
       >
-        <div className={` ml-24 flex text-xl ${hover.P || "hidden"}`}>
+        <div className={`ml-28 flex text-xl ${hover.P || "hidden"}`}>
           <Formula tex={`${prof.P}`} />
-          <Formula tex="\, = \," />
-          <Formula className="text-error" tex={`${prof.name[1]}`} />
-          <Formula tex="\, * \, 0.05 " />
+          <Formula tex="\, =" />
+          <Formula className="text-error" tex={`\\, ${prof.name[1]}`} />
+          <Formula tex=" *  0.05 " />
         </div>
       </AnimatedInputTechnical>
     </>

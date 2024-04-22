@@ -9,6 +9,7 @@ import NACA4Hoverables from "./NACA4Hoverables";
 import NACA5Hoverables from "./NACA5Hoverables";
 import ProfileThickness from "./profile/ProfileThickness";
 import ProfileCamber from "./profile/ProfileCamber";
+import ProfileCl from "./profile/ProfileCl";
 
 interface Props {
   opacity?: SpringValue<number>;
@@ -25,7 +26,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
   const set = useHoverProfileStore((state) => state.set);
   const hover = useHoverProfileStore((state) => state.hover);
 
-  const show = !(!!locked || hoverChart);
+  const show = !locked;
 
   const prof = useProfileStore((state) => state.prof);
 
@@ -63,6 +64,7 @@ const ProfileNACAExplanation = ({ opacity }: Props) => {
       >
         <ProfileCamber />
         <ProfileThickness />
+        <ProfileCl />
       </mesh>
     </mesh>
   );
