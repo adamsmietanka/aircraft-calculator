@@ -41,6 +41,10 @@ export abstract class Profile
   public T: number = 0;
   public F: number = 0.3;
 
+  // 5 series
+  public L: number = 0;
+  public S: number = 0;
+
   public lower: number[][] = [];
   public upper: number[][] = [];
   public points: number[][] = [];

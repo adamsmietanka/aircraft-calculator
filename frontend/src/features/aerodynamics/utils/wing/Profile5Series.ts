@@ -13,8 +13,6 @@ const coeffs: Record<number, { r: number; k: number }> = {
 export class Profile5Series extends Profile {
   public r = 0;
   public k = 0;
-  public L = 0;
-  public S = 0;
 
   parseName(name: string) {
     const L = parseInt(name[0]);
@@ -23,7 +21,7 @@ export class Profile5Series extends Profile {
     const T = parseInt(name.slice(3, 5));
     const F = 0.3;
 
-    this.L = L * 0.15;
+    this.L = parseFloat((L * 0.15).toFixed(2));
     this.P = parseFloat((P * 0.05).toFixed(2));
     this.S = S;
     this.T = T * 0.01;

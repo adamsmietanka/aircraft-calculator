@@ -22,9 +22,10 @@ interface Props {
     display?: string;
     color?: string;
   }>;
+  phantom?: string;
 }
 
-const Formula = ({ tex = "", className = "", style }: Props) => {
+const Formula = ({ tex = "", className = "", style, phantom = "" }: Props) => {
   useEffect(() => {
     if (typeof window?.MathJax !== "undefined") {
       window.MathJax.typesetClear();
@@ -46,7 +47,7 @@ const Formula = ({ tex = "", className = "", style }: Props) => {
     <animated.p
       className={className}
       style={style}
-    >{`\\(${tex}\\)`}</animated.p>
+    >{`\\(\\vphantom{${phantom}}${tex}\\)`}</animated.p>
   );
 };
 
