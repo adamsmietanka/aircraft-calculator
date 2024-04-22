@@ -3,6 +3,7 @@ import useWingScale from "../../hooks/useWingScale";
 import { useProfileStore } from "../../stores/useProfile";
 import { useHoverProfileStore } from "../../stores/useHoverProfile";
 import Formula from "../../../common/Formula";
+import AnimatedHtml from "../../../common/three/AnimatedHtml";
 
 const ProfileCamber = () => {
   const { scaleProfile } = useWingScale();
@@ -56,13 +57,30 @@ const ProfileCamber = () => {
         valueY={prof.M}
         opacity={0.75}
       >
-        <div className={`ml-28 flex text-xl ${hover.P || "hidden"}`}>
-          <Formula tex={`${prof.P}`} />
-          <Formula tex="\, =" />
-          <Formula className="text-error" tex={`\\, ${prof.name[1]}`} />
-          <Formula tex=" *  0.05 " />
+        <div className={`flex text-xl ${hover.P || "hidden"}`}>
+          <Formula className="text-primary" tex={`${prof.P}`} />
         </div>
       </AnimatedInputTechnical>
+
+      <mesh position={[0.5, -0.4, 0]}>
+        <AnimatedHtml show={hover.P && prof.name.length === 5}>
+          <div className={`flex text-xl ${hover.P || "hidden"}`}>
+            <Formula tex="X_C =" />
+            <Formula
+              className="text-primary"
+              tex={`\\, ${prof.P}`}
+              phantom="X_C"
+            />
+            <Formula tex="= \," phantom="X_C" />
+            <Formula
+              className="text-error"
+              tex={`\\, ${prof.name[1]}`}
+              phantom="X_C"
+            />
+            <Formula tex="*0.05 " phantom="X_C" />
+          </div>
+        </AnimatedHtml>
+      </mesh>
     </>
   );
 };
