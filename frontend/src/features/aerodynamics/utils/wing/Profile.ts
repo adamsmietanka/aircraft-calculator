@@ -43,7 +43,7 @@ export abstract class Profile
 
   // 5 series
   public L: number = 0;
-  public S: number = 0;
+  public S: boolean = false;
 
   public lower: number[][] = [];
   public upper: number[][] = [];

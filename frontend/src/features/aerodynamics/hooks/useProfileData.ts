@@ -13,12 +13,16 @@ const useProfileData = () => {
   const set = useProfileCoefficientsStore((state) => state.set);
 
   useEffect(() => {
-    const cl = getProfileData(profile).cz[reynoldsIndex].map(([x, y]) => [
+    const profileFix =
+      profile.length === 5
+        ? profile.substring(0, 2) + "0" + profile.substring(3)
+        : profile;
+    const cl = getProfileData(profileFix).cz[reynoldsIndex].map(([x, y]) => [
       x,
       y,
       0.1,
     ]);
-    const cd = getProfileData(profile).cd[reynoldsIndex].map(([x, y]) => [
+    const cd = getProfileData(profileFix).cd[reynoldsIndex].map(([x, y]) => [
       y,
       x,
       0.1,
