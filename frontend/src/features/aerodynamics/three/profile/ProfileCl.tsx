@@ -19,8 +19,9 @@ const ProfileCl = () => {
       // workaround: force a Y update
     } else set({ hover: false, yHover: prof.L - 0.0001 });
   }, [hover.L]);
+
   return (
-    <mesh position={[0.5, -0.2, 0]}>
+    <mesh position={[0.5, -0.25, 0]}>
       <AnimatedHtml show={hover.L}>
         <div className={`flex text-xl ${hover.L || "hidden"}`}>
           <Formula tex="C_L =" />
