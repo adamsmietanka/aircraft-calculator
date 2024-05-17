@@ -28,6 +28,9 @@ export interface ProfileMethods {
   updateForFlap: (X: number) => void;
 }
 
+
+const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
+
 /**
  * The class encompasses all the logic of creating the profile and flap outlines
  * @param SEGMENTS number of the profile segments, per side. So all profiles have 2x
@@ -61,8 +64,60 @@ export abstract class Profile
   public FLAP_GAP = 0.01;
 
   public abstract parseName(name: string): void;
-  public abstract createPoints(): void;
-  public abstract getLowerUpper(x: number): number[][];
+  public abstract getCamberY(x: number): number;
+  public abstract getCamberGradient(x: number): number;
+  public abstract getThickness(x: number): number;
+
+  getLowerUpper(x: number) {
+    const theta = Math.atan(this.getCamberGradient(x));
+    const halfThickness = this.getThickness(x);
+    const y = this.getCamberY(x);
+    return [
+      [
+        x + halfThickness * Math.sin(theta),
+        y - halfThickness * Math.cos(theta),
+        0,
+      ],
+      [
+        x - halfThickness * Math.sin(theta),
+        y + halfThickness * Math.cos(theta),
+        0,
+      ],
+    ];
+  }
+
+  createPoints() {
+    let upper = [];
+    let lower = [];
+    let camber = [];
+
+    this.M = this.getCamberY(this.P);
+
+    for (let i = 0; i < Profile.SEGMENTS; i++) {
+      const x = cosineSpacing(i / Profile.SEGMENTS);
+      const y = this.getCamberY(x);
+      const points = this.getLowerUpper(x);
+
+      lower.push(points[0]);
+      upper.push(points[1]);
+      camber.push([x, y, 0]);
+    }
+    lower.push([1, 0, 0]);
+    upper.push([1, 0, 0]);
+    camber.push([1, 0, 0]);
+
+    const max = this.getLowerUpper(this.F);
+
+    this.upper = upper;
+    this.lower = lower;
+    this.camber = camber;
+    this.max = max.map(([x, y, z]) => ({
+      x,
+      y,
+      z,
+    }));
+    this.points = [...upper, ...lower.toReversed().slice(1)];
+  }
 
   constructor(name: string) {
     this.name = name;

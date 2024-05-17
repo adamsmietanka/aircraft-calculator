@@ -1,7 +1,5 @@
 import { Profile } from "./Profile";
 
-const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
-
 const coeffs: Record<number, { r: number; k: number }> = {
   1: { r: 0.058, k: 361.4 },
   2: { r: 0.126, k: 51.64 },
@@ -86,57 +84,6 @@ export class Profile5Series extends Profile {
         0.2843 * Math.pow(x, 3) -
         0.1036 * Math.pow(x, 4))
     );
-  }
-
-  getLowerUpper(x: number) {
-    const theta = Math.atan(this.getCamberGradient(x));
-    const halfThickness = this.getThickness(x);
-    const y = this.getCamberY(x);
-    return [
-      [
-        x + halfThickness * Math.sin(theta),
-        y - halfThickness * Math.cos(theta),
-        0,
-      ],
-      [
-        x - halfThickness * Math.sin(theta),
-        y + halfThickness * Math.cos(theta),
-        0,
-      ],
-    ];
-  }
-
-  createPoints() {
-    let upper = [];
-    let lower = [];
-    let camber = [];
-
-    this.M = this.getCamberY(this.P);
-
-    for (let i = 0; i < Profile.SEGMENTS; i++) {
-      const x = cosineSpacing(i / Profile.SEGMENTS);
-      const y = this.getCamberY(x);
-      const points = this.getLowerUpper(x);
-
-      lower.push(points[0]);
-      upper.push(points[1]);
-      camber.push([x, y, 0]);
-    }
-    lower.push([1, 0, 0]);
-    upper.push([1, 0, 0]);
-    camber.push([1, 0, 0]);
-
-    const max = this.getLowerUpper(this.F);
-
-    this.upper = upper;
-    this.lower = lower;
-    this.camber = camber;
-    this.max = max.map(([x, y, z]) => ({
-      x,
-      y,
-      z,
-    }));
-    this.points = [...upper, ...lower.toReversed().slice(1)];
   }
 
   constructor(name: string) {

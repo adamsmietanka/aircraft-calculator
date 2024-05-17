@@ -1,6 +1,4 @@
-import { Profile, ProfilePoints } from "./Profile";
-
-const cosineSpacing = (x: number) => (1 - Math.cos(x * Math.PI)) / 2;
+import { Profile } from "./Profile";
 
 export class Profile4Series extends Profile {
   parseName(name: string) {
@@ -39,52 +37,4 @@ export class Profile4Series extends Profile {
     );
   }
 
-  getLowerUpper(x: number) {
-    const theta = Math.atan(this.getCamberGradient(x));
-    const halfThickness = this.getThickness(x);
-    const y = this.getCamberY(x);
-    return [
-      [
-        x + halfThickness * Math.sin(theta),
-        y - halfThickness * Math.cos(theta),
-        0,
-      ],
-      [
-        x - halfThickness * Math.sin(theta),
-        y + halfThickness * Math.cos(theta),
-        0,
-      ],
-    ];
-  }
-
-  createPoints() {
-    let upper = [];
-    let lower = [];
-    let camber = [];
-
-    for (let i = 0; i < Profile.SEGMENTS; i++) {
-      const x = cosineSpacing(i / Profile.SEGMENTS);
-      const y = this.getCamberY(x);
-      const points = this.getLowerUpper(x);
-
-      lower.push(points[0]);
-      upper.push(points[1]);
-      camber.push([x, y, 0]);
-    }
-    lower.push([1, 0, 0]);
-    upper.push([1, 0, 0]);
-    camber.push([1, 0, 0]);
-
-    const max = this.getLowerUpper(this.F);
-
-    this.upper = upper;
-    this.lower = lower;
-    this.camber = camber;
-    this.max = max.map(([x, y, z]) => ({
-      x,
-      y,
-      z,
-    }));
-    this.points = [...upper, ...lower.toReversed().slice(1)];
-  }
 }
