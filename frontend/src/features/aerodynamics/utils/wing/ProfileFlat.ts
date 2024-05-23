@@ -1,4 +1,4 @@
-import { Profile, ProfilePoints } from "./Profile";
+import { Profile } from "./Profile";
 
 export class ProfileFlat extends Profile {
   public static SEGMENTS_V = 2; // amount of segments on the shorter sides of the plate
@@ -15,6 +15,18 @@ export class ProfileFlat extends Profile {
       [x, -this.T / 2, 0],
       [x, this.T / 2, 0],
     ];
+  }
+
+  getCamberY(x: number): number {
+      return 0
+  }
+
+  getCamberGradient(x: number): number {
+      return 0
+  }
+
+  getThickness(x: number): number {
+      return this.T
   }
 
   createPoints() {
