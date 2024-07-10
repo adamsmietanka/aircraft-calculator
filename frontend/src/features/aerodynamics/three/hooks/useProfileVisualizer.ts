@@ -14,6 +14,7 @@ const useProfileVisualizer = () => {
   const locked = useProfileChartsStore((state) => state.locked);
 
   const chord = useWingStore((state) => state.chord);
+  const dragging = useWingStore((state) => state.dragging);
 
   const centerVectors = useHoverProfileStore((state) => state.centerVectors);
   const vector3rdNewton = useHoverProfileStore(
@@ -89,7 +90,6 @@ const useProfileVisualizer = () => {
         keepAngle || showVisuals
           ? (-x["Coefficient of Lift"] * Math.PI) / 180
           : 0,
-      scale: getScale(),
       gridX: getPosition(),
       vectorsPosition: centerVectors ? 0.25 : 0,
       vectorY: vector3rdNewton ? -0.03 : 0,
@@ -97,7 +97,6 @@ const useProfileVisualizer = () => {
     });
   }, [
     x,
-    scale,
     chord,
     showVisuals,
     pathname,
@@ -105,6 +104,14 @@ const useProfileVisualizer = () => {
     vector3rdNewton,
     customConfig,
   ]);
+
+  useEffect(() => {
+    if (!dragging) {
+      api.start({
+        scale: getScale(),
+      });
+    }
+  }, [dragging, pathname]);
 
   return { profileSpring, showVisuals };
 };

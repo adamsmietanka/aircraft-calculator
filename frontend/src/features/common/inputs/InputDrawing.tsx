@@ -14,7 +14,7 @@ const InputDrawing = ({
   small = false,
   value,
   min = 0,
-  max = 100000,
+  max = 1000,
   setter,
 }: Props) => {
   const { multiplier, step, unit } = useUnits(value, "length");
@@ -25,9 +25,10 @@ const InputDrawing = ({
     setLocal(value);
   }, [value]);
 
-  useEffect(() => {
-    setter && min <= local && local <= max && setter(local);
-  }, [local]);
+  // TODO: Add better validation
+  // useEffect(() => {
+  //   setter && min <= local && local <= max && setter(local);
+  // }, [local]);
 
   return unit === "ft" ? (
     <InputDrawingFeet
@@ -43,11 +44,14 @@ const InputDrawing = ({
       }`}
       type="number"
       step={step}
-      value={parseFloat((local / multiplier).toPrecision(4))}
+      value={value}
       min={min / multiplier}
       max={max / multiplier}
-      onChange={(e) => setLocal(parseFloat(e.target.value) * multiplier)}
-      onBlur={() => setLocal(value)}
+      onChange={(e) => {
+        const val = parseFloat(e.target.value);
+        setter && max >= val && val >= min && setter(val);
+      }}
+      // onBlur={() => setter && setter(value)}
     />
   );
 };

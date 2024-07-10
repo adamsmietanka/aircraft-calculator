@@ -22,17 +22,19 @@ const useWing3D = () => {
       const { x, y } = e.target.object.position;
 
       if (isTip) {
-        useWingStore.setState({ span: y * 2 });
+        useWingStore.setState({ span: parseFloat((y * 2).toPrecision(4)) });
 
         if (isTrailing) {
           const angle = useWingStore.getState().angle;
           const span = useWingStore.getState().span;
           const xTip = getXTip(angle, span);
 
-          useWingStore.setState({ chordTip: x - xTip });
+          useWingStore.setState({
+            chordTip: parseFloat((x - xTip).toPrecision(4)),
+          });
         }
       } else if (isFuselage) {
-        useWingStore.setState({ chord: x });
+        useWingStore.setState({ chord: parseFloat(x.toPrecision(4)) });
       }
     }
   };
