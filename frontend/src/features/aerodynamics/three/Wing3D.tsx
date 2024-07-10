@@ -10,6 +10,7 @@ import WingHoverables from "./WingHoverables";
 import ProfileOutlines from "./ProfileOutlines";
 import AnimatedLine from "../../common/three/AnimatedLine";
 import useWingOutline from "../hooks/useWingOutline";
+import { useWingStore } from "../stores/useWing";
 
 interface Props {
   width: number;
@@ -20,6 +21,7 @@ interface Props {
 const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
   const { onTransform, active, setActive, step } = useWing3D();
   const { leadingPoints, trailingPoints } = useWingOutline();
+  const set = useWingStore((state) => state.set);
 
   const { wingSpring } = useWingSpring(width);
 
@@ -43,6 +45,8 @@ const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
         showX={active?.userData.isTrailing}
         showY={active?.userData.isTip}
         onChange={onTransform}
+        onMouseDown={() => set({ dragging: true })}
+        onMouseUp={() => set({ dragging: false })}
         object={active}
         space="local"
       />

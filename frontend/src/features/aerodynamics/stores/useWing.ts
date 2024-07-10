@@ -22,6 +22,7 @@ export interface WingState {
   MAC: number;
   MACposition: number[];
   stallReynolds: number;
+  dragging: boolean;
   setChord: (value: number) => void;
   setChordTip: (value: number) => void;
   setTipX: (value: number) => void;
@@ -59,6 +60,7 @@ export const useWingStore = create<WingState>()(
       MAC: 0,
       MACposition: [0, 0],
       stallReynolds: 0,
+      dragging: false,
       setChord: (value) => set({ chord: value }),
       setChordTip: (value) => set({ chordTip: value }),
       setTipX: (value) => set({ tipX: value }),
