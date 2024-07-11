@@ -42,7 +42,7 @@ describe("Profile creation", () => {
     profile.createPoints();
 
     expect(profile.upper[1][0]).toBeCloseTo(0.5, 2);
-    expect(profile.max[1][1] - profile.max[0][1]).toBeCloseTo(12 / 100, 4);
+    expect(profile.max[1].y - profile.max[0].y).toBeCloseTo(12 / 100, 4);
 
     expect(profile.upper.length - 1).toBe(Profile.SEGMENTS);
     expect(profile.points.length - 1).toBe(2 * Profile.SEGMENTS);
@@ -52,7 +52,7 @@ describe("Profile creation", () => {
     const profile = ProfileFactory.create("2415");
     profile.createPoints();
 
-    expect(profile.max[1][1] - profile.max[0][1]).toBeCloseTo(15 / 100, 4);
+    expect(profile.max[1].y - profile.max[0].y).toBeCloseTo(15 / 100, 4);
   });
 
   it("transforms points", () => {
