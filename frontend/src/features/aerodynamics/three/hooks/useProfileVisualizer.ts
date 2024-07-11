@@ -95,6 +95,11 @@ const useProfileVisualizer = () => {
       vectorY: vector3rdNewton ? -0.03 : 0,
       config: customConfig,
     });
+    if (!dragging) {
+      api.start({
+        scale: getScale(),
+      });
+    }
   }, [
     x,
     chord,
@@ -103,15 +108,9 @@ const useProfileVisualizer = () => {
     centerVectors,
     vector3rdNewton,
     customConfig,
+    dragging,
+    scale
   ]);
-
-  useEffect(() => {
-    if (!dragging) {
-      api.start({
-        scale: getScale(),
-      });
-    }
-  }, [dragging, pathname]);
 
   return { profileSpring, showVisuals };
 };

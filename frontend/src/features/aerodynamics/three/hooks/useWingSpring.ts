@@ -33,14 +33,6 @@ const useWingSpring = (width: number) => {
   );
 
   useEffect(() => {
-    if (!dragging) {
-      api.start({
-        scale,
-      });
-    }
-  }, [dragging]);
-
-  useEffect(() => {
     api.start({
       x: shape === 0 ? 0 : shape === 1 ? getXTip(angle, span) : F * chord,
       y: span / 2,
@@ -49,7 +41,12 @@ const useWingSpring = (width: number) => {
       chordTip,
       angle: (angle * Math.PI) / 180,
     });
-  }, [span, angle, chord, chordTip, shape]);
+    if (!dragging) {
+      api.start({
+        scale,
+      });
+    }
+  }, [span, angle, chord, chordTip, shape, dragging]);
 
   return { wingSpring };
 };
