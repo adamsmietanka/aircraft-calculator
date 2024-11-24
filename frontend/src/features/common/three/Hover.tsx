@@ -4,8 +4,9 @@ import { StoreApi, UseBoundStore } from "zustand";
 import HoverMarker from "./HoverMarker";
 import round from "../../../utils/interpolation/round";
 import { SpringValue } from "@react-spring/three";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useCallback } from "react";
 import { Mesh } from "three";
+import debounce from "../../../utils/debounce";
 
 export interface SimpleMarkerStore {
   x: number;
@@ -75,6 +76,24 @@ const Hover = ({
 }: HoverProps) => {
   const meshRef = useRef<Mesh>(null!);
 
+  const updateHoverPosition = useCallback(
+    debounce((point: { x: number, y: number }) => {
+      const locked = store.getState().locked;
+      
+      if (yHover && !locked) {
+        const y = round(point.y, step.y / 10);
+        const clampedY = clamp(y, data.min.y, data.max.y);
+        store.setState({ yHover: clampedY });
+      } else if (!locked) {
+        const x = round(point.x, step.x / 10);
+        const clampedX = clamp(x, data.min.x, data.max.x);
+        store.setState({ xHover: clampedX });
+      }
+      console.log("updateHoverPosition");
+    }, 16),
+    [yHover, store, step, data.min, data.max]
+  );
+
   return (
     <mesh ref={meshRef}>
       <Plane
@@ -84,16 +103,7 @@ const Hover = ({
         position-y={(min.y + max.y) / (2 * scale[1])}
         onPointerMove={(e) => {
           const point = meshRef.current.worldToLocal(e.point);
-          const locked = store.getState().locked;
-          if (yHover) {
-            const y = round(point.y, step.y / 10);
-            const clampedY = clamp(y, data.min.y, data.max.y);
-            !locked && store.setState({ yHover: clampedY });
-          } else {
-            const x = round(point.x, step.x / 10);
-            const clampedX = clamp(x, data.min.x, data.max.x);
-            !locked && store.setState({ xHover: clampedX });
-          }
+          updateHoverPosition(point);
         }}
         onPointerEnter={(e) => !disable && store.setState({ hover: true })}
         onPointerLeave={(e) => !disable && store.setState({ hover: false })}
