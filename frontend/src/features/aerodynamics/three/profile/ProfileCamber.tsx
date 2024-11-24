@@ -19,10 +19,7 @@ const ProfileCamber = () => {
         value={1}
         opacity={0.75}
       >
-        <Formula
-          className={`text-xl ${hover.Y || hover.X || hover.P || "hidden"}`}
-          tex="1"
-        />
+        <p className="text-xl"></p>
       </AnimatedInputTechnical>
       <AnimatedInputTechnical
         visible={hover.Y}
@@ -33,9 +30,9 @@ const ProfileCamber = () => {
         opacity={0.75}
         vertical
       >
-        <div className={`flex text-xl ${hover.Y || "hidden"}`}>
-          <Formula className={`${prof.M === 0 && "hidden"}`} tex="0.0" />
-          <Formula className="text-error" tex={`${prof.M * 100}`} />
+        <div className="flex text-xl">
+          {prof.M !== 0 && <p>0.0</p>}
+          <p className="text-error">{prof.M * 100}</p>
         </div>
       </AnimatedInputTechnical>
       <AnimatedInputTechnical
@@ -45,9 +42,9 @@ const ProfileCamber = () => {
         valueY={prof.M}
         opacity={0.75}
       >
-        <div className={`flex text-xl ${hover.X || "hidden"}`}>
-          <Formula className={`${prof.P === 0 && "hidden"}`} tex="0." />
-          <Formula className="text-error" tex={`${prof.P * 10}`} />
+        <div className="flex text-xl">
+          {prof.P !== 0 && <p>0.</p>}
+          <p className="text-error">{prof.P * 10}</p>
         </div>
       </AnimatedInputTechnical>
       <AnimatedInputTechnical
@@ -57,27 +54,23 @@ const ProfileCamber = () => {
         valueY={prof.M}
         opacity={0.75}
       >
-        <div className={`flex text-xl ${hover.P || "hidden"}`}>
-          <Formula className="text-primary" tex={`${prof.P}`} />
-        </div>
+        <div className="flex text-xl text-primary">{prof.P}</div>
       </AnimatedInputTechnical>
 
       <mesh position={[0.5, -0.4, 0]}>
         <AnimatedHtml show={hover.P && prof.name.length === 5}>
-          <div className={`flex text-xl ${hover.P || "hidden"}`}>
-            <Formula tex="X_C =" />
-            <Formula
-              className="text-primary"
-              tex={`\\, ${prof.P}`}
-              phantom="X_C"
-            />
-            <Formula tex="= \," phantom="X_C" />
-            <Formula
-              className="text-error"
-              tex={`\\, ${prof.name[1]}`}
-              phantom="X_C"
-            />
-            <Formula tex="*0.05 " phantom="X_C" />
+          <div
+            className={`flex text-xl font-['Computer_Modern']`}
+          >
+            <p>
+              X<sub>C</sub>
+            </p>
+            <p className="mx-2">=</p>
+            <p className="text-primary">{prof.P}</p>
+            <p className="mx-2">=</p>
+            <p className="text-error">{prof.name[1]}</p>
+            <p className="mx-1">×</p>
+            <p>0.05</p>
           </div>
         </AnimatedHtml>
       </mesh>

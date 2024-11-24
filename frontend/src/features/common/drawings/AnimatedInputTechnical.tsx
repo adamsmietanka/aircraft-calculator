@@ -126,6 +126,7 @@ const AnimatedInputTechnical = ({
 
         <AnimatedHtml
           show={visible}
+          className="flex font-['Computer_Modern']"
           position={to(
             [inputSpring.value, inputSpring.scale],
             (value, scale) => [
