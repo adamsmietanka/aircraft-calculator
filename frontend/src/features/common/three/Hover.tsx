@@ -89,7 +89,6 @@ const Hover = ({
         const clampedX = clamp(x, data.min.x, data.max.x);
         store.setState({ xHover: clampedX });
       }
-      console.log("updateHoverPosition");
     }, 16),
     [yHover, store, step, data.min, data.max]
   );
