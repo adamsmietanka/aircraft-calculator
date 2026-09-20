@@ -44,8 +44,8 @@ const useAxisTicks = (
   const minY = axes.y.min !== undefined ? axes.y.min : dataMinY;
   const maxY = axes.y.max ? axes.y.max : dataMaxY;
 
-  let xStep = getStep(maxX - minX);
-  let yStep = getStep(maxY - minY);
+  const xStep = getStep(maxX - minX);
+  const yStep = getStep(maxY - minY);
 
   const getTicks = (min: number, step: number, localWidth: number) => {
     if (localWidth < 10) step *= 2;
@@ -62,8 +62,8 @@ const useAxisTicks = (
   const localWidth = width * CANVAS_WIDTH;
   const localHeight = height * CANVAS_HEIGHT;
 
-  let xTicks = getTicks(minX, xStep, localWidth);
-  let yTicks = getTicks(minY, equalAxis ? xStep/2 : yStep, localHeight);
+  const xTicks = getTicks(minX, xStep, localWidth);
+  const yTicks = getTicks(minY, equalAxis ? xStep/2 : yStep, localHeight);
 
   const X_TEXTS = 3;
   const Y_TEXTS = 0.5;

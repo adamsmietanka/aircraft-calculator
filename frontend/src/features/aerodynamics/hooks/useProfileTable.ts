@@ -20,8 +20,7 @@ const linearRegression = (points: number[][]) => {
   const y_mean = Y.reduce((a, b) => a + b, 0) / Y.length;
 
   //Equations to solve for slope:
-  let slope = 0,
-    slope_numerator = 0,
+  let slope_numerator = 0,
     slope_denominator = 0;
   for (let i = 0; i < X.length; i++) {
     slope_numerator += (X[i] - x_mean) * (Y[i] - y_mean);
@@ -35,14 +34,14 @@ const useProfileTable = (index: number, profile?: string) => {
   const tableData = useMemo<Row[][]>(
     () =>
       [0, 1, 2].map((reynoldsIndex) => {
-        let tableForReynolds = Object.keys(profiles).map((profile) => {
+        const tableForReynolds = Object.keys(profiles).map((profile) => {
           const cz = getProfileData(profile).cz[reynoldsIndex];
           const cd = getProfileData(profile).cd[reynoldsIndex];
 
           const highestCz = cz.reduce((previous, current) =>
             current[1] > previous[1] ? current : previous
           );
-          let lowestCd = cd.reduce((previous, current) =>
+          const lowestCd = cd.reduce((previous, current) =>
             current[1] < previous[1] ? current : previous
           );
 

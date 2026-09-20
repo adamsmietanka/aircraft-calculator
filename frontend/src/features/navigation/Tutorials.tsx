@@ -4,8 +4,8 @@ import Info from "../../assets/info.svg?react";
 import { useNavigationStore } from "./useNavigation";
 
 const Tutorials = () => {
-  let { pathname } = useLocation();
-  let navigate = useNavigate();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   const tutorials = useNavigationStore((state) => state.tutorials);
 
   const feature = pathname.split("/")[1];
@@ -43,7 +43,7 @@ const Tutorials = () => {
             >
               <p>{step.symbol}</p>
               <p className="font-bold">{step.name}</p>
-              <p>{!!tutorials[`/${step.feature}/${step.path}`] ? "✓" : ""}</p>
+              <p>{tutorials[`/${step.feature}/${step.path}`] ? "✓" : ""}</p>
             </a>
           </li>
         ))}

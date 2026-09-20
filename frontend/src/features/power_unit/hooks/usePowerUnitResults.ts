@@ -42,7 +42,7 @@ export const usePowerUnitResults = () => {
   };
 
   const points_fixed = useMemo(() => {
-    let points: number[] = [];
+    const points: number[] = [];
     const j_lim = barycentricJ(cpMesh, angle, Cp);
     const j_end = barycentricJ(cpMesh, angle, 0);
 

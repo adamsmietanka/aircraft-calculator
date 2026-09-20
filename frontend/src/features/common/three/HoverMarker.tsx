@@ -115,7 +115,7 @@ const HoverMarker = ({
           [hoverSpring.opacity, opacity],
           (opacity, stepOpacity) => opacity * stepOpacity
         )}
-        width={!!locked ? 2 : 1}
+        width={locked ? 2 : 1}
         dashSize={0.25}
         gapSize={0.75}
         dashScale={3}

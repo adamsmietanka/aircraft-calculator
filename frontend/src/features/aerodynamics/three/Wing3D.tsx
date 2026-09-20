@@ -27,7 +27,7 @@ const Wing3D = ({ width, gridPositionX, opacity }: Props) => {
 
   const [gizmoSpring] = useSpring(
     () => ({
-      size: !!active ? 0.6 : 0,
+      size: active ? 0.6 : 0,
     }),
     [active]
   );

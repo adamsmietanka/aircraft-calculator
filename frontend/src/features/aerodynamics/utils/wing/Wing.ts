@@ -261,7 +261,7 @@ export class Wing {
       ((this.FLAP_END - gap) * this.span) / 2
     );
 
-    let geom = BufferGeometryUtils.mergeGeometries([wingGeometry, flapTip]);
+    const geom = BufferGeometryUtils.mergeGeometries([wingGeometry, flapTip]);
     this.flap = geom;
 
     return geom;

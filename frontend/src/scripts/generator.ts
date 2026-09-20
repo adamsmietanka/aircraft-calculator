@@ -19,9 +19,9 @@ const generatePoints = (
   XY: number[][],
   extrapolate = true
 ) => {
-  let X = XY.map(([x, y]) => x);
-  let Y = XY.map(([x, y]) => y);
-  let result = [];
+  const X = XY.map(([x, y]) => x);
+  const Y = XY.map(([x, y]) => y);
+  const result = [];
 
   for (let i = 0; i <= NUMBER_OF_POINTS; i++) {
     let x = start + (i * (end - start)) / NUMBER_OF_POINTS;
@@ -44,7 +44,7 @@ const generatePoints = (
 };
 
 const getCoefficients = (profile: string) => {
-  let result: Record<string, number[][][]> = { cz: [], cd: [] };
+  const result: Record<string, number[][][]> = { cz: [], cd: [] };
   for (let i = 1; i <= 3; i++) {
     const oldCz = profiles[profile].cz
       .map((array) => [array[0], array[i]])
@@ -55,7 +55,7 @@ const getCoefficients = (profile: string) => {
     const startX = oldCz[0][0];
     const endX = oldCz[oldCz.length - 1][0];
 
-    let cz = generatePoints(startX, endX, oldCz);
+    const cz = generatePoints(startX, endX, oldCz);
 
     // get lowest and highest Coefficient of Lift from the generated points
     const highestCz = cz.reduce((previous, current) =>
@@ -66,11 +66,11 @@ const getCoefficients = (profile: string) => {
       current[1] < previous[1] ? current : previous
     )[1];
 
-    let oldCd = profiles[profile].cd
+    const oldCd = profiles[profile].cd
       .map((array) => [array[0], array[i]])
       .filter(([x, y]) => y !== 0 && y !== null) as number[][];
 
-    let cd = generatePoints(lowestCz, highestCz, oldCd, true);
+    const cd = generatePoints(lowestCz, highestCz, oldCd, true);
     result.cz.push(cz);
     result.cd.push(cd);
   }
@@ -83,7 +83,7 @@ const isWithin = (x: number, delta: number, target: number) => {
 };
 
 export const getBetterCoefficients = (profile: string) => {
-  let result: Record<string, number[][][]> = { cz: [], cd: [] };
+  const result: Record<string, number[][][]> = { cz: [], cd: [] };
   for (let i = 1; i <= 3; i++) {
     const cl = profiles[profile].cz
       .map((array) => [array[0], array[i]])
@@ -94,7 +94,7 @@ export const getBetterCoefficients = (profile: string) => {
     const startX = cl[0][0];
     const endX = cl[cl.length - 1][0];
 
-    let newCl = generatePoints(startX, endX, cl);
+    const newCl = generatePoints(startX, endX, cl);
 
     // get lowest and highest Coefficient of Lift from the generated points
     const [alphaOfHighestCl, highestCz] = newCl.reduce((previous, current) =>
@@ -174,7 +174,7 @@ export const getBetterCoefficients = (profile: string) => {
       }
     }
 
-    let newCd = generatePoints(
+    const newCd = generatePoints(
       lowestCz,
       highestCz,
       [...startTangent.toReversed(), ...cd, ...endTangent],
@@ -188,7 +188,7 @@ export const getBetterCoefficients = (profile: string) => {
 };
 
 const getMinMaxData = (coeffs: Record<string, number[][][]>) => {
-  let result: Record<string, number>[] = [];
+  const result: Record<string, number>[] = [];
   for (let i = 0; i < 3; i++) {
     const cz = coeffs.cz[i];
     const cd = coeffs.cd[i];
@@ -196,11 +196,11 @@ const getMinMaxData = (coeffs: Record<string, number[][][]>) => {
     const highestCz = cz.reduce((previous, current) =>
       current[1] > previous[1] ? current : previous
     );
-    let lowestCz = cz.reduce((previous, current) =>
+    const lowestCz = cz.reduce((previous, current) =>
       current[1] < previous[1] ? current : previous
     );
 
-    let lowestCd = cd.reduce((previous, current) =>
+    const lowestCd = cd.reduce((previous, current) =>
       current[1] < previous[1] ? current : previous
     );
 
@@ -234,11 +234,11 @@ const getMinMaxData = (coeffs: Record<string, number[][][]>) => {
 };
 
 const generate_coefficients = () => {
-  let newProfiles: Record<
+  const newProfiles: Record<
     string,
     Record<string, number[][][] | number | number[]>
   > = {};
-  let table: Record<string, Record<string, number>[]> = {};
+  const table: Record<string, Record<string, number>[]> = {};
   Object.keys(profiles).forEach((profile) => {
     const coeffs = getBetterCoefficients(profile);
     newProfiles[profile] = coeffs;

@@ -87,9 +87,9 @@ export abstract class Profile
   }
 
   createPoints() {
-    let upper = [];
-    let lower = [];
-    let camber = [];
+    const upper = [];
+    const lower = [];
+    const camber = [];
 
     this.M = this.getCamberY(this.P);
 

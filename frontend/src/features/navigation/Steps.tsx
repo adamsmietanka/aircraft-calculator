@@ -6,8 +6,8 @@ import { a, useSpring } from "@react-spring/web";
 import Arrow from "../../assets/arrow.svg?react";
 
 const Steps = () => {
-  let { pathname } = useLocation();
-  let navigate = useNavigate();
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const feature = pathname.split("/")[1];
   const pathSubRoute = pathname.split("/")[2];

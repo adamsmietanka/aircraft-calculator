@@ -43,7 +43,7 @@ const AnimatedTipNew = ({
       1 / worldScale.getComponent(2)
     );
   });
-  const fluidScale = !!scale ? scale : worldScale.x;
+  const fluidScale = scale ? scale : worldScale.x;
 
   const [tipSpring] = useSpring(
     () => ({

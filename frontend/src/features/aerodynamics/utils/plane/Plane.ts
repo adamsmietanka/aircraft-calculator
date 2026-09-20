@@ -120,7 +120,7 @@ export class Plane implements IPlane {
     ];
 
     if (this.isMultifuse()) {
-      let geom = this.fuselage.geometry;
+      const geom = this.fuselage.geometry;
       this.geometry = this.merge([
         geom.clone().translate(0, 0, -1.5),
         geom.translate(0, 0, 1.5),
@@ -128,7 +128,7 @@ export class Plane implements IPlane {
     } else this.geometry = this.fuselage.geometry;
 
     if (this.isBiplane()) {
-      let geom = this.wing.geometry;
+      const geom = this.wing.geometry;
       this.addGeometries([geom.clone(), geom.translate(0, 1.25, 0)]);
     } else {
       this.addGeometries([this.wing.geometry]);

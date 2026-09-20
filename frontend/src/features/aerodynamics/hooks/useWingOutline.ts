@@ -13,7 +13,7 @@ const useWingOutline = () => {
     const xTip = getXTip(wing.angle, wing.span);
     const z = -0.01;
 
-    let points = [];
+    const points = [];
     for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
       const norm = (2 * i) / NUM_OF_SEGMENTS;
       const j =
@@ -39,7 +39,7 @@ const useWingOutline = () => {
     const xTip = getXTip(wing.angle, wing.span);
     const z = -0.01;
 
-    let points = [];
+    const points = [];
     for (let i = -NUM_OF_SEGMENTS / 2; i <= NUM_OF_SEGMENTS / 2; i++) {
       const norm = (2 * i) / NUM_OF_SEGMENTS;
       const j =

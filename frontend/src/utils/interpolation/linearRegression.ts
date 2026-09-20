@@ -5,8 +5,7 @@ const linearRegression = (points: number[][]) => {
   const y_mean = Y.reduce((a, b) => a + b, 0) / Y.length;
 
   //Equations to solve for slope:
-  let slope = 0,
-    slope_numerator = 0,
+  let slope_numerator = 0,
     slope_denominator = 0;
   for (let i = 0; i < X.length; i++) {
     slope_numerator += (X[i] - x_mean) * (Y[i] - y_mean);

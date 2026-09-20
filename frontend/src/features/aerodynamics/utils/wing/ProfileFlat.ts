@@ -30,9 +30,9 @@ export class ProfileFlat extends Profile {
   }
 
   createPoints() {
-    let upper = [];
-    let lower = [];
-    let camber = [];
+    const upper = [];
+    const lower = [];
+    const camber = [];
 
     for (let i = 0; i <= Profile.SEGMENTS; i++) {
       let x, y;

@@ -14,7 +14,7 @@ const getCdOfPlate = (x: number) => {
 };
 
 export const plateGenerator = () => {
-  let results: Record<string, Record<string, Array<Array<number | null>>>> = {};
+  const results: Record<string, Record<string, Array<Array<number | null>>>> = {};
 
   const brick = plate.map(([aoa, cz]) => [aoa / 2, cz / 2]);
 

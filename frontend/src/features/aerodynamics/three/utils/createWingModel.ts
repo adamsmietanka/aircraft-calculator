@@ -25,7 +25,7 @@ const createWingModel = (
   const tipShape = new Shape();
 
   console.log("new wing created");
-  let arr = [];
+  const arr = [];
 
   for (let j = 1; j < yOutline.length; j++) {
     if (full || yOutline[j] > 0) {
