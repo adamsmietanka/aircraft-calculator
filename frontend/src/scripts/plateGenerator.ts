@@ -1,4 +1,4 @@
-import plate, { plates } from "../data/flatPlate";
+import plate, { plates } from "../features/aerodynamics/data/flatPlate";
 
 const getCdOfPlate = (x: number) => {
   return (

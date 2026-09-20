@@ -1,12 +1,12 @@
 import {
   findUpperBound,
   linearInterpolation,
-} from "../../../utils/interpolation/binarySearch";
-import { linearInterpolationArray } from "../../../utils/interpolation/binarySearchArray";
-import linearRegression from "../../../utils/interpolation/linearRegression";
-import round from "../../../utils/interpolation/round";
-import profiles from "../data/profiles";
-import { default as profilesInterpolated } from "../data/profiles_interpolated";
+} from "../utils/interpolation/binarySearch";
+import { linearInterpolationArray } from "../utils/interpolation/binarySearchArray";
+import linearRegression from "../utils/interpolation/linearRegression";
+import round from "../utils/interpolation/round";
+import profiles from "../features/aerodynamics/data/profiles";
+import { default as profilesInterpolated } from "../features/aerodynamics/data/profiles_interpolated";
 
 // 0 - this is the alpha/Cz or the x in the exported arrays
 // 1 - is the trace for the lowest Re ~ 3 * 10^6
