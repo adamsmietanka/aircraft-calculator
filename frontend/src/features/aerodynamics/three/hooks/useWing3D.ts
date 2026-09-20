@@ -45,7 +45,7 @@ const useWing3D = () => {
           useWingStore.setState({ chord: parseFloat(x.toPrecision(4)) });
         }
       },
-      33
+      500
     ),
     []
   );
