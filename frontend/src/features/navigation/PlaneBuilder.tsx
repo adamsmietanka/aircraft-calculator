@@ -29,7 +29,7 @@ import DebugHeadless from "./Perf";
 import LevelFlightFormula from "../aerodynamics/three/tutorials/LevelFlightFormula";
 import NavigationElliptic from "../compass/NavigationElliptic";
 import FuselageUI from "../aerodynamics/three/FuselageUI";
-import VerticalUI from "../aerodynamics/three/VerticalUI ";
+import VerticalUI from "../aerodynamics/three/VerticalUI";
 import HorizontalUI from "../aerodynamics/three/HorizontalUI";
 import GlideUI from "../aerodynamics/three/GlideUI";
 import ResultsUI from "../aerodynamics/three/ResultsUI";
