@@ -10,13 +10,8 @@ import {
   Performance,
   Settings,
   Turn,
-  Weight,
 } from "./features";
 
-import StabilityLongitudalMoment from "./features/stabillity/StabilityLongitudalMoment";
-import StabilityRodForce from "./features/stabillity/StabilityRodForce";
-import StabillitySteer from "./features/stabillity/StabillitySteer";
-import StabillityCharts from "./features/stabillity/StabillityCharts";
 import PlaneBuilder from "./features/navigation/PlaneBuilder";
 
 const root = ReactDOM.createRoot(
@@ -36,20 +31,6 @@ root.render(
             <Route path="results" element={<PowerUnitResults />} />
           </Route>
           <Route path="performance" element={<Performance />} />
-          <Route path="weight" element={<Weight />} />
-          <Route path="stability">
-            <Route
-              path="longitudinal-moment"
-              element={<StabilityLongitudalMoment />}
-            />
-            <Route path="steer" element={<StabillitySteer />} />
-            <Route path="rod-force" element={<StabilityRodForce />} />
-            <Route
-              path="stabillty-and-manouverabillty"
-              element={<StabillityCharts />}
-            />
-          </Route>
-
           <Route path="turn" element={<Turn />} />
           <Route path="navigation/*" element={<PlaneBuilder />} />
           <Route path="settings" element={<Settings />} />
@@ -58,4 +39,3 @@ root.render(
     </BrowserRouter>
   </React.StrictMode>
 );
-

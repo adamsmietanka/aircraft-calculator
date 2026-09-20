@@ -16,7 +16,6 @@ export const useNavigationStore = create<NavigationState>()(
       routes: {
         aerodynamics: "profile",
         powerunit: "engine",
-        stability: "longitudinal-moment",
         navigation: "hyperbolic",
       },
       tutorials: {},

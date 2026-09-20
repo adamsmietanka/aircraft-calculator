@@ -103,31 +103,6 @@ const stepsList: Step[] = [
     path: "",
   },
   {
-    name: "Mass Distribution",
-    feature: "weight",
-    path: "",
-  },
-  {
-    name: "Longitudinal Moment",
-    feature: "stability",
-    path: "longitudinal-moment",
-  },
-  {
-    name: "Steer",
-    feature: "stability",
-    path: "steer",
-  },
-  {
-    name: "Force on a rod",
-    feature: "stability",
-    path: "rod-force",
-  },
-  {
-    name: "Stabillty and manouverabillty",
-    feature: "stability",
-    path: "stabillty-and-manouverabillty",
-  },
-  {
     name: "Turn",
     feature: "turn",
     path: "",

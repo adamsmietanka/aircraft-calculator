@@ -2,12 +2,10 @@ import Home from "../../assets/home.svg?react";
 import Airplane from "../../assets/airplane.svg?react";
 import Propeller from "../../assets/propeller.svg?react";
 import Engine from "../../assets/engine.svg?react";
-import Swing from "../../assets/swing.svg?react";
-import Scales from "../../assets/scales.svg?react";
 import Curve from "../../assets/curve.svg?react";
 import Compass from "../../assets/compass.svg?react";
 import React from "react";
-import { Settings } from "..";
+import Settings from "../settings/Settings";
 import { NavLink, useLocation } from "react-router-dom";
 import Tutorials from "./Tutorials";
 import steps, { whitelist } from "./data/steps";
@@ -28,16 +26,6 @@ const linkList = [
     to: "performance",
     name: "Performance",
     icon: <Engine />,
-  },
-  {
-    to: "weight",
-    name: "Mass Distribution",
-    icon: <Scales />,
-  },
-  {
-    to: "stability",
-    name: "Longitudinal Stability",
-    icon: <Swing />,
   },
   {
     to: "turn",

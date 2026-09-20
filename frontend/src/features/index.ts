@@ -4,7 +4,6 @@ import PowerUnitResults from "./power_unit/PowerUnitResults";
 import Performance from "./performance/Performance";
 import Settings from "./settings/Settings";
 import Turn from "./turn/Turn";
-import Weight from "./weight_distribution/Weight";
 
 export {
   PowerUnitEngine,
@@ -13,5 +12,4 @@ export {
   Performance,
   Settings,
   Turn,
-  Weight,
 };
