@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { getProfileData } from "../data/profiles_interpolated";
 import { useWingStore } from "../stores/useWing";
-import useReversedData from "../../common/hooks/useReversedData";
+import getReversedData from "../../common/utils/getReversedData";
 import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
 import { useProfileTabCoefficientsStore } from "../stores/useProfileTabCoefficients";
 
@@ -27,7 +27,7 @@ const useProfileData = () => {
       x,
       0.1,
     ]);
-    const { monotonic, reversed } = useReversedData(cl, cd);
+    const { monotonic, reversed } = getReversedData(cl, cd);
     setProfileTab({ cl, cd, monotonic, reversed });
   }, [profile, reynoldsIndex]);
 
@@ -42,7 +42,7 @@ const useProfileData = () => {
       x,
       0.1,
     ]);
-    const { monotonic, reversed } = useReversedData(cl, cd);
+    const { monotonic, reversed } = getReversedData(cl, cd);
     set({ cl, cd, monotonic, reversed });
   }, [profile, reynoldsClosest]);
 };

@@ -3,7 +3,7 @@ import { usePlaneStore } from "../stores/usePlane";
 import { usePlaneCoefficientsStore } from "../stores/usePlaneCoefficients";
 import { useWingStore } from "../stores/useWing";
 import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
-import useReversedData from "../../common/hooks/useReversedData";
+import getReversedData from "../../common/utils/getReversedData";
 import { table as profileTable } from "../data/profiles_interpolated";
 import { useVerticalStore } from "../stores/useVertical";
 import { useHorizontalStore } from "../stores/useHorizontal";
@@ -99,11 +99,11 @@ const usePlaneAerodynamics = () => {
 
     const cl = wingCl.map(([x, y, z]) => [x, y, z]);
 
-    const { monotonic, reversed } = useReversedData(cl, cd);
+    const { monotonic, reversed } = getReversedData(cl, cd);
     const { monotonic: monotonicHorizontal, reversed: reversedHorizontal } =
-      useReversedData(clHorizontal, cdHorizontal);
-    const { reversed: reversedFuse } = useReversedData(cl, cdFuse);
-    const { reversed: reversedVertical } = useReversedData(cl, cdVertical);
+      getReversedData(clHorizontal, cdHorizontal);
+    const { reversed: reversedFuse } = getReversedData(cl, cdFuse);
+    const { reversed: reversedVertical } = getReversedData(cl, cdVertical);
 
     const k = cd.map(([y, x, z]) => [x / y, x, z]);
     const kAlpha = getAlphaFromCl(monotonic, k);

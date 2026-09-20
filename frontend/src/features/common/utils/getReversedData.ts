@@ -4,7 +4,7 @@
  * @param cd The Cd points to be reversed (x/y swapped)
  * @returns
  */
-const useReversedData = (
+const getReversedData = (
   cl: number[][],
   cd: number[][]
 ): { monotonic: number[][]; reversed: number[][] } => {
@@ -23,4 +23,4 @@ const useReversedData = (
   };
 };
 
-export default useReversedData;
+export default getReversedData;

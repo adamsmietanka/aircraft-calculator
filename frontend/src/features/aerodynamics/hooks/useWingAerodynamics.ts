@@ -3,7 +3,7 @@ import { getReynolds } from "../data/profiles";
 import { useProfileCoefficientsStore } from "../stores/useProfileCoefficients";
 import { useWingStore } from "../stores/useWing";
 import { useWingCoefficientsStore } from "../stores/useWingCoefficients";
-import useReversedData from "../../common/hooks/useReversedData";
+import getReversedData from "../../common/utils/getReversedData";
 import { getProfileInfo } from "../data/profiles_interpolated";
 
 const KINEMATIC_VISCOSITY = 1.4207e-5;
@@ -32,7 +32,7 @@ const useWingAerodynamics = () => {
       const closest = getReynolds(profile).map((re) =>
         Math.abs(stallReynolds - re * 1000000)
       );
-      let closestIndex = closest.reduce(
+      const closestIndex = closest.reduce(
         (index, value, i, array) => (value < array[index] ? i : index),
         0
       );
@@ -152,8 +152,8 @@ const useWingAerodynamics = () => {
     const cl = profileCl.map(([x, y, z]) => [x + getAlphaInduced(y), y, z]);
     const cd = profileCd.map(([y, x, z]) => [getCdWing(x, y), x, z]);
     const cdInduced = profileCd.map(([y, x, z]) => [getCdInduced(x), x, z]);
-    const { monotonic, reversed } = useReversedData(cl, cd);
-    const { reversed: reversedInduced } = useReversedData(cl, cdInduced);
+    const { monotonic, reversed } = getReversedData(cl, cd);
+    const { reversed: reversedInduced } = getReversedData(cl, cdInduced);
 
     set({
       area,
