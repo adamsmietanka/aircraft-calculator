@@ -37,5 +37,11 @@ export default tseslint.config(
         { allowShortCircuit: true, allowTernary: true },
       ],
     },
+  },
+  {
+    // The app entry renders into the DOM and exports nothing, so fast refresh
+    // never applies to it, but it does declare the lazy route components.
+    files: ["src/index.tsx"],
+    rules: { "react-refresh/only-export-components": "off" },
   }
 );
