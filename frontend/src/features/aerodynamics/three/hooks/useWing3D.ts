@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useWingStore } from "../../stores/useWing";
 import { getStep } from "../../../common/three/hooks/useAxes";
 import debounce from "../../../../utils/debounce";
+import { transformTarget } from "../../../common/types/three";
 
 const getXTip = (angle: number, span: number) =>
   (Math.tan((angle * Math.PI) / 180) * span) / 2;
@@ -20,7 +21,11 @@ const useWing3D = () => {
   const update = useCallback(
     debounce(
       (
-        userData: { isTip: boolean; isTrailing: boolean; isFuselage: boolean },
+        userData: {
+          isTip?: boolean;
+          isTrailing?: boolean;
+          isFuselage?: boolean;
+        },
         x: number,
         y: number
       ) => {
@@ -45,10 +50,11 @@ const useWing3D = () => {
     []
   );
 
-  const onTransform = (e: THREE.Event | undefined) => {
-    if (e && e.target && e.target.object) {
-      const { x, y } = e.target.object.position;
-      update(e.target.object.userData, x, y);
+  const onTransform = (e?: THREE.Event) => {
+    const object = transformTarget(e);
+    if (object) {
+      const { x, y } = object.position;
+      update(object.userData, x, y);
     }
   };
 

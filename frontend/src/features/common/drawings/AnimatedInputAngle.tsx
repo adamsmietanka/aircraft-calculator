@@ -6,12 +6,13 @@ import AnimatedTip from "./AnimatedTip";
 import AnimatedHtml from "../three/AnimatedHtml";
 import InputDrawingAngle from "../inputs/InputDrawingAngle";
 import Formula from "../Formula";
+import { FluidNumber } from "../types/three";
 
 interface Props {
-  scale: SpringValue<number>;
-  y: SpringValue<number>;
-  angle: SpringValue<number>;
-  opacity: SpringValue<number>;
+  scale: FluidNumber;
+  y: FluidNumber;
+  angle: FluidNumber;
+  opacity: FluidNumber;
   show: boolean;
   children?: ReactNode;
 }
@@ -125,13 +126,13 @@ const WingInputAngle = ({
       <AnimatedTip
         opacity={opacity}
         scale={scale}
-        distance={y.to((y) => y / 2)}
+        distance={to(y, (y) => y / 2)}
       />
-      <animated.mesh rotation-z={angle.to((a) => -a)}>
+      <animated.mesh rotation-z={to(angle, (a) => -a)}>
         <AnimatedTip
           opacity={opacity}
           scale={scale}
-          distance={y.to((y) => y / 2)}
+          distance={to(y, (y) => y / 2)}
           end
         />
       </animated.mesh>
@@ -144,7 +145,7 @@ const WingInputAngle = ({
           0,
         ])}
         rotation-z={Math.PI/2}
-        scale={scale.to((s) => 1 / s)}
+        scale={to(scale, (s) => 1 / s)}
       >
         {children}
       </AnimatedHtml>

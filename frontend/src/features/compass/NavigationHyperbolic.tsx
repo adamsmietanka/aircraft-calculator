@@ -15,6 +15,7 @@ import Signals from "./Signals";
 import AnimatedInputTechnical from "../common/drawings/AnimatedInputTechnical";
 import Formula from "../common/Formula";
 import AnimatedInputAngle from "../common/drawings/AnimatedInputAngle";
+import { transformTarget } from "../common/types/three";
 
 interface Props {
   opacity: SpringValue<number>;
@@ -27,7 +28,7 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const [active, setActive] = useState<THREE.Object3D | undefined>(null!);
   const [gizmoSpring] = useSpring(
     () => ({
-      size: !!active ? 0.6 : 0,
+      size: active ? 0.6 : 0,
     }),
     [active]
   );
@@ -54,10 +55,11 @@ const NavigationHyperbolic = ({ opacity }: Props) => {
   const setDirectrix = useCompassStore((state) => state.setDirectrix);
   const setDistances = useCompassStore((state) => state.setDistances);
 
-  const onTransform = (e: THREE.Event | undefined) => {
-    if (e && e.target.object) {
-      const { tower } = e.target.object.userData;
-      const { x, y } = e.target.object.position;
+  const onTransform = (e?: THREE.Event) => {
+    const object = transformTarget(e);
+    if (object) {
+      const { tower } = object.userData;
+      const { x, y } = object.position;
       if (tower === "A") {
         set({ A: { x, y } });
       }

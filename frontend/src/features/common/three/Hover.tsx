@@ -22,6 +22,7 @@ export interface SimpleMarkerStore {
 export interface SynchronizedXMarkersStore {
   x: number;
   y: number | Record<string, number>;
+  xHover: number;
   hover: boolean;
   locked: boolean;
   legend?: string;

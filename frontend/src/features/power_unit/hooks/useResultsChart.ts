@@ -10,7 +10,6 @@ const useResultsChartStore = create<SynchronizedXMarkersStore>()((set) => ({
   y: { "Propeller Power": 2, "Propeller Angle": 2 },
   xHover: 0,
   hover: false,
-  show: false,
   locked: false,
   set: (value) => set(value),
 }));
@@ -75,7 +74,6 @@ const useResultsChart = () => {
           "Propeller Speed": yRPM,
           "Coefficient of Power": yCp,
         },
-        show: true,
       });
     }
   }, [xHover, table]);

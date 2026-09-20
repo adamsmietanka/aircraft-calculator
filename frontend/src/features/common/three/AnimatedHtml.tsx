@@ -7,13 +7,16 @@ import { checkVisible } from "./checkVisible";
 import { ROUTE_DELAY } from "./config";
 import { Mesh, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
+import { AnimatedNumber } from "../types/three";
 
 type Props = {
   position?: Interpolation<number[]> | [x: number, y: number, z: number];
-  "position-x"?: Interpolation<number> | number;
-  "position-y"?: Interpolation<number> | SpringValue<number> | number;
-  "rotation-z"?: Interpolation<number> | SpringValue<number> | number;
-  scale?: Interpolation<number> | number;
+  "position-x"?: AnimatedNumber;
+  "position-y"?: AnimatedNumber;
+  "position-z"?: AnimatedNumber;
+  "rotation-z"?: AnimatedNumber;
+  scale?: AnimatedNumber;
+  visible?: boolean;
   show?: boolean;
   delayVisible?: number;
   className?: string;

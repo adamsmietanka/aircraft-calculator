@@ -8,7 +8,7 @@ const Rudder = ({
   opacity,
   stabilizer,
   ...rest
-}: Props & { stabilizer: Wing }) => {
+}: Props & { stabilizer: Wing; visible?: boolean }) => {
   const left = useKeyboardControls<Controls>((state) => state.left);
   const right = useKeyboardControls<Controls>((state) => state.right);
 

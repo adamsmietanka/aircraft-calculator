@@ -14,6 +14,7 @@ import PlaneModel from "../aerodynamics/three/PlaneModel";
 import SignalsElliptic from "./SignalsElliptic";
 import { useCompassStore } from "./stores/useCompass";
 import { getAngles } from "./utils/maths";
+import { transformTarget } from "../common/types/three";
 
 const HYPER_POINTS = 50;
 
@@ -26,7 +27,7 @@ const NavigationElliptic = ({ opacity }: Props) => {
 
   const [gizmoSpring] = useSpring(
     () => ({
-      size: !!active ? 0.6 : 0,
+      size: active ? 0.6 : 0,
     }),
     [active]
   );
@@ -49,10 +50,11 @@ const NavigationElliptic = ({ opacity }: Props) => {
   const setHelpers = useEllipseStore((state) => state.setHelpers);
   const setDOP = useEllipseStore((state) => state.setDOP);
 
-  const onTransform = (e: THREE.Event | undefined) => {
-    if (e && e.target.object) {
-      const { tower } = e.target.object.userData;
-      const { x, y } = e.target.object.position;
+  const onTransform = (e?: THREE.Event) => {
+    const object = transformTarget(e);
+    if (object) {
+      const { tower } = object.userData;
+      const { x, y } = object.position;
       if (tower === "A") {
         set({ A: { x, y } });
       }

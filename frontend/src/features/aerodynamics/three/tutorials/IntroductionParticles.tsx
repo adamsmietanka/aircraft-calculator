@@ -6,8 +6,8 @@ import {
   useSpring,
 } from "@react-spring/three";
 import { Props } from "../../../common/types/three";
-import { useMemo, useRef } from "react";
-import { CylinderGeometry, Mesh } from "three";
+import { ComponentProps, useMemo, useRef } from "react";
+import { CylinderGeometry, Mesh, Vector3Tuple } from "three";
 import { Instance, Instances, Point, Points } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -174,13 +174,8 @@ const Vectors = ({
   );
 };
 
-interface ParticleProps {
-  move: boolean;
-  center: boolean;
-  sum: number;
-  offset: number;
-  sideLength: number;
-}
+/** Everything but the ref is forwarded straight to drei's <Instance>. */
+type ParticleProps = ComponentProps<typeof Instance>;
 const Particle = ({ ...rest }: ParticleProps) => {
   const ref = useRef<Mesh>(null!);
 
@@ -232,11 +227,13 @@ const IntroductionParticles = ({ opacity }: Props) => {
 
   const positions = useMemo(
     () =>
-      Array.from(Array(NUMBER_OF_PARTICLES).keys()).map((i) => [
-        1.25 * Math.random() - 0.375,
-        0.7 * (Math.random() - 0.5),
-        0,
-      ]),
+      Array.from(Array(NUMBER_OF_PARTICLES).keys()).map(
+        (i): Vector3Tuple => [
+          1.25 * Math.random() - 0.375,
+          0.7 * (Math.random() - 0.5),
+          0,
+        ]
+      ),
     []
   );
   const { backgroundColor } = useCSSColors();

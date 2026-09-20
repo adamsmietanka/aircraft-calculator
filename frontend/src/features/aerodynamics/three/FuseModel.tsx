@@ -1,6 +1,5 @@
 import { SpringValue, animated, useSpring } from "@react-spring/three";
-import { useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import useFuseNodes from "./hooks/useFuseNodes";
 import { usePlaneStore } from "../stores/usePlane";
 import { useEffect, useRef } from "react";
 import { Mesh } from "three";
@@ -10,7 +9,7 @@ interface Props {
 }
 
 const FuseModel = ({ opacity }: Props) => {
-  const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
+  const nodes = useFuseNodes();
   
   const fuselage = usePlaneStore((state) => state.fuselage);
   const length = usePlaneStore((state) => state.length);

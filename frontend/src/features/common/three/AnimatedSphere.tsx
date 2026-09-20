@@ -1,10 +1,11 @@
 import { SpringRef, animated, useSpring } from "@react-spring/three";
 import { Sphere } from "@react-three/drei";
 import { ThreeEvent } from "@react-three/fiber";
+import { Vector3Tuple } from "three";
 
 interface Props {
-  position: number[];
-  scale: number[];
+  position: Vector3Tuple;
+  scale: Vector3Tuple;
   color: string;
   springRef?: SpringRef;
   onClick?: ((event: ThreeEvent<MouseEvent>) => void) | undefined;

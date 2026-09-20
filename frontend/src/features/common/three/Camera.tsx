@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { CAMERA_DELAY } from "./config";
 import { useCameraStore } from "./stores/useCamera";
 import { useEffect } from "react";
+import { Vector3Tuple } from "three";
 
 // spherical coords
 const obj: Record<string, number[]> = {
@@ -35,13 +36,16 @@ const getCenter = (pathname: string) => {
   return center[pathname] || [0, 0, 0];
 };
 
-const getPosition = ([r, theta, phi]: number[], [x, y, z]: number[]) => [
+const getPosition = (
+  [r, theta, phi]: number[],
+  [x, y, z]: number[]
+): Vector3Tuple => [
   r * Math.sin((theta * Math.PI) / 180) * Math.sin((phi * Math.PI) / 180) + x,
   r * Math.cos((theta * Math.PI) / 180) + y,
   r * Math.sin((theta * Math.PI) / 180) * Math.cos((phi * Math.PI) / 180) + z,
 ];
 
-const getRotationPolar = ([r, theta, phi]: number[]) => [
+const getRotationPolar = ([r, theta, phi]: number[]): Vector3Tuple => [
   ((theta - 90) * Math.PI) / 180,
   (phi * Math.PI) / 180,
   0,

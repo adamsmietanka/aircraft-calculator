@@ -4,14 +4,13 @@ import { usePlaneGeometryStore } from "../stores/usePlaneGeometry";
 import FuseModel from "./FuseModel";
 import WingModel from "./WingModel";
 import { usePlaneStore } from "../stores/usePlane";
-import { useLoader } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import useFuseNodes from "./hooks/useFuseNodes";
 import { useWingStore } from "../stores/useWing";
 import { DoubleSide } from "three";
 import { isMultifuse, isMultiwing } from "../utils/planeConfiguration";
 
 const PlaneModel = ({ opacity }: Props) => {
-  const { nodes } = useLoader(GLTFLoader, "/models/fuse.glb");
+  const nodes = useFuseNodes();
 
   const vertical = usePlaneGeometryStore((state) => state.vertical);
   const verticalX = usePlaneStore((state) => state.verticalX);

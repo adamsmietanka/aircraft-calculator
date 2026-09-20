@@ -1,18 +1,19 @@
 import { Cone } from "@react-three/drei";
-import { Interpolation, SpringValue, animated } from "@react-spring/three";
+import { SpringValue, animated, to } from "@react-spring/three";
 import {
   MEASUREMENT_DISTANCE,
   VECTOR_TIP_LENGTH,
   VECTOR_TIP_WIDTH,
   useCSSColors,
 } from "../three/config";
+import { FluidNumber } from "../types/three";
 
 interface Props {
   end?: boolean;
-  scale: SpringValue<number>;
-  value?: SpringValue<number>;
-  opacity?: SpringValue<number>;
-  distance?: Interpolation<number>;
+  scale: FluidNumber;
+  value?: FluidNumber;
+  opacity?: FluidNumber;
+  distance?: FluidNumber;
 }
 
 const AnimatedTip = ({
@@ -30,14 +31,14 @@ const AnimatedTip = ({
       rotation-z={end ? Math.PI : 0}
       position-x={value}
       position-y={
-        distance ? distance : scale.to((scale) => MEASUREMENT_DISTANCE / scale)
+        distance ? distance : to(scale, (scale) => MEASUREMENT_DISTANCE / scale)
       }
     >
       <AnimatedCone
         args={[VECTOR_TIP_WIDTH, VECTOR_TIP_LENGTH, 32]}
         // its created perfectly centered around local [0,0,0]
-        position-x={scale.to((scale) => VECTOR_TIP_LENGTH / (2 * scale))}
-        scale={scale.to((s) => 1 / s)}
+        position-x={to(scale, (scale) => VECTOR_TIP_LENGTH / (2 * scale))}
+        scale={to(scale, (s) => 1 / s)}
         material-transparent
         rotation-z={Math.PI / 2}
         material-color={gridColor}
